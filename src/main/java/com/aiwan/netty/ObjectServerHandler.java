@@ -4,40 +4,40 @@ import com.aiwan.publicsystem.DecodeData;
 import com.aiwan.util.GetBean;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * 处理器
- * */
-public class Handler extends SimpleChannelInboundHandler<DecodeData> {
+@Component("objectServerHandler")
+public class ObjectServerHandler extends ChannelInboundHandlerAdapter {
 
-    Logger logger = LoggerFactory.getLogger(Handler.class);
+    Logger logger = LoggerFactory.getLogger(ObjectServerHandler.class);
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println(msg+"hhhhhhhhhasdhashdsahd");
+        DecodeData decodeData = (DecodeData) msg;
+        logger.debug(decodeData.getLength()+"");
         DecodeData decodeData1 = GetBean.getTaskDispatcher().dispatcherTask(decodeData);
         Channel channel = ctx.channel();
         if (decodeData1 == null){
             logger.debug("decodeData1 is null");
         }
         channel.writeAndFlush(decodeData1);
+        System.out.println(msg);
+        ctx.writeAndFlush(msg);
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        logger.debug("channelReadComplete");
-        super.channelReadComplete(ctx);
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.debug("exceptionCaught");
-        if(null != cause) cause.printStackTrace();
-        if(null != ctx) ctx.close();
+        System.out.println(cause.getMessage());
+        ctx.close();
+//        super.exceptionCaught(ctx, cause);
     }
 }

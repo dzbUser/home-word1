@@ -1,11 +1,18 @@
 package com.aiwan.netty;
 
-import com.aiwan.publicsystem.CM_UserMessage;
+import com.aiwan.client.ClientServer;
 import com.aiwan.publicsystem.DecodeData;
-import com.aiwan.service.UserService;
+import com.aiwan.role.protocol.CM_UserMessage;
+import com.aiwan.role.service.UserService;
 import com.aiwan.util.DeepClone;
+import com.aiwan.util.Protocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -14,6 +21,7 @@ import org.springframework.stereotype.Component;
  * */
 @Component("taskDispatcher")
 public class TaskDispatcher {
+    private static Logger logger = LoggerFactory.getLogger(TaskDispatcher.class);
     private UserService userService;
 
     @Autowired
@@ -25,22 +33,28 @@ public class TaskDispatcher {
         //开始分配任务
         DecodeData decodeData1 = null;
         switch (decodeData.getType()){
-            case DecodeData.LOGIN:{
+            case Protocol.LOGIN:{
                 CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
                 decodeData1 =userService.login(userMessage);
                 break;
             }
-            case DecodeData.REGIST:{
+            case Protocol.REGIST:{
+                CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
+                decodeData1 = userService.registUser(userMessage);
                 break;
             }
-
-            case DecodeData.MOVE:{
+            case Protocol.LOGOUT:{
+                CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
+                decodeData1 = userService.logout(userMessage);
                 break;
             }
-
-            case DecodeData.SHIFT:{
-                break;
-            }
+//            case Protocol.MOVE:{
+//                break;
+//            }
+//
+//            case Protocol.SHIFT:{
+//                break;
+//            }
             default:
                 throw new IllegalStateException("Unexpected value: " + decodeData.getType());
         }

@@ -7,6 +7,9 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -34,7 +37,11 @@ public class NettyServer {
                                 .addLast("decoder", new Decoder())   // 1
                                 .addLast("encoder", new Encoder())  // 2
 //                                .addLast("aggregator", new HttpObjectAggregator(256 * 1024))    // 3
-                                .addLast("handler", (ChannelHandler) classPathXmlApplicationContext.getBean("handler"));        // 4
+                                .addLast("handler", new Handler());        // 4
+//                        ch.pipeline().addLast(new ObjectEncoder());
+//                        ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE,
+//                                ClassResolvers.cacheDisabled(null)));
+//                        ch.pipeline().addLast((ChannelHandler) classPathXmlApplicationContext.getBean("objectServerHandler"));
                     }
                 })
                 .option(ChannelOption.SO_BACKLOG, 128) // determining the number of connections queued

@@ -1,6 +1,5 @@
-package com.aiwan.netty;
+package com.aiwan.client;
 import com.aiwan.publicsystem.DecodeData;
-import com.aiwan.util.DeepClone;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -13,9 +12,9 @@ import java.util.List;
 /**
  * 解码器
  * **/
-public class Decoder extends ByteToMessageDecoder implements Serializable {
+public class ClientDecoder extends ByteToMessageDecoder implements Serializable {
     private DecodeData decodeData;
-    Logger logger = LoggerFactory.getLogger(Decoder.class);
+    Logger logger = LoggerFactory.getLogger(ClientDecoder.class);
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
         /*
@@ -33,8 +32,6 @@ public class Decoder extends ByteToMessageDecoder implements Serializable {
         decodeData.setType(type);
         decodeData.setLength(length);
         decodeData.setData(data);
-//        CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(data);
-//        logger.debug(userMessage.getUsername());
         list.add(decodeData);
     }
 }

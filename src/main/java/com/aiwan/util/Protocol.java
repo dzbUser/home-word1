@@ -17,4 +17,6 @@ public class Protocol {
     public final static short LOGOUT = 7;
     //注销用户称
     public final static short LOGOUTSUCCESS = 8;
+    //注销用户失败
+    public final static short LOGOUTFAIL = 9;
 }

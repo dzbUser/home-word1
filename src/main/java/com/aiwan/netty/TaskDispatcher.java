@@ -4,6 +4,7 @@ import com.aiwan.client.ClientServer;
 import com.aiwan.publicsystem.DecodeData;
 import com.aiwan.role.protocol.CM_UserMessage;
 import com.aiwan.role.service.UserService;
+import com.aiwan.scenes.service.ScenesService;
 import com.aiwan.util.DeepClone;
 import com.aiwan.util.Protocol;
 import org.slf4j.Logger;
@@ -23,10 +24,16 @@ import java.util.Map;
 public class TaskDispatcher {
     private static Logger logger = LoggerFactory.getLogger(TaskDispatcher.class);
     private UserService userService;
+    private ScenesService scenesService;
 
     @Autowired
     public void setUserService(UserService userService){
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setScenesService(ScenesService scenesService){
+        this.scenesService = scenesService;
     }
 
     public DecodeData dispatcherTask(DecodeData decodeData){

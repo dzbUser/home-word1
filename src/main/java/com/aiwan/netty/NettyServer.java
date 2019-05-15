@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 /**
  * netty启动类
  * */
+
 @Component("nettyServer")
 public class NettyServer {
     private final int port = 8001;

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Scope
+@Scope("singleton")
 @Repository("userDao")
 public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
     @Resource

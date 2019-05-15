@@ -48,6 +48,10 @@ public class ClientServer {
                 byte[] data = "初始化".getBytes();
                 int num = scanner.nextInt();
                 if(num == 1){
+                    if (!LoginUser.username.equals("")){
+                        System.out.println("您已经登录过了！");
+                        continue;
+                    }
                     scanner.nextLine();
                     System.out.println("登录开始，请输入账号");
                     String username = scanner.nextLine();

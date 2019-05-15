@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 
-@Scope
+@Scope("singleton")
 @Service("userService")
 public class UserServiceImpl implements UserService {
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);

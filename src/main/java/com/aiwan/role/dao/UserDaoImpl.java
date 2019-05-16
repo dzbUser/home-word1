@@ -12,6 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * 用户持久层操作类
+ * @author dengzebiao
+ * */
 @Scope("singleton")
 @Repository("userDao")
 public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
@@ -37,6 +41,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         return (List<User>) getHibernateTemplate().find("from User");
     }
 
+    //根据uid获取用户
     public User getUserById(int uid) {
         List users = getHibernateTemplate().find("from User where uid = ?", uid);
         if (users.size() == 0){
@@ -45,6 +50,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         return (User) users.get(0);
     }
 
+    //根据信息协议获取用户信息
     @Override
     @Transactional(readOnly=true)
     public User getUserByUsernameAndPassword(CM_UserMessage userMessage) {
@@ -55,6 +61,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         return (User) users.get(0);
     }
 
+    //根据用户账号获取用户信息
     @Override
     @Transactional(readOnly=true)
     public User getUserByUsername(CM_UserMessage userMessage) {

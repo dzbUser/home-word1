@@ -2,6 +2,9 @@ package com.aiwan.scenes.protocol;
 
 import java.io.Serializable;
 
+/**
+ * 地图跳转协议类
+ * */
 public class SM_Shift implements Serializable {
     private short targetX;
     private short targetY;

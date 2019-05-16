@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
+/**
+ * 客户端启动类
+ * */
 public class Start {
     private static Logger logger = LoggerFactory.getLogger(Start.class);
     public static void main(String[] args) throws Exception {

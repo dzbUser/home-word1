@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * 用户业务逻辑类
+ * */
 @Scope("singleton")
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    //用户登录
     @Override
     public DecodeData login(CM_UserMessage userMessage) {
 //        if (UserCache.userCache.get(userMessage.getUsername())!=null){
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService {
         return decodeData;
     }
 
+    //用户注册
     @Override
     public DecodeData registUser(CM_UserMessage userMessage) {
         User user = userDao.getUserByUsername(userMessage);

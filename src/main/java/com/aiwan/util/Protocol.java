@@ -1,5 +1,8 @@
 package com.aiwan.util;
 
+/**
+ * 包头协议
+ * */
 public class Protocol {
     //登录
     public final static short LOGIN = 1;

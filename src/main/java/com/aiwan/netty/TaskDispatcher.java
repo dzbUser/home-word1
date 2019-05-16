@@ -19,7 +19,6 @@ import java.util.Map;
 /**
  *
  * 任务分配器
- * type = 1.注册、2.登录、3.移动（move）、4.跳转（shift）
  * */
 @Component("taskDispatcher")
 public class TaskDispatcher {
@@ -41,27 +40,27 @@ public class TaskDispatcher {
         //开始分配任务
         DecodeData decodeData1 = null;
         switch (decodeData.getType()){
-            case Protocol.LOGIN:{
+            case Protocol.LOGIN:{//分配到登录任务
                 CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
                 decodeData1 =userService.login(userMessage);
                 break;
             }
-            case Protocol.REGIST:{
+            case Protocol.REGIST:{//分配到注册任务
                 CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
                 decodeData1 = userService.registUser(userMessage);
                 break;
             }
-            case Protocol.LOGOUT:{
+            case Protocol.LOGOUT:{//分配到注销任务
                 CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
                 decodeData1 = userService.logout(userMessage);
                 break;
             }
-            case Protocol.MOVE:{
+            case Protocol.MOVE:{//分配到角色移动任务
                 CM_Move cm_move = (CM_Move) DeepClone.restore(decodeData.getData());
                 decodeData1 = scenesService.move(cm_move);
                 break;
             }
-            case Protocol.SHIFT:{
+            case Protocol.SHIFT:{//分配到角色地图跳转任务
                 CM_Shift cm_shift = (CM_Shift) DeepClone.restore(decodeData.getData());
                 decodeData1 = scenesService.shift(cm_shift);
                 break;

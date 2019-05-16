@@ -6,6 +6,9 @@ import com.aiwan.role.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 单例资源获取工具类
+ * */
 @Component("getBean")
 public class GetBean {
     private static UserService userService;

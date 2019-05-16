@@ -30,7 +30,7 @@ public class Decoder extends ByteToMessageDecoder implements Serializable {
         int length = byteBuf.readInt();
 //        logger.debug("包的长度："+byteBuf.readableBytes()+" length:"+length);
 //        logger.debug("length:"+length+"all:");
-        if (byteBuf.readableBytes() < length) {
+        if (byteBuf.readableBytes() < length) {//包长度小于指定长度，把包存在缓存中
             byteBuf.resetReaderIndex();
         } else {
             byte[] data = new byte[length];

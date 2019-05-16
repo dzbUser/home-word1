@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 暂无用处理器
+ * */
 @Component("objectServerHandler")
 public class ObjectServerHandler extends ChannelInboundHandlerAdapter {
 

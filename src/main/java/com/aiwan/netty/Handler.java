@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 public class Handler extends SimpleChannelInboundHandler<DecodeData> {
 
     Logger logger = LoggerFactory.getLogger(Handler.class);
+
+    //netty处理器，把数据传到任务分配器，获取数据后发送出去
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
         DecodeData decodeData1 = GetBean.getTaskDispatcher().dispatcherTask(decodeData);

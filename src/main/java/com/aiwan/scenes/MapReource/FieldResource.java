@@ -5,6 +5,9 @@ import com.aiwan.model.Monster;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 野外地图静态资源类
+ * */
 public class FieldResource {
     public final static int LENGTH = 5;
     public final static short ORINGINX =1;

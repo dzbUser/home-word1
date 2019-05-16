@@ -1,7 +1,9 @@
 package com.aiwan.role.entity;
 
 import javax.persistence.*;
-
+/**
+ * 用户表实体类
+ * */
 @Entity
 @Table(name = "usertable")
 public class User {

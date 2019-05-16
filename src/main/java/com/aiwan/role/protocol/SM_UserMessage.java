@@ -2,6 +2,9 @@ package com.aiwan.role.protocol;
 
 import java.io.Serializable;
 
+/**
+ * 用户信息发送协议
+ * */
 public class SM_UserMessage implements Serializable {
     private String username;
     private Short map;

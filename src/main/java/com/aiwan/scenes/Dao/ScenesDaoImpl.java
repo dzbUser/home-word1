@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
+/**
+ * 场景持久层操作类
+ * */
 @Scope("singleton")
 @Component("scenesDao")
 public class ScenesDaoImpl extends HibernateDaoSupport implements ScenesDao{
@@ -23,6 +26,7 @@ public class ScenesDaoImpl extends HibernateDaoSupport implements ScenesDao{
         super.setSessionFactory(sessionFactory);
     }
 
+    //修改用户坐标
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void updateUserPosition(CM_Move cm_move) {
@@ -30,6 +34,7 @@ public class ScenesDaoImpl extends HibernateDaoSupport implements ScenesDao{
         getHibernateTemplate().bulkUpdate(hql);
     }
 
+    //修改用户地图，初始化坐标
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void updateMapPosition(CM_Shift cm_shift, short x, short y) {

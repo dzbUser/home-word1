@@ -2,6 +2,9 @@ package com.aiwan.scenes.protocol;
 
 import java.io.Serializable;
 
+/**
+ * 用户地图跳转静态资源接收协议类
+ * */
 public class CM_Shift implements Serializable {
     private String username;
     private short map;

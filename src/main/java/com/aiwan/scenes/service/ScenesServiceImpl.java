@@ -21,6 +21,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * 场景业务逻辑类
+ * */
 @Scope("singleton")
 @Component("scenesService")
 public class ScenesServiceImpl implements ScenesService{
@@ -38,13 +41,12 @@ public class ScenesServiceImpl implements ScenesService{
         Object data = "移动失败！";
         short type = Protocol.MOVEFAIL;
         if (user == null){
-            logger.debug(user.getUsername()+"啊实打实");
             data  = "您还未登录！";
             type = Protocol.MOVEFAIL;
         }else{
             short map = user.getMap();
             if (map == MapResourceProtocol.CITY){
-                if (CityResource.allowMove(cm_move.getTargetX(),cm_move.getTargetY())){
+                if (CityResource.allowMove(cm_move.getTargetX(),cm_move.getTargetY())){//主城内移动
                     scenesDao.updateUserPosition(cm_move);
                     String content = "移动成功\n"+CityResource.MaptoMapMessage(cm_move.getTargetX(),cm_move.getTargetY());
                     SM_Move sm_move = new SM_Move(cm_move.getTargetX(),cm_move.getCurrentY(),content);
@@ -54,8 +56,8 @@ public class ScenesServiceImpl implements ScenesService{
                     data = "此处不可移动！";
                     type = Protocol.MOVEFAIL;
                 }
-            }else if (map == MapResourceProtocol.FIELD){
-                if (FieldResource.allowMove(cm_move.getTargetX(),cm_move.getTargetY())){
+            }else if (map == MapResourceProtocol.FIELD){//野外移动
+                if (FieldResource.allowMove(cm_move.getTargetX(),cm_move.getTargetY())){//
                     scenesDao.updateUserPosition(cm_move);
                     String content = "移动成功\n"+FieldResource.MaptoMapMessage(cm_move.getTargetX(),cm_move.getTargetY());
                     SM_Move sm_move = new SM_Move(cm_move.getTargetX(),cm_move.getCurrentY(),content);
@@ -84,13 +86,13 @@ public class ScenesServiceImpl implements ScenesService{
             type = Protocol.MOVEFAIL;
         }else {
 
-            if (cm_shift.getMap() == MapResourceProtocol.CITY){
+            if (cm_shift.getMap() == MapResourceProtocol.CITY){//移动到主城
                 scenesDao.updateMapPosition(cm_shift,CityResource.ORINGINX,CityResource.ORINGINY);
                 String content = "跳转成功\n"+CityResource.MaptoMapMessage(CityResource.ORINGINX,CityResource.ORINGINY);
                 SM_Shift sm_shift = new SM_Shift(CityResource.ORINGINX,CityResource.ORINGINY,MapResourceProtocol.CITY,content);
                 data = sm_shift;
                 type = Protocol.SHIFTSUCCESS;
-            }else if (cm_shift.getMap() == MapResourceProtocol.FIELD){
+            }else if (cm_shift.getMap() == MapResourceProtocol.FIELD){//移动到野外
                 scenesDao.updateMapPosition(cm_shift,FieldResource.ORINGINX,FieldResource.ORINGINY);
                 String content = "跳转成功\n"+FieldResource.MaptoMapMessage(FieldResource.ORINGINX,FieldResource.ORINGINY);
                 SM_Shift sm_shift = new SM_Shift(FieldResource.ORINGINX,FieldResource.ORINGINY,MapResourceProtocol.FIELD,content);

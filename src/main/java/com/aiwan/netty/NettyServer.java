@@ -39,10 +39,6 @@ public class NettyServer {
                                 .addLast("encoder", new Encoder())  // 2
 //                                .addLast("aggregator", new HttpObjectAggregator(256 * 1024))    // 3
                                 .addLast("handler", new Handler());        // 4
-//                        ch.pipeline().addLast(new ObjectEncoder());
-//                        ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE,
-//                                ClassResolvers.cacheDisabled(null)));
-//                        ch.pipeline().addLast((ChannelHandler) classPathXmlApplicationContext.getBean("objectServerHandler"));
                     }
                 })
                 .option(ChannelOption.SO_BACKLOG, 128) // determining the number of connections queued

@@ -5,6 +5,9 @@ import com.aiwan.model.NPC;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 主城地图静态资源类
+ * */
 public class CityResource {
     public final static int LENGTH = 5;
     public final static short ORINGINX =1;

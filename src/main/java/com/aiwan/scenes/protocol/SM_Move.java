@@ -2,6 +2,9 @@ package com.aiwan.scenes.protocol;
 
 import java.io.Serializable;
 
+/**
+ * 用户移动协议发送类
+ * */
 public class SM_Move implements Serializable {
     private short targetX;
     private short targetY;

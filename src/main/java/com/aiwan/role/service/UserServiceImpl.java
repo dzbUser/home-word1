@@ -5,10 +5,9 @@ import com.aiwan.role.entity.User;
 import com.aiwan.role.dao.UserDao;
 import com.aiwan.role.protocol.CM_UserMessage;
 import com.aiwan.role.protocol.SM_UserMessage;
-import com.aiwan.util.DecodeDataShift;
-import com.aiwan.util.DeepClone;
-import com.aiwan.util.Protocol;
-import com.aiwan.util.UserCache;
+import com.aiwan.scenes.MapReource.CityResource;
+import com.aiwan.scenes.MapReource.FieldResource;
+import com.aiwan.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +52,12 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setMap(user.getMap());
             sm_userMessage.setCurrentX(user.getCurrentX());
             sm_userMessage.setCurrentY(user.getCurrentY());
+            if (user.getMap() == 1){
+                sm_userMessage.setMapMessage(CityResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
+            }
+            else if(user.getMap() == 2){
+                sm_userMessage.setMapMessage(FieldResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
+            }
             decodeData = DecodeDataShift.shift(Protocol.LOGINSUCCESS,sm_userMessage);
         }
         return decodeData;
@@ -75,9 +80,9 @@ public class UserServiceImpl implements UserService {
             User user1 = new User();
             user1.setUsername(userMessage.getUsername());
             user1.setPassword(userMessage.getPassword());
-            user1.setMap((short) 1);
-            user1.setCurrentX((short)1);
-            user1.setCurrentY((short)1);
+            user1.setMap(MapResourceProtocol.CITY);
+            user1.setCurrentX(CityResource.ORINGINX);
+            user1.setCurrentY(CityResource.ORINGINY);
             userDao.insert(user1);
             String content = "恭喜您，注册成功！";
             decodeData = DecodeDataShift.shift(Protocol.REGISTSUCCESS,content);

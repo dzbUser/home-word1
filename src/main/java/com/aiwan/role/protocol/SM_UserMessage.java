@@ -7,6 +7,7 @@ public class SM_UserMessage implements Serializable {
     private Short map;
     private Short currentX;
     private Short currentY;
+    private String mapMessage;
 
     public short getMap() {
         return map;
@@ -37,5 +38,13 @@ public class SM_UserMessage implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getMapMessage() {
+        return mapMessage;
+    }
+
+    public void setMapMessage(String mapMessage) {
+        this.mapMessage = mapMessage;
     }
 }

@@ -19,4 +19,16 @@ public class Protocol {
     public final static short LOGOUTSUCCESS = 8;
     //注销用户失败
     public final static short LOGOUTFAIL = 9;
+    //用户移动
+    public final static short MOVE = 10;
+    //移动成功
+    public final static short MOVESUCCESS = 11;
+    //移动失败
+    public final static short MOVEFAIL = 12;
+    //跳转
+    public final static short SHIFT = 13;
+    //跳转成功
+    public final static short SHIFTSUCCESS = 14;
+    //跳转失败
+    public final static short SHIFTFAIL = 15;
 }

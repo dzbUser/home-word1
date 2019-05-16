@@ -1,5 +1,7 @@
 package com.aiwan.client;
 import com.aiwan.publicsystem.DecodeData;
+import com.aiwan.util.DeepClone;
+import com.aiwan.util.Protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -25,13 +27,20 @@ public class ClientDecoder extends ByteToMessageDecoder implements Serializable 
         * 4.转化为DecodeData
         * */
         decodeData = new DecodeData();
-        Short type = byteBuf.readShort();
+        short type = byteBuf.readShort();
         int length = byteBuf.readInt();
-        byte[] data = new byte[length];
-        byteBuf.readBytes(data);
-        decodeData.setType(type);
-        decodeData.setLength(length);
-        decodeData.setData(data);
-        list.add(decodeData);
+//        logger.debug("包的长度："+byteBuf.readableBytes()+" length:"+length);
+//        logger.debug("length:"+length+"all:");
+        if (byteBuf.readableBytes()< length){
+            byteBuf.resetReaderIndex();
+        }else {
+            byte[] data = new byte[length];
+            byteBuf.readBytes(data);
+            decodeData.setType(type);
+            decodeData.setLength(length);
+            decodeData.setData(data);
+            list.add(decodeData);
+        }
+
     }
 }

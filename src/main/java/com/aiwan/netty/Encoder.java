@@ -13,9 +13,10 @@ public class Encoder extends MessageToByteEncoder<DecodeData> {
     Logger logger = LoggerFactory.getLogger(Encoder.class);
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, DecodeData decodeData, ByteBuf byteBuf) throws Exception {
-        logger.debug("Encoder start");
+//        logger.debug("Encoder start");
         byteBuf.writeShort(decodeData.getType());
         byteBuf.writeInt(decodeData.getLength());
         byteBuf.writeBytes(decodeData.getData());
+        logger.debug("length:"+decodeData.getLength()+"  decodeDataLength:"+decodeData.getData().length);
     }
 }

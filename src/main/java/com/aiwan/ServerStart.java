@@ -30,7 +30,5 @@ public class ServerStart {
                     }
                 }
         ).start();
-        UserService userService =(UserService) applicationContext.getBean("userService");
-        logger.debug("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh:"+userService.getUserByUid(1).getUsername());
     }
 }

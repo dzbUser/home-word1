@@ -1,7 +1,10 @@
 package com.aiwan.client;
 
+import com.aiwan.publicsystem.CM_Map;
 import com.aiwan.publicsystem.DecodeData;
 import com.aiwan.role.protocol.CM_UserMessage;
+import com.aiwan.scenes.protocol.CM_Move;
+import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.util.DeepClone;
 import com.aiwan.util.Protocol;
 import io.netty.bootstrap.Bootstrap;
@@ -41,14 +44,14 @@ public class ClientServer {
             Channel channel = channelFuture.channel();
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
-            System.out.println("请输入1.登录 2.注册 3.注销");
+            System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转");
             while(true){
                 CM_UserMessage userMessage = new CM_UserMessage();
                 DecodeData decodeData = new DecodeData();
                 byte[] data = "初始化".getBytes();
                 int num = scanner.nextInt();
                 if(num == 1){
-                    if (!LoginUser.username.equals("")){
+                    if (!LoginUser.getUsername().equals("")){
                         System.out.println("您已经登录过了！");
                         continue;
                     }
@@ -65,7 +68,11 @@ public class ClientServer {
                     decodeData.setData(data);
                     channel.writeAndFlush(decodeData);
                 }else if (num == 2){
-                    System.out.println("注册用户开发，请输入注册账号");
+                    if (!LoginUser.getUsername().equals("")){
+                        System.out.println("您已经登录，请退出后再注册！");
+                        continue;
+                    }
+                    System.out.println("注册用户开始\n请输入注册账号");
                     scanner.nextLine();
                     String username = scanner.nextLine();
                     System.out.println("请输入密码");
@@ -78,11 +85,11 @@ public class ClientServer {
                     decodeData.setData(data);
                     channel.writeAndFlush(decodeData);
                 }else if (num == 3){
-                    if (LoginUser.username.equals("")){
+                    if (LoginUser.getUsername().equals("")){
                         System.out.println("您还未登录，请登录游戏！");
                         continue;
                     }
-                    userMessage.setUsername(LoginUser.username);
+                    userMessage.setUsername(LoginUser.getUsername());
                     userMessage.setPassword("");
                     data = DeepClone.writeInto(userMessage);
                     decodeData.setType(Protocol.LOGOUT);
@@ -90,7 +97,48 @@ public class ClientServer {
                     decodeData.setData(data);
                     channel.writeAndFlush(decodeData);
                 }
-                logger.debug(num+"");
+                else  if (num == 4){
+                    if (LoginUser.getUsername().equals("")){
+                        System.out.println("您还未登录，请登录游戏！");
+                        continue;
+                    }
+                    System.out.println(LoginUser.getMapMessage());
+                    scanner.nextLine();
+                    System.out.println("请输入您要移动的横坐标");
+                    short x = scanner.nextShort();
+                    System.out.println("请输入您要移动的横坐标纵坐标");
+                    short y = scanner.nextShort();
+                    CM_Move move = new CM_Move(LoginUser.getCurrentX(),LoginUser.getCurrentY(),x,y,LoginUser.getUsername());
+                    decodeData.setType(Protocol.MOVE);
+                    data = DeepClone.writeInto(move);
+                    decodeData.setLength(data.length);
+                    decodeData.setData(data);
+                    channel.writeAndFlush(decodeData);
+                }else if (num == 5){
+                    if (LoginUser.getUsername().equals("")){
+                        System.out.println("您还未登录，请登录游戏！");
+                        continue;
+                    }
+                    System.out.println(LoginUser.getMapMessage());
+                    System.out.println("请选择您要跳转的地图；1主城 2野外");
+                    scanner.nextLine();
+                    short map = scanner.nextShort();
+                    if (map > 2){
+                        System.out.println("没有这个地图，请重新选择");
+                        continue;
+                    }else {
+                        CM_Shift cm_shift = new CM_Shift(LoginUser.getUsername(),map);
+                        decodeData.setType(Protocol.SHIFT);
+                        data = DeepClone.writeInto(cm_shift);
+                        decodeData.setLength(data.length);
+                        decodeData.setData(data);
+                        channel.writeAndFlush(decodeData);
+                    }
+                }else {
+                    System.out.println("尊敬的用户，您的输入不规格，请重新输入");
+                    System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转");
+                    continue;
+                }
             }
 
         }catch (Exception e){

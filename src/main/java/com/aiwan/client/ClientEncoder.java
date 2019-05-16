@@ -12,7 +12,7 @@ public class ClientEncoder extends MessageToByteEncoder<DecodeData> {
     Logger logger = LoggerFactory.getLogger(ClientEncoder.class);
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, DecodeData decodeData, ByteBuf byteBuf) throws Exception {
-        logger.debug("Encoder start");
+//        logger.debug("Encoder start");
         byteBuf.writeShort(decodeData.getType());
         byteBuf.writeInt(decodeData.getLength());
         byteBuf.writeBytes(decodeData.getData());

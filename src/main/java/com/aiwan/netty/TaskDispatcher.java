@@ -1,9 +1,10 @@
 package com.aiwan.netty;
 
-import com.aiwan.client.ClientServer;
 import com.aiwan.publicsystem.DecodeData;
 import com.aiwan.role.protocol.CM_UserMessage;
 import com.aiwan.role.service.UserService;
+import com.aiwan.scenes.protocol.CM_Move;
+import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.scenes.service.ScenesService;
 import com.aiwan.util.DeepClone;
 import com.aiwan.util.Protocol;
@@ -55,13 +56,16 @@ public class TaskDispatcher {
                 decodeData1 = userService.logout(userMessage);
                 break;
             }
-//            case Protocol.MOVE:{
-//                break;
-//            }
-//
-//            case Protocol.SHIFT:{
-//                break;
-//            }
+            case Protocol.MOVE:{
+                CM_Move cm_move = (CM_Move) DeepClone.restore(decodeData.getData());
+                decodeData1 = scenesService.move(cm_move);
+                break;
+            }
+            case Protocol.SHIFT:{
+                CM_Shift cm_shift = (CM_Shift) DeepClone.restore(decodeData.getData());
+                decodeData1 = scenesService.shift(cm_shift);
+                break;
+            }
             default:
                 throw new IllegalStateException("Unexpected value: " + decodeData.getType());
         }

@@ -1,15 +1,15 @@
 package com.aiwan.netty;
 
-import com.aiwan.publicsystem.DecodeData;
+import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.util.GetBean;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
  * */
 public class Handler extends SimpleChannelInboundHandler<DecodeData> {
 
+    Map<String,Channel> channelMap = new HashMap<>();
     Logger logger = LoggerFactory.getLogger(Handler.class);
 
     //netty处理器，把数据传到任务分配器，获取数据后发送出去

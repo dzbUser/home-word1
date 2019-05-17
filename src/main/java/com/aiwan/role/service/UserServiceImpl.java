@@ -1,6 +1,6 @@
 package com.aiwan.role.service;
 
-import com.aiwan.publicsystem.DecodeData;
+import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.role.entity.User;
 import com.aiwan.role.dao.UserDao;
 import com.aiwan.role.protocol.CM_UserMessage;
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         if (user == null){
             logger.debug(userMessage.getUsername()+"登录失败");
             String msg = new String("账号或者密码错误");
-            decodeData = DecodeDataShift.shift(Protocol.LOGINFAIL,msg);
+            decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINFAIL,msg);
         }
         else {
             logger.debug(userMessage.getUsername()+"用户登录成功");
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
             else if(user.getMap() == 2){
                 sm_userMessage.setMapMessage(FieldResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
             }
-            decodeData = DecodeDataShift.shift(Protocol.LOGINSUCCESS,sm_userMessage);
+            decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINSUCCESS,sm_userMessage);
         }
         return decodeData;
     }
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         if(userMessage == null){
             logger.debug("输入错误");
             String content = "抱歉，用户账号已被注册，请选择其他账号";
-            decodeData = DecodeDataShift.shift(Protocol.REGISTDAIL,content);
+            decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTDAIL,content);
             return decodeData;
         }
         //账号可用
@@ -89,12 +89,12 @@ public class UserServiceImpl implements UserService {
             user1.setCurrentY(CityResource.ORINGINY);
             userDao.insert(user1);
             String content = "恭喜您，注册成功！";
-            decodeData = DecodeDataShift.shift(Protocol.REGISTSUCCESS,content);
+            decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTSUCCESS,content);
             return decodeData;
         }else {//账号已被注册
             logger.debug("用户已存在");
             String content = "抱歉，用户账号已被注册，请选择其他账号";
-            decodeData = DecodeDataShift.shift(Protocol.REGISTDAIL,content);
+            decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTDAIL,content);
             return decodeData;
         }
     }
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 //        logger.debug(UserCache.userCache.get(userMessage.getUsername())+"");
         logger.debug("注销成功！");
         String content = new String("注销用户成功！");
-        DecodeData decodeData = DecodeDataShift.shift(Protocol.LOGOUTSUCCESS,content);
+        DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.LOGOUTSUCCESS,content);
         return decodeData;
     }
 

@@ -1,6 +1,6 @@
 package com.aiwan.role.service;
 
-import com.aiwan.publicsystem.DecodeData;
+import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.role.entity.User;
 import com.aiwan.role.protocol.CM_UserMessage;
 

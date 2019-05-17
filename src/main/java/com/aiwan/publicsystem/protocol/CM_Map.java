@@ -1,4 +1,4 @@
-package com.aiwan.publicsystem;
+package com.aiwan.publicsystem.protocol;
 
 /**
  * 客户端地图接收数据类

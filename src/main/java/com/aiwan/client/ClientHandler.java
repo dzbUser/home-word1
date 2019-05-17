@@ -1,19 +1,17 @@
 package com.aiwan.client;
 
-import com.aiwan.netty.TaskDispatcher;
-import com.aiwan.publicsystem.DecodeData;
+import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.role.protocol.SM_UserMessage;
 import com.aiwan.scenes.protocol.SM_Move;
 import com.aiwan.scenes.protocol.SM_Shift;
-import com.aiwan.util.DeepClone;
+import com.aiwan.util.ConsequenceCode;
+import com.aiwan.util.ObjectToBytes;
 import com.aiwan.util.Protocol;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -27,12 +25,12 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
         Channel channel = ctx.channel();
-        if (decodeData.getType() == Protocol.LOGINFAIL ||decodeData.getType() == Protocol.REGISTDAIL||decodeData.getType() == Protocol.REGISTSUCCESS||decodeData.getType() == Protocol.MOVEFAIL||decodeData.getType()==Protocol.SHIFTFAIL){
-            String content = (String) DeepClone.restore(decodeData.getData());
+        if (decodeData.getType() == ConsequenceCode.LOGINFAIL ||decodeData.getType() == ConsequenceCode.REGISTDAIL||decodeData.getType() == ConsequenceCode.REGISTSUCCESS||decodeData.getType() == ConsequenceCode.MOVEFAIL||decodeData.getType()==ConsequenceCode.SHIFTFAIL){
+            String content = (String) ObjectToBytes.restore(decodeData.getData());
            System.out.println(content);
         }
-        else if (decodeData.getType() == Protocol.LOGINSUCCESS){
-            SM_UserMessage userMessage = (SM_UserMessage) DeepClone.restore(decodeData.getData());
+        else if (decodeData.getType() == ConsequenceCode.LOGINSUCCESS){
+            SM_UserMessage userMessage = (SM_UserMessage) ObjectToBytes.restore(decodeData.getData());
             LoginUser.setUsername (userMessage.getUsername());
             LoginUser.setCurrentX(userMessage.getCurrentX());
             LoginUser.setCurrentY(userMessage.getCurrentY());
@@ -41,18 +39,18 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
             System.out.println(userMessage.getUsername()+"登录成功");
             System.out.println(userMessage.getMapMessage());
 
-        }else if(decodeData.getType() == Protocol.LOGOUTSUCCESS){
-            String content = (String) DeepClone.restore(decodeData.getData());
+        }else if(decodeData.getType() == ConsequenceCode.LOGOUTSUCCESS){
+            String content = (String) ObjectToBytes.restore(decodeData.getData());
             LoginUser.setUsername("");
             System.out.println(content);
-        }else if (decodeData.getType() == Protocol.MOVESUCCESS){
-            SM_Move sm_move= (SM_Move) DeepClone.restore(decodeData.getData());
+        }else if (decodeData.getType() == ConsequenceCode.MOVESUCCESS){
+            SM_Move sm_move= (SM_Move) ObjectToBytes.restore(decodeData.getData());
             LoginUser.setCurrentY(sm_move.getTargetY());
             LoginUser.setCurrentX(sm_move.getTargetX());
             LoginUser.setMapMessage(sm_move.getMapMessage());
             System.out.println(sm_move.getMapMessage());
-        }else if(decodeData.getType() == Protocol.SHIFTSUCCESS){
-            SM_Shift sm_shift = (SM_Shift) DeepClone.restore(decodeData.getData());
+        }else if(decodeData.getType() == ConsequenceCode.SHIFTSUCCESS){
+            SM_Shift sm_shift = (SM_Shift) ObjectToBytes.restore(decodeData.getData());
             LoginUser.setCurrentY(sm_shift.getTargetY());
             LoginUser.setCurrentX(sm_shift.getTargetX());
             LoginUser.setMap(sm_shift.getMap());

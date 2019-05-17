@@ -1,14 +1,9 @@
 package com.aiwan.client;
 
 
-import com.aiwan.publicsystem.DecodeData;
-import com.aiwan.role.protocol.CM_UserMessage;
-import com.aiwan.util.DeepClone;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Scanner;
 
 /**
  * 客户端启动类

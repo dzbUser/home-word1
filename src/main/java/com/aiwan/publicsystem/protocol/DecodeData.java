@@ -1,4 +1,4 @@
-package com.aiwan.publicsystem;
+package com.aiwan.publicsystem.protocol;
 
 import java.io.Serializable;
 

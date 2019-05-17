@@ -1,8 +1,7 @@
 package com.aiwan.scenes.service;
 
-import com.aiwan.publicsystem.DecodeData;
+import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.role.entity.User;
-import com.aiwan.role.service.UserServiceImpl;
 import com.aiwan.scenes.Dao.ScenesDao;
 import com.aiwan.scenes.MapReource.CityResource;
 import com.aiwan.scenes.MapReource.FieldResource;
@@ -10,10 +9,7 @@ import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.scenes.protocol.SM_Move;
 import com.aiwan.scenes.protocol.SM_Shift;
-import com.aiwan.util.DecodeDataShift;
-import com.aiwan.util.MapResourceProtocol;
-import com.aiwan.util.Protocol;
-import com.aiwan.util.UserCache;
+import com.aiwan.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +35,10 @@ public class ScenesServiceImpl implements ScenesService{
     public DecodeData move(CM_Move cm_move) {
         User user = UserCache.getUserByUsername(cm_move.getUsername());
         Object data = "移动失败！";
-        short type = Protocol.MOVEFAIL;
+        short type = ConsequenceCode.MOVEFAIL;
         if (user == null){
             data  = "您还未登录！";
-            type = Protocol.MOVEFAIL;
+            type = ConsequenceCode.MOVEFAIL;
         }else{
             short map = user.getMap();
             if (map == MapResourceProtocol.CITY){
@@ -51,10 +47,10 @@ public class ScenesServiceImpl implements ScenesService{
                     String content = "移动成功\n"+CityResource.MaptoMapMessage(cm_move.getTargetX(),cm_move.getTargetY());
                     SM_Move sm_move = new SM_Move(cm_move.getTargetX(),cm_move.getCurrentY(),content);
                     data = sm_move;
-                    type = Protocol.MOVESUCCESS;
+                    type = ConsequenceCode.MOVESUCCESS;
                 }else {
                     data = "此处不可移动！";
-                    type = Protocol.MOVEFAIL;
+                    type = ConsequenceCode.MOVEFAIL;
                 }
             }else if (map == MapResourceProtocol.FIELD){//野外移动
                 if (FieldResource.allowMove(cm_move.getTargetX(),cm_move.getTargetY())){//
@@ -62,14 +58,14 @@ public class ScenesServiceImpl implements ScenesService{
                     String content = "移动成功\n"+FieldResource.MaptoMapMessage(cm_move.getTargetX(),cm_move.getTargetY());
                     SM_Move sm_move = new SM_Move(cm_move.getTargetX(),cm_move.getCurrentY(),content);
                     data = sm_move;
-                    type = Protocol.MOVESUCCESS;
+                    type = ConsequenceCode.MOVESUCCESS;
                 }else {
                     data = "此处不可移动！";
-                    type = Protocol.MOVEFAIL;
+                    type = ConsequenceCode.MOVEFAIL;
                 }
             }
         }
-        DecodeData decodeData = DecodeDataShift.shift(type,data);
+        DecodeData decodeData = SMToDecodeData.shift(type,data);
         return decodeData;
     }
 
@@ -80,10 +76,10 @@ public class ScenesServiceImpl implements ScenesService{
     public DecodeData shift(CM_Shift cm_shift) {
         User user = UserCache.getUserByUsername(cm_shift.getUsername());
         Object data = "跳转失败！";
-        short type = Protocol.SHIFTFAIL;
+        short type = ConsequenceCode.SHIFTFAIL;
         if (user == null){
             data  = "您还未登录！";
-            type = Protocol.MOVEFAIL;
+            type = ConsequenceCode.SHIFTFAIL;
         }else {
 
             if (cm_shift.getMap() == MapResourceProtocol.CITY){//移动到主城
@@ -91,15 +87,15 @@ public class ScenesServiceImpl implements ScenesService{
                 String content = "跳转成功\n"+CityResource.MaptoMapMessage(CityResource.ORINGINX,CityResource.ORINGINY);
                 SM_Shift sm_shift = new SM_Shift(CityResource.ORINGINX,CityResource.ORINGINY,MapResourceProtocol.CITY,content);
                 data = sm_shift;
-                type = Protocol.SHIFTSUCCESS;
+                type = ConsequenceCode.SHIFTSUCCESS;
             }else if (cm_shift.getMap() == MapResourceProtocol.FIELD){//移动到野外
                 scenesDao.updateMapPosition(cm_shift,FieldResource.ORINGINX,FieldResource.ORINGINY);
                 String content = "跳转成功\n"+FieldResource.MaptoMapMessage(FieldResource.ORINGINX,FieldResource.ORINGINY);
                 SM_Shift sm_shift = new SM_Shift(FieldResource.ORINGINX,FieldResource.ORINGINY,MapResourceProtocol.FIELD,content);
                 data = sm_shift;
-                type = Protocol.SHIFTSUCCESS;
+                type = ConsequenceCode.SHIFTSUCCESS;
             }
         }
-        return DecodeDataShift.shift(type,data);
+        return SMToDecodeData.shift(type,data);
     }
 }

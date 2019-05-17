@@ -1,6 +1,5 @@
 package com.aiwan.netty;
-import com.aiwan.publicsystem.DecodeData;
-import com.aiwan.util.DeepClone;
+import com.aiwan.publicsystem.protocol.DecodeData;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;

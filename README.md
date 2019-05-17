@@ -37,8 +37,8 @@
 		CM_Shift:返回跳转信息给客户端  
 	4. MapResource：地图资源类包，有两张地图CityResource，FieldResource，分别为主城、野外  
 ### util:工具类  
-	1. DecodeDataShift:DecodeData类转换工具类  
-	2. DeepClone:把对象转变成二进制  
+	1. SMToDecodeData:DecodeData类转换工具类  
+	2. ObjectToBytes:把对象转变成二进制  
 	3. GetBean:单例资源获取工具类  
 	4. MapResourceProtocol:地图协议  
 	5. Protocol:包头协议  

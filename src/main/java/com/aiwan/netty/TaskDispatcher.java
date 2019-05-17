@@ -1,20 +1,17 @@
 package com.aiwan.netty;
 
-import com.aiwan.publicsystem.DecodeData;
+import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.role.protocol.CM_UserMessage;
 import com.aiwan.role.service.UserService;
 import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.scenes.service.ScenesService;
-import com.aiwan.util.DeepClone;
+import com.aiwan.util.ObjectToBytes;
 import com.aiwan.util.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -22,6 +19,7 @@ import java.util.Map;
  * */
 @Component("taskDispatcher")
 public class TaskDispatcher {
+
     private static Logger logger = LoggerFactory.getLogger(TaskDispatcher.class);
     private UserService userService;
     private ScenesService scenesService;
@@ -41,27 +39,27 @@ public class TaskDispatcher {
         DecodeData decodeData1 = null;
         switch (decodeData.getType()){
             case Protocol.LOGIN:{//分配到登录任务
-                CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
+                CM_UserMessage userMessage = (CM_UserMessage) ObjectToBytes.restore(decodeData.getData());
                 decodeData1 =userService.login(userMessage);
                 break;
             }
             case Protocol.REGIST:{//分配到注册任务
-                CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
+                CM_UserMessage userMessage = (CM_UserMessage) ObjectToBytes.restore(decodeData.getData());
                 decodeData1 = userService.registUser(userMessage);
                 break;
             }
             case Protocol.LOGOUT:{//分配到注销任务
-                CM_UserMessage userMessage = (CM_UserMessage) DeepClone.restore(decodeData.getData());
+                CM_UserMessage userMessage = (CM_UserMessage) ObjectToBytes.restore(decodeData.getData());
                 decodeData1 = userService.logout(userMessage);
                 break;
             }
             case Protocol.MOVE:{//分配到角色移动任务
-                CM_Move cm_move = (CM_Move) DeepClone.restore(decodeData.getData());
+                CM_Move cm_move = (CM_Move) ObjectToBytes.restore(decodeData.getData());
                 decodeData1 = scenesService.move(cm_move);
                 break;
             }
             case Protocol.SHIFT:{//分配到角色地图跳转任务
-                CM_Shift cm_shift = (CM_Shift) DeepClone.restore(decodeData.getData());
+                CM_Shift cm_shift = (CM_Shift) ObjectToBytes.restore(decodeData.getData());
                 decodeData1 = scenesService.shift(cm_shift);
                 break;
             }

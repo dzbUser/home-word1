@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
-public class DeepClone {
-    private DeepClone() {
+public class ObjectToBytes {
+    private ObjectToBytes() {
     }
 
-    private static Logger logger = LoggerFactory.getLogger(DeepClone.class);
+    private static Logger logger = LoggerFactory.getLogger(ObjectToBytes.class);
 
     /**
      * 把对象转变成二进制

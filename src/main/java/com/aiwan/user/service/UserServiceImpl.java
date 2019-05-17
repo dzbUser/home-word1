@@ -1,13 +1,15 @@
-package com.aiwan.role.service;
+package com.aiwan.user.service;
 
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.role.entity.User;
-import com.aiwan.role.dao.UserDao;
-import com.aiwan.role.protocol.CM_UserMessage;
-import com.aiwan.role.protocol.SM_UserMessage;
+import com.aiwan.publicsystem.service.ChannelManager;
+import com.aiwan.user.entity.User;
+import com.aiwan.user.dao.UserDao;
+import com.aiwan.user.protocol.CM_UserMessage;
+import com.aiwan.user.protocol.SM_UserMessage;
 import com.aiwan.scenes.MapReource.CityResource;
 import com.aiwan.scenes.MapReource.FieldResource;
 import com.aiwan.util.*;
+import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     //用户登录
     @Override
-    public DecodeData login(CM_UserMessage userMessage) {
+    public void login(CM_UserMessage userMessage, Channel channel) {
 //        if (UserCache.userCache.get(userMessage.getUsername())!=null){
 //            logger.debug("您已经登录过了");
 //        }
@@ -49,7 +51,14 @@ public class UserServiceImpl implements UserService {
         }
         else {
             logger.debug(userMessage.getUsername()+"用户登录成功");
+            //加入缓存
             UserCache.userCache.put(user.getUsername(),user);
+            //加入用户Channel
+//            if (ChannelManager.getChannelByUsername(user.getUsername()) == null){
+//
+//            }
+            ChannelManager.putChannel(user.getUsername(),channel);
+
             SM_UserMessage sm_userMessage = new SM_UserMessage();
             sm_userMessage.setUsername(user.getUsername());
             sm_userMessage.setMap(user.getMap());
@@ -63,12 +72,12 @@ public class UserServiceImpl implements UserService {
             }
             decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINSUCCESS,sm_userMessage);
         }
-        return decodeData;
+        channel.writeAndFlush(decodeData);
     }
 
     //用户注册
     @Override
-    public DecodeData registUser(CM_UserMessage userMessage) {
+    public void registUser(CM_UserMessage userMessage,Channel channel) {
         User user = userDao.getUserByUsername(userMessage);
         DecodeData decodeData = new DecodeData();
         //错误输入
@@ -76,7 +85,7 @@ public class UserServiceImpl implements UserService {
             logger.debug("输入错误");
             String content = "抱歉，用户账号已被注册，请选择其他账号";
             decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTDAIL,content);
-            return decodeData;
+            channel.writeAndFlush(decodeData);
         }
         //账号可用
         else if (user == null){
@@ -90,26 +99,28 @@ public class UserServiceImpl implements UserService {
             userDao.insert(user1);
             String content = "恭喜您，注册成功！";
             decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTSUCCESS,content);
-            return decodeData;
+            channel.writeAndFlush(decodeData);
         }else {//账号已被注册
             logger.debug("用户已存在");
             String content = "抱歉，用户账号已被注册，请选择其他账号";
             decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTDAIL,content);
-            return decodeData;
+            channel.writeAndFlush(decodeData);
         }
     }
 
 
     @Override
     //用户注销
-    public DecodeData logout(CM_UserMessage userMessage) {
+    public void logout(CM_UserMessage userMessage) {
 //        logger.debug(UserCache.userCache.get(userMessage.getUsername()).getUsername()+"hahaah");
         UserCache.userCache.remove(userMessage.getUsername());
 //        logger.debug(UserCache.userCache.get(userMessage.getUsername())+"");
         logger.debug("注销成功！");
         String content = new String("注销用户成功！");
         DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.LOGOUTSUCCESS,content);
-        return decodeData;
+        Channel channel = ChannelManager.getChannelByUsername(userMessage.getUsername());
+        ChannelManager.removeChannel(userMessage.getUsername());
+        channel.writeAndFlush(decodeData);
     }
 
 

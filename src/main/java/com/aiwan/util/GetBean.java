@@ -1,8 +1,8 @@
 package com.aiwan.util;
 
 import com.aiwan.netty.TaskDispatcher;
-import com.aiwan.role.dao.UserDao;
-import com.aiwan.role.service.UserService;
+import com.aiwan.user.dao.UserDao;
+import com.aiwan.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

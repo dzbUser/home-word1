@@ -23,12 +23,7 @@ public class Handler extends SimpleChannelInboundHandler<DecodeData> {
     //netty处理器，把数据传到任务分配器，获取数据后发送出去
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
-        DecodeData decodeData1 = GetBean.getTaskDispatcher().dispatcherTask(decodeData);
-        Channel channel = ctx.channel();
-        if (decodeData1 == null){
-            logger.debug("decodeData1 is null");
-        }
-        channel.writeAndFlush(decodeData1);
+        GetBean.getTaskDispatcher().dispatcherTask(decodeData,ctx.channel());
     }
 
     @Override

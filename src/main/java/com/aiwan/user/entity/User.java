@@ -1,4 +1,4 @@
-package com.aiwan.role.entity;
+package com.aiwan.user.entity;
 
 import javax.persistence.*;
 /**

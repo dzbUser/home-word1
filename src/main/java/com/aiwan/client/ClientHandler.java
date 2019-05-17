@@ -1,12 +1,11 @@
 package com.aiwan.client;
 
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.role.protocol.SM_UserMessage;
+import com.aiwan.user.protocol.SM_UserMessage;
 import com.aiwan.scenes.protocol.SM_Move;
 import com.aiwan.scenes.protocol.SM_Shift;
 import com.aiwan.util.ConsequenceCode;
 import com.aiwan.util.ObjectToBytes;
-import com.aiwan.util.Protocol;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

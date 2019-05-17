@@ -1,4 +1,4 @@
-package com.aiwan.role.protocol;
+package com.aiwan.user.protocol;
 
 import java.io.Serializable;
 

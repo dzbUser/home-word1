@@ -1,7 +1,7 @@
-package com.aiwan.role.dao;
+package com.aiwan.user.dao;
 
-import com.aiwan.role.entity.User;
-import com.aiwan.role.protocol.CM_UserMessage;
+import com.aiwan.user.entity.User;
+import com.aiwan.user.protocol.CM_UserMessage;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;

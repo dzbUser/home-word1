@@ -3,7 +3,7 @@ package com.aiwan.client;
 import com.aiwan.netty.Decoder;
 import com.aiwan.netty.Encoder;
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.role.protocol.CM_UserMessage;
+import com.aiwan.user.protocol.CM_UserMessage;
 import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.util.ObjectToBytes;

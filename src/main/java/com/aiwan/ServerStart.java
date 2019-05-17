@@ -1,7 +1,6 @@
 package com.aiwan;
 
 import com.aiwan.netty.NettyServer;
-import com.aiwan.role.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

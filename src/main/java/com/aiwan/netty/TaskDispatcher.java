@@ -1,13 +1,14 @@
 package com.aiwan.netty;
 
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.role.protocol.CM_UserMessage;
-import com.aiwan.role.service.UserService;
+import com.aiwan.user.protocol.CM_UserMessage;
+import com.aiwan.user.service.UserService;
 import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.scenes.service.ScenesService;
 import com.aiwan.util.ObjectToBytes;
 import com.aiwan.util.Protocol;
+import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,23 +35,23 @@ public class TaskDispatcher {
         this.scenesService = scenesService;
     }
 
-    public DecodeData dispatcherTask(DecodeData decodeData){
+    public DecodeData dispatcherTask(DecodeData decodeData, Channel channel){
         //开始分配任务
         DecodeData decodeData1 = null;
         switch (decodeData.getType()){
             case Protocol.LOGIN:{//分配到登录任务
                 CM_UserMessage userMessage = (CM_UserMessage) ObjectToBytes.restore(decodeData.getData());
-                decodeData1 =userService.login(userMessage);
+                userService.login(userMessage,channel);
                 break;
             }
             case Protocol.REGIST:{//分配到注册任务
                 CM_UserMessage userMessage = (CM_UserMessage) ObjectToBytes.restore(decodeData.getData());
-                decodeData1 = userService.registUser(userMessage);
+                userService.registUser(userMessage,channel);
                 break;
             }
             case Protocol.LOGOUT:{//分配到注销任务
                 CM_UserMessage userMessage = (CM_UserMessage) ObjectToBytes.restore(decodeData.getData());
-                decodeData1 = userService.logout(userMessage);
+                userService.logout(userMessage);
                 break;
             }
             case Protocol.MOVE:{//分配到角色移动任务

@@ -1,7 +1,7 @@
 package com.aiwan.scenes.service;
 
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.role.entity.User;
+import com.aiwan.user.entity.User;
 import com.aiwan.scenes.Dao.ScenesDao;
 import com.aiwan.scenes.MapReource.CityResource;
 import com.aiwan.scenes.MapReource.FieldResource;

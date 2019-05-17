@@ -6,8 +6,6 @@ import com.aiwan.user.entity.User;
 import com.aiwan.user.dao.UserDao;
 import com.aiwan.user.protocol.CM_UserMessage;
 import com.aiwan.user.protocol.SM_UserMessage;
-import com.aiwan.scenes.MapReource.CityResource;
-import com.aiwan.scenes.MapReource.FieldResource;
 import com.aiwan.util.*;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
@@ -22,6 +20,11 @@ import org.springframework.stereotype.Service;
 @Scope("singleton")
 @Service("userService")
 public class UserServiceImpl implements UserService {
+    //新用户初始地址
+    private final static int ORINGINMAP = 1;
+    //新用户初始坐标
+    private final static int ORINGINX = 1;
+    private final static int ORINGINY = 3;
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private UserDao userDao;
 
@@ -64,12 +67,19 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setMap(user.getMap());
             sm_userMessage.setCurrentX(user.getCurrentX());
             sm_userMessage.setCurrentY(user.getCurrentY());
-            if (user.getMap() == 1){
-                sm_userMessage.setMapMessage(CityResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
+//            if (user.getMap() == 1){
+//                sm_userMessage.setMapMessage(CityResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
+//            }
+//            else if(user.getMap() == 2){
+//                sm_userMessage.setMapMessage(FieldResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
+//            }
+            if (GetBean.getMapManager() == null){
+                logger.debug("getMapManager null");
             }
-            else if(user.getMap() == 2){
-                sm_userMessage.setMapMessage(FieldResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
+            if (GetBean.getMapManager().getMapResource((int) user.getMap()) == null){
+                logger.debug("getMapResource null :"+user.getMap());
             }
+            sm_userMessage.setMapMessage(GetBean.getMapManager().getMapResource((int) user.getMap()).getMapContent(user.getCurrentX(),user.getCurrentY()));
             decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINSUCCESS,sm_userMessage);
         }
         channel.writeAndFlush(decodeData);
@@ -93,9 +103,9 @@ public class UserServiceImpl implements UserService {
             User user1 = new User();
             user1.setUsername(userMessage.getUsername());
             user1.setPassword(userMessage.getPassword());
-            user1.setMap(MapResourceProtocol.CITY);
-            user1.setCurrentX(CityResource.ORINGINX);
-            user1.setCurrentY(CityResource.ORINGINY);
+            user1.setMap(ORINGINMAP);
+            user1.setCurrentX(ORINGINX);
+            user1.setCurrentY(ORINGINY);
             userDao.insert(user1);
             String content = "恭喜您，注册成功！";
             decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTSUCCESS,content);

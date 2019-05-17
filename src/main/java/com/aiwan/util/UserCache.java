@@ -14,4 +14,8 @@ public class UserCache {
     public static User getUserByUsername(String username){
         return userCache.get(username);
     }
+
+    public static void putUserByUsername(String username,User user){
+        userCache.put(username,user);
+    }
 }

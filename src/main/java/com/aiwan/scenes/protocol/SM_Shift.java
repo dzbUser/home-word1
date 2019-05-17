@@ -6,39 +6,39 @@ import java.io.Serializable;
  * 地图跳转协议类
  * */
 public class SM_Shift implements Serializable {
-    private short targetX;
-    private short targetY;
-    private short map;
+    private int targetX;
+    private int targetY;
+    private int map;
     private String mapMessage;
 
-    public SM_Shift(short targetX, short targetY, short map, String mapMessage) {
+    public SM_Shift(int targetX, int targetY, int map, String mapMessage) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.map = map;
         this.mapMessage = mapMessage;
     }
 
-    public short getTargetX() {
+    public int getTargetX() {
         return targetX;
     }
 
-    public void setTargetX(short targetX) {
+    public void setTargetX(int targetX) {
         this.targetX = targetX;
     }
 
-    public short getTargetY() {
+    public int getTargetY() {
         return targetY;
     }
 
-    public void setTargetY(short targetY) {
+    public void setTargetY(int targetY) {
         this.targetY = targetY;
     }
 
-    public short getMap() {
+    public int getMap() {
         return map;
     }
 
-    public void setMap(short map) {
+    public void setMap(int map) {
         this.map = map;
     }
 

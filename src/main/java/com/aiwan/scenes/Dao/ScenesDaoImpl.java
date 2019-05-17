@@ -34,7 +34,7 @@ public class ScenesDaoImpl extends HibernateDaoSupport implements ScenesDao{
     //修改用户地图，初始化坐标
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public void updateMapPosition(CM_Shift cm_shift, short x, short y) {
+    public void updateMapPosition(CM_Shift cm_shift, int x, int y) {
         String hql="update User u set u.currentX="+x+",u.currentY="+y+",u.map="+cm_shift.getMap()+" where u.username='"+cm_shift.getUsername()+"'";
         getHibernateTemplate().bulkUpdate(hql);
     }

@@ -1,6 +1,8 @@
 package com.aiwan;
 
 import com.aiwan.netty.NettyServer;
+import com.aiwan.publicsystem.Initialization.MapInitialization;
+import com.aiwan.util.GetBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -16,6 +18,8 @@ public class ServerStart {
         logger.debug("开始加载资源");
         applicationContext.start();
         NettyServer nettyServer = (NettyServer) applicationContext.getBean("nettyServer");
+        //地图资源初始化
+        MapInitialization.init();
         //线程启动
         logger.debug("启动Netty服务器");
         new Thread(

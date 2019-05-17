@@ -10,9 +10,9 @@ public class User {
     private int uid;
     private String username;
     private String password;
-    private short map;
-    private short currentX;
-    private short currentY;
+    private int map;
+    private int currentX;
+    private int currentY;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,29 +43,29 @@ public class User {
     }
 
     @Column(name = "map",nullable = true,length = 4)
-    public short getMap() {
+    public int getMap() {
         return map;
     }
 
-    public void setMap(short map) {
+    public void setMap(int map) {
         this.map = map;
     }
 
     @Column(name = "currentX",nullable = true,length = 4)
-    public short getCurrentX() {
+    public int getCurrentX() {
         return currentX;
     }
 
-    public void setCurrentX(short currentX) {
+    public void setCurrentX(int currentX) {
         this.currentX = currentX;
     }
 
     @Column(name = "currentY",nullable = true,length = 4)
-    public short getCurrentY() {
+    public int getCurrentY() {
         return currentY;
     }
 
-    public void setCurrentY(short currentY) {
+    public void setCurrentY(int currentY) {
         this.currentY = currentY;
     }
 }

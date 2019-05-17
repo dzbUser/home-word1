@@ -6,13 +6,13 @@ import java.io.Serializable;
  * 用户移动数据类接收协议
  * */
 public class CM_Move implements Serializable {
-    private short currentX;
-    private short currentY;
-    private short targetX;
-    private short targetY;
+    private int currentX;
+    private int currentY;
+    private int targetX;
+    private int targetY;
     private String username;
 
-    public CM_Move(short currentX, short currentY, short targetX, short targetY, String username) {
+    public CM_Move(int currentX, int currentY, int targetX, int targetY, String username) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.targetX = targetX;
@@ -20,35 +20,35 @@ public class CM_Move implements Serializable {
         this.username = username;
     }
 
-    public short getCurrentX() {
+    public int getCurrentX() {
         return currentX;
     }
 
-    public void setCurrentX(short currentX) {
+    public void setCurrentX(int currentX) {
         this.currentX = currentX;
     }
 
-    public short getCurrentY() {
+    public int getCurrentY() {
         return currentY;
     }
 
-    public void setCurrentY(short currentY) {
+    public void setCurrentY(int currentY) {
         this.currentY = currentY;
     }
 
-    public short getTargetX() {
+    public int getTargetX() {
         return targetX;
     }
 
-    public void setTargetX(short targetX) {
+    public void setTargetX(int targetX) {
         this.targetX = targetX;
     }
 
-    public short getTargetY() {
+    public int getTargetY() {
         return targetY;
     }
 
-    public void setTargetY(short targetY) {
+    public void setTargetY(int targetY) {
         this.targetY = targetY;
     }
 

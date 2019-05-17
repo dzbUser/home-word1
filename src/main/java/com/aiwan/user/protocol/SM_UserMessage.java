@@ -7,31 +7,31 @@ import java.io.Serializable;
  * */
 public class SM_UserMessage implements Serializable {
     private String username;
-    private Short map;
-    private Short currentX;
-    private Short currentY;
+    private int map;
+    private int currentX;
+    private int currentY;
     private String mapMessage;
 
-    public short getMap() {
+    public int getMap() {
         return map;
     }
-    public void setMap(short map) {
+    public void setMap(int map) {
         this.map = map;
     }
 
-    public short getCurrentX() {
+    public int getCurrentX() {
         return currentX;
     }
 
-    public void setCurrentX(short currentX) {
+    public void setCurrentX(int currentX) {
         this.currentX = currentX;
     }
 
-    public short getCurrentY() {
+    public int getCurrentY() {
         return currentY;
     }
 
-    public void setCurrentY(short currentY) {
+    public void setCurrentY(int currentY) {
         this.currentY = currentY;
     }
 

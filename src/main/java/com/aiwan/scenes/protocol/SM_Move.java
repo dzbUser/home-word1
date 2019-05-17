@@ -6,29 +6,29 @@ import java.io.Serializable;
  * 用户移动协议发送类
  * */
 public class SM_Move implements Serializable {
-    private short targetX;
-    private short targetY;
+    private int targetX;
+    private int targetY;
     private String mapMessage;
 
-    public SM_Move(short targetX, short targetY, String mapMessage) {
+    public SM_Move(int targetX, int targetY, String mapMessage) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.mapMessage = mapMessage;
     }
 
-    public short getTargetX() {
+    public int getTargetX() {
         return targetX;
     }
 
-    public void setTargetX(short targetX) {
+    public void setTargetX(int targetX) {
         this.targetX = targetX;
     }
 
-    public short getTargetY() {
+    public int getTargetY() {
         return targetY;
     }
 
-    public void setTargetY(short targetY) {
+    public void setTargetY(int targetY) {
         this.targetY = targetY;
     }
 

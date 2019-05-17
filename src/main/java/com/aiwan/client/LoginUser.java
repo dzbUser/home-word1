@@ -3,10 +3,10 @@ package com.aiwan.client;
 public class LoginUser {
 
     private static String username = "";
-    private static short map;
+    private static int map;
     private static String mapMessage;
-    private static short currentX = -1;
-    private static short currentY = -1;
+    private static int currentX = -1;
+    private static int currentY = -1;
 
     public static String getUsername() {
         return username;
@@ -16,27 +16,27 @@ public class LoginUser {
         LoginUser.username = username;
     }
 
-    public static short getCurrentX() {
+    public static int getCurrentX() {
         return currentX;
     }
 
-    public static void setCurrentX(short currentX) {
+    public static void setCurrentX(int currentX) {
         LoginUser.currentX = currentX;
     }
 
-    public static short getCurrentY() {
+    public static int getCurrentY() {
         return currentY;
     }
 
-    public static void setCurrentY(short currentY) {
+    public static void setCurrentY(int currentY) {
         LoginUser.currentY = currentY;
     }
 
-    public static short getMap() {
+    public static int getMap() {
         return map;
     }
 
-    public static void setMap(short map) {
+    public static void setMap(int map) {
         LoginUser.map = map;
     }
 

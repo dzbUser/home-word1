@@ -1,6 +1,7 @@
 package com.aiwan.util;
 
 import com.aiwan.netty.TaskDispatcher;
+import com.aiwan.scenes.service.MapManager;
 import com.aiwan.user.dao.UserDao;
 import com.aiwan.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class GetBean {
     private static UserService userService;
     private static UserDao userDao;
     private static TaskDispatcher taskDispatcher;
+    private static MapManager mapManager;
 
     public static TaskDispatcher getTaskDispatcher() {
         return GetBean.taskDispatcher;
@@ -39,5 +41,13 @@ public class GetBean {
     @Autowired
     public void setUserDao(UserDao userDao) {
         GetBean.userDao = userDao;
+    }
+
+    public static MapManager getMapManager() {
+        return mapManager;
+    }
+    @Autowired
+    public void setMapManager(MapManager mapManager) {
+        GetBean.mapManager = mapManager;
     }
 }

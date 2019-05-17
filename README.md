@@ -13,9 +13,14 @@
 	3. Handler:处理类  
 	4. TaskDispatcher:任务分配类  
 ### publicSystem:项目通用协议类  
-	1. DecodeData:统一数据包接收类型  
-	2. CM_Map:客户端地图接收数据类  
-### role:角色包  
+	1. initialzation包:存放初始化用的类
+		* MapInitialization：地图资源初始化
+	2. protocol:公共协议类
+		* CM_Map：公共地图接收类
+		* DecodeData:类转换工具类
+	3. service:公共业务逻辑包
+		* ChannelManager：管理用户Channel
+### user:角色包  
     1. entity:实体类包  
 		* user：用户表实体类  
 	2. dao:持久操作包  
@@ -35,7 +40,9 @@
 		* CM_Shift:从客户端获取地图跳转信息类  
 		* SM_Move:返回移动信息给客户端  
 		CM_Shift:返回跳转信息给客户端  
-	4. MapResource：地图资源类包，有两张地图CityResource，FieldResource，分别为主城、野外  
+	4. MapResource：地图资源类包
+		* MapResouce:存放静态地图资源
+		* PositionMeaning:地图资源内数字的具体含义
 ### util:工具类  
 	1. SMToDecodeData:DecodeData类转换工具类  
 	2. ObjectToBytes:把对象转变成二进制  
@@ -43,3 +50,4 @@
 	4. MapResourceProtocol:地图协议  
 	5. Protocol:包头协议  
 	6. UserCache:用户缓存暂用  
+	7. ConsequenceCode：结果集协议

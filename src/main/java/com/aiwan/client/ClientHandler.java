@@ -57,7 +57,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
             System.out.println(sm_shift.getMapMessage());
         }
 //        channel.writeAndFlush(decodeData);
-        System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转");
+        System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.退出游戏");
     }
 
     @Override

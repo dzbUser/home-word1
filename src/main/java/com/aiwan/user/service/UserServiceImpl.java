@@ -120,7 +120,9 @@ public class UserServiceImpl implements UserService {
         DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.LOGOUTSUCCESS,content);
         Channel channel = ChannelManager.getChannelByUsername(userMessage.getUsername());
         ChannelManager.removeChannel(userMessage.getUsername());
-        channel.writeAndFlush(decodeData);
+        if(channel != null){
+            channel.writeAndFlush(decodeData);
+        }
     }
 
 

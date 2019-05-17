@@ -56,12 +56,12 @@ public class TaskDispatcher {
             }
             case Protocol.MOVE:{//分配到角色移动任务
                 CM_Move cm_move = (CM_Move) ObjectToBytes.restore(decodeData.getData());
-                decodeData1 = scenesService.move(cm_move);
+                scenesService.move(cm_move);
                 break;
             }
             case Protocol.SHIFT:{//分配到角色地图跳转任务
                 CM_Shift cm_shift = (CM_Shift) ObjectToBytes.restore(decodeData.getData());
-                decodeData1 = scenesService.shift(cm_shift);
+                scenesService.shift(cm_shift);
                 break;
             }
             default:

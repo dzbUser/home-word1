@@ -1,6 +1,7 @@
 package com.aiwan.scenes.service;
 
 import com.aiwan.publicsystem.protocol.DecodeData;
+import com.aiwan.publicsystem.service.ChannelManager;
 import com.aiwan.user.entity.User;
 import com.aiwan.scenes.Dao.ScenesDao;
 import com.aiwan.scenes.MapReource.CityResource;
@@ -10,6 +11,7 @@ import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.scenes.protocol.SM_Move;
 import com.aiwan.scenes.protocol.SM_Shift;
 import com.aiwan.util.*;
+import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class ScenesServiceImpl implements ScenesService{
      * 角色的移动
      * */
     @Override
-    public DecodeData move(CM_Move cm_move) {
+    public void move(CM_Move cm_move) {
         User user = UserCache.getUserByUsername(cm_move.getUsername());
         Object data = "移动失败！";
         short type = ConsequenceCode.MOVEFAIL;
@@ -66,14 +68,17 @@ public class ScenesServiceImpl implements ScenesService{
             }
         }
         DecodeData decodeData = SMToDecodeData.shift(type,data);
-        return decodeData;
+        Channel channel = ChannelManager.getChannelByUsername(cm_move.getUsername());
+        if (channel != null){
+            channel.writeAndFlush(decodeData);
+        }
     }
 
     /**
      * 地图跳转
      * */
     @Override
-    public DecodeData shift(CM_Shift cm_shift) {
+    public void shift(CM_Shift cm_shift) {
         User user = UserCache.getUserByUsername(cm_shift.getUsername());
         Object data = "跳转失败！";
         short type = ConsequenceCode.SHIFTFAIL;
@@ -96,6 +101,10 @@ public class ScenesServiceImpl implements ScenesService{
                 type = ConsequenceCode.SHIFTSUCCESS;
             }
         }
-        return SMToDecodeData.shift(type,data);
+        DecodeData decodeData = SMToDecodeData.shift(type,data);
+        Channel channel = ChannelManager.getChannelByUsername(cm_shift.getUsername());
+        if (channel != null){
+            channel.writeAndFlush(decodeData);
+        }
     }
 }

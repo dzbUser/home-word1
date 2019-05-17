@@ -1,9 +1,9 @@
-#项目描述
+# 项目描述
 一阶段任务
-#项目用法
+# 项目用法
 1）启动com.aiwan.ServerStart类，该类为服务器启动类
 2）启动com.aiwan.client.Start类，启动客户端程序
-#项目结构
+# 项目结构
 ##整体结构
 1、client:客户端程序包
 2、netty：网络通讯包

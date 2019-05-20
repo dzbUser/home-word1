@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -26,18 +28,11 @@ import java.lang.reflect.Method;
 public class TaskDispatcher {
 
     private static Logger logger = LoggerFactory.getLogger(TaskDispatcher.class);
-    private UserService userService;
-    private ScenesService scenesService;
+    //用户运行线程池
+    private Executor userExecutor = Executors.newFixedThreadPool(10);
+    //场景运行线程池
+    private Executor secensExecutor = Executors.newFixedThreadPool(10);
 
-    @Autowired
-    public void setUserService(UserService userService){
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setScenesService(ScenesService scenesService){
-        this.scenesService = scenesService;
-    }
 
     //任务分配
     public void dispatcherTask(DecodeData decodeData, Channel channel){
@@ -47,7 +42,20 @@ public class TaskDispatcher {
         Method method = ReflectionManager.getMethod(ReflectionManager.getProtocolClass(decodeData.getType()));
         //获取方法对应的bean
         Object bean = ReflectionManager.getBean(method);
-        //调用函数
-        ReflectionUtils.invokeMethod(method,bean,obj,channel);
+        if (bean instanceof UserService){//用户线程池
+            userExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    ReflectionUtils.invokeMethod(method,bean,obj,channel);
+                }
+            });
+        }else {//场景线程池
+            secensExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    ReflectionUtils.invokeMethod(method,bean,obj,channel);
+                }
+            });
+        }
     }
 }

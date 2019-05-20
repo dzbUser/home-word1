@@ -3,6 +3,9 @@ package com.aiwan.client;
 import com.aiwan.netty.Decoder;
 import com.aiwan.netty.Encoder;
 import com.aiwan.publicsystem.protocol.DecodeData;
+import com.aiwan.user.protocol.CM_Login;
+import com.aiwan.user.protocol.CM_Logout;
+import com.aiwan.user.protocol.CM_Registered;
 import com.aiwan.user.protocol.CM_UserMessage;
 import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
@@ -55,12 +58,13 @@ public class ClientServer {
                     }
                     scanner.nextLine();
                     System.out.println("登录开始，请输入账号");
+                    CM_Login cm_login = new CM_Login();
                     String username = scanner.nextLine();
                     System.out.println("请输入密码");
                     String password = scanner.nextLine();
-                    userMessage.setUsername(username);
-                    userMessage.setPassword(password);
-                    data  = ObjectToBytes.writeInto(userMessage);
+                    cm_login.setUsername(username);
+                    cm_login.setPassword(password);
+                    data  = ObjectToBytes.writeInto(cm_login);
                     decodeData.setType(Protocol.LOGIN);
                     decodeData.setLength(data.length);
                     decodeData.setData(data);
@@ -75,9 +79,10 @@ public class ClientServer {
                     String username = scanner.nextLine();
                     System.out.println("请输入密码");
                     String password = scanner.nextLine();
-                    userMessage.setUsername(username);
-                    userMessage.setPassword(password);
-                    data = ObjectToBytes.writeInto(userMessage);
+                    CM_Registered cm_registered = new CM_Registered();
+                    cm_registered.setUsername(username);
+                    cm_registered.setPassword(password);
+                    data = ObjectToBytes.writeInto(cm_registered);
                     decodeData.setType(Protocol.REGIST);
                     decodeData.setLength(data.length);
                     decodeData.setData(data);
@@ -87,9 +92,9 @@ public class ClientServer {
                         System.out.println("您还未登录，请登录游戏！");
                         continue;
                     }
-                    userMessage.setUsername(LoginUser.getUsername());
-                    userMessage.setPassword("");
-                    data = ObjectToBytes.writeInto(userMessage);
+                    CM_Logout cm_logout = new CM_Logout();
+                    cm_logout.setUsername(LoginUser.getUsername());
+                    data = ObjectToBytes.writeInto(cm_logout);
                     decodeData.setType(Protocol.LOGOUT);
                     decodeData.setLength(data.length);
                     decodeData.setData(data);
@@ -103,10 +108,15 @@ public class ClientServer {
                     System.out.println(LoginUser.getMapMessage());
                     scanner.nextLine();
                     System.out.println("请输入您要移动的横坐标");
-                    short x = scanner.nextShort();
+                    Integer x = scanner.nextInt();
                     System.out.println("请输入您要移动的横坐标纵坐标");
-                    short y = scanner.nextShort();
-                    CM_Move move = new CM_Move(LoginUser.getCurrentX(),LoginUser.getCurrentY(),x,y,LoginUser.getUsername());
+                    Integer y =  scanner.nextInt();
+                    CM_Move move = new CM_Move();
+                    move.setCurrentX(LoginUser.getCurrentX());
+                    move.setCurrentY(LoginUser.getCurrentY());
+                    move.setTargetX(x);
+                    move.setTargetY(y);
+                    move.setUsername(LoginUser.getUsername());
                     decodeData.setType(Protocol.MOVE);
                     data = ObjectToBytes.writeInto(move);
                     decodeData.setLength(data.length);
@@ -120,12 +130,14 @@ public class ClientServer {
                     System.out.println(LoginUser.getMapMessage());
                     System.out.println("请选择您要跳转的地图；1主城 2野外");
                     scanner.nextLine();
-                    short map = scanner.nextShort();
+                    int map = scanner.nextInt();
                     if (map > 2){
                         System.out.println("没有这个地图，请重新选择");
                         continue;
                     }else {
-                        CM_Shift cm_shift = new CM_Shift(LoginUser.getUsername(),map);
+                        CM_Shift cm_shift = new CM_Shift();
+                        cm_shift.setMap(map);
+                        cm_shift.setUsername(LoginUser.getUsername());
                         decodeData.setType(Protocol.SHIFT);
                         data = ObjectToBytes.writeInto(cm_shift);
                         decodeData.setLength(data.length);

@@ -1,18 +1,18 @@
 package com.aiwan.scenes.protocol;
 
+import com.aiwan.publicsystem.annotation.ProtocolAnnotation;
+import com.aiwan.util.Protocol;
+
 import java.io.Serializable;
 
 /**
  * 用户地图跳转静态资源接收协议类
  * */
+@ProtocolAnnotation(protocol = Protocol.SHIFT)
 public class CM_Shift implements Serializable {
     private String username;
-    private short map;
+    private int map;
 
-    public CM_Shift(String username, short map) {
-        this.username = username;
-        this.map = map;
-    }
 
     public String getUsername() {
         return username;
@@ -22,11 +22,11 @@ public class CM_Shift implements Serializable {
         this.username = username;
     }
 
-    public short getMap() {
+    public int getMap() {
         return map;
     }
 
-    public void setMap(short map) {
+    public void setMap(int map) {
         this.map = map;
     }
 }

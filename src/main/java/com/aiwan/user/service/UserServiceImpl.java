@@ -2,10 +2,10 @@ package com.aiwan.user.service;
 
 import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.publicsystem.service.ChannelManager;
+import com.aiwan.scenes.mapresource.MapResource;
 import com.aiwan.user.entity.User;
 import com.aiwan.user.dao.UserDao;
-import com.aiwan.user.protocol.CM_UserMessage;
-import com.aiwan.user.protocol.SM_UserMessage;
+import com.aiwan.user.protocol.*;
 import com.aiwan.util.*;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     //用户登录
     @Override
-    public void login(CM_UserMessage userMessage, Channel channel) {
+    public void login(CM_Login userMessage, Channel channel) {
 //        if (UserCache.userCache.get(userMessage.getUsername())!=null){
 //            logger.debug("您已经登录过了");
 //        }
@@ -62,23 +62,15 @@ public class UserServiceImpl implements UserService {
 //            }
             ChannelManager.putChannel(user.getUsername(),channel);
 
+            //把用户添加到地图资源中
+            MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());
+            mapResource.putUser(user.getUsername(),user);
+
             SM_UserMessage sm_userMessage = new SM_UserMessage();
             sm_userMessage.setUsername(user.getUsername());
             sm_userMessage.setMap(user.getMap());
             sm_userMessage.setCurrentX(user.getCurrentX());
             sm_userMessage.setCurrentY(user.getCurrentY());
-//            if (user.getMap() == 1){
-//                sm_userMessage.setMapMessage(CityResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
-//            }
-//            else if(user.getMap() == 2){
-//                sm_userMessage.setMapMessage(FieldResource.MaptoMapMessage(user.getCurrentX(),user.getCurrentY()));
-//            }
-            if (GetBean.getMapManager() == null){
-                logger.debug("getMapManager null");
-            }
-            if (GetBean.getMapManager().getMapResource((int) user.getMap()) == null){
-                logger.debug("getMapResource null :"+user.getMap());
-            }
             sm_userMessage.setMapMessage(GetBean.getMapManager().getMapResource((int) user.getMap()).getMapContent(user.getCurrentX(),user.getCurrentY()));
             decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINSUCCESS,sm_userMessage);
         }
@@ -87,8 +79,8 @@ public class UserServiceImpl implements UserService {
 
     //用户注册
     @Override
-    public void registUser(CM_UserMessage userMessage,Channel channel) {
-        User user = userDao.getUserByUsername(userMessage);
+    public void registUser(CM_Registered userMessage, Channel channel) {
+        User user = userDao.getUserByUsername(userMessage.getUsername());
         DecodeData decodeData = new DecodeData();
         //错误输入
         if(userMessage == null){
@@ -121,15 +113,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     //用户注销
-    public void logout(CM_UserMessage userMessage) {
+    public void logout(CM_Logout userMessage,Channel channel) {
 //        logger.debug(UserCache.userCache.get(userMessage.getUsername()).getUsername()+"hahaah");
         UserCache.userCache.remove(userMessage.getUsername());
 //        logger.debug(UserCache.userCache.get(userMessage.getUsername())+"");
         logger.debug("注销成功！");
         String content = new String("注销用户成功！");
         DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.LOGOUTSUCCESS,content);
-        Channel channel = ChannelManager.getChannelByUsername(userMessage.getUsername());
         ChannelManager.removeChannel(userMessage.getUsername());
+        User user = userDao.getUserByUsername(userMessage.getUsername());
+        //把用户从地图资源中移除
+        MapResource mapResource = GetBean.getMapManager().getMapResource(user.getMap());
+        mapResource.removeUser(userMessage.getUsername());
         if(channel != null){
             channel.writeAndFlush(decodeData);
         }

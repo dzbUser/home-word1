@@ -16,17 +16,17 @@ public class DecodeData implements Serializable {
     public static final short SHIFT = 4;
 
     //数据包类型
-    private short type;
+    private int type;
     //数据包长度
     private int length;
     //数据包内容
     private byte[] data;
 
-    public short getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(short type) {
+    public void setType(int type) {
         this.type = type;
     }
 

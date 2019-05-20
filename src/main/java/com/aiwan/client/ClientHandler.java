@@ -9,16 +9,13 @@ import com.aiwan.util.ObjectToBytes;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  * 处理器
  * */
 public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
 
-    Logger logger = LoggerFactory.getLogger(ClientHandler.class);
+//    Logger logger = LoggerFactory.getLogger(ClientHandler.class);
     //存登录成功username;
     private static String username;
     @Override
@@ -68,7 +65,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.debug("exceptionCaught");
         if(null != cause) cause.printStackTrace();
         if(null != ctx) ctx.close();
     }

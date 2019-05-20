@@ -1,6 +1,8 @@
 package com.aiwan.user.dao;
 
 import com.aiwan.user.entity.User;
+import com.aiwan.user.protocol.CM_Login;
+import com.aiwan.user.protocol.CM_Registered;
 import com.aiwan.user.protocol.CM_UserMessage;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Scope;
@@ -53,7 +55,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
     //根据信息协议获取用户信息
     @Override
     @Transactional(readOnly=true)
-    public User getUserByUsernameAndPassword(CM_UserMessage userMessage) {
+    public User getUserByUsernameAndPassword(CM_Login userMessage) {
         List users = getHibernateTemplate().find("from User where username = ? and password = ?", userMessage.getUsername(),userMessage.getPassword());
         if (users.size()==0){
             return null;
@@ -64,8 +66,8 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
     //根据用户账号获取用户信息
     @Override
     @Transactional(readOnly=true)
-    public User getUserByUsername(CM_UserMessage userMessage) {
-        List users = getHibernateTemplate().find("from User where username = ?", userMessage.getUsername());
+    public User getUserByUsername(String username) {
+        List users = getHibernateTemplate().find("from User where username = ?", username);
         if(users.size() == 0){
             return null;
         }

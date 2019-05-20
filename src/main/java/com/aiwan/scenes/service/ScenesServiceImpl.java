@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import java.util.Map;
  * 场景业务逻辑类
  * */
 @Scope("singleton")
-@Component("scenesService")
+@Service("scenesService")
 public class ScenesServiceImpl implements ScenesService{
     Logger logger = LoggerFactory.getLogger(ScenesServiceImpl.class);
     private ScenesDao scenesDao;
@@ -35,7 +36,7 @@ public class ScenesServiceImpl implements ScenesService{
      * 角色的移动
      * */
     @Override
-    public void move(CM_Move cm_move) {
+    public void move(CM_Move cm_move,Channel channel) {
         User user = UserCache.getUserByUsername(cm_move.getUsername());
         user.setCurrentX(cm_move.getTargetX());
         user.setCurrentY(cm_move.getCurrentY());
@@ -50,6 +51,7 @@ public class ScenesServiceImpl implements ScenesService{
             MapResource mapResource = GetBean.getMapManager().getMapResource((int) map);
             if (mapResource.allowMove(cm_move.getTargetX(),cm_move.getTargetY())){
                 scenesDao.updateUserPosition(cm_move);
+                mapResource.move(user.getUsername(),cm_move.getTargetX(),cm_move.getTargetY());
                 String content = "移动成功\n"+mapResource.getMapContent(cm_move.getTargetX(),cm_move.getTargetY());
                 SM_Move sm_move = new SM_Move(cm_move.getTargetX(),cm_move.getCurrentY(),content);
                 data = sm_move;
@@ -60,7 +62,6 @@ public class ScenesServiceImpl implements ScenesService{
             }
         }
         DecodeData decodeData = SMToDecodeData.shift(type,data);
-        Channel channel = ChannelManager.getChannelByUsername(cm_move.getUsername());
         if (channel != null){
             channel.writeAndFlush(decodeData);
         }
@@ -70,27 +71,34 @@ public class ScenesServiceImpl implements ScenesService{
      * 地图跳转
      * */
     @Override
-    public void shift(CM_Shift cm_shift) {
+    public void shift(CM_Shift cm_shift,Channel channel) {
         User user = UserCache.getUserByUsername(cm_shift.getUsername());
-        user.setMap(cm_shift.getMap());
-        UserCache.putUserByUsername(user.getUsername(),user);
         Object data = "跳转失败！";
         short type = ConsequenceCode.SHIFTFAIL;
         if (user == null){
             data  = "您还未登录！";
             type = ConsequenceCode.SHIFTFAIL;
+            DecodeData decodeData = SMToDecodeData.shift(type,data);
+            channel.writeAndFlush(decodeData);
         }else {
-
+            MapResource mapResource1 = GetBean.getMapManager().getMapResource(user.getMap());
+            mapResource1.removeUser(user.getUsername());
             MapResource mapResource = GetBean.getMapManager().getMapResource((int) cm_shift.getMap());
+            user.setMap(cm_shift.getMap());
+            user.setCurrentY(mapResource.getOriginY());
+            user.setCurrentX(mapResource.getOriginX());
+            //添加到地图资源中
+            mapResource.putUser(user.getUsername(),user);
+            //加入缓存
+            UserCache.putUserByUsername(user.getUsername(),user);
             scenesDao.updateMapPosition(cm_shift,mapResource.getOriginX(),mapResource.getOriginY());
             String content = "跳转成功\n"+ mapResource.getMapContent(mapResource.getOriginX(),mapResource.getOriginY());
             SM_Shift sm_shift = new SM_Shift(mapResource.getOriginX(),mapResource.getOriginY(),cm_shift.getMap(),content);
             data = sm_shift;
             type = ConsequenceCode.SHIFTSUCCESS;
-        }
-        DecodeData decodeData = SMToDecodeData.shift(type,data);
-        Channel channel = ChannelManager.getChannelByUsername(cm_shift.getUsername());
-        if (channel != null){
+            DecodeData decodeData = SMToDecodeData.shift(type,data);
+//            mapResource.sendMessage();
+//            mapResource1.sendMessage();
             channel.writeAndFlush(decodeData);
         }
     }

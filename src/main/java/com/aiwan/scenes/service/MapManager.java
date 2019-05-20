@@ -2,6 +2,7 @@ package com.aiwan.scenes.service;
 
 import com.aiwan.scenes.mapresource.MapResource;
 import com.aiwan.scenes.mapresource.PositionMeaning;
+import com.aiwan.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -44,5 +45,6 @@ public class MapManager {
     public void putMapProtocol(Integer num,PositionMeaning positionMeaning){
         mapProtocolMap.put(num,positionMeaning);
     }
+
 
 }

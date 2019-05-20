@@ -1,14 +1,24 @@
 package com.aiwan.user.protocol;
 
+import com.aiwan.publicsystem.annotation.ProtocolAnnotation;
+import com.aiwan.util.Protocol;
+
 import java.io.Serializable;
 
-/**
- * 登录收协议
- * */
-//@ProtocolAnnotation(id = Protocol.LOGIN)
-public class CM_UserMessage implements Serializable {
+@ProtocolAnnotation(protocol = Protocol.LOGIN)
+public class CM_Login implements Serializable {
     private String username;
     private String password;
+//    @ProtocolHeart(protocolType = 1)
+//    private int protocol;
+//
+//    public int getProtocol() {
+//        return protocol;
+//    }
+//
+//    public void setProtocol(int protocol) {
+//        this.protocol = protocol;
+//    }
 
     public String getPassword() {
         return password;

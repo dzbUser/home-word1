@@ -1,10 +1,14 @@
 package com.aiwan.scenes.protocol;
 
+import com.aiwan.publicsystem.annotation.ProtocolAnnotation;
+import com.aiwan.util.Protocol;
+
 import java.io.Serializable;
 
 /**
  * 用户移动数据类接收协议
  * */
+@ProtocolAnnotation(protocol = Protocol.MOVE)
 public class CM_Move implements Serializable {
     private int currentX;
     private int currentY;
@@ -12,13 +16,6 @@ public class CM_Move implements Serializable {
     private int targetY;
     private String username;
 
-    public CM_Move(int currentX, int currentY, int targetX, int targetY, String username) {
-        this.currentX = currentX;
-        this.currentY = currentY;
-        this.targetX = targetX;
-        this.targetY = targetY;
-        this.username = username;
-    }
 
     public int getCurrentX() {
         return currentX;

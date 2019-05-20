@@ -15,11 +15,14 @@
 ### publicSystem:项目通用协议类  
 	1. initialzation包:存放初始化用的类
 		* MapInitialization：地图资源初始化
+		* ReflectionInitialization:反射类初始化
 	2. protocol:公共协议类
 		* CM_Map：公共地图接收类
 		* DecodeData:类转换工具类
 	3. service:公共业务逻辑包
 		* ChannelManager：管理用户Channel
+	4. annotation:自定义注解包（新添加）
+		* ProtocolAnnotation：自定义注解，用于定位协议类
 ### user:角色包  
     1. entity:实体类包  
 		* user：用户表实体类  
@@ -28,7 +31,9 @@
 	3. service:业务层  
 		* UserService:用户业务逻辑类，有功能登录，注册  
 	4. protocol:协议包  
-		* CM_UserMessage:从客户获取的账号与密码  
+		* CM_Login:用户登录协议包
+		* CM_Logout:用户注销协议包
+		* CM_Regitsted:用户注册协议包
 		* SM_UserMessage:返回用户信息给客户端  
 ### scenes:场景处理类  
 	1. dao:持久操作包  

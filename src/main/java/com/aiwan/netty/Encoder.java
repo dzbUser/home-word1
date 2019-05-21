@@ -16,6 +16,6 @@ public class Encoder extends MessageToByteEncoder<DecodeData> {
         byteBuf.writeShort(decodeData.getType());
         byteBuf.writeInt(decodeData.getLength());
         byteBuf.writeBytes(decodeData.getData());
-        logger.debug("length:"+decodeData.getLength()+"  decodeDataLength:"+decodeData.getData().length);
+//        logger.debug("length:"+decodeData.getLength()+"  decodeDataLength:"+decodeData.getData().length);
     }
 }

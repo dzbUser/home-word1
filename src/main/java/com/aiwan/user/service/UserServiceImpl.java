@@ -60,11 +60,8 @@ public class UserServiceImpl implements UserService {
             logger.debug(userMessage.getUsername()+"用户登录成功");
             //加入缓存
             UserCache.userCache.put(user.getUsername(),user);
-            //加入用户Channel
-//            if (ChannelManager.getChannelByUsername(user.getUsername()) == null){
-//
-//            }
             ChannelManager.putChannel(user.getUsername(),channel);
+            UserCache.putUsernameByChannel(channel.hashCode(),user.getUsername());
 
             //把用户添加到地图资源中
             MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());
@@ -120,9 +117,11 @@ public class UserServiceImpl implements UserService {
     //用户注销
     public void logout(CM_Logout userMessage,Channel channel) {
         UserCache.userCache.remove(userMessage.getUsername());;
+        UserCache.removeUsernameByChannel(channel.hashCode());
         logger.debug("注销成功！");
         String content = new String("注销用户成功！");
         DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.LOGOUTSUCCESS,content);
+
         ChannelManager.removeChannel(userMessage.getUsername());
         User user = userDao.getUserByUsername(userMessage.getUsername());
         //把用户从地图资源中移除
@@ -158,6 +157,7 @@ public class UserServiceImpl implements UserService {
         //更改缓存
         UserCache.userCache.put(user.getUsername(),user);
         ChannelManager.putChannel(user.getUsername(),channel);
+        UserCache.putUsernameByChannel(channel.hashCode(),user.getUsername());
 
         //把用户添加到地图资源中
         MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());

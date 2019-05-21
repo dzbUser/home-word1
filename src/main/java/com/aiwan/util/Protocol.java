@@ -38,4 +38,6 @@ public class Protocol {
     public final static int HLOGIN = 16;
     //退出游戏
     public final static int EXIT = 17;
+    //心跳
+    public final static int HEART = 18;
 }

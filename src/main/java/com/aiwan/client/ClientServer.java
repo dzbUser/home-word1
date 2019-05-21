@@ -40,6 +40,8 @@ public class ClientServer {
             });
             ChannelFuture channelFuture = bootstrap.connect(ip, port).sync();
             Channel channel = channelFuture.channel();
+            //发送心跳
+            sendHear(channel);
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
             System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.高级登录 7.退出游戏");
@@ -202,4 +204,25 @@ public class ClientServer {
         channel.writeAndFlush(decodeData);
     }
 
+    //发送心跳
+    public static void sendHear(final Channel channel){
+        final DecodeData decodeData = new DecodeData();
+        final byte[] data = ObjectToBytes.writeInto("heart");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    decodeData.setType(Protocol.HEART);
+                    decodeData.setLength(data.length);
+                    decodeData.setData(data);
+                    channel.writeAndFlush(decodeData);
+                }
+            }
+        }).start();
+    }
 }

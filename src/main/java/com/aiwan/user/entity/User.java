@@ -13,6 +13,7 @@ public class User {
     private int map;
     private int currentX;
     private int currentY;
+    private String hpassword;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,5 +68,14 @@ public class User {
 
     public void setCurrentY(int currentY) {
         this.currentY = currentY;
+    }
+
+    @Column(name = "hpassword",nullable = false,length = 50)
+    public String getHpassword() {
+        return hpassword;
+    }
+
+    public void setHpassword(String hpassword) {
+        this.hpassword = hpassword;
     }
 }

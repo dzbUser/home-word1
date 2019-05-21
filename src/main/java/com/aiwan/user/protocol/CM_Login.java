@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 @ProtocolAnnotation(protocol = Protocol.LOGIN)
 public class CM_Login implements Serializable {
+    private static final long serialVersionUID = -5809782578272943999L;
     private String username;
     private String password;
 //    @ProtocolHeart(protocolType = 1)

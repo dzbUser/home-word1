@@ -41,11 +41,15 @@ public class UserServiceImpl implements UserService {
     //用户登录
     @Override
     public void login(CM_Login userMessage, Channel channel) {
-//        if (UserCache.userCache.get(userMessage.getUsername())!=null){
-//            logger.debug("您已经登录过了");
-//        }
-        User user = userDao.getUserByUsernameAndPassword(userMessage);
         DecodeData decodeData;
+        if (UserCache.userCache.get(userMessage.getUsername())!=null){
+            logger.debug("您已经登录过了");
+            decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINFAIL,"用户已在线，若想顶替，请选择高级登录");
+            channel.writeAndFlush(decodeData);
+            return;
+        }
+        User user = userDao.getUserByUsernameAndPassword(userMessage);
+
         //账号或者密码错误
         if (user == null){
             logger.debug(userMessage.getUsername()+"登录失败");
@@ -85,7 +89,7 @@ public class UserServiceImpl implements UserService {
         //错误输入
         if(userMessage == null){
             logger.debug("输入错误");
-            String content = "抱歉，用户账号已被注册，请选择其他账号";
+            String content = "输入错误";
             decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTDAIL,content);
             channel.writeAndFlush(decodeData);
         }
@@ -95,6 +99,7 @@ public class UserServiceImpl implements UserService {
             User user1 = new User();
             user1.setUsername(userMessage.getUsername());
             user1.setPassword(userMessage.getPassword());
+            user1.setHpassword(userMessage.getHpassword());
             user1.setMap(ORINGINMAP);
             user1.setCurrentX(ORINGINX);
             user1.setCurrentY(ORINGINY);
@@ -114,9 +119,7 @@ public class UserServiceImpl implements UserService {
     @Override
     //用户注销
     public void logout(CM_Logout userMessage,Channel channel) {
-//        logger.debug(UserCache.userCache.get(userMessage.getUsername()).getUsername()+"hahaah");
-        UserCache.userCache.remove(userMessage.getUsername());
-//        logger.debug(UserCache.userCache.get(userMessage.getUsername())+"");
+        UserCache.userCache.remove(userMessage.getUsername());;
         logger.debug("注销成功！");
         String content = new String("注销用户成功！");
         DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.LOGOUTSUCCESS,content);
@@ -128,6 +131,47 @@ public class UserServiceImpl implements UserService {
         if(channel != null){
             channel.writeAndFlush(decodeData);
         }
+    }
+
+    /**
+     * 用户需顶替已登录用户登录
+     * */
+    @Override
+    public void hLogin(CM_HLogin cm_hlogin, Channel channel) {
+        DecodeData decodeData;
+        User user = userDao.getUserByUsernameAndHpassword(cm_hlogin.getUsername(),cm_hlogin.getHpassword());
+        //账号或者密码错误
+        if (user == null){
+            String msg = new String("账号或者高级密码错误");
+            decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINFAIL,msg);
+            channel.writeAndFlush(decodeData);
+            return;
+        }
+
+        //发送顶替下线信息
+        Channel channel1 = ChannelManager.getChannelByUsername(cm_hlogin.getUsername());
+        if (channel!= null){
+            channel1.writeAndFlush(SMToDecodeData.shift((short) ConsequenceCode.INSIST,"您已被顶替下线！"));
+        }
+
+
+        //更改缓存
+        UserCache.userCache.put(user.getUsername(),user);
+        ChannelManager.putChannel(user.getUsername(),channel);
+
+        //把用户添加到地图资源中
+        MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());
+        mapResource.putUser(user.getUsername(),user);
+
+        //设置和发送信息
+        SM_UserMessage sm_userMessage = new SM_UserMessage();
+        sm_userMessage.setUsername(user.getUsername());
+        sm_userMessage.setMap(user.getMap());
+        sm_userMessage.setCurrentX(user.getCurrentX());
+        sm_userMessage.setCurrentY(user.getCurrentY());
+        sm_userMessage.setMapMessage(GetBean.getMapManager().getMapResource((int) user.getMap()).getMapContent(user.getCurrentX(),user.getCurrentY()));
+        decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINSUCCESS,sm_userMessage);
+        channel.writeAndFlush(decodeData);
     }
 
 

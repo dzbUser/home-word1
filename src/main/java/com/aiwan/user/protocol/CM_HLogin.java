@@ -5,11 +5,10 @@ import com.aiwan.util.Protocol;
 
 import java.io.Serializable;
 
-@ProtocolAnnotation(protocol = Protocol.REGIST)
-public class CM_Registered implements Serializable {
+@ProtocolAnnotation(protocol = Protocol.HLOGIN)
+public class CM_HLogin implements Serializable {
 
     private String username;
-    private String password;
     private String hpassword;
 
     public String getUsername() {
@@ -18,14 +17,6 @@ public class CM_Registered implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getHpassword() {

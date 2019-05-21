@@ -34,4 +34,8 @@ public class Protocol {
     public final static short SHIFTSUCCESS = 14;
     //跳转失败
     public final static short SHIFTFAIL = 15;
+    //高级登录
+    public final static int HLOGIN = 16;
+    //退出游戏
+    public final static int EXIT = 17;
 }

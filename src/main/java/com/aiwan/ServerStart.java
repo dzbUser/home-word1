@@ -16,10 +16,10 @@ public class ServerStart {
     public static void main(String[] args) throws Exception {
 
         //加载资源
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("Spring-Hibernate-All-Cfg.xml");
+        final ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("Spring-Hibernate-All-Cfg.xml");
         logger.debug("开始加载资源");
         applicationContext.start();
-        NettyServer nettyServer = (NettyServer) applicationContext.getBean("nettyServer");
+        final NettyServer nettyServer = (NettyServer) applicationContext.getBean("nettyServer");
         //地图资源初始化
         MapInitialization.init();
         //初始化反射

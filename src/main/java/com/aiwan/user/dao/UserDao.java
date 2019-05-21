@@ -21,4 +21,6 @@ public interface UserDao {
     public User getUserByUsernameAndPassword(CM_Login userMessage);
 
     public User getUserByUsername(String username);
+
+    public User getUserByUsernameAndHpassword(String username, String hpassword);
 }

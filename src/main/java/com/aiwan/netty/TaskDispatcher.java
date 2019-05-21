@@ -35,13 +35,15 @@ public class TaskDispatcher {
 
 
     //任务分配
-    public void dispatcherTask(DecodeData decodeData, Channel channel){
-        //反序列化对象
-        Object obj = ObjectToBytes.restore(decodeData.getData());
+    public void dispatcherTask(DecodeData decodeData, final Channel channel){
         //获取协议对应的方法
-        Method method = ReflectionManager.getMethod(ReflectionManager.getProtocolClass(decodeData.getType()));
+        final Method method = ReflectionManager.getMethod(ReflectionManager.getProtocolClass(decodeData.getType()));
+
         //获取方法对应的bean
-        Object bean = ReflectionManager.getBean(method);
+        //反序列化对象
+        final Object obj = ObjectToBytes.restore(decodeData.getData());
+
+        final Object bean = ReflectionManager.getBean(method);
         if (bean instanceof UserService){//用户线程池
             userExecutor.execute(new Runnable() {
                 @Override

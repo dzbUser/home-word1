@@ -22,4 +22,6 @@ public class ConsequenceCode {
     public final static short SHIFTSUCCESS = 10;
     //跳转失败
     public final static short SHIFTFAIL = 11;
+    //顶替下线
+    public final static int INSIST = 12;
 }

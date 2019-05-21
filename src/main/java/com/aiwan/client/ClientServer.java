@@ -3,10 +3,7 @@ package com.aiwan.client;
 import com.aiwan.netty.Decoder;
 import com.aiwan.netty.Encoder;
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.user.protocol.CM_Login;
-import com.aiwan.user.protocol.CM_Logout;
-import com.aiwan.user.protocol.CM_Registered;
-import com.aiwan.user.protocol.CM_UserMessage;
+import com.aiwan.user.protocol.*;
 import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.util.ObjectToBytes;
@@ -45,9 +42,8 @@ public class ClientServer {
             Channel channel = channelFuture.channel();
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
-            System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.退出游戏");
+            System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.高级登录 7.退出游戏");
             while(true){
-                CM_UserMessage userMessage = new CM_UserMessage();
                 DecodeData decodeData = new DecodeData();
                 byte[] data = "初始化".getBytes();
                 int num = scanner.nextInt();
@@ -56,49 +52,20 @@ public class ClientServer {
                         System.out.println("您已经登录过了！");
                         continue;
                     }
-                    scanner.nextLine();
-                    System.out.println("登录开始，请输入账号");
-                    CM_Login cm_login = new CM_Login();
-                    String username = scanner.nextLine();
-                    System.out.println("请输入密码");
-                    String password = scanner.nextLine();
-                    cm_login.setUsername(username);
-                    cm_login.setPassword(password);
-                    data  = ObjectToBytes.writeInto(cm_login);
-                    decodeData.setType(Protocol.LOGIN);
-                    decodeData.setLength(data.length);
-                    decodeData.setData(data);
-                    channel.writeAndFlush(decodeData);
+                    login(channel,scanner,decodeData);
                 }else if (num == 2){
                     if (!LoginUser.getUsername().equals("")){
                         System.out.println("您已经登录，请退出后再注册！");
                         continue;
                     }
-                    System.out.println("注册用户开始\n请输入注册账号");
-                    scanner.nextLine();
-                    String username = scanner.nextLine();
-                    System.out.println("请输入密码");
-                    String password = scanner.nextLine();
-                    CM_Registered cm_registered = new CM_Registered();
-                    cm_registered.setUsername(username);
-                    cm_registered.setPassword(password);
-                    data = ObjectToBytes.writeInto(cm_registered);
-                    decodeData.setType(Protocol.REGIST);
-                    decodeData.setLength(data.length);
-                    decodeData.setData(data);
-                    channel.writeAndFlush(decodeData);
+                    registered(channel,scanner,decodeData);
+
                 }else if (num == 3){
                     if (LoginUser.getUsername().equals("")){
                         System.out.println("您还未登录，请登录游戏！");
                         continue;
                     }
-                    CM_Logout cm_logout = new CM_Logout();
-                    cm_logout.setUsername(LoginUser.getUsername());
-                    data = ObjectToBytes.writeInto(cm_logout);
-                    decodeData.setType(Protocol.LOGOUT);
-                    decodeData.setLength(data.length);
-                    decodeData.setData(data);
-                    channel.writeAndFlush(decodeData);
+                    logout(channel,scanner,decodeData);
                 }
                 else  if (num == 4){
                     if (LoginUser.getUsername().equals("")){
@@ -145,12 +112,22 @@ public class ClientServer {
                         channel.writeAndFlush(decodeData);
                     }
                 }else if (num == 6){
+                    if (!LoginUser.getUsername().equals("")){
+                        System.out.println("您已经登录过了！");
+                        continue;
+                    }
+                    hlogin(channel,scanner,decodeData);
+                }
+                else if (num == 7){
+                    if (!LoginUser.getUsername().equals("")){
+                        logout(channel,scanner,decodeData);
+                    }
                     channel.close();
                     System.exit(0);
                 }
                 else {
                     System.out.println("尊敬的用户，您的输入不规格，请重新输入");
-                    System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转");
+                    System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.高级登录 7.退出游戏");
                     continue;
                 }
             }
@@ -161,6 +138,68 @@ public class ClientServer {
             worker.shutdownGracefully();
         }
         return null;
+    }
+
+    //登录函数
+    private static void login(Channel channel, Scanner scanner, DecodeData decodeData){
+        scanner.nextLine();
+        System.out.println("登录开始，请输入账号");
+        CM_Login cm_login = new CM_Login();
+        String username = scanner.nextLine();
+        System.out.println("请输入密码");
+        String password = scanner.nextLine();
+        cm_login.setUsername(username);
+        cm_login.setPassword(password);
+        byte[] data  = ObjectToBytes.writeInto(cm_login);
+        decodeData.setType(Protocol.LOGIN);
+        decodeData.setLength(data.length);
+        decodeData.setData(data);
+        channel.writeAndFlush(decodeData);
+    }
+
+    //注册函数
+    private static void hlogin(Channel channel, Scanner scanner, DecodeData decodeData){
+        scanner.nextLine();
+        System.out.println("高级登录开始，请输入账号");
+        CM_HLogin cm_login = new CM_HLogin();
+        String username = scanner.nextLine();
+        System.out.println("请高级输入密码");
+        String hpassword = scanner.nextLine();
+        cm_login.setUsername(username);
+        cm_login.setHpassword(hpassword);
+        byte[]data  = ObjectToBytes.writeInto(cm_login);
+        decodeData.setType(Protocol.HLOGIN);
+        decodeData.setLength(data.length);
+        decodeData.setData(data);
+        channel.writeAndFlush(decodeData);
+    }
+    //注销函数
+    private static void logout(Channel channel, Scanner scanner, DecodeData decodeData){
+        CM_Logout cm_logout = new CM_Logout();
+        cm_logout.setUsername(LoginUser.getUsername());
+        byte[] data = ObjectToBytes.writeInto(cm_logout);
+        decodeData.setType(Protocol.LOGOUT);
+        decodeData.setLength(data.length);
+        decodeData.setData(data);
+        channel.writeAndFlush(decodeData);
+    }
+    private static void registered(Channel channel,Scanner scanner,DecodeData decodeData){
+        System.out.println("注册用户开始\n请输入注册账号");
+        scanner.nextLine();
+        String username = scanner.nextLine();
+        System.out.println("请输入密码");
+        String password = scanner.nextLine();
+        System.out.println("请输入高级密码");
+        String hpassword = scanner.nextLine();
+        CM_Registered cm_registered = new CM_Registered();
+        cm_registered.setUsername(username);
+        cm_registered.setPassword(password);
+        cm_registered.setHpassword(hpassword);
+        byte[] data = ObjectToBytes.writeInto(cm_registered);
+        decodeData.setType(Protocol.REGIST);
+        decodeData.setLength(data.length);
+        decodeData.setData(data);
+        channel.writeAndFlush(decodeData);
     }
 
 }

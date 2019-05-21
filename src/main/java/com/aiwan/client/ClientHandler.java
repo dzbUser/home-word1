@@ -52,9 +52,13 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
             LoginUser.setMap(sm_shift.getMap());
             LoginUser.setMapMessage(sm_shift.getMapMessage());
             System.out.println(sm_shift.getMapMessage());
+        }if (decodeData.getType() == ConsequenceCode.INSIST){
+            String content = (String) ObjectToBytes.restore(decodeData.getData());
+            LoginUser.setUsername("");
+            System.out.println(content);
         }
 //        channel.writeAndFlush(decodeData);
-        System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.退出游戏");
+        System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6 高级登录 7.退出游戏");
     }
 
     @Override

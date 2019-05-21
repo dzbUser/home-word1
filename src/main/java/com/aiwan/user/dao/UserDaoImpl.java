@@ -2,8 +2,6 @@ package com.aiwan.user.dao;
 
 import com.aiwan.user.entity.User;
 import com.aiwan.user.protocol.CM_Login;
-import com.aiwan.user.protocol.CM_Registered;
-import com.aiwan.user.protocol.CM_UserMessage;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
@@ -69,6 +67,18 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
     public User getUserByUsername(String username) {
         List users = getHibernateTemplate().find("from User where username = ?", username);
         if(users.size() == 0){
+            return null;
+        }
+        return (User) users.get(0);
+    }
+
+
+    //根据用户账号与高级密码获取用户信息
+    @Override
+    @Transactional(readOnly=true)
+    public User getUserByUsernameAndHpassword(String username, String hpassword) {
+        List users = getHibernateTemplate().find("from User where username = ? and hpassword = ?", username,hpassword);
+        if (users.size()==0){
             return null;
         }
         return (User) users.get(0);

@@ -21,8 +21,13 @@
 		* DecodeData:类转换工具类
 	3. service:公共业务逻辑包
 		* ChannelManager：管理用户Channel
+		* ReflectionManager：管理映射元素
+		* PublicGameService: 全局业务
 	4. annotation:自定义注解包（新添加）
 		* ProtocolAnnotation：自定义注解，用于定位协议类
+	5. hanlder:全局处理器包
+		* MyServerHandler：检测心跳
+	6. 
 ### user:角色包  
     1. entity:实体类包  
 		* user：用户表实体类  
@@ -56,3 +61,4 @@
 	5. Protocol:包头协议  
 	6. UserCache:用户缓存暂用  
 	7. ConsequenceCode：结果集协议
+	8. JsonUtil：json工具类

@@ -1,7 +1,9 @@
 package com.aiwan.netty;
 
+import com.aiwan.publicsystem.common.Session;
 import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.publicsystem.service.ReflectionManager;
+import com.aiwan.publicsystem.service.SessionManager;
 import com.aiwan.user.protocol.CM_UserMessage;
 import com.aiwan.user.service.UserService;
 import com.aiwan.scenes.protocol.CM_Move;
@@ -44,18 +46,20 @@ public class TaskDispatcher {
         final Object obj = ObjectToBytes.restore(decodeData.getData());
 
         final Object bean = ReflectionManager.getBean(method);
+
+        final Session session = SessionManager.getSessionByHashCode(channel.hashCode());
         if (bean instanceof UserService){//用户线程池
             userExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    ReflectionUtils.invokeMethod(method,bean,obj,channel);
+                    ReflectionUtils.invokeMethod(method,bean,obj,session);
                 }
             });
         }else {//场景线程池
             secensExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    ReflectionUtils.invokeMethod(method,bean,obj,channel);
+                    ReflectionUtils.invokeMethod(method,bean,obj,session);
                 }
             });
         }

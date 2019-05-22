@@ -4,6 +4,7 @@ import com.aiwan.netty.NettyServer;
 import com.aiwan.publicsystem.Initialization.MapInitialization;
 import com.aiwan.publicsystem.Initialization.ReflectionInitialization;
 import com.aiwan.util.GetBean;
+import com.aiwan.util.RedisOperating;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,6 +25,8 @@ public class ServerStart {
         MapInitialization.init();
         //初始化反射
         ReflectionInitialization.initialReflection(applicationContext);
+        //redis初始化
+        RedisOperating.init("localhost");
         //线程启动
         logger.debug("启动Netty服务器");
         new Thread(

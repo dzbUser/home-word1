@@ -1,7 +1,6 @@
 package com.aiwan.client;
 
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.publicsystem.service.ChannelManager;
 import com.aiwan.user.protocol.SM_UserMessage;
 import com.aiwan.scenes.protocol.SM_Move;
 import com.aiwan.scenes.protocol.SM_Shift;
@@ -23,7 +22,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
     protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
         Channel channel = ctx.channel();
         //加入缓存
-        ChannelManager.putChannel(channel);
         if (decodeData.getType() == ConsequenceCode.LOGINFAIL ||decodeData.getType() == ConsequenceCode.REGISTDAIL||decodeData.getType() == ConsequenceCode.REGISTSUCCESS||decodeData.getType() == ConsequenceCode.MOVEFAIL||decodeData.getType()==ConsequenceCode.SHIFTFAIL){
             String content = (String) ObjectToBytes.restore(decodeData.getData());
            System.out.println(content);

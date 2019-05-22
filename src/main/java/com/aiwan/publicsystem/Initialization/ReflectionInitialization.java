@@ -53,9 +53,9 @@ public class ReflectionInitialization {
                 ReflectionManager.putBean(methods[i],object);
                 //获取方法的参数类型
                 Class[] classes = methods[i].getParameterTypes();
-                System.out.println(methods[i].getName());
+//                System.out.println(methods[i].getName());
                 if (classes.length>0){
-                    System.out.println(classes[0]);
+//                    System.out.println(classes[0]);
                     //储存参数类型与方法的映射
                     ReflectionManager.putMethod(classes[0],methods[i]);
                 }

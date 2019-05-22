@@ -15,6 +15,8 @@ public class PositionMeaning {
         this.allowMove = allowMove;
     }
 
+    public PositionMeaning(){}
+
     public int getNum() {
         return num;
     }

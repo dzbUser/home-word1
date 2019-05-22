@@ -1,14 +1,13 @@
 package com.aiwan.scenes.mapresource;
 
+import com.aiwan.publicsystem.annotation.CellMapping;
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.publicsystem.service.ChannelManager;
 import com.aiwan.scenes.protocol.SM_Shift;
 import com.aiwan.scenes.service.MapManager;
 import com.aiwan.user.entity.User;
 import com.aiwan.util.ConsequenceCode;
 import com.aiwan.util.GetBean;
 import com.aiwan.util.SMToDecodeData;
-import io.netty.channel.Channel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,19 +17,34 @@ import java.util.Map;
  * */
 public class MapResource {
     //地图类型
-    private int mapType;
+    @CellMapping(name = "mapType")
+    private Integer mapType;
     //地图名字
+    @CellMapping(name = "name")
     private String name;
-    //地图
-    private int[][] map;
-    //地图长度
-    private int height;
+    //地图高度
+    @CellMapping(name = "height")
+    private Integer height;
     //地图宽度
-    private int width;
-    //初始横坐标
-    private int originX;
-    //初始纵坐标
-    private int originY;
+    @CellMapping(name = "width")
+    private Integer width;
+    //地图初始x坐标
+    @CellMapping(name = "originX")
+    private Integer originX;
+    //地图初始化y纵坐标
+    @CellMapping(name = "originY")
+    private Integer originY;
+    //地图字符串
+    @CellMapping(name = "mapString")
+    private String mapString;
+    //位置信息字符串
+    @CellMapping(name = "positionString")
+    private String positionString;
+
+    //存地图数字涵义协议
+    private Map<Integer, PositionMeaning> positionMeaningHashMap = new HashMap<>();
+    //存地图数据
+    private int[][] map;
     //存储在本地图中的用户
     private Map<String, User> userMap = new HashMap<>();
     //地图动态内容
@@ -49,14 +63,31 @@ public class MapResource {
         userMap.remove(username);
     }
 
-    public MapResource(int mapType, String name, int[][] map,int height,int width,int originX,int originY) {
-        this.mapType = mapType;
-        this.name = name;
-        this.map = map;
-        this.height = height;
-        this.width = width;
-        this.originX = originX;
-        this.originY = originY;
+
+    public MapResource(){
+
+    }
+    public void init(){
+        //初始化地图数据
+        this.map = new int[height][width];
+        String[] line = mapString.split(";");
+        for (int i = 0;i<line.length;i++){
+            String[] num = line[i].split(" ");
+            for (int j = 0;j<num.length;j++){
+                this.map[i][j] = Integer.parseInt(num[j]);
+            }
+        }
+
+        //初始化位置信息
+        line = positionString.split(";");
+        for (int i = 0;i<line.length;i++){
+            String[] element =  line[i].split(" ");
+            PositionMeaning positionMeaning = new PositionMeaning();
+            positionMeaning.setNum(Integer.parseInt(element[0]));
+            positionMeaning.setName(element[1]);
+            positionMeaning.setAllowMove(Integer.parseInt(element[2]));
+            positionMeaningHashMap.put(positionMeaning.getNum(),positionMeaning);
+        }
         //初始化动态资源
         initMapMessage();
     }
@@ -65,67 +96,16 @@ public class MapResource {
     private void initMapMessage(){
         this.mapMessage = new String[height][width];
         MapManager mapManager = GetBean.getMapManager();
+
         for (int i = 0;i < height;i++){
             for (int j = 0;j < width;j++){
-                mapMessage[i][j] = mapManager.getmapProtocol(map[i][j]);
+                mapMessage[i][j] = positionMeaningHashMap.get(map[i][j]).getName();
             }
         }
     }
-    public int getMapType() {
-        return mapType;
-    }
 
-    public void setMapType(int mapType) {
-        this.mapType = mapType;
-    }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int[][] getMap() {
-        return map;
-    }
-
-    public void setMap(int[][] map) {
-        this.map = map;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getOriginX() {
-        return originX;
-    }
-
-    public void setOriginX(int originX) {
-        this.originX = originX;
-    }
-
-    public int getOriginY() {
-        return originY;
-    }
-
-    public void setOriginY(int originY) {
-        this.originY = originY;
-    }
 
     //获取地图信息
     public String getMapContent(int x, int y){
@@ -171,11 +151,11 @@ public class MapResource {
             String username = user.getUsername();
             String content = getMapContent(user.getCurrentX(),user.getCurrentY());
             //获取对应用户的channel
-            Channel channel = ChannelManager.getChannelByUsername(username);
+//            Channel channel = ChannelManager.getChannelByUsername(username);
             //创建跳转类
             SM_Shift sm_shift = new SM_Shift(user.getCurrentX(),user.getCurrentY(),user.getMap(),content);
             decodeData = SMToDecodeData.shift(ConsequenceCode.SHIFTSUCCESS,sm_shift);
-            channel.writeAndFlush(decodeData);
+//            channel.writeAndFlush(decodeData);
         }
     }
 
@@ -187,13 +167,80 @@ public class MapResource {
         putUser(username,user);
     }
 
+    /**
+     * 判断是否可走
+     * */
     public boolean allowMove(int x,int y){
         if (x>height||y>width)
             return false;
-        MapManager mapManager = GetBean.getMapManager();
-        if (mapManager.getPositionMeaning(map[x-1][y-1]).getAllowMove() == 1){
+        if (positionMeaningHashMap.get(map[x-1][y-1]).getAllowMove() == 1){
             return true;
         }
         return false;
     }
+
+    public Integer getMapType() {
+        return mapType;
+    }
+
+    public void setMapType(Integer mapType) {
+        this.mapType = mapType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getOriginX() {
+        return originX;
+    }
+
+    public void setOriginX(Integer originX) {
+        this.originX = originX;
+    }
+
+    public Integer getOriginY() {
+        return originY;
+    }
+
+    public void setOriginY(Integer originY) {
+        this.originY = originY;
+    }
+
+    public String getMapString() {
+        return mapString;
+    }
+
+    public void setMapString(String mapString) {
+        this.mapString = mapString;
+    }
+
+    public String getPositionString() {
+        return positionString;
+    }
+
+    public void setPositionString(String positionString) {
+        this.positionString = positionString;
+    }
+
 }

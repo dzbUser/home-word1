@@ -10,9 +10,9 @@ public class JsonUtil {
         return jsonObject.toString();
     }
 
-    public static Object jsonToObject(String str){
+    public static Object jsonToObject(String str,Class clazz){
         JSONObject jsonObject = new JSONObject().fromObject(str);
-        Object object = JSONObject.toBean(jsonObject,Object.class);
+        Object object = JSONObject.toBean(jsonObject,clazz);
         return object;
     }
 }

@@ -1,10 +1,10 @@
 package com.aiwan.netty;
 
+import com.aiwan.publicsystem.common.Session;
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.publicsystem.service.ChannelManager;
-import com.aiwan.util.GetBean;
-import com.aiwan.util.Protocol;
-import com.aiwan.util.UserCache;
+import com.aiwan.publicsystem.service.SessionManager;
+import com.aiwan.user.entity.User;
+import com.aiwan.util.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -43,15 +43,34 @@ public class Handler extends SimpleChannelInboundHandler<DecodeData> {
 //        logger.debug("exceptionCaught");
 //        if(null != cause) cause.printStackTrace();
         logger.debug("发生异常，删除缓存");
-        //删除缓存
-        String username = UserCache.getUsernameByChannel(ctx.channel().hashCode());
-        ChannelManager.removeChannel(ctx.channel());
-        if (username != null && !username.equals("")){//存在登录异常
-            //删除用户缓存
-            ChannelManager.removeChannel(username);
-            UserCache.removeUserByUsername(username);
-            UserCache.removeUsernameByChannel(ctx.channel().hashCode());
+        Session session = SessionManager.getSessionByHashCode(ctx.channel().hashCode());
+        if (session != null){
+            User user = session.getUser();
+            if (user!=null&&user.getUsername()!=null){//检查是否有用户缓存
+                SessionManager.removeSessionByUsername(user.getUsername());
+            }
+            SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
         }
         if(null != ctx) ctx.close();
+    }
+    @Override
+    public void channelActive(ChannelHandlerContext ctx){
+        //session加如管理器
+        Session session = new Session();
+        session.setChannel(ctx.channel());
+        SessionManager.putSessionByHashCode(ctx.channel().hashCode(),session);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx){
+        //删除缓存
+        Session session = SessionManager.getSessionByHashCode(ctx.channel().hashCode());
+        if (session != null){
+            User user = session.getUser();
+            if (user!=null&&user.getUsername()!=null){//检查是否有用户缓存
+                SessionManager.removeSessionByUsername(user.getUsername());
+            }
+            SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
+        }
     }
 }

@@ -1,14 +1,17 @@
 package com.aiwan.publicsystem.handler;
 
-import com.aiwan.netty.NettyServer;
-import com.aiwan.publicsystem.service.ChannelManager;
-import com.aiwan.util.UserCache;
+import com.aiwan.publicsystem.common.Session;
+import com.aiwan.publicsystem.service.SessionManager;
+import com.aiwan.user.entity.User;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 心跳检测
+ * */
 public class MyServerHandler extends ChannelInboundHandlerAdapter {
     private static Logger logger = LoggerFactory.getLogger(MyServerHandler.class);
 
@@ -21,16 +24,13 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
         switch (event.state()){
             case READER_IDLE:
                 logger.debug(ctx.name()+"未接受信息超过5秒");
-                //移除channel管理集合
-                ChannelManager.removeChannel(ctx.channel());
-                //查看是否有登录缓存
-                String username = UserCache.getUsernameByChannel(ctx.channel().hashCode());
-                if (username != null && !username.equals("")){//有登录缓存
-                    //删除缓存
-                    ChannelManager.removeChannel(username);
-                    UserCache.removeUserByUsername(username);
-                    UserCache.removeUsernameByChannel(ctx.channel().hashCode());
+                //删除缓存
+                Session session = SessionManager.getSessionByHashCode(ctx.channel().hashCode());
+                User user = session.getUser();
+                if (user!=null&&user.getUsername()!=null){//检查是否有用户缓存
+                    SessionManager.removeSessionByUsername(user.getUsername());
                 }
+                SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
                 //断开连接
                 ctx.channel().close();
                 break;

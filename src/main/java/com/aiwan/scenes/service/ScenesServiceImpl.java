@@ -1,7 +1,8 @@
 package com.aiwan.scenes.service;
 
+import com.aiwan.publicsystem.common.Session;
 import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.publicsystem.service.ChannelManager;
+import com.aiwan.publicsystem.service.SessionManager;
 import com.aiwan.scenes.mapresource.MapResource;
 import com.aiwan.user.entity.User;
 import com.aiwan.scenes.Dao.ScenesDao;
@@ -10,12 +11,10 @@ import com.aiwan.scenes.protocol.CM_Shift;
 import com.aiwan.scenes.protocol.SM_Move;
 import com.aiwan.scenes.protocol.SM_Shift;
 import com.aiwan.util.*;
-import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -36,11 +35,16 @@ public class ScenesServiceImpl implements ScenesService{
      * 角色的移动
      * */
     @Override
-    public void move(CM_Move cm_move,Channel channel) {
-        User user = UserCache.getUserByUsername(cm_move.getUsername());
-        user.setCurrentX(cm_move.getTargetX());
-        user.setCurrentY(cm_move.getCurrentY());
-        UserCache.putUserByUsername(user.getUsername(),user);
+    public void move(CM_Move cm_move, Session session) {
+        User user = SessionManager.getSessionByUsername(cm_move.getUsername()).getUser();
+//        JSONObject jsonObject = new JSONObject().fromObject(RedisOperating.getCache("user:"+cm_move.getUsername()));
+//        User user = (User) jsonObject.toBean(jsonObject,User.class);
+        if (user!=null){
+            user.setCurrentX(cm_move.getTargetX());
+            user.setCurrentY(cm_move.getCurrentY());
+        }
+//        UserCache.putUserByUsername(user.getUsername(),user);
+//        RedisOperating.putCache("user:"+cm_move.getUsername(),JsonUtil.objectToJson(user));
         Object data = "移动失败！";
         short type = ConsequenceCode.MOVEFAIL;
         if (user == null){
@@ -62,8 +66,8 @@ public class ScenesServiceImpl implements ScenesService{
             }
         }
         DecodeData decodeData = SMToDecodeData.shift(type,data);
-        if (channel != null){
-            channel.writeAndFlush(decodeData);
+        if (session.getChannel() != null){
+            session.getChannel().writeAndFlush(decodeData);
         }
     }
 
@@ -71,15 +75,15 @@ public class ScenesServiceImpl implements ScenesService{
      * 地图跳转
      * */
     @Override
-    public void shift(CM_Shift cm_shift,Channel channel) {
-        User user = UserCache.getUserByUsername(cm_shift.getUsername());
+    public void shift(CM_Shift cm_shift,Session session) {
+        User user = SessionManager.getSessionByUsername(cm_shift.getUsername()).getUser();
         Object data = "跳转失败！";
         short type = ConsequenceCode.SHIFTFAIL;
         if (user == null){
             data  = "您还未登录！";
             type = ConsequenceCode.SHIFTFAIL;
             DecodeData decodeData = SMToDecodeData.shift(type,data);
-            channel.writeAndFlush(decodeData);
+            session.getChannel().writeAndFlush(decodeData);
         }else {
             MapResource mapResource1 = GetBean.getMapManager().getMapResource(user.getMap());
             mapResource1.removeUser(user.getUsername());
@@ -90,16 +94,14 @@ public class ScenesServiceImpl implements ScenesService{
             //添加到地图资源中
             mapResource.putUser(user.getUsername(),user);
             //加入缓存
-            UserCache.putUserByUsername(user.getUsername(),user);
+
             scenesDao.updateMapPosition(cm_shift,mapResource.getOriginX(),mapResource.getOriginY());
             String content = "跳转成功\n"+ mapResource.getMapContent(mapResource.getOriginX(),mapResource.getOriginY());
             SM_Shift sm_shift = new SM_Shift(mapResource.getOriginX(),mapResource.getOriginY(),cm_shift.getMap(),content);
             data = sm_shift;
             type = ConsequenceCode.SHIFTSUCCESS;
             DecodeData decodeData = SMToDecodeData.shift(type,data);
-//            mapResource.sendMessage();
-//            mapResource1.sendMessage();
-            channel.writeAndFlush(decodeData);
+            session.getChannel().writeAndFlush(decodeData);
         }
     }
 }

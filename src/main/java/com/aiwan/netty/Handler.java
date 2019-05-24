@@ -3,7 +3,7 @@ package com.aiwan.netty;
 import com.aiwan.publicsystem.common.Session;
 import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.publicsystem.service.SessionManager;
-import com.aiwan.user.entity.User;
+import com.aiwan.user.model.User;
 import com.aiwan.util.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -46,8 +46,8 @@ public class Handler extends SimpleChannelInboundHandler<DecodeData> {
         Session session = SessionManager.getSessionByHashCode(ctx.channel().hashCode());
         if (session != null){
             User user = session.getUser();
-            if (user!=null&&user.getUsername()!=null){//检查是否有用户缓存
-                SessionManager.removeSessionByUsername(user.getUsername());
+            if (user!=null&&user.getAcountId()!=null){//检查是否有用户缓存
+                SessionManager.removeSessionByUsername(user.getAcountId());
             }
             SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
         }
@@ -67,8 +67,8 @@ public class Handler extends SimpleChannelInboundHandler<DecodeData> {
         Session session = SessionManager.getSessionByHashCode(ctx.channel().hashCode());
         if (session != null){
             User user = session.getUser();
-            if (user!=null&&user.getUsername()!=null){//检查是否有用户缓存
-                SessionManager.removeSessionByUsername(user.getUsername());
+            if (user!=null&&user.getAcountId()!=null){//检查是否有用户缓存
+                SessionManager.removeSessionByUsername(user.getAcountId());
             }
             SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
         }

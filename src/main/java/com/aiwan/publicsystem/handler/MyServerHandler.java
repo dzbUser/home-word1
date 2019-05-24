@@ -2,7 +2,7 @@ package com.aiwan.publicsystem.handler;
 
 import com.aiwan.publicsystem.common.Session;
 import com.aiwan.publicsystem.service.SessionManager;
-import com.aiwan.user.entity.User;
+import com.aiwan.user.model.User;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -27,8 +27,8 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
                 //删除缓存
                 Session session = SessionManager.getSessionByHashCode(ctx.channel().hashCode());
                 User user = session.getUser();
-                if (user!=null&&user.getUsername()!=null){//检查是否有用户缓存
-                    SessionManager.removeSessionByUsername(user.getUsername());
+                if (user!=null&&user.getAcountId()!=null){//检查是否有用户缓存
+                    SessionManager.removeSessionByUsername(user.getAcountId());
                 }
                 SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
                 //断开连接

@@ -4,6 +4,7 @@ import com.aiwan.publicsystem.common.Session;
 import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.publicsystem.service.ReflectionManager;
 import com.aiwan.publicsystem.service.SessionManager;
+import com.aiwan.publicsystem.service.TheatpoolManager;
 import com.aiwan.user.protocol.CM_UserMessage;
 import com.aiwan.user.service.UserService;
 import com.aiwan.scenes.protocol.CM_Move;
@@ -30,10 +31,10 @@ import java.util.concurrent.Executors;
 public class TaskDispatcher {
 
     private static Logger logger = LoggerFactory.getLogger(TaskDispatcher.class);
-    //用户运行线程池
-    private Executor userExecutor = Executors.newFixedThreadPool(10);
-    //场景运行线程池
-    private Executor secensExecutor = Executors.newFixedThreadPool(10);
+//    //用户运行线程池
+//    private Executor userExecutor = Executors.newFixedThreadPool(10);
+//    //场景运行线程池
+//    private Executor secensExecutor = Executors.newFixedThreadPool(10);
 
 
     //任务分配
@@ -48,20 +49,26 @@ public class TaskDispatcher {
         final Object bean = ReflectionManager.getBean(method);
 
         final Session session = SessionManager.getSessionByHashCode(channel.hashCode());
-        if (bean instanceof UserService){//用户线程池
-            userExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    ReflectionUtils.invokeMethod(method,bean,obj,session);
-                }
-            });
-        }else {//场景线程池
-            secensExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    ReflectionUtils.invokeMethod(method,bean,obj,session);
-                }
-            });
-        }
+//        if (bean instanceof UserService){//用户线程池
+//            userExecutor.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ReflectionUtils.invokeMethod(method,bean,obj,session);
+//                }
+//            });
+//        }else {//场景线程池
+//            secensExecutor.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ReflectionUtils.invokeMethod(method,bean,obj,session);
+//                }
+//            });
+//        }
+        TheatpoolManager.start("user", new Runnable() {
+            @Override
+            public void run() {
+                ReflectionUtils.invokeMethod(method,bean,obj,session);
+            }
+        });
     }
 }

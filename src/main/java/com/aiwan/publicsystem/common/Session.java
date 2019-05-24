@@ -1,6 +1,6 @@
 package com.aiwan.publicsystem.common;
 
-import com.aiwan.user.entity.User;
+import com.aiwan.user.model.User;
 import io.netty.channel.Channel;
 
 public class Session {

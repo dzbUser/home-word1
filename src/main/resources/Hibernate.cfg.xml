@@ -13,6 +13,7 @@
         <property name="hbm2ddl.auto">update</property>
         
         <!-- <mapping resource="Article.hbm.xml"/> -->
-        <mapping class="com.aiwan.user.entity.User"/>
+<!--        <mapping class="com.aiwan.user.entity.User"/>-->
+        <mapping class="com.aiwan.user.entity.UserEnt"/>
     </session-factory>
 </hibernate-configuration>

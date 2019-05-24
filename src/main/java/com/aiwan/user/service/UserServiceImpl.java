@@ -3,16 +3,22 @@ package com.aiwan.user.service;
 import com.aiwan.publicsystem.common.Session;
 import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.publicsystem.service.SessionManager;
+import com.aiwan.publicsystem.service.TheatpoolManager;
 import com.aiwan.scenes.mapresource.MapResource;
-import com.aiwan.user.entity.User;
-import com.aiwan.user.dao.UserDao;
+import com.aiwan.scenes.protocol.CM_Move;
+import com.aiwan.scenes.protocol.CM_Shift;
+import com.aiwan.user.model.User;
+//import com.aiwan.user.dao.UserDao;
 import com.aiwan.user.protocol.*;
 import com.aiwan.util.*;
+import com.sun.corba.se.spi.orbutil.threadpool.ThreadPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 用户业务逻辑类
@@ -26,17 +32,14 @@ public class UserServiceImpl implements UserService {
     private final static int ORINGINX = 1;
     private final static int ORINGINY = 3;
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private UserDao userDao;
+    private UserManager userManager;
 
     @Autowired
-    public void setUserDao(UserDao userDao){
-        this.userDao = userDao;
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
-    public User getUserByUid(int uid){
-        User user = userDao.getUserById(uid);
-        return user;
-    }
+
 
     //用户登录
     @Override
@@ -55,10 +58,10 @@ public class UserServiceImpl implements UserService {
             session.getChannel().writeAndFlush(decodeData);
             return;
         }
-        User user = userDao.getUserByUsernameAndPassword(userMessage);
+        User user = userManager.getUserByAcountId(userMessage.getUsername());
 
         //账号或者密码错误~~~~~~~第二步~~~~~~~~~
-        if (user == null){
+        if (user == null||!user.getPassword().equals(userMessage.getPassword())){
             logger.debug(userMessage.getUsername()+"登录失败");
             String msg = new String("账号或者密码错误");
             decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINFAIL,msg);
@@ -72,10 +75,10 @@ public class UserServiceImpl implements UserService {
 
             //把用户添加到地图资源中
             MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());
-            mapResource.putUser(user.getUsername(),session.getUser());
+            mapResource.putUser(user.getAcountId(),user);
 
             SM_UserMessage sm_userMessage = new SM_UserMessage();
-            sm_userMessage.setUsername(user.getUsername());
+            sm_userMessage.setUsername(user.getAcountId());
             sm_userMessage.setMap(user.getMap());
             sm_userMessage.setCurrentX(user.getCurrentX());
             sm_userMessage.setCurrentY(user.getCurrentY());
@@ -88,7 +91,7 @@ public class UserServiceImpl implements UserService {
     //用户注册
     @Override
     public void registUser(CM_Registered userMessage, Session session) {
-        User user = userDao.getUserByUsername(userMessage.getUsername());
+        User user = userManager.getUserByAcountId(userMessage.getUsername());
         DecodeData decodeData = new DecodeData();
         //错误输入
         if(userMessage == null){
@@ -100,14 +103,7 @@ public class UserServiceImpl implements UserService {
         //账号可用
         else if (user == null){
             logger.debug("注册新用户");
-            User user1 = new User();
-            user1.setUsername(userMessage.getUsername());
-            user1.setPassword(userMessage.getPassword());
-            user1.setHpassword(userMessage.getHpassword());
-            user1.setMap(ORINGINMAP);
-            user1.setCurrentX(ORINGINX);
-            user1.setCurrentY(ORINGINY);
-            userDao.insert(user1);
+            userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY);
             String content = "恭喜您，注册成功！";
             decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTSUCCESS,content);
             session.getChannel().writeAndFlush(decodeData);
@@ -131,7 +127,7 @@ public class UserServiceImpl implements UserService {
         logger.debug("注销成功！");
         String content = new String("注销用户成功！");
         DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.LOGOUTSUCCESS,content);
-        User user = userDao.getUserByUsername(userMessage.getUsername());
+        User user = userManager.getUserByAcountId(userMessage.getUsername());
         //把用户从地图资源中移除
         MapResource mapResource = GetBean.getMapManager().getMapResource(user.getMap());
         mapResource.removeUser(userMessage.getUsername());
@@ -144,13 +140,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void hLogin(CM_HLogin cm_hlogin, Session session) {
         /*
-        * 1.查看账号以及高级密码，若错误则返回错误
-        * 2.顶替用户上线，更新缓存
-        * */
+         * 1.查看账号以及高级密码，若错误则返回错误
+         * 2.顶替用户上线，更新缓存
+         * */
         DecodeData decodeData;
-        User user = userDao.getUserByUsernameAndHpassword(cm_hlogin.getUsername(),cm_hlogin.getHpassword());
+        User user = userManager.getUserByAcountId(cm_hlogin.getUsername());
         //账号或者密码错误
-        if (user == null){
+        if (user == null||!user.getHpassword().equals(cm_hlogin.getHpassword())){
             String msg = new String("账号或者高级密码错误");
             decodeData = SMToDecodeData.shift(ConsequenceCode.LOGINFAIL,msg);
             session.getChannel().writeAndFlush(decodeData);
@@ -169,11 +165,11 @@ public class UserServiceImpl implements UserService {
         SessionManager.putSessionByUsername(cm_hlogin.getUsername(),session);
         //把用户添加到地图资源中
         MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());
-        mapResource.putUser(user.getUsername(),session.getUser());
+        mapResource.putUser(user.getAcountId(),user);
 
         //设置和发送信息
         SM_UserMessage sm_userMessage = new SM_UserMessage();
-        sm_userMessage.setUsername(user.getUsername());
+        sm_userMessage.setUsername(user.getAcountId());
         sm_userMessage.setMap(user.getMap());
         sm_userMessage.setCurrentX(user.getCurrentX());
         sm_userMessage.setCurrentY(user.getCurrentY());
@@ -182,5 +178,49 @@ public class UserServiceImpl implements UserService {
         session.getChannel().writeAndFlush(decodeData);
     }
 
+    public void move(final CM_Move cm_move, final Session session) {
+        User user = SessionManager.getSessionByUsername(cm_move.getUsername()).getUser();
+        Object data = "移动失败！";
+        short type = ConsequenceCode.MOVEFAIL;
+        //判断是否登录
+        if (user == null){
+            data  = "您还未登录！";
+            type = ConsequenceCode.MOVEFAIL;
+            DecodeData decodeData = SMToDecodeData.shift(type,data);
+            session.getChannel().writeAndFlush(data);
+            return;
+        }
+        //把业务抛给场景线程池
+        TheatpoolManager.start("scenes", new Runnable() {
+            @Override
+            public void run() {
+                GetBean.getScenesService().move(session,cm_move);
+            }
+        });
+    }
+
+    /**
+     * 用户移动
+     * */
+    public void shift(final CM_Shift cm_shift, final Session session){
+        User user = SessionManager.getSessionByUsername(cm_shift.getUsername()).getUser();
+        Object data = "跳转失败！";
+        short type = ConsequenceCode.SHIFTFAIL;
+        //判断是否登录
+        if (user == null){
+            data  = "您还未登录！";
+            type = ConsequenceCode.SHIFTFAIL;
+            DecodeData decodeData = SMToDecodeData.shift(type,data);
+            session.getChannel().writeAndFlush(decodeData);
+            return;
+        }
+        //把业务抛给场景线程池
+        TheatpoolManager.start("scenes", new Runnable() {
+            @Override
+            public void run() {
+                GetBean.getScenesService().shift(session,cm_shift);
+            }
+        });
+    }
 
 }

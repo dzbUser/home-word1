@@ -4,13 +4,14 @@ import com.aiwan.publicsystem.annotation.CellMapping;
 import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.scenes.protocol.SM_Shift;
 import com.aiwan.scenes.service.MapManager;
-import com.aiwan.user.entity.User;
+import com.aiwan.user.model.User;
 import com.aiwan.util.ConsequenceCode;
 import com.aiwan.util.GetBean;
 import com.aiwan.util.SMToDecodeData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 地图资源类
@@ -46,7 +47,7 @@ public class MapResource {
     //存地图数据
     private int[][] map;
     //存储在本地图中的用户
-    private Map<String, User> userMap = new HashMap<>();
+    private Map<String, User> userMap = new ConcurrentHashMap<>();
     //地图动态内容
     private String[][] mapMessage;
 
@@ -148,7 +149,7 @@ public class MapResource {
         for (Map.Entry<String, User> entry : userMap.entrySet()) {
             //获取本地图所有用户
             user = entry.getValue();
-            String username = user.getUsername();
+            String username = user.getAcountId();
             String content = getMapContent(user.getCurrentX(),user.getCurrentY());
             //获取对应用户的channel
 //            Channel channel = ChannelManager.getChannelByUsername(username);

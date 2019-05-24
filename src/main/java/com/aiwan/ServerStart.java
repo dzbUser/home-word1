@@ -1,8 +1,12 @@
 package com.aiwan;
 
 import com.aiwan.netty.NettyServer;
+import com.aiwan.publicsystem.Initialization.CacheInitialzation;
 import com.aiwan.publicsystem.Initialization.MapInitialization;
 import com.aiwan.publicsystem.Initialization.ReflectionInitialization;
+import com.aiwan.publicsystem.service.TheatpoolManager;
+import com.aiwan.user.entity.UserEnt;
+import com.aiwan.user.service.UserManager;
 import com.aiwan.util.GetBean;
 import com.aiwan.util.RedisOperating;
 import org.slf4j.Logger;
@@ -27,7 +31,10 @@ public class ServerStart {
         ReflectionInitialization.initialReflection(applicationContext);
         //redis初始化
         RedisOperating.init("localhost");
-        //线程启动
+        //缓存初始化
+        CacheInitialzation.init(applicationContext);
+        //线程池初始化
+        TheatpoolManager.initialize();
         logger.debug("启动Netty服务器");
         new Thread(
                 new Runnable() {

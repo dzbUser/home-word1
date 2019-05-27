@@ -2,6 +2,7 @@ package com.aiwan.util;
 
 import com.aiwan.common.ramcache.orm.Accessor;
 import com.aiwan.netty.TaskDispatcher;
+import com.aiwan.role.service.RoleService;
 import com.aiwan.scenes.service.MapManager;
 //import com.aiwan.user.dao.UserDao;
 import com.aiwan.scenes.service.ScenesService;
@@ -22,6 +23,7 @@ public class GetBean {
     private static Accessor accessor;
     private static UserManager userManager;
     private static ScenesService scenesService;
+    private static RoleService roleService;
 
     public static TaskDispatcher getTaskDispatcher() {
         return GetBean.taskDispatcher;
@@ -44,6 +46,16 @@ public class GetBean {
     public static UserService getUserService() {
         return GetBean.userService;
     }
+
+    @Autowired
+    public  void setRoleService(RoleService roleService) {
+        GetBean.roleService = roleService;
+    }
+
+    public static RoleService getRoleService() {
+        return GetBean.roleService;
+    }
+
     @Autowired
     public  void setUserService(UserService userService) {
         GetBean.userService = userService;

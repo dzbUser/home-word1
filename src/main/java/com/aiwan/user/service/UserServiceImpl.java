@@ -7,6 +7,7 @@ import com.aiwan.publicsystem.service.TheatpoolManager;
 import com.aiwan.scenes.mapresource.MapResource;
 import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
+import com.aiwan.scenes.service.MapManager;
 import com.aiwan.user.model.User;
 //import com.aiwan.user.dao.UserDao;
 import com.aiwan.user.protocol.*;
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
         //账号可用
         else if (user == null){
             logger.debug("注册新用户");
-            userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY);
+            userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY,1);
             String content = "恭喜您，注册成功！";
             decodeData = SMToDecodeData.shift(ConsequenceCode.REGISTSUCCESS,content);
             session.getChannel().writeAndFlush(decodeData);
@@ -221,6 +222,51 @@ public class UserServiceImpl implements UserService {
                 GetBean.getScenesService().shift(session,cm_shift);
             }
         });
+    }
+
+    /**
+     * 查看个人信息
+     * */
+    public void userMessage(CM_UserMessage userMessage,Session session){
+        User user = SessionManager.getSessionByUsername(userMessage.getUsername()).getUser();
+        Object data = "获取个人信息失败";
+        int type = ConsequenceCode.SHIFTFAIL;
+        //判断是否登录
+        if (user == null){
+            data  = "您还未登录！";
+            type = ConsequenceCode.SHIFTFAIL;
+            DecodeData decodeData = SMToDecodeData.shift(type,data);
+            session.getChannel().writeAndFlush(decodeData);
+            return;
+        }
+        String mapContent = GetBean.getMapManager().getMapResource(user.getMap()).getMapContent(user.getCurrentX(),user.getCurrentY());
+        type = ConsequenceCode.GETMESSAGESUCCESS;
+        SM_UserMessage sm_userMessage = new SM_UserMessage();
+        sm_userMessage.setMapMessage(mapContent);
+        sm_userMessage.setCurrentX(user.getCurrentX());
+        sm_userMessage.setCurrentY(user.getCurrentY());
+        sm_userMessage.setMap(user.getMap());
+        DecodeData decodeData = SMToDecodeData.shift(type,sm_userMessage);
+        session.getChannel().writeAndFlush(decodeData);
+    }
+
+    /**
+     * 创建角色
+     * */
+    public void createRole(final CM_CreateRole cm_createRole, final Session session){
+        logger.debug(cm_createRole.getAccountId()+"创建角色");
+        User user = session.getUser();
+        if (user == null){//还未登录
+            DecodeData decodeData = SMToDecodeData.shift(ConsequenceCode.CREATEROLEFAIL,"您还未登录");
+            session.getChannel().writeAndFlush(decodeData);
+        }else {//转交给角色线程池
+            TheatpoolManager.start("role", new Runnable() {
+                @Override
+                public void run() {
+                    GetBean.getRoleService().create(session,cm_createRole);
+                }
+            });
+        }
     }
 
 }

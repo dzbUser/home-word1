@@ -22,7 +22,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
     protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
         Channel channel = ctx.channel();
         //加入缓存
-        if (decodeData.getType() == ConsequenceCode.LOGINFAIL ||decodeData.getType() == ConsequenceCode.REGISTDAIL||decodeData.getType() == ConsequenceCode.REGISTSUCCESS||decodeData.getType() == ConsequenceCode.MOVEFAIL||decodeData.getType()==ConsequenceCode.SHIFTFAIL){
+        if (decodeData.getType() == ConsequenceCode.GETUSERMESSAGEFAIL||decodeData.getType() == ConsequenceCode.LOGINFAIL ||decodeData.getType() == ConsequenceCode.REGISTDAIL||decodeData.getType() == ConsequenceCode.REGISTSUCCESS||decodeData.getType() == ConsequenceCode.MOVEFAIL||decodeData.getType()==ConsequenceCode.SHIFTFAIL){
             String content = (String) ObjectToBytes.restore(decodeData.getData());
            System.out.println(content);
         }
@@ -57,9 +57,12 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
             String content = (String) ObjectToBytes.restore(decodeData.getData());
             LoginUser.setUsername("");
             System.out.println(content);
+        }else if (decodeData.getType() == ConsequenceCode.GETMESSAGESUCCESS){
+            SM_UserMessage sm_userMessage = (SM_UserMessage) ObjectToBytes.restore(decodeData.getData());
+            System.out.println(sm_userMessage.getMapMessage());
         }
 //        channel.writeAndFlush(decodeData);
-        System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6 高级登录 7.退出游戏");
+        System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6 高级登录 7.查看个人信息 8.退出游戏");
     }
 
     @Override

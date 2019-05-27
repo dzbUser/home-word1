@@ -16,6 +16,8 @@ public class TheatpoolManager {
         executorMap.put("user",Executors.newFixedThreadPool(10));
         //场景运行线程池
         executorMap.put("scenes",Executors.newFixedThreadPool(10));
+        //角色运行线程
+        executorMap.put("role",Executors.newFixedThreadPool(10));
     }
 
     public static void start(String name,Runnable runnable){

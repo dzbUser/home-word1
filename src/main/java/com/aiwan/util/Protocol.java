@@ -5,39 +5,43 @@ package com.aiwan.util;
  * */
 public class Protocol {
     //登录
-    public final static short LOGIN = 1;
+    public final static int LOGIN = 1;
     //注册
-    public final static short REGIST = 2;
+    public final static int REGIST = 2;
     //登录成功
-    public final static short LOGINSUCCESS = 3;
+    public final static int LOGINSUCCESS = 3;
     //注册成功
-    public final static short REGISTSUCCESS = 4;
+    public final static int REGISTSUCCESS = 4;
     //登录失败
-    public final static short LOGINFAIL = 5;
+    public final static int LOGINFAIL = 5;
     //注册失败
-    public final static short REGISTDAIL = 6;
+    public final static int REGISTDAIL = 6;
     //注销
-    public final static short LOGOUT = 7;
+    public final static int LOGOUT = 7;
     //注销用户成功
-    public final static short LOGOUTSUCCESS = 8;
+    public final static int LOGOUTSUCCESS = 8;
     //注销用户失败
-    public final static short LOGOUTFAIL = 9;
+    public final static int LOGOUTFAIL = 9;
     //用户移动
-    public final static short MOVE = 10;
+    public final static int MOVE = 10;
     //移动成功
-    public final static short MOVESUCCESS = 11;
+    public final static int MOVESUCCESS = 11;
     //移动失败
-    public final static short MOVEFAIL = 12;
+    public final static int MOVEFAIL = 12;
     //跳转
-    public final static short SHIFT = 13;
+    public final static int SHIFT = 13;
     //跳转成功
-    public final static short SHIFTSUCCESS = 14;
+    public final static int SHIFTSUCCESS = 14;
     //跳转失败
-    public final static short SHIFTFAIL = 15;
+    public final static int SHIFTFAIL = 15;
     //高级登录
     public final static int HLOGIN = 16;
     //退出游戏
     public final static int EXIT = 17;
     //心跳
     public final static int HEART = 18;
+    //返回个人信息
+    public final static int  USERMESSAGE = 19;
+    //创建角色
+    public final static int CREATEROLE = 20;
 }

@@ -47,6 +47,8 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
         //若缓存中有
         T current = cacheMap.get(id);
         if (current != null){
+            //序列化
+            current.unserialize();
             return current;
         }
         //若缓存中无
@@ -59,6 +61,8 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
             cacheMap.put(id,current);
             linkedQueue.offer(id);
             num++;
+            //反序列化
+            current.unserialize();
             return current;
         }
         //从队列中取出最后一个，写回
@@ -71,7 +75,8 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
 
     @Override
     public void writeBack(PK id, T entity) {
-
+        //序列化
+        entity.serialize();
         Element element = new Element(EventType.SAVE,id,entity,entityClz);
         persister.put(element);
     }
@@ -89,7 +94,13 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
         persister.put(element);
 
         return current;
+
     }
+
+//    @Override
+//    public PK create(T entity) {
+//        return null;
+//    }
 
     public boolean isInitailzation() {
         return initailzation;

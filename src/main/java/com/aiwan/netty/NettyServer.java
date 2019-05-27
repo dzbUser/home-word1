@@ -43,7 +43,7 @@ public class NettyServer {
                                 .addLast("encoder", new Encoder())  // 2
 //                                .addLast("aggregator", new HttpObjectAggregator(256 * 1024))    // 3
                                 //处理空闲状态事件的处理器
-                                .addLast(new IdleStateHandler(5,0,0, TimeUnit.SECONDS))
+                                .addLast(new IdleStateHandler(30,0,0, TimeUnit.SECONDS))
                                 .addLast(new MyServerHandler())
                                 .addLast("handler", new Handler());// 4
                     }

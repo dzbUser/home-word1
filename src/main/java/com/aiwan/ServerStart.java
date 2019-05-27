@@ -5,10 +5,6 @@ import com.aiwan.publicsystem.Initialization.CacheInitialzation;
 import com.aiwan.publicsystem.Initialization.MapInitialization;
 import com.aiwan.publicsystem.Initialization.ReflectionInitialization;
 import com.aiwan.publicsystem.service.TheatpoolManager;
-import com.aiwan.user.entity.UserEnt;
-import com.aiwan.user.service.UserManager;
-import com.aiwan.util.GetBean;
-import com.aiwan.util.RedisOperating;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -29,8 +25,6 @@ public class ServerStart {
         MapInitialization.init();
         //初始化反射
         ReflectionInitialization.initialReflection(applicationContext);
-        //redis初始化
-        RedisOperating.init("localhost");
         //缓存初始化
         CacheInitialzation.init(applicationContext);
         //线程池初始化

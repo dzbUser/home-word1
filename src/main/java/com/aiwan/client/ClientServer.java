@@ -6,8 +6,10 @@ import com.aiwan.publicsystem.protocol.DecodeData;
 import com.aiwan.user.protocol.*;
 import com.aiwan.scenes.protocol.CM_Move;
 import com.aiwan.scenes.protocol.CM_Shift;
+import com.aiwan.util.ConsequenceCode;
 import com.aiwan.util.ObjectToBytes;
 import com.aiwan.util.Protocol;
+import com.aiwan.util.SMToDecodeData;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -44,7 +46,7 @@ public class ClientServer {
             sendHear(channel);
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
-            System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.高级登录 7.退出游戏");
+            System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.高级登录 7.查看个人信息 8.退出游戏");
             while(true){
                 DecodeData decodeData = new DecodeData();
                 byte[] data = "初始化".getBytes();
@@ -121,6 +123,14 @@ public class ClientServer {
                     hlogin(channel,scanner,decodeData);
                 }
                 else if (num == 7){
+                    if (LoginUser.getUsername().equals("")){
+                        System.out.println("您还未登录过了！");
+                        continue;
+                    }
+                    getUserMessage(channel,LoginUser.getUsername());
+
+                }
+                else if (num == 8){
                     if (!LoginUser.getUsername().equals("")){
                         logout(channel,scanner,decodeData);
                     }
@@ -213,7 +223,7 @@ public class ClientServer {
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(20000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -224,5 +234,13 @@ public class ClientServer {
                 }
             }
         }).start();
+    }
+
+    //获取个人信息
+    public static void getUserMessage(final Channel channel,String username){
+        CM_UserMessage cm_userMessage = new CM_UserMessage();
+        cm_userMessage.setUsername(username);
+        DecodeData decodeData = SMToDecodeData.shift(Protocol.USERMESSAGE,cm_userMessage);
+        channel.writeAndFlush(decodeData);
     }
 }

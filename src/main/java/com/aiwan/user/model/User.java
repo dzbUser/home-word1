@@ -2,8 +2,11 @@ package com.aiwan.user.model;
 
 import com.aiwan.user.entity.UserEnt;
 
+import java.util.List;
+
 public class User {
     private UserEnt userEnt;
+
     public User(UserEnt userEnt){
         this.userEnt = userEnt;
     }
@@ -59,5 +62,21 @@ public class User {
 
     public void setUserEnt(UserEnt userEnt) {
         this.userEnt = userEnt;
+    }
+
+    public int getMaxRole() {
+        return userEnt.getMaxRole();
+    }
+
+    public UserBaseInfo getUserBaseInfo() {
+        return userEnt.getUserBaseInfo();
+    }
+
+    public void setUserBaseInfo(UserBaseInfo userBaseInfo) {
+        userEnt.setUserBaseInfo(userBaseInfo);
+    }
+
+    public void setMaxRole(int maxRole) {
+        userEnt.setMaxRole(maxRole);
     }
 }

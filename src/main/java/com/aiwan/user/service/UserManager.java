@@ -5,6 +5,7 @@ import com.aiwan.user.entity.UserEnt;
 import com.aiwan.user.model.User;
 import org.springframework.stereotype.Service;
 
+
 @Service("userManager")
 public class UserManager {
     private EntityCaheServiceImpl<String, UserEnt> cache;
@@ -18,13 +19,19 @@ public class UserManager {
         return user;
     }
 
+    /**
+     * 保存用户
+     * */
     public void sava(User user){
         UserEnt userEnt = user.getUserEnt();
-
+        //序列化
         cache.writeBack(user.getAcountId(),userEnt);
     }
 
-    public void register(String acountId,String password,String hpassword,int map,int x,int y){
+    /**
+     * 创建角色
+     * */
+    public void register(String acountId,String password,String hpassword,int map,int x,int y,int maxRole){
         UserEnt userEnt = new UserEnt();
         userEnt.setAcountId(acountId);
         userEnt.setPassword(password);
@@ -32,6 +39,7 @@ public class UserManager {
         userEnt.setMap(map);
         userEnt.setCurrentX(x);
         userEnt.setCurrentY(y);
+        userEnt.setMaxRole(maxRole);
         cache.writeBack(acountId,userEnt);
     }
 

@@ -7,9 +7,6 @@ import com.aiwan.util.GetBean;
 
 public class ServiceManager {
     public EntityCacheService getEntityCacheService(Class<? extends IEntity> clz){
-        if (GetBean.getAccessor() == null){
-            System.out.println("accessor is  null");
-        }
         if (clz.isAnnotationPresent(Cache.class)) {//有注解
             Cache cached = clz.getAnnotation(Cache.class);
             int maxmum = cached.maxmum();

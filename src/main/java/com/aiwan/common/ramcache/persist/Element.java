@@ -4,7 +4,7 @@ import com.aiwan.common.ramcache.IEntity;
 
 import java.io.Serializable;
 
-public class Element {
+public class  Element {
     private EventType type;
     private Serializable id;
     private IEntity entity;

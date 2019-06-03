@@ -1,15 +1,15 @@
 package com.aiwan.client;
 
-import com.aiwan.netty.Decoder;
-import com.aiwan.netty.Encoder;
-import com.aiwan.publicsystem.protocol.DecodeData;
-import com.aiwan.user.protocol.*;
-import com.aiwan.scenes.protocol.CM_Move;
-import com.aiwan.scenes.protocol.CM_Shift;
-import com.aiwan.util.ConsequenceCode;
-import com.aiwan.util.ObjectToBytes;
-import com.aiwan.util.Protocol;
-import com.aiwan.util.SMToDecodeData;
+import com.aiwan.client.clientservice.RoleService;
+import com.aiwan.server.netty.Decoder;
+import com.aiwan.server.netty.Encoder;
+import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.user.protocol.*;
+import com.aiwan.server.scenes.protocol.CM_Move;
+import com.aiwan.server.scenes.protocol.CM_Shift;
+import com.aiwan.server.util.ObjectToBytes;
+import com.aiwan.server.util.Protocol;
+import com.aiwan.server.util.SMToDecodeData;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -46,7 +46,7 @@ public class ClientServer {
             sendHear(channel);
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
-            System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.高级登录 7.查看个人信息 8.退出游戏");
+            System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏");
             while(true){
                 DecodeData decodeData = new DecodeData();
                 byte[] data = "初始化".getBytes();
@@ -70,10 +70,16 @@ public class ClientServer {
                         continue;
                     }
                     logout(channel,scanner,decodeData);
-                }
-                else  if (num == 4){
+                }else if (num == 4){
                     if (LoginUser.getUsername().equals("")){
                         System.out.println("您还未登录，请登录游戏！");
+                        continue;
+                    }
+                    RoleService.roleSystem(channel);
+                }
+                else  if (num == 5){
+                    if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
+                        System.out.println("您还未登录，或者还未创建角色，请登录游戏！");
                         continue;
                     }
                     System.out.println(LoginUser.getMapMessage());
@@ -93,9 +99,9 @@ public class ClientServer {
                     decodeData.setLength(data.length);
                     decodeData.setData(data);
                     channel.writeAndFlush(decodeData);
-                }else if (num == 5){
-                    if (LoginUser.getUsername().equals("")){
-                        System.out.println("您还未登录，请登录游戏！");
+                }else if (num == 6){
+                    if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
+                        System.out.println("您还未登录，或者还未创建角色，请登录游戏！");
                         continue;
                     }
                     System.out.println(LoginUser.getMapMessage());
@@ -115,14 +121,14 @@ public class ClientServer {
                         decodeData.setData(data);
                         channel.writeAndFlush(decodeData);
                     }
-                }else if (num == 6){
+                }else if (num == 7){
                     if (!LoginUser.getUsername().equals("")){
                         System.out.println("您已经登录过了！");
                         continue;
                     }
                     hlogin(channel,scanner,decodeData);
                 }
-                else if (num == 7){
+                else if (num == 8){
                     if (LoginUser.getUsername().equals("")){
                         System.out.println("您还未登录过了！");
                         continue;
@@ -130,7 +136,7 @@ public class ClientServer {
                     getUserMessage(channel,LoginUser.getUsername());
 
                 }
-                else if (num == 8){
+                else if (num == 9){
                     if (!LoginUser.getUsername().equals("")){
                         logout(channel,scanner,decodeData);
                     }
@@ -139,7 +145,7 @@ public class ClientServer {
                 }
                 else {
                     System.out.println("尊敬的用户，您的输入不规格，请重新输入");
-                    System.out.println("请输入1.登录 2.注册 3.注销 4.角色移动 5.地图跳转 6.高级登录 7.退出游戏");
+                    System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏");
                     continue;
                 }
             }

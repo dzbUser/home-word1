@@ -37,7 +37,7 @@
 		* MyServerHandler：检测心跳
 	6. common:公共模型包
 		* Session:用户对话
-### user:角色包  
+### user:用户包  
     1. entity:实体类包  
 		* user：用户表实体类  
 	2. dao:持久操作包 (已去除) 
@@ -50,6 +50,13 @@
 		* CM_Logout:用户注销协议包
 		* CM_Regitsted:用户注册协议包
 		* SM_UserMessage:返回用户信息给客户端  
+### 角色包:role（已整合）
+	1. player：玩家系统
+		* entity:role 实体类
+		* model：
+		* rule：暂时用户职业与数字的对应
+		* service
+
 ### scenes:场景处理类  
 	1. service:业务层  
 		* ScenesService:用户位置改变业务逻辑类，有移动，地图跳转  

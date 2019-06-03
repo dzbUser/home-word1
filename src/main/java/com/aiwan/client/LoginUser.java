@@ -1,5 +1,11 @@
 package com.aiwan.client;
 
+import java.util.List;
+
+/**
+ * @author dengzebiao
+ * 保存登录成功的用户信息
+ * */
 public class LoginUser {
 
     private static String username = "";
@@ -7,6 +13,7 @@ public class LoginUser {
     private static String mapMessage;
     private static int currentX = -1;
     private static int currentY = -1;
+    private static List<Long> roles;
 
     public static String getUsername() {
         return username;
@@ -46,5 +53,13 @@ public class LoginUser {
 
     public static void setMapMessage(String mapMessage) {
         LoginUser.mapMessage = mapMessage;
+    }
+
+    public static List<Long> getRoles() {
+        return roles;
+    }
+
+    public static void setRoles(List<Long> roles) {
+        LoginUser.roles = roles;
     }
 }

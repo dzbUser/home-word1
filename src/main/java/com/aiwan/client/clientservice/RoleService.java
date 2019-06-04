@@ -3,7 +3,7 @@ package com.aiwan.client.clientservice;
 import com.aiwan.client.LoginUser;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
-import com.aiwan.server.user.protocol.CM_CreateRole;
+import com.aiwan.server.user.account.protocol.CM_CreateRole;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 import io.netty.channel.Channel;

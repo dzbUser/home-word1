@@ -1,10 +1,10 @@
-package com.aiwan.server.user.service;
+package com.aiwan.server.user.account.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
-import com.aiwan.server.user.protocol.*;
+import com.aiwan.server.user.account.protocol.*;
 
 /**
  * @author dengzebiao

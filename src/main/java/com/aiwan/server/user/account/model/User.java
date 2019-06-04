@@ -1,6 +1,6 @@
-package com.aiwan.server.user.model;
+package com.aiwan.server.user.account.model;
 
-import com.aiwan.server.user.entity.UserEnt;
+import com.aiwan.server.user.account.entity.UserEnt;
 
 /**
  * @author dengzebiao

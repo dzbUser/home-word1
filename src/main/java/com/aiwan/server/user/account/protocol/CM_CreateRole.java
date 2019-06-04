@@ -1,4 +1,4 @@
-package com.aiwan.server.user.protocol;
+package com.aiwan.server.user.account.protocol;
 
 import com.aiwan.server.publicsystem.annotation.ProtocolAnnotation;
 import com.aiwan.server.util.Protocol;

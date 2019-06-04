@@ -1,7 +1,7 @@
 package com.aiwan.server.publicsystem.common;
 
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.user.model.User;
+import com.aiwan.server.user.account.model.User;
 import io.netty.channel.Channel;
 
 /**

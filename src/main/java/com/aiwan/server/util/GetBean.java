@@ -7,8 +7,8 @@ import com.aiwan.server.role.player.service.RoleService;
 import com.aiwan.server.scenes.service.MapManager;
 //import com.aiwan.server.user.dao.UserDao;
 import com.aiwan.server.scenes.service.ScenesService;
-import com.aiwan.server.user.service.UserManager;
-import com.aiwan.server.user.service.UserService;
+import com.aiwan.server.user.account.service.UserManager;
+import com.aiwan.server.user.account.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

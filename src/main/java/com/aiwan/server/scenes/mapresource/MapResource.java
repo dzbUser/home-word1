@@ -1,18 +1,9 @@
 package com.aiwan.server.scenes.mapresource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
-import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.scenes.protocol.SM_Shift;
-import com.aiwan.server.scenes.service.MapManager;
-import com.aiwan.server.user.model.User;
-import com.aiwan.server.util.StatusCode;
-import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.SMToDecodeData;
 
-import java.beans.Transient;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author dengzebiao

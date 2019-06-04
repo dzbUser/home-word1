@@ -2,13 +2,11 @@ package com.aiwan.server.scenes.service;
 
 import com.aiwan.server.scenes.mapresource.MapResource;
 //import com.aiwan.server.scenes.mapresource.PositionMeaning;
-//import com.aiwan.server.user.entity.User;
+//import com.aiwan.server.user.account.entity.User;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
-import com.aiwan.server.user.model.User;
-import com.aiwan.server.util.GetBean;
+import com.aiwan.server.user.account.model.User;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

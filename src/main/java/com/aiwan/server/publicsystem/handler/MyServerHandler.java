@@ -2,7 +2,7 @@ package com.aiwan.server.publicsystem.handler;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.user.model.User;
+import com.aiwan.server.user.account.model.User;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;

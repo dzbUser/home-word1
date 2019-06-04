@@ -1,9 +1,9 @@
-package com.aiwan.server.user.service;
+package com.aiwan.server.user.account.service;
 
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
-import com.aiwan.server.user.entity.UserEnt;
-import com.aiwan.server.user.model.User;
-import com.aiwan.server.user.model.UserBaseInfo;
+import com.aiwan.server.user.account.entity.UserEnt;
+import com.aiwan.server.user.account.model.User;
+import com.aiwan.server.user.account.model.UserBaseInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

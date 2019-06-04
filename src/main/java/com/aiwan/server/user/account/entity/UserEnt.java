@@ -1,9 +1,9 @@
-package com.aiwan.server.user.entity;
+package com.aiwan.server.user.account.entity;
 
 import com.aiwan.server.ramcache.IEntity;
 import com.aiwan.server.ramcache.anno.Cache;
-import com.aiwan.server.user.model.User;
-import com.aiwan.server.user.model.UserBaseInfo;
+import com.aiwan.server.user.account.model.User;
+import com.aiwan.server.user.account.model.UserBaseInfo;
 import com.aiwan.server.util.JsonUtil;
 
 import javax.persistence.*;
@@ -15,7 +15,6 @@ import javax.persistence.*;
  * */
 @Cache(maxmum = 300)
 @Entity()
-//@org.hibernate.annotations.Table(appliesTo = "user",comment = "用户")
 @Table(name = "usertable")
 public class UserEnt implements IEntity<String> {
     @Id
@@ -42,7 +41,7 @@ public class UserEnt implements IEntity<String> {
     private byte[] userBaseData;
 
     @Transient
-    private com.aiwan.server.user.model.User user;
+    private User user;
     @Transient
     private UserBaseInfo userBaseInfo;
 

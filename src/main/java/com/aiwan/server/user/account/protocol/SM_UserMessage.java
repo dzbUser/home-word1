@@ -1,4 +1,4 @@
-package com.aiwan.server.user.protocol;
+package com.aiwan.server.user.account.protocol;
 
 import java.io.Serializable;
 import java.util.List;

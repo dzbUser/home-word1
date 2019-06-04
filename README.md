@@ -38,18 +38,23 @@
 	6. common:公共模型包
 		* Session:用户对话
 ### user:用户包  
-    1. entity:实体类包  
-		* user：用户表实体类  
-	2. dao:持久操作包 (已去除) 
-		* UserDao:用户表持久层操作类  
-	3. service:业务层  
-		* UserService:用户业务逻辑类，有功能登录，注册  
-		* UserManager:用户缓存操作类
-	4. protocol:协议包  
-		* CM_Login:用户登录协议包
-		* CM_Logout:用户注销协议包
-		* CM_Regitsted:用户注册协议包
-		* SM_UserMessage:返回用户信息给客户端  
+	acount:用户处理包
+		1. entity:实体类包  
+			* user：用户表实体类   
+		2. service:业务层  
+			* UserService:用户业务逻辑类，有功能登录，注册  
+			* UserManager:用户缓存操作类
+		3. protocol:协议包  
+			* CM_Login:用户登录协议包
+			* CM_Logout:用户注销协议包
+			* CM_Regitsted:用户注册协议包
+			* SM_UserMessage:返回用户信息给客户端  
+	backpa：背包处理包（还为添加业务）
+		1. entity:实体类包  
+			* BackpackEnt:背包实体类
+		2. service:业务层  
+			* BackPackService:背包业务逻辑类 
+			* BackPackManager:背包缓存操作类
 ### 角色包:role（已整合）
 	1. player：玩家系统
 		* entity:role 实体类

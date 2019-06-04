@@ -1,4 +1,4 @@
-package com.aiwan.server.user.model;
+package com.aiwan.server.user.account.model;
 
 import java.util.List;
 

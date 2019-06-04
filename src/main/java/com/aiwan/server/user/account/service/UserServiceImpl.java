@@ -1,15 +1,13 @@
-package com.aiwan.server.user.service;
+package com.aiwan.server.user.account.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.publicsystem.service.ThreadPoolManager;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
-import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
-import com.aiwan.server.user.model.User;
-import com.aiwan.server.user.protocol.*;
+import com.aiwan.server.user.account.model.User;
+import com.aiwan.server.user.account.protocol.*;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

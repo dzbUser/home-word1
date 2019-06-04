@@ -2,7 +2,7 @@ package com.aiwan.client;
 
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.role.player.protocol.SM_CreateRole;
-import com.aiwan.server.user.protocol.SM_UserMessage;
+import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.util.StatusCode;

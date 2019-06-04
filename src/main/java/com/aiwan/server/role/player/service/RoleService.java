@@ -2,7 +2,7 @@ package com.aiwan.server.role.player.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
-import com.aiwan.server.user.protocol.CM_CreateRole;
+import com.aiwan.server.user.account.protocol.CM_CreateRole;
 
 /**
  * @author dengzebiao

@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         if (session1 !=null){
             logger.debug("您已经登录过了");
             decodeData = SMToDecodeData.shift(StatusCode.LOGINFAIL,"用户已在线，若想顶替，请选择高级登录");
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
             return;
         }
         User user = userManager.getUserByAccountId(userMessage.getUsername());
@@ -73,8 +73,7 @@ public class UserServiceImpl implements UserService {
             SessionManager.putSessionByUsername(userMessage.getUsername(),session);
 
             //把用户添加到地图资源中
-            MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());
-            mapResource.putUser(user.getAcountId(),user);
+            GetBean.getMapManager().putUser(user);
 
             SM_UserMessage sm_userMessage = new SM_UserMessage();
             //~~~~~~~~~~~第四步~~~~~~~~~~~~~
@@ -86,11 +85,11 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setMap(user.getMap());
             sm_userMessage.setCurrentX(user.getCurrentX());
             sm_userMessage.setCurrentY(user.getCurrentY());
-            sm_userMessage.setMapMessage(GetBean.getMapManager().getMapResource((int) user.getMap()).getMapContent(user.getCurrentX(),user.getCurrentY()));
+            sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
             sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
             decodeData = SMToDecodeData.shift(StatusCode.LOGINSUCCESS,sm_userMessage);
         }
-        session.getChannel().writeAndFlush(decodeData);
+        session.messageSend(decodeData);
     }
 
     //用户注册
@@ -103,7 +102,7 @@ public class UserServiceImpl implements UserService {
             logger.debug("输入错误");
             String content = "输入错误";
             decodeData = SMToDecodeData.shift(StatusCode.REGISTDAIL,content);
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
         }
         //账号可用
         else if (user == null){
@@ -111,12 +110,12 @@ public class UserServiceImpl implements UserService {
             userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY,1);
             String content = "恭喜您，注册成功！";
             decodeData = SMToDecodeData.shift(StatusCode.REGISTSUCCESS,content);
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
         }else {//账号已被注册
             logger.debug("用户已存在");
             String content = "抱歉，用户账号已被注册，请选择其他账号";
             decodeData = SMToDecodeData.shift(StatusCode.REGISTDAIL,content);
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
         }
     }
 
@@ -136,9 +135,10 @@ public class UserServiceImpl implements UserService {
         //保存用户数据
         userManager.save(user);
         //把用户从地图资源中移除
-        MapResource mapResource = GetBean.getMapManager().getMapResource(user.getMap());
-        mapResource.removeUser(userMessage.getUsername());
-        session.getChannel().writeAndFlush(decodeData);
+        GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
+        //session移除用户信息
+        session.setUser(null);
+        session.messageSend(decodeData);
     }
 
     /**
@@ -156,14 +156,14 @@ public class UserServiceImpl implements UserService {
         if (user == null||!user.getHpassword().equals(cm_hlogin.getHpassword())){
             String msg = new String("账号或者高级密码错误");
             decodeData = SMToDecodeData.shift(StatusCode.LOGINFAIL,msg);
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
             return;
         }
 
         //发送顶替下线信息
         Session session1 = SessionManager.getSessionByUsername(cm_hlogin.getUsername());
         if (session1!= null){
-            session1.getChannel().writeAndFlush(SMToDecodeData.shift((short) StatusCode.INSIST,"您已被顶替下线！"));
+            session1.messageSend(SMToDecodeData.shift((short) StatusCode.INSIST,"您已被顶替下线！"));
         }
 
 
@@ -171,8 +171,7 @@ public class UserServiceImpl implements UserService {
         session.setUser(user);
         SessionManager.putSessionByUsername(cm_hlogin.getUsername(),session);
         //把用户添加到地图资源中
-        MapResource mapResource = GetBean.getMapManager().getMapResource((int) user.getMap());
-        mapResource.putUser(user.getAcountId(),user);
+        GetBean.getMapManager().putUser(user);
 
         //设置和发送信息
         SM_UserMessage sm_userMessage = new SM_UserMessage();
@@ -181,9 +180,9 @@ public class UserServiceImpl implements UserService {
         sm_userMessage.setCurrentX(user.getCurrentX());
         sm_userMessage.setCurrentY(user.getCurrentY());
         sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
-        sm_userMessage.setMapMessage(GetBean.getMapManager().getMapResource((int) user.getMap()).getMapContent(user.getCurrentX(),user.getCurrentY()));
+        sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
         decodeData = SMToDecodeData.shift(StatusCode.LOGINSUCCESS,sm_userMessage);
-        session.getChannel().writeAndFlush(decodeData);
+        session.messageSend(decodeData);
     }
 
     @Override
@@ -199,13 +198,8 @@ public class UserServiceImpl implements UserService {
             session.getChannel().writeAndFlush(data);
             return;
         }
-        //把业务抛给场景线程池
-        ThreadPoolManager.start("scenes", new Runnable() {
-            @Override
-            public void run() {
-                GetBean.getScenesService().move(session,cm_move);
-            }
-        });
+        //交给场景业务
+         GetBean.getScenesService().move(session,cm_move);
     }
 
     /**
@@ -221,16 +215,12 @@ public class UserServiceImpl implements UserService {
             data  = "您还未登录！";
             type = StatusCode.SHIFTFAIL;
             DecodeData decodeData = SMToDecodeData.shift(type,data);
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
             return;
         }
-        //把业务抛给场景线程池
-        ThreadPoolManager.start("scenes", new Runnable() {
-            @Override
-            public void run() {
-                GetBean.getScenesService().shift(session,cm_shift);
-            }
-        });
+        //交给场景业务
+        GetBean.getScenesService().shift(session,cm_shift);
+
     }
 
     /**
@@ -245,10 +235,10 @@ public class UserServiceImpl implements UserService {
             data  = "您还未登录！";
             type = StatusCode.SHIFTFAIL;
             DecodeData decodeData = SMToDecodeData.shift(type,data);
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
             return;
         }
-        String mapContent = GetBean.getMapManager().getMapResource(user.getMap()).getMapContent(user.getCurrentX(),user.getCurrentY());
+        String mapContent = GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
         type = StatusCode.GETMESSAGESUCCESS;
         SM_UserMessage sm_userMessage = new SM_UserMessage();
         sm_userMessage.setMapMessage(mapContent);
@@ -256,7 +246,7 @@ public class UserServiceImpl implements UserService {
         sm_userMessage.setCurrentY(user.getCurrentY());
         sm_userMessage.setMap(user.getMap());
         DecodeData decodeData = SMToDecodeData.shift(type,sm_userMessage);
-        session.getChannel().writeAndFlush(decodeData);
+        session.messageSend(decodeData);
     }
 
     /**
@@ -266,20 +256,18 @@ public class UserServiceImpl implements UserService {
     public void createRole(final CM_CreateRole cm_createRole, final Session session){
         logger.debug(cm_createRole.getAccountId()+"创建角色");
         User user = session.getUser();
-        if (user == null){//还未登录
+        if (user == null){
+            //还未登录
             DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLEFAIL,"您还未登录!");
-            session.getChannel().writeAndFlush(decodeData);
-        }else if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){//查看角色量
+            session.messageSend(decodeData);
+        }else if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){
+            //查看角色量
             DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLEFAIL,"您角色数已上限！");
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
         }
-        else {//转交给角色线程池
-            ThreadPoolManager.start("role", new Runnable() {
-                @Override
-                public void run() {
-                    GetBean.getRoleService().create(session,cm_createRole);
-                }
-            });
+        else {
+            //转交给角色业务
+            GetBean.getRoleService().create(session,cm_createRole);
         }
     }
 
@@ -287,17 +275,14 @@ public class UserServiceImpl implements UserService {
     public void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session) {
         logger.debug("获取角色信息");
         User user = session.getUser();
-        if (user == null){//还未登录
+        if (user == null){
+            //还未登录
             DecodeData decodeData = SMToDecodeData.shift(StatusCode.NOLOGIN,"您还未登录!");
-            session.getChannel().writeAndFlush(decodeData);
+            session.messageSend(decodeData);
         }
-        else {//转交给角色线程池
-            ThreadPoolManager.start("role", new Runnable() {
-                @Override
-                public void run() {
-                    GetBean.getRoleService().getRoleMessage(session,cm_roleMessage);
-                }
-            });
+        else {
+            //转交给角色业务
+            GetBean.getRoleService().getRoleMessage(session,cm_roleMessage);
         }
     }
 

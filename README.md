@@ -30,7 +30,7 @@
 		* ReflectionManager：管理映射元素
 		* PublicGameService: 全局业务
 		* SessionManager:管理用对话
-		* TheatpoolManager：线程池管理类(新增)
+		* TheatpoolManager：线程池管理类(已完善)
 	4. annotation:自定义注解包（新添加）
 		* ProtocolAnnotation：自定义注解，用于定位协议类
 	5. hanlder:全局处理器包
@@ -77,3 +77,4 @@
 	8. ConsequenceCode：结果集协议
 	9. JsonUtil：json工具类
 	10. ExcelUtil：Excel操作类
+	11. IDUtile:生成id

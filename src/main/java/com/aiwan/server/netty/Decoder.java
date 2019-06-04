@@ -16,6 +16,7 @@ import java.util.List;
 public class Decoder extends ByteToMessageDecoder implements Serializable {
     private DecodeData decodeData;
     Logger logger = LoggerFactory.getLogger(Decoder.class);
+    private final int MINSIZE = 6;
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
         /*
@@ -25,19 +26,25 @@ public class Decoder extends ByteToMessageDecoder implements Serializable {
          * 3.读数据
          * 4.转化为DecodeData
          * */
-        decodeData = new DecodeData();
-        short type = byteBuf.readShort();
-        int length = byteBuf.readInt();
-        if (byteBuf.readableBytes() < length) {
-            //包长度小于指定长度，把包存在缓存中
-            byteBuf.resetReaderIndex();
-        } else {
-            byte[] data = new byte[length];
-            byteBuf.readBytes(data);
-            decodeData.setType(type);
-            decodeData.setLength(length);
-            decodeData.setData(data);
-            list.add(decodeData);
+        if (byteBuf.readableBytes()>=MINSIZE){
+            //标记当前为读索引
+            byteBuf.markReaderIndex();
+            decodeData = new DecodeData();
+            short type = byteBuf.readShort();
+            int length = byteBuf.readInt();
+            if (byteBuf.readableBytes() < length) {
+                //包长度小于指定长度，把包存在缓存中????
+                byteBuf.resetReaderIndex();
+                return;
+            } else {
+                //若有分片标记，清除分片标记
+                byte[] data = new byte[length];
+                byteBuf.readBytes(data);
+                decodeData.setType(type);
+                decodeData.setLength(length);
+                decodeData.setData(data);
+                list.add(decodeData);
+            }
         }
     }
 }

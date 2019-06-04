@@ -41,12 +41,11 @@ public class ScenesServiceImpl implements ScenesService{
         int type ;
         User user = session.getUser();
         int map = user.getMap();
-        MapResource mapResource = GetBean.getMapManager().getMapResource((int) map);
-        if (mapResource.allowMove(cm_move.getTargetX(), cm_move.getTargetY())) {
+        if (GetBean.getMapManager().allowMove(cm_move.getTargetX(),cm_move.getTargetY(),user.getMap())) {
             userManager.save(user);
             user.setCurrentX(cm_move.getTargetX());
             user.setCurrentY(cm_move.getTargetY());
-            String content = "移动成功\n" + mapResource.getMapContent(cm_move.getTargetX(), cm_move.getTargetY());
+            String content = "移动成功\n" + GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
             SM_Move sm_move = new SM_Move(cm_move.getTargetX(), cm_move.getCurrentY(), content);
             data = sm_move;
             type = StatusCode.MOVESUCCESS;
@@ -55,7 +54,7 @@ public class ScenesServiceImpl implements ScenesService{
             type = StatusCode.MOVEFAIL;
         }
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
-        session.getChannel().writeAndFlush(decodeData);
+        session.messageSend(decodeData);
     }
 
     /**
@@ -64,22 +63,22 @@ public class ScenesServiceImpl implements ScenesService{
     @Override
     public void shift(Session session,CM_Shift cm_shift) {
         User user = session.getUser();
-        MapResource mapResource1 = GetBean.getMapManager().getMapResource(user.getMap());
-        mapResource1.removeUser(user.getAcountId());
+        //从旧地图中去除
+        GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
         MapResource mapResource = GetBean.getMapManager().getMapResource((int) cm_shift.getMap());
         user.setMap(cm_shift.getMap());
         user.setCurrentY(mapResource.getOriginY());
         user.setCurrentX(mapResource.getOriginX());
         //添加到地图资源中
-        mapResource.putUser(user.getAcountId(),user);
+        GetBean.getMapManager().putUser(user);
         //加入缓存
 
         userManager.save(user);
-        String content = "跳转成功\n"+ mapResource.getMapContent(mapResource.getOriginX(),mapResource.getOriginY());
+        String content = "跳转成功\n"+ GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
         SM_Shift sm_shift = new SM_Shift(mapResource.getOriginX(),mapResource.getOriginY(),cm_shift.getMap(),content);
         Object data = sm_shift;
         int type = StatusCode.SHIFTSUCCESS;
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
-        session.getChannel().writeAndFlush(decodeData);
+        session.messageSend(decodeData);
     }
 }

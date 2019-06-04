@@ -1,6 +1,6 @@
 package com.aiwan.server.scenes.mapresource;
 
-//存储地图二维数组内数字的含义
+/** 存储地图二维数组内数字的含义 */
 public class PositionMeaning {
     //二维数组中的数字
     private int num;

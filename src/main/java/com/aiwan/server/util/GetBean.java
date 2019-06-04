@@ -1,5 +1,6 @@
 package com.aiwan.server.util;
 
+import com.aiwan.server.prop.resource.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
 import com.aiwan.server.role.player.service.RoleService;
@@ -24,6 +25,7 @@ public class GetBean {
     private static UserManager userManager;
     private static ScenesService scenesService;
     private static RoleService roleService;
+    private static PropsManager propsManager;
 
     public static TaskDispatcher getTaskDispatcher() {
         return GetBean.taskDispatcher;
@@ -76,6 +78,14 @@ public class GetBean {
     @Autowired
     public void setMapManager(MapManager mapManager) {
         GetBean.mapManager = mapManager;
+    }
+
+    public static PropsManager getPropsManager() {
+        return propsManager;
+    }
+    @Autowired
+    public void setPropsManager(PropsManager propsManager) {
+        GetBean.propsManager = propsManager;
     }
 
     public static Accessor getAccessor() {

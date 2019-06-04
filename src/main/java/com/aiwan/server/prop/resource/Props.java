@@ -1,5 +1,7 @@
 package com.aiwan.server.prop.resource;
 
+import com.aiwan.server.publicsystem.annotation.CellMapping;
+
 /**
  * @author dengzebiap
  * @since 2019.6.3
@@ -8,14 +10,23 @@ package com.aiwan.server.prop.resource;
 public class Props {
 
     //id
+    @CellMapping(name = "id")
     private int id;
+
     //道具类型
+    @CellMapping(name = "type")
     private int type;
+
     //道具名字
+    @CellMapping(name = "name")
     private String name;
+
     //道具介绍
+    @CellMapping(name = "introduce")
     private String introduce;
+
     //道具是否可叠加
+    @CellMapping(name = "overlay")
     private int overlay;
 
     public int getId() {

@@ -48,7 +48,7 @@ public class RoleServiceImpl implements RoleService {
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLESUCESS,sm_createRole);
         logger.debug(decodeData.getLength()+"");
         //返回信息到客户端
-        session.getChannel().writeAndFlush(decodeData);
+        session.messageSend(decodeData);
     }
 
     @Override
@@ -58,6 +58,6 @@ public class RoleServiceImpl implements RoleService {
             logger.error("角色id："+cm_roleMessage.getrId()+"为空");
         }
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.ROLEMESSAGE,role.getRoleMessage());
-        session.getChannel().writeAndFlush(decodeData);
+        session.messageSend(decodeData);
     }
 }

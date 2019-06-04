@@ -36,11 +36,23 @@ public class TaskDispatcher {
         final Object bean = ReflectionManager.getBean(method);
 
         final Session session = SessionManager.getSessionByHashCode(channel.hashCode());
-        ThreadPoolManager.start("user", new Runnable() {
-            @Override
-            public void run() {
-                ReflectionUtils.invokeMethod(method,bean,obj,session);
-            }
-        });
+        /** 用户已登录 */
+        if (session.getUser()!=null){
+            ThreadPoolManager.excuteUserThread(session.getUser().getAcountId(), new Runnable() {
+                @Override
+                public void run() {
+                    ReflectionUtils.invokeMethod(method,bean,obj,session);
+                }
+            });
+        }else {
+            ThreadPoolManager.excuteOtherThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            ReflectionUtils.invokeMethod(method,bean,obj,session);
+                        }
+                    }
+            );
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.aiwan.server;
 import com.aiwan.server.netty.NettyServer;
 import com.aiwan.server.publicsystem.Initialization.CacheInitialzation;
 import com.aiwan.server.publicsystem.Initialization.MapInitialization;
+import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
 import com.aiwan.server.publicsystem.Initialization.ReflectionInitialization;
 import com.aiwan.server.publicsystem.service.ThreadPoolManager;
 import org.slf4j.Logger;
@@ -29,6 +30,8 @@ public class ServerStart {
         CacheInitialzation.init(applicationContext);
         //线程池初始化
         ThreadPoolManager.initialize();
+        //道具资源初始化
+        PropsInitialzation.init();
         logger.debug("启动Netty服务器");
         new Thread(
                 new Runnable() {

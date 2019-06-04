@@ -1,9 +1,7 @@
 package com.aiwan.server.prop.resource;
 
-import com.aiwan.server.util.Protocol;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 静态资源管理类
  * */
 @Component
-public class ResourceManager {
+public class PropsManager {
     /** 道具静态资源映射 */
     private Map<Integer,Props> propsMap = new ConcurrentHashMap<>();
     /** 装备静态资源映射类 */
@@ -29,8 +27,8 @@ public class ResourceManager {
     /**
      * 保存某类道具
      * */
-    public void putProps(Integer id,Props props){
-        propsMap.put(id,props);
+    public void putProps(Props props){
+        propsMap.put(props.getId(),props);
     }
 
     /**
@@ -43,7 +41,7 @@ public class ResourceManager {
     /**
      * 保存某类装备
      * */
-    public void putEquipment(Integer id,Equipment equipment){
-        equipmentMap.put(id,equipment);
+    public void putEquipment(Equipment equipment){
+        equipmentMap.put(equipment.getId(),equipment);
     }
 }

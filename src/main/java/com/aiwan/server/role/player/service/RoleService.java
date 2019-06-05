@@ -21,4 +21,7 @@ public interface RoleService {
 
     /** 角色经验增加 */
     void addExperience(String accountId,Long rId,int experienceNum);
+
+    /** 装备装备 */
+    int equip(String accountId,Long rId,int pId);
 }

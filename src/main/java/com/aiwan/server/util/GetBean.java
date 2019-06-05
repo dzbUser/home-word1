@@ -4,6 +4,7 @@ import com.aiwan.server.prop.service.PropService;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
+import com.aiwan.server.role.equipment.service.EquipmentService;
 import com.aiwan.server.role.player.service.RoleService;
 import com.aiwan.server.scenes.service.MapManager;
 //import com.aiwan.server.user.dao.UserDao;
@@ -29,6 +30,7 @@ public class GetBean {
     private static PropsManager propsManager;
     private static BackpackService backpackService;
     private static PropService propService;
+    private static EquipmentService equipmentService;
 
     public static PropService getPropService() {
         return propService;
@@ -41,6 +43,15 @@ public class GetBean {
 
     public static BackpackService getBackpackService() {
         return backpackService;
+    }
+
+    public static EquipmentService getEquipmentService() {
+        return equipmentService;
+    }
+
+    @Autowired
+    public void setEquipmentService(EquipmentService equipmentService) {
+        GetBean.equipmentService = equipmentService;
     }
 
     @Autowired

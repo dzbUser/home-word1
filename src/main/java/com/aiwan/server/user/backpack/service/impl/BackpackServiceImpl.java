@@ -135,7 +135,21 @@ public class BackpackServiceImpl implements BackpackService {
             int type = props.getType();
             //道具使用
             if (type == 1){
+                //道具使用
                 GetBean.getPropService().userExperience(accountId,rId);
+            }
+            if (type == 3){
+                //装备使用
+                int id = GetBean.getRoleService().equip(accountId,rId,pId);
+                //装备错误
+                if (id == -1){
+                    session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的等级未达到要求"));
+                    return;
+                }
+                //获取旧的装备
+                Props oldEquipment  = GetBean.getPropsManager().getProps(id);
+                //旧的装备存到背包
+                obtainProp(accountId,oldEquipment,id);
             }
             num--;
             if (num == 0){

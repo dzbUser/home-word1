@@ -36,9 +36,14 @@ public class RoleEnt implements IEntity<Long> {
     @Column(nullable = false,length = 50)
     private String accountId;
 
+    /** 经验值 */
+    @Column(nullable = false)
+    private int experience;
+
     @Transient
     private Role role;
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -112,5 +117,14 @@ public class RoleEnt implements IEntity<Long> {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public RoleEnt setExperience(int experience) {
+        this.experience = experience;
+        return this;
     }
 }

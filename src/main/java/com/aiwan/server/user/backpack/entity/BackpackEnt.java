@@ -22,6 +22,7 @@ import java.util.Map;
 public class BackpackEnt implements IEntity<String> {
 
     /** 用户账号 */
+    @Id
     @Column(nullable = false,length = 50)
     private String accountId;
 

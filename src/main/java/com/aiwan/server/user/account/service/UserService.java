@@ -1,10 +1,13 @@
 package com.aiwan.server.user.account.service;
 
+import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
 import com.aiwan.server.user.account.protocol.*;
+import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
+import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 
 /**
  * @author dengzebiao
@@ -52,4 +55,13 @@ public interface UserService {
      * 获取角色信息
      * */
     public void getRoleMessage(CM_RoleMessage cm_roleMessage,Session session);
+
+    /** 添加道具 */
+    void  obtainProp(CM_ObtainProp cm_obtainProp,Session session);
+
+    /** 查看背包 */
+    void viewBackpack(CM_ViewBackpack cm_viewBackpack,Session session);
+
+    /** 使用道具 */
+    void propUse(CM_PropUse cm_propUser, Session session);
 }

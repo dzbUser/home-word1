@@ -40,4 +40,6 @@ public class StatusCode {
     public final static int ROLEMESSAGE = 17;
     //未登录错误
     public final static int NOLOGIN = 18;
+    //Message;
+    public final static int MESSAGE = 19;
 }

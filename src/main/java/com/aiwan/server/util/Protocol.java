@@ -47,4 +47,10 @@ public class Protocol {
     public final static int CREATEROLE = 20;
     //获取角色信息
     public final static int GETROLEMESSAGE = 21;
+    //获取道具
+    public final static int OBTAINPROP = 22;
+    //查看背包
+    public final static int VIEWBACKPACK = 23;
+    //道具使用
+    public final static int PROPUSER = 24;
 }

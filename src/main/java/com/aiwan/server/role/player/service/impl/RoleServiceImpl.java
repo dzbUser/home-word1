@@ -60,4 +60,27 @@ public class RoleServiceImpl implements RoleService {
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.ROLEMESSAGE,role.getRoleMessage());
         session.messageSend(decodeData);
     }
+
+    /**
+     * 经验添加
+     * */
+    @Override
+    public void addExperience(String accountId, Long rId, int experienceNum) {
+        //获取经验，循环解决升级
+        Role role = roleManager.load(rId);
+        int level = role.getLevel();
+        int totalExperience = role.getExperience()+experienceNum;
+        while (totalExperience >= getUpgradeRequest(level)){
+            totalExperience = totalExperience - getUpgradeRequest(level);
+            level = level+1;
+        }
+        role.setLevel(level);
+        role.setExperience(totalExperience);
+        roleManager.sava(role);
+    }
+
+    /**获取升级要求*/
+    private int getUpgradeRequest(int level){
+        return level*50;
+    }
 }

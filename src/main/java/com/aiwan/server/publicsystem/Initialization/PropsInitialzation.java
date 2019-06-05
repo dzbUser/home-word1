@@ -2,9 +2,7 @@ package com.aiwan.server.publicsystem.Initialization;
 
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
-import com.aiwan.server.prop.resource.PropsManager;
-import com.aiwan.server.scenes.mapresource.MapResource;
-import com.aiwan.server.scenes.service.ScenesServiceImpl;
+import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.util.ExcelUtil;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;

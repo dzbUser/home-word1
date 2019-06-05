@@ -1,5 +1,7 @@
-package com.aiwan.server.prop.resource;
+package com.aiwan.server.prop.service;
 
+import com.aiwan.server.prop.resource.Equipment;
+import com.aiwan.server.prop.resource.Props;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -12,10 +14,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * */
 @Component
 public class PropsManager {
+    public final static int EQUIP  = 3;
+    public final static int Prop = 1;
+    public final static int DEVELOP = 2;
+
     /** 道具静态资源映射 */
-    private Map<Integer,Props> propsMap = new ConcurrentHashMap<>();
+    private Map<Integer, Props> propsMap = new ConcurrentHashMap<>();
     /** 装备静态资源映射类 */
-    private Map<Integer,Equipment> equipmentMap = new ConcurrentHashMap<>();
+    private Map<Integer, Equipment> equipmentMap = new ConcurrentHashMap<>();
 
     /**
      * 获取某种道具

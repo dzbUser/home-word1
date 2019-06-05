@@ -1,8 +1,10 @@
 package com.aiwan.client;
 
+import com.aiwan.client.clientservice.PropSystem;
 import com.aiwan.client.clientservice.RoleService;
 import com.aiwan.server.netty.Decoder;
 import com.aiwan.server.netty.Encoder;
+import com.aiwan.server.prop.service.PropService;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.user.account.protocol.*;
 import com.aiwan.server.scenes.protocol.CM_Move;
@@ -46,7 +48,7 @@ public class ClientServer {
             sendHear(channel);
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
-            System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏");
+            System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏\n10.背包系统");
             while(true){
                 DecodeData decodeData = new DecodeData();
                 byte[] data = "初始化".getBytes();
@@ -142,10 +144,16 @@ public class ClientServer {
                     }
                     channel.close();
                     System.exit(0);
+                }else if (num == 10){
+                    if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
+                        System.out.println("您还未登录，或者还未创建角色，请登录游戏！");
+                        continue;
+                    }
+                    PropSystem.entrance(channel);
                 }
                 else {
                     System.out.println("尊敬的用户，您的输入不规格，请重新输入");
-                    System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏");
+                    System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏 \n10.背包系统");
                     continue;
                 }
             }

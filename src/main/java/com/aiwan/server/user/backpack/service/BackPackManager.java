@@ -15,6 +15,8 @@ import java.util.Calendar;
  * */
 @Service()
 public class BackPackManager {
+
+
     private EntityCaheServiceImpl<String, BackpackEnt> cache;
     private final static int MAXNUM = 50;
 
@@ -50,5 +52,6 @@ public class BackPackManager {
         backpackEnt.setUpdateTime(time);
         backpackEnt.setCreateTime(time);
         backpackEnt.setBackpackInfo(new BackpackInfo());
+        cache.writeBack(backpackEnt.getAccountId(),backpackEnt);
     }
 }

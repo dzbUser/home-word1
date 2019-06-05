@@ -1,5 +1,7 @@
 package com.aiwan.server.user.account.service;
 
+import com.aiwan.server.prop.protocol.CM_PropUse;
+import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
@@ -8,6 +10,8 @@ import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.*;
+import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
+import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +110,7 @@ public class UserServiceImpl implements UserService {
         else if (user == null){
             logger.debug("注册新用户");
             userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY,1);
+            GetBean.getBackpackService().createBackpack(userMessage.getUsername());
             String content = "恭喜您，注册成功！";
             decodeData = SMToDecodeData.shift(StatusCode.REGISTSUCCESS,content);
             session.messageSend(decodeData);
@@ -282,6 +287,58 @@ public class UserServiceImpl implements UserService {
             //转交给角色业务
             GetBean.getRoleService().getRoleMessage(session,cm_roleMessage);
         }
+    }
+    /** 获取道具 */
+    @Override
+    public void obtainProp(CM_ObtainProp cm_obtainProp, Session session) {
+        logger.debug("添加信息");
+        //是否登录
+        User user = session.getUser();
+        if (user == null){
+            //还未登录
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.NOLOGIN,"您还未登录!");
+            session.messageSend(decodeData);
+            return;
+        }
+        /*
+        * 1.获取道具
+        * 2.若道具为空，则发送获取错误
+        * */
+        Props props = GetBean.getPropService().getProp(cm_obtainProp.getId());
+        if (props == null){
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"没有该道具");
+            session.messageSend(decodeData);
+            return;
+        }
+        //添加该道具到背包
+        GetBean.getBackpackService().obtainProp(cm_obtainProp.getAccountId(),props,cm_obtainProp.getNum());
+        logger.info("用户："+cm_obtainProp.getAccountId()+"添加"+props.getName()+"成功");
+        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,props.getName()+"添加成功");
+        session.messageSend(decodeData);
+    }
+
+    /**  查看背包 */
+    @Override
+    public void viewBackpack(CM_ViewBackpack cm_viewBackpack, Session session) {
+        String message = GetBean.getBackpackService().viewBackpack(cm_viewBackpack.getAccountId());
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,message));
+    }
+
+    /** 道具使用 */
+    @Override
+    public void propUse(CM_PropUse cm_propUser, Session session) {
+        logger.debug(cm_propUser.getAccountId()+"道具使用"+cm_propUser.getpId());
+        //是否登录
+        User user = session.getUser();
+        if (user == null||user.getUserBaseInfo().getRoles().size() == 0){
+            //还未登录
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.NOLOGIN,"您还未登录,获取还未创建角色!");
+            logger.warn(cm_propUser.getAccountId()+"道具使用"+cm_propUser.getpId());
+            session.messageSend(decodeData);
+            return;
+        }
+        //调用背包
+        GetBean.getBackpackService().propUse(cm_propUser.getAccountId(),cm_propUser.getrId(),cm_propUser.getpId(),session);
     }
 
 }

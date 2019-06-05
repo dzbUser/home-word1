@@ -1,6 +1,7 @@
 package com.aiwan.server.util;
 
-import com.aiwan.server.prop.resource.PropsManager;
+import com.aiwan.server.prop.service.PropService;
+import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
 import com.aiwan.server.role.player.service.RoleService;
@@ -9,6 +10,7 @@ import com.aiwan.server.scenes.service.MapManager;
 import com.aiwan.server.scenes.service.ScenesService;
 import com.aiwan.server.user.account.service.UserManager;
 import com.aiwan.server.user.account.service.UserService;
+import com.aiwan.server.user.backpack.service.BackpackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,6 @@ import org.springframework.stereotype.Component;
 @Component("getBean")
 public class GetBean {
     private static UserService userService;
-//    private static UserDao userDao;
     private static TaskDispatcher taskDispatcher;
     private static MapManager mapManager;
     private static Accessor accessor;
@@ -26,6 +27,26 @@ public class GetBean {
     private static ScenesService scenesService;
     private static RoleService roleService;
     private static PropsManager propsManager;
+    private static BackpackService backpackService;
+    private static PropService propService;
+
+    public static PropService getPropService() {
+        return propService;
+    }
+
+    @Autowired
+    public void setPropService(PropService propService) {
+        GetBean.propService = propService;
+    }
+
+    public static BackpackService getBackpackService() {
+        return backpackService;
+    }
+
+    @Autowired
+    public void setBackpackService(BackpackService backpackService) {
+        GetBean.backpackService = backpackService;
+    }
 
     public static TaskDispatcher getTaskDispatcher() {
         return GetBean.taskDispatcher;
@@ -72,6 +93,7 @@ public class GetBean {
 //        GetBean.userDao = userDao;
 //    }
 
+
     public static MapManager getMapManager() {
         return mapManager;
     }
@@ -83,6 +105,7 @@ public class GetBean {
     public static PropsManager getPropsManager() {
         return propsManager;
     }
+
     @Autowired
     public void setPropsManager(PropsManager propsManager) {
         GetBean.propsManager = propsManager;

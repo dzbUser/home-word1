@@ -29,6 +29,10 @@ public class Equipment {
     @CellMapping(name = "position")
     private int position;
 
+    /** 等级限制 */
+    @CellMapping(name = "level")
+    private int level;
+
     public int getId() {
         return id;
     }
@@ -71,6 +75,15 @@ public class Equipment {
 
     public Equipment setPowerBonus(int powerBonus) {
         this.powerBonus = powerBonus;
+        return this;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public Equipment setLevel(int level) {
+        this.level = level;
         return this;
     }
 }

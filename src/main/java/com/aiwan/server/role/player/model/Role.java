@@ -70,6 +70,15 @@ public class Role {
         roleEnt.setAccountId(accountId);
     }
 
+    public int getExperience() {
+        return roleEnt.getExperience();
+    }
+
+    public void setExperience(int experience) {
+        roleEnt.setExperience(experience);
+    }
+
+
     /**
      * 返回角色信息
      * */
@@ -82,6 +91,8 @@ public class Role {
             buffer.append(" 性别：女");
         }
         buffer.append(" 等级："+roleEnt.getLevel());
+        buffer.append(" 经验值："+roleEnt.getExperience());
         return buffer.toString();
     }
+
 }

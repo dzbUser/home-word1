@@ -21,7 +21,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
     protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
         Channel channel = ctx.channel();
         //加入缓存
-        if (decodeData.getType() == StatusCode.GETUSERMESSAGEFAIL||decodeData.getType() == StatusCode.LOGINFAIL ||decodeData.getType() == StatusCode.REGISTDAIL||decodeData.getType() == StatusCode.REGISTSUCCESS||decodeData.getType() == StatusCode.MOVEFAIL||decodeData.getType()== StatusCode.SHIFTFAIL||decodeData.getType() == StatusCode.CREATEROLEFAIL||decodeData.getType() == StatusCode.NOLOGIN || decodeData.getType() == StatusCode.ROLEMESSAGE){
+        if (decodeData.getType() == StatusCode.GETUSERMESSAGEFAIL||decodeData.getType() == StatusCode.LOGINFAIL ||decodeData.getType() == StatusCode.REGISTDAIL||decodeData.getType() == StatusCode.REGISTSUCCESS||decodeData.getType() == StatusCode.MOVEFAIL||decodeData.getType()== StatusCode.SHIFTFAIL||decodeData.getType() == StatusCode.CREATEROLEFAIL||decodeData.getType() == StatusCode.NOLOGIN || decodeData.getType() == StatusCode.ROLEMESSAGE||decodeData.getType() == StatusCode.MESSAGE){
             String content = (String) ObjectToBytes.restore(decodeData.getData());
            System.out.println(content);
         }
@@ -70,7 +70,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
             LoginUser.setRoles(sm_createRole.getRoles());
             System.out.println(sm_createRole.getMessage());
         }
-        System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏");
+        System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏\n10.背包系统");
     }
 
     @Override

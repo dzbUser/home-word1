@@ -2,6 +2,7 @@ package com.aiwan.server.user.account.service;
 
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.role.attributes.protocol.CM_ViewAttributes;
 import com.aiwan.server.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
@@ -72,5 +73,11 @@ public interface UserService {
 
     /** 查看坐骑信息 */
     void viewMount(CM_ViewMount cm_viewMount,Session session);
+
+    /** 删除人物储存 */
+    void deleteSave(String accountId);
+
+    /** 查看用户缓存 */
+    void viewAttributes(CM_ViewAttributes cm_viewAttributes,Session session);
 
 }

@@ -57,4 +57,6 @@ public class Protocol {
     public final static int VIEWQEUIP = 25;
     //查看坐骑信息
     public final static int VIEWMOUNT = 26;
+    //查看用户属性
+    public final static int VIEWATTRIBUTES = 27;
 }

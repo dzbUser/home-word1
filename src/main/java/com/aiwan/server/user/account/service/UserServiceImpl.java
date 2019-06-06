@@ -5,6 +5,7 @@ import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.role.attributes.protocol.CM_ViewAttributes;
 import com.aiwan.server.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
@@ -84,6 +85,9 @@ public class UserServiceImpl implements UserService {
             if (user.getRoleNum() == 0){
                 sm_userMessage.setCreated(false);
                 sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
+            }else {
+                //加入人物属性映射
+                GetBean.getAttributesService().putRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
             }
             sm_userMessage.setUsername(user.getAcountId());
             sm_userMessage.setMap(user.getMap());
@@ -143,6 +147,10 @@ public class UserServiceImpl implements UserService {
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
         //session移除用户信息
         session.setUser(null);
+        //若有人物角色，移除人物属性映射
+        if (user.getRoleNum() != 0){
+            GetBean.getAttributesService().removeRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
+        }
         session.messageSend(decodeData);
     }
 
@@ -154,6 +162,7 @@ public class UserServiceImpl implements UserService {
         /*
          * 1.查看账号以及高级密码，若错误则返回错误
          * 2.顶替用户上线，更新缓存
+         * 3.查看是否创建新角色，若创建则加入人物属性映射
          * */
         DecodeData decodeData;
         User user = userManager.getUserByAccountId(cm_hlogin.getUsername());
@@ -180,6 +189,16 @@ public class UserServiceImpl implements UserService {
 
         //设置和发送信息
         SM_UserMessage sm_userMessage = new SM_UserMessage();
+
+        //是否创建新角色
+        if (user.getRoleNum() == 0){
+            sm_userMessage.setCreated(false);
+            sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
+        }else {
+            //加入人物属性映射
+            GetBean.getAttributesService().putRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
+        }
+
         sm_userMessage.setUsername(user.getAcountId());
         sm_userMessage.setMap(user.getMap());
         sm_userMessage.setCurrentX(user.getCurrentX());
@@ -278,7 +297,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session) {
-        logger.debug("获取角色信息");
+        logger.debug("获取角色信息"+cm_roleMessage.getAccountId());
         User user = session.getUser();
         if (user == null){
             //还未登录
@@ -372,6 +391,38 @@ public class UserServiceImpl implements UserService {
         }
 
         String message = GetBean.getMountService().viewMount(cm_viewMount.getrId());
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,message));
+    }
+
+    @Override
+    public void deleteSave(String accountId) {
+        //删除人物session缓存
+        SessionManager.removeSessionByUsername(accountId);
+        logger.debug("删除人物缓存");
+        User user = userManager.getUserByAccountId(accountId);
+        //保存用户数据
+        userManager.save(user);
+        //把用户从地图资源中移除
+        GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
+        //若有人物角色，移除人物属性映射
+        if (user.getRoleNum() != 0){
+            GetBean.getAttributesService().removeRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
+        }
+    }
+
+    @Override
+    public void viewAttributes(CM_ViewAttributes cm_viewAttributes, Session session) {
+        logger.debug(cm_viewAttributes.getAccountId()+"查看角色属性"+cm_viewAttributes.getrId());
+        //是否登录
+        User user = session.getUser();
+        if (user == null||user.getUserBaseInfo().getRoles().size() == 0){
+            //还未登录
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.NOLOGIN,"您还未登录,获取还未创建角色!");
+            session.messageSend(decodeData);
+            return;
+        }
+        //获取属性值
+        String message = GetBean.getAttributesService().viewRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
         session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,message));
     }
 

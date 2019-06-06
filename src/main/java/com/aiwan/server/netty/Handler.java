@@ -52,9 +52,10 @@ public class Handler extends SimpleChannelInboundHandler<DecodeData> {
         if (session != null){
             User user = session.getUser();
             if (user!=null&&user.getAcountId()!=null){
-                //检查是否有用户缓存
-                GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
-                SessionManager.removeSessionByUsername(user.getAcountId());
+                //检查是否有用户缓存，注销处理
+//                GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
+//                SessionManager.removeSessionByUsername(user.getAcountId());
+                 GetBean.getUserService().deleteSave(user.getAcountId());
             }
             SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
         }
@@ -83,8 +84,9 @@ public class Handler extends SimpleChannelInboundHandler<DecodeData> {
             User user = session.getUser();
             if (user!=null&&user.getAcountId()!=null){
                 //检查是否有用户缓存
-                GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
-                SessionManager.removeSessionByUsername(user.getAcountId());
+//                GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
+//                SessionManager.removeSessionByUsername(user.getAcountId());
+                GetBean.getUserService().deleteSave(user.getAcountId());
             }
             SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
         }

@@ -1,5 +1,7 @@
 package com.aiwan.server.role.mount.service;
 
+import com.aiwan.server.role.attributes.model.Attributes;
+
 /**
  * @author dengzebiao
  * @since 2019.6.6
@@ -14,4 +16,7 @@ public interface MountService {
 
     /** 查看坐骑 */
     public String viewMount(Long rId);
+
+    /** 获取坐骑属性 */
+    Attributes getMountAttributes(Long rId);
 }

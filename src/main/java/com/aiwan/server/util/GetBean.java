@@ -4,6 +4,8 @@ import com.aiwan.server.prop.service.PropService;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
+import com.aiwan.server.role.attributes.service.AttributesManager;
+import com.aiwan.server.role.attributes.service.AttributesService;
 import com.aiwan.server.role.equipment.service.EquipmentService;
 import com.aiwan.server.role.mount.service.MountService;
 import com.aiwan.server.role.player.service.RoleService;
@@ -33,6 +35,25 @@ public class GetBean {
     private static PropService propService;
     private static EquipmentService equipmentService;
     private static MountService mountService;
+    private static AttributesManager attributesManager;
+    private static AttributesService attributesService;
+
+    public static AttributesService getAttributesService() {
+        return attributesService;
+    }
+    @Autowired
+    public void setAttributesService(AttributesService attributesService) {
+        GetBean.attributesService = attributesService;
+    }
+
+    public static AttributesManager getAttributesManager() {
+        return attributesManager;
+    }
+
+    @Autowired
+    public void setAttributesManager(AttributesManager attributesManager) {
+        GetBean.attributesManager = attributesManager;
+    }
 
     public static MountService getMountService() {
         return mountService;

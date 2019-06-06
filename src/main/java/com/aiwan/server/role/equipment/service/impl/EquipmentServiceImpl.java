@@ -2,6 +2,8 @@ package com.aiwan.server.role.equipment.service.impl;
 
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.role.attributes.model.Attributes;
+import com.aiwan.server.role.attributes.model.RoleAttributes;
 import com.aiwan.server.role.equipment.model.EquipmentElement;
 import com.aiwan.server.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.role.equipment.model.EquipmentModel;
@@ -53,6 +55,13 @@ public class EquipmentServiceImpl implements EquipmentService {
         //装备转换
         equipmentInfo.getEquipmentElements()[equipment.getPosition()].setId(pid);
         equipmentManager.writeBack(equipmentModel);
+
+        //人物属性更新
+        RoleAttributes roleAttributes = GetBean.getAttributesManager().getRoleAttributes(rId);
+        if (roleAttributes != null){
+            roleAttributes.setEquipAttributes(getEquipAttribute(rId));
+        }
+
         //返回装备id
         return oldId;
     }
@@ -78,5 +87,23 @@ public class EquipmentServiceImpl implements EquipmentService {
             }
         }
         return stringBuffer.toString();
+    }
+
+    @Override
+    public Attributes getEquipAttribute(Long rId) {
+        EquipmentModel equipmentModel = equipmentManager.load(rId);
+        Attributes attributes = new Attributes();
+        //遍历叠加
+        for (int i = 1;i<=equipmentModel.getLength();i++){
+            int pid = equipmentModel.getEquipmentInfo().getEquipmentElements()[i].getId();
+            //装备不为空
+            if (pid != 0){
+                Equipment equipment = GetBean.getPropsManager().getEquipment(pid);
+                attributes.setBlood(attributes.getBlood()+equipment.getBlood());
+                attributes.setPower(attributes.getPower()+equipment.getPower());
+                attributes.setPowerBonus(attributes.getPowerBonus()+equipment.getPowerBonus());
+            }
+        }
+        return attributes;
     }
 }

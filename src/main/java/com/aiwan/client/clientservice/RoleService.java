@@ -23,6 +23,10 @@ public class RoleService {
             createRole(channel);
         }
         else if (num == 2){
+            if (LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
+                System.out.println("您还创建角色，请创建角色");
+                return;
+            }
             getRoleMessage(channel);
         }
 
@@ -63,4 +67,5 @@ public class RoleService {
         cm_roleMessage.setrId(LoginUser.getRoles().get(0));
         channel.writeAndFlush(SMToDecodeData.shift(Protocol.GETROLEMESSAGE,cm_roleMessage));
     }
+
 }

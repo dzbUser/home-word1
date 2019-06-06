@@ -3,6 +3,8 @@ package com.aiwan.server.role.player.service.impl;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.role.attributes.model.Attributes;
+import com.aiwan.server.role.attributes.model.RoleAttributes;
 import com.aiwan.server.role.player.model.Role;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.role.player.protocol.SM_CreateRole;
@@ -63,7 +65,8 @@ public class RoleServiceImpl implements RoleService {
         if (role == null){
             logger.error("角色id："+cm_roleMessage.getrId()+"为空");
         }
-        DecodeData decodeData = SMToDecodeData.shift(StatusCode.ROLEMESSAGE,role.getRoleMessage());
+        String message = role.getRoleMessage()+"\n"+GetBean.getAttributesService().viewRoleAttributes(cm_roleMessage.getrId());
+        DecodeData decodeData = SMToDecodeData.shift(StatusCode.ROLEMESSAGE,message);
         session.messageSend(decodeData);
     }
 
@@ -83,6 +86,12 @@ public class RoleServiceImpl implements RoleService {
         role.setLevel(level);
         role.setExperience(totalExperience);
         roleManager.sava(role);
+
+        //更新人物属性
+        RoleAttributes roleAttributes = GetBean.getAttributesManager().getRoleAttributes(rId);
+        if (roleAttributes != null){
+            roleAttributes.setEquipAttributes(getBaseAttribute(rId));
+        }
     }
 
     @Override
@@ -98,8 +107,24 @@ public class RoleServiceImpl implements RoleService {
         return id;
     }
 
+    @Override
+    public String getRoleAttribute(Long rId) {
+        return GetBean.getAttributesService().viewRoleAttributes(rId);
+    }
+
     /**获取升级要求(暂用)*/
     private int getUpgradeRequest(int level){
         return (level+1)*50;
+    }
+
+    /** 获取基本属性 */
+    @Override
+    public Attributes getBaseAttribute(Long rId){
+        Role role = roleManager.load(rId);
+        Attributes attributes = new Attributes();
+        attributes.setPowerBonus(0);
+        attributes.setPower(role.getLevel()*10);
+        attributes.setBlood(role.getLevel()*5);
+        return attributes;
     }
 }

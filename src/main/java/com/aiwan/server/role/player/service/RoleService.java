@@ -1,6 +1,7 @@
 package com.aiwan.server.role.player.service;
 
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.role.attributes.model.Attributes;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.user.account.protocol.CM_CreateRole;
 
@@ -22,6 +23,12 @@ public interface RoleService {
     /** 角色经验增加 */
     void addExperience(String accountId,Long rId,int experienceNum);
 
+    /** 获取基本属性 */
+    Attributes getBaseAttribute(Long rId);
+
     /** 装备装备 */
     int equip(String accountId,Long rId,int pId);
+
+    /** 获取人物属性 */
+    String getRoleAttribute(Long rId);
 }

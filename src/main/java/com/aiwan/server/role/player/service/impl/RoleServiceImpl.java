@@ -100,6 +100,6 @@ public class RoleServiceImpl implements RoleService {
 
     /**获取升级要求(暂用)*/
     private int getUpgradeRequest(int level){
-        return level*50;
+        return (level+1)*50;
     }
 }

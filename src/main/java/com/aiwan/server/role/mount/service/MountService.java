@@ -8,4 +8,10 @@ package com.aiwan.server.role.mount.service;
 public interface MountService {
     /** 创建坐骑 */
     public void createMount(Long rId);
+
+    /** 经验增加 */
+    public void addExperience(Long rId,int experienceNum);
+
+    /** 查看坐骑 */
+    public String viewMount(Long rId);
 }

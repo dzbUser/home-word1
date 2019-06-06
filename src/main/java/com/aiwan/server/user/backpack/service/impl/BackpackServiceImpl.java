@@ -133,12 +133,16 @@ public class BackpackServiceImpl implements BackpackService {
             int num = backpackItem.getNum();
             //道具数正确
             int type = props.getType();
-            //道具使用
+            //道具使用（暂用）
             if (type == 1){
                 //道具使用
                 GetBean.getPropService().userExperience(accountId,rId);
             }
-            if (type == 3){
+            else if (type == 2){
+                //使用升阶丹(暂用)
+                GetBean.getMountService().addExperience(rId,1000);
+            }
+            else if (type == 3){
                 //装备使用
                 int id = GetBean.getRoleService().equip(accountId,rId,pId);
                 //装备错误

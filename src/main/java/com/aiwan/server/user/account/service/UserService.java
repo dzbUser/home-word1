@@ -3,6 +3,7 @@ package com.aiwan.server.user.account.service;
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.role.equipment.CM_ViewEquipBar;
+import com.aiwan.server.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
@@ -68,5 +69,8 @@ public interface UserService {
 
     /** 查看角色装备栏 */
     void viewEquip(CM_ViewEquipBar cm_viewEquipBar,Session session);
+
+    /** 查看坐骑信息 */
+    void viewMount(CM_ViewMount cm_viewMount,Session session);
 
 }

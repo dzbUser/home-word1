@@ -12,12 +12,12 @@ public interface RoleService {
     /**
      * 创建角色
      * */
-    public void create(Session session, CM_CreateRole cm_createRole);
+    void create(Session session, CM_CreateRole cm_createRole);
 
     /**
      * 获取角色信息
      * */
-    public void getRoleMessage(Session session, CM_RoleMessage cm_roleMessage);
+    void getRoleMessage(Session session, CM_RoleMessage cm_roleMessage);
 
     /** 角色经验增加 */
     void addExperience(String accountId,Long rId,int experienceNum);

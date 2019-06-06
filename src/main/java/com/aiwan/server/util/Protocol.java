@@ -55,4 +55,6 @@ public class Protocol {
     public final static int PROPUSER = 24;
     //装备协议
     public final static int VIEWQEUIP = 25;
+    //查看坐骑信息
+    public final static int VIEWMOUNT = 26;
 }

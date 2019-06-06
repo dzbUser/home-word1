@@ -42,6 +42,8 @@ public class RoleServiceImpl implements RoleService {
         userManager.save(user);
         //创建装备栏
         GetBean.getEquipmentService().createEquipmentBar(id);
+        //创建坐骑
+        GetBean.getMountService().createMount(id);
         //保存用户状态到session
         session.setUser(user);
         //创建返回信息
@@ -96,7 +98,7 @@ public class RoleServiceImpl implements RoleService {
         return id;
     }
 
-    /**获取升级要求*/
+    /**获取升级要求(暂用)*/
     private int getUpgradeRequest(int level){
         return level*50;
     }

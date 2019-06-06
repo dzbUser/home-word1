@@ -5,7 +5,6 @@ import com.aiwan.server.role.equipment.entity.EquipmentEntity;
 import com.aiwan.server.role.equipment.model.EquipmentModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -13,6 +12,15 @@ import java.util.Calendar;
 @Service()
 public class EquipmentManager {
     Logger logger = LoggerFactory.getLogger(EquipmentManager.class);
+
+    /**装备框信息（暂用）*/
+    public static String[] equipContent ;
+    static {
+        equipContent = new String[4];
+        equipContent[1] = "武器";
+        equipContent[2] = "衣服";
+        equipContent[3] = "鞋子";
+    }
 
     private EntityCaheServiceImpl<Long, EquipmentEntity> cache;
 

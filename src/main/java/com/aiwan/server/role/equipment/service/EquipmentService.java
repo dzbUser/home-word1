@@ -11,4 +11,9 @@ public interface EquipmentService {
 
     /** 装备 */
     public int equip(String accountId,Long rId,int pid);
+
+    /**
+     * @param rId 角色id
+     * 查看角色装备 */
+    public String viewEquip(Long rId);
 }

@@ -2,6 +2,7 @@ package com.aiwan.server.role.equipment.service.impl;
 
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.role.equipment.model.EquipmentElement;
 import com.aiwan.server.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.role.equipment.model.EquipmentModel;
 import com.aiwan.server.role.equipment.service.EquipmentManager;
@@ -31,23 +32,51 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
+    /**
+     *
+     * */
     public int equip(String accountId, Long rId, int pid) {
         //获取装备栏
         EquipmentModel equipmentModel = equipmentManager.load(rId);
-        //获取道具
+        //获取装备
         Equipment equipment = GetBean.getPropsManager().getEquipment(pid);
         //判断位置是否正确
-        if (equipment.getPosition() > equipmentModel.getLength()){
+        if (equipment == null||equipment.getPosition() > equipmentModel.getLength()){
             //位置错误
             logger.error(accountId+"中的"+rId+"装备错误");
             return -1;
         }
         EquipmentInfo equipmentInfo = equipmentModel.getEquipmentInfo();
-        //旧装备的id
+
+        //旧装备的id,0表示装备栏无装备
         int oldId = equipmentInfo.getEquipmentElements()[equipment.getPosition()].getId();
         //装备转换
         equipmentInfo.getEquipmentElements()[equipment.getPosition()].setId(pid);
+        equipmentManager.writeBack(equipmentModel);
         //返回装备id
         return oldId;
+    }
+
+    @Override
+    public String viewEquip(Long rId) {
+        StringBuffer stringBuffer = new StringBuffer();
+        /**
+         * 获取装备栏，遍历装备栏
+         * */
+        EquipmentModel equipmentModel = equipmentManager.load(rId);
+        Props prop;
+        //获取装备栏数组
+        EquipmentElement[] equipmentElements = equipmentModel.getEquipmentInfo().getEquipmentElements();
+        //遍历装备栏
+        for (int i =1;i<equipmentElements.length;i++){
+            stringBuffer.append(EquipmentManager.equipContent[i]+":");
+            if (equipmentElements[i] == null||equipmentElements[i].getId() == 0){
+                stringBuffer.append("无\n");
+            }else {
+                prop = GetBean.getPropsManager().getProps(equipmentElements[i].getId());
+                stringBuffer.append(prop.getName()+"\n");
+            }
+        }
+        return stringBuffer.toString();
     }
 }

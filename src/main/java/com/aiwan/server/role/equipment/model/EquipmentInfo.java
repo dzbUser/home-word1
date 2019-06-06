@@ -13,7 +13,13 @@ public class EquipmentInfo {
     private EquipmentElement[] equipmentElements;
 
     public EquipmentInfo() {
+        //初始化
         this.equipmentElements = new EquipmentElement[length+1];
+        for (int i = 1;i<=length;i++){
+            equipmentElements[i] = new EquipmentElement();
+            equipmentElements[i].setId(0);
+            equipmentElements[i].setPosition(i);
+        }
     }
 
     public int getLength() {

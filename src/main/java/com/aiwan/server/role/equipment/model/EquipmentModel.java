@@ -19,18 +19,7 @@ public class EquipmentModel {
         this.equipmentEntity = equipmentEntity;
         return this;
     }
-
-//    /** 装备装备 */
-//    public int equip(EquipmentElement equipmentElement){
-//        if (equipmentElement.getPosition()>getLength()){
-//            //装备位置越界
-//            return -1;
-//        }
-//        //获取旧的装备id
-//        int pId = equipmentEntity.getEquipmentInfo().getEquipmentElements()[equipmentElement.getPosition()].getId();
-//        equipmentEntity.getEquipmentInfo().getEquipmentElements()[equipmentElement.getPosition()] = equipmentElement;
-//        return pId;
-//    }
+    
 
     /** 获取装备长度 */
     public int getLength(){

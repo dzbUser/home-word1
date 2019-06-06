@@ -5,6 +5,7 @@ import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
@@ -340,5 +341,22 @@ public class UserServiceImpl implements UserService {
         //调用背包
         GetBean.getBackpackService().propUse(cm_propUser.getAccountId(),cm_propUser.getrId(),cm_propUser.getpId(),session);
     }
+
+    @Override
+    public void viewEquip(CM_ViewEquipBar cm_viewEquipBar, Session session) {
+        logger.debug(cm_viewEquipBar.getAccountId()+"查看装备栏"+cm_viewEquipBar.getrId());
+        //是否登录
+        User user = session.getUser();
+        if (user == null||user.getUserBaseInfo().getRoles().size() == 0){
+            //还未登录
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.NOLOGIN,"您还未登录,获取还未创建角色!");
+            session.messageSend(decodeData);
+            return;
+        }
+
+        String message = GetBean.getEquipmentService().viewEquip(cm_viewEquipBar.getrId());
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,message));
+    }
+
 
 }

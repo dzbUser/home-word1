@@ -53,4 +53,6 @@ public class Protocol {
     public final static int VIEWBACKPACK = 23;
     //道具使用
     public final static int PROPUSER = 24;
+    //装备协议
+    public final static int VIEWQEUIP = 25;
 }

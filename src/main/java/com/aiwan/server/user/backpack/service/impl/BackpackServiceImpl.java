@@ -146,10 +146,12 @@ public class BackpackServiceImpl implements BackpackService {
                     session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的等级未达到要求"));
                     return;
                 }
-                //获取旧的装备
-                Props oldEquipment  = GetBean.getPropsManager().getProps(id);
-                //旧的装备存到背包
-                obtainProp(accountId,oldEquipment,id);
+                if (id != 0){
+                    //获取旧的装备
+                    Props oldEquipment  = GetBean.getPropsManager().getProps(id);
+                    //旧的装备存到背包
+                    obtainProp(accountId,oldEquipment,1);
+                }
             }
             num--;
             if (num == 0){

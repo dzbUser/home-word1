@@ -3,6 +3,7 @@ package com.aiwan.client.clientservice;
 import com.aiwan.client.LoginUser;
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.util.Protocol;
@@ -19,7 +20,7 @@ import java.util.Scanner;
 public class PropSystem {
     public static void entrance(Channel channel){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("您已进入背包系统 1.添加道具 2.查看背包 3.使用道具");
+        System.out.println("您已进入背包系统 1.添加道具 2.查看背包 3.使用道具 4.查看装备栏");
         int num = scanner.nextInt();
         if (num == 1){
             addProp(scanner,channel);
@@ -31,6 +32,9 @@ public class PropSystem {
         }
         else if (num ==3){
             propUse(scanner,channel);
+        }
+        else if(num == 4){
+            viewEquipBar(channel);
         }
     }
 
@@ -55,5 +59,13 @@ public class PropSystem {
         cm_propUse.setpId(id);
         cm_propUse.setrId(LoginUser.getRoles().get(0));
         channel.writeAndFlush(SMToDecodeData.shift(Protocol.PROPUSER,cm_propUse));
+    }
+
+    /** 查看装备栏 */
+    public static void viewEquipBar(Channel channel){
+        CM_ViewEquipBar cm_viewEquipBar = new CM_ViewEquipBar();
+        cm_viewEquipBar.setAccountId(LoginUser.getUsername());
+        cm_viewEquipBar.setrId(LoginUser.getRoles().get(0));
+        channel.writeAndFlush(SMToDecodeData.shift(Protocol.VIEWQEUIP,cm_viewEquipBar));
     }
 }

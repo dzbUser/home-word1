@@ -49,7 +49,7 @@
 			* CM_Logout:用户注销协议包
 			* CM_Regitsted:用户注册协议包
 			* SM_UserMessage:返回用户信息给客户端  
-	backpa：背包处理包（还为添加业务）
+	backpa：背包处理包（已完成业务）
 		1. entity:实体类包  
 			* BackpackEnt:背包实体类
 		2. service:业务层  

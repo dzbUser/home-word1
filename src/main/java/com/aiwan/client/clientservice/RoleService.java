@@ -2,7 +2,7 @@ package com.aiwan.client.clientservice;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.role.player.protocol.CM_RoleMessage;
+import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.user.account.protocol.CM_CreateRole;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
@@ -37,7 +37,7 @@ public class RoleService {
     public static void createRole(Channel channel){
         //获取客户端屏幕的写入
         Scanner scanner = new Scanner(System.in);
-        System.out.println("输入职业：0.战士 1.法师;输入性别：0.女 1.男");
+        System.out.println("输入职业：0.法师 1.战士;输入性别：0.女 1.男");
         int job = scanner.nextInt();
         int sex = scanner.nextInt();
         if (job<0||job>1||sex<0||sex>1){

@@ -9,7 +9,8 @@ import com.aiwan.server.publicsystem.common.Session;
  * 背包业务
  * */
 public interface BackpackService {
-    /** 创建背包 */
+    /** 创建背包
+     * */
     void createBackpack(String acountId);
 
     /** 获取道具 */

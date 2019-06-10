@@ -1,7 +1,7 @@
 package com.aiwan.client;
 
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.role.player.protocol.SM_CreateRole;
+import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.scenes.protocol.SM_Shift;
@@ -71,7 +71,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
             System.out.println(sm_createRole.getMessage());
         }
         System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏\n10.背包系统" +
-                "11.坐骑系统");
+                " 11.坐骑系统");
     }
 
     @Override

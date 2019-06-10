@@ -64,6 +64,11 @@ public class BackpackEnt implements IEntity<String> {
         return true;
     }
 
+    @Override
+    public void init() {
+
+    }
+
     public String getAccountId() {
         return accountId;
     }

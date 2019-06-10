@@ -4,6 +4,7 @@ import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.publicsystem.service.PropUserManager;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.backpack.model.BackpackItem;
 import com.aiwan.server.user.backpack.service.BackPackManager;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import java.util.Map;
 
@@ -133,31 +135,13 @@ public class BackpackServiceImpl implements BackpackService {
             int num = backpackItem.getNum();
             //道具数正确
             int type = props.getType();
-            //道具使用（暂用）
-            if (type == 1){
-                //道具使用
-                GetBean.getPropService().userExperience(accountId,rId);
+            //道具使用,反射使用
+            int status = (int) ReflectionUtils.invokeMethod(PropUserManager.getMethod(type),GetBean.getPropService(),accountId,rId,pId,session);
+            logger.debug(accountId+"使用道具"+pId+"的状态："+status);
+            if (status == 1){
+                //使用成功
+                num--;
             }
-            else if (type == 2){
-                //使用升阶丹(暂用)
-                GetBean.getMountService().addExperience(rId,1000);
-            }
-            else if (type == 3){
-                //装备使用
-                int id = GetBean.getRoleService().equip(accountId,rId,pId);
-                //装备错误
-                if (id == -1){
-                    session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的等级未达到要求"));
-                    return;
-                }
-                if (id != 0){
-                    //获取旧的装备
-                    Props oldEquipment  = GetBean.getPropsManager().getProps(id);
-                    //旧的装备存到背包
-                    obtainProp(accountId,oldEquipment,1);
-                }
-            }
-            num--;
             if (num == 0){
                 //道具用完
                 backpack.removeBackpackItem(pId);
@@ -168,7 +152,6 @@ public class BackpackServiceImpl implements BackpackService {
 
             //写回
             backPackManager.writeBack(backpack);
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,props.getName()+"使用成功！"));
         }
 
     }

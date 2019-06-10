@@ -61,7 +61,18 @@
 		* model：
 		* rule：暂时用户职业与数字的对应
 		* service
-
+	2. attribute:属性系统包
+		* model：1.Attribute:属性元素实体  2.角色属性：RoleAttributes
+		* service：属性业务类
+		* protocol:属性协议包
+	3. equipment:装备系统包
+		* entity:role 实体类
+		* model：模型包
+		* service：业务包
+	4. mount:坐骑包
+		* entity:role 实体类
+		* model：模型包
+		* service：业务包
 ### scenes:场景处理类  
 	1. service:业务层  
 		* ScenesService:用户位置改变业务逻辑类，有移动，地图跳转  

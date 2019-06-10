@@ -12,7 +12,7 @@ public class IDUtil {
 
     private static boolean tmpIDlocked = false;
 
-    public static long getId()
+    public static synchronized long getId()
     {
         long ltime = 0;
 

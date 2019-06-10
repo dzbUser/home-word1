@@ -2,8 +2,7 @@ package com.aiwan.client.clientservice;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.server.prop.protocol.CM_PropUse;
-import com.aiwan.server.prop.resource.Props;
-import com.aiwan.server.role.equipment.CM_ViewEquipBar;
+import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.util.Protocol;

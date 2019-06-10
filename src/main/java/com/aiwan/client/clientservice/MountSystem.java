@@ -1,7 +1,7 @@
 package com.aiwan.client.clientservice;
 
 import com.aiwan.client.LoginUser;
-import com.aiwan.server.role.mount.protocol.CM_ViewMount;
+import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 import io.netty.channel.Channel;

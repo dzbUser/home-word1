@@ -62,6 +62,11 @@ public class UserEnt implements IEntity<String> {
         return true;
     }
 
+    @Override
+    public void init() {
+
+    }
+
     public String getAcountId() {
         return acountId;
     }

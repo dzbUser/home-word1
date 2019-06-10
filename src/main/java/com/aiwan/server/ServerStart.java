@@ -1,10 +1,7 @@
 package com.aiwan.server;
 
 import com.aiwan.server.netty.NettyServer;
-import com.aiwan.server.publicsystem.Initialization.CacheInitialzation;
-import com.aiwan.server.publicsystem.Initialization.MapInitialization;
-import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
-import com.aiwan.server.publicsystem.Initialization.ReflectionInitialization;
+import com.aiwan.server.publicsystem.Initialization.*;
 import com.aiwan.server.publicsystem.service.ThreadPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +29,9 @@ public class ServerStart {
         ThreadPoolManager.initialize();
         //道具资源初始化
         PropsInitialzation.init();
+        PropUserInitialization.initialization();
+        //人物资源初始化
+        RoleResourceInit.init();
         logger.debug("启动Netty服务器");
         new Thread(
                 new Runnable() {

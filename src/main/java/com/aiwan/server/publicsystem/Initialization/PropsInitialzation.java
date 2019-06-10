@@ -59,6 +59,7 @@ public class PropsInitialzation {
         PropsManager propsManager = GetBean.getPropsManager();
         logger.debug("装备静态资源初始化debug："+list.size());
         for (int i = 0;i < list.size();i++){
+            list.get(i).init();
             propsManager.putEquipment(list.get(i));
         }
     }

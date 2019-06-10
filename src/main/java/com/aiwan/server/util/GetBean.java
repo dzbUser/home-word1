@@ -4,13 +4,11 @@ import com.aiwan.server.prop.service.PropService;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
-import com.aiwan.server.role.attributes.service.AttributesManager;
-import com.aiwan.server.role.attributes.service.AttributesService;
-import com.aiwan.server.role.equipment.service.EquipmentService;
-import com.aiwan.server.role.mount.service.MountService;
-import com.aiwan.server.role.player.service.RoleService;
+import com.aiwan.server.user.role.equipment.service.EquipmentService;
+import com.aiwan.server.user.role.mount.service.MountService;
+import com.aiwan.server.user.role.player.service.RoleService;
+import com.aiwan.server.user.role.service.RoleResourceManager;
 import com.aiwan.server.scenes.service.MapManager;
-//import com.aiwan.server.user.dao.UserDao;
 import com.aiwan.server.scenes.service.ScenesService;
 import com.aiwan.server.user.account.service.UserManager;
 import com.aiwan.server.user.account.service.UserService;
@@ -35,25 +33,18 @@ public class GetBean {
     private static PropService propService;
     private static EquipmentService equipmentService;
     private static MountService mountService;
-    private static AttributesManager attributesManager;
-    private static AttributesService attributesService;
+    private static RoleResourceManager roleResourceManager;
 
-    public static AttributesService getAttributesService() {
-        return attributesService;
-    }
-    @Autowired
-    public void setAttributesService(AttributesService attributesService) {
-        GetBean.attributesService = attributesService;
-    }
-
-    public static AttributesManager getAttributesManager() {
-        return attributesManager;
+    public static RoleResourceManager getRoleResourceManager() {
+        return roleResourceManager;
     }
 
     @Autowired
-    public void setAttributesManager(AttributesManager attributesManager) {
-        GetBean.attributesManager = attributesManager;
+    public void setRoleResourceManager(RoleResourceManager roleResourceManager) {
+        GetBean.roleResourceManager = roleResourceManager;
     }
+
+
 
     public static MountService getMountService() {
         return mountService;
@@ -126,16 +117,6 @@ public class GetBean {
     public  void setUserService(UserService userService) {
         GetBean.userService = userService;
     }
-
-//    public static UserDao getUserDao() {
-//        return GetBean.userDao;
-//    }
-//
-//    @Autowired
-//    public void setUserDao(UserDao userDao) {
-//        GetBean.userDao = userDao;
-//    }
-
 
     public static MapManager getMapManager() {
         return mapManager;

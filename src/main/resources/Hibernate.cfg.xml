@@ -12,10 +12,10 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping class="com.aiwan.server.role.mount.entity.MountEntity"/>
-        <mapping class="com.aiwan.server.role.equipment.entity.EquipmentEntity"/>
+        <mapping class="com.aiwan.server.user.role.mount.entity.MountEntity"/>
+        <mapping class="com.aiwan.server.user.role.equipment.entity.EquipmentEntity"/>
         <mapping class="com.aiwan.server.user.backpack.entity.BackpackEnt"/>
         <mapping class="com.aiwan.server.user.account.entity.UserEnt"/>
-        <mapping class="com.aiwan.server.role.player.entity.RoleEnt"/>
+        <mapping class="com.aiwan.server.user.role.player.entity.RoleEnt"/>
     </session-factory>
 </hibernate-configuration>

@@ -11,6 +11,7 @@ import java.util.concurrent.*;
 public class ThreadPoolManager {
     /** 用户线程池 */
     private static ExecutorService[] userThreadArray;
+    
     /** 其他线程池 */
     private static ExecutorService otherThreadPool;
     /** 用户线程池大小 */
@@ -51,7 +52,7 @@ public class ThreadPoolManager {
 
     /** 生成账号获取唯一索引 */
     public static int getNum(String accountId){
-        return accountId.length()*15/4*25%userPoolSize;
+        return accountId.hashCode()%userPoolSize;
     }
 
     /** 执行其他线程池 */

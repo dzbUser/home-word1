@@ -2,6 +2,9 @@ package com.aiwan.server.prop.resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author dengzebiao
  * @since 2019.6.3
@@ -32,6 +35,18 @@ public class Equipment {
     /** 等级限制 */
     @CellMapping(name = "level")
     private int level;
+
+    @CellMapping(name = "attribute")
+    private String attribute;
+
+    private Map<String,Integer> map = new HashMap<>();
+    public void init(){
+        String[] attributeString = attribute.split(" ");
+        for (String element:attributeString){
+            String[] item = element.split(":");
+            map.put(item[0],Integer.parseInt(item[1]));
+        }
+    }
 
     public int getId() {
         return id;
@@ -84,6 +99,24 @@ public class Equipment {
 
     public Equipment setLevel(int level) {
         this.level = level;
+        return this;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public Equipment setAttribute(String attribute) {
+        this.attribute = attribute;
+        return this;
+    }
+
+    public Map<String, Integer> getMap() {
+        return map;
+    }
+
+    public Equipment setMap(Map<String, Integer> map) {
+        this.map = map;
         return this;
     }
 }

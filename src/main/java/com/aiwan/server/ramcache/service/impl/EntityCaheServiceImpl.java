@@ -63,6 +63,7 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
             num++;
             //反序列化
             current.unserialize();
+            current.init();
             return current;
         }
         //从队列中取出最后一个，写回
@@ -70,6 +71,7 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
         cacheMap.remove(lasfId);
         linkedQueue.offer(id);
         cacheMap.put(id,current);
+        current.init();
         return current;
     }
 

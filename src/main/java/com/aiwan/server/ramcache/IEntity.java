@@ -9,4 +9,7 @@ public interface IEntity <PK extends Serializable& Comparable<PK>>{
     public boolean serialize();
     /** 反序列化方法*/
     public boolean unserialize();
+
+    /** 初始化方法 */
+    void init();
 }

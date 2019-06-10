@@ -5,10 +5,10 @@ import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.role.attributes.protocol.CM_ViewAttributes;
-import com.aiwan.server.role.equipment.CM_ViewEquipBar;
-import com.aiwan.server.role.mount.protocol.CM_ViewMount;
-import com.aiwan.server.role.player.protocol.CM_RoleMessage;
+import com.aiwan.server.user.role.attributes.protocol.CM_ViewAttributes;
+import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
+import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
+import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
 import com.aiwan.server.user.account.model.User;
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
                 sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
             }else {
                 //加入人物属性映射
-                GetBean.getAttributesService().putRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
+//                GetBean.getAttributesService().putRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
             }
             sm_userMessage.setUsername(user.getAcountId());
             sm_userMessage.setMap(user.getMap());
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
         session.setUser(null);
         //若有人物角色，移除人物属性映射
         if (user.getRoleNum() != 0){
-            GetBean.getAttributesService().removeRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
+//            GetBean.getAttributesService().removeRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
         }
         session.messageSend(decodeData);
     }
@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
         }else {
             //加入人物属性映射
-            GetBean.getAttributesService().putRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
+//            GetBean.getAttributesService().putRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
         }
 
         sm_userMessage.setUsername(user.getAcountId());
@@ -404,27 +404,6 @@ public class UserServiceImpl implements UserService {
         userManager.save(user);
         //把用户从地图资源中移除
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
-        //若有人物角色，移除人物属性映射
-        if (user.getRoleNum() != 0){
-            GetBean.getAttributesService().removeRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
-        }
     }
-
-    @Override
-    public void viewAttributes(CM_ViewAttributes cm_viewAttributes, Session session) {
-        logger.debug(cm_viewAttributes.getAccountId()+"查看角色属性"+cm_viewAttributes.getrId());
-        //是否登录
-        User user = session.getUser();
-        if (user == null||user.getUserBaseInfo().getRoles().size() == 0){
-            //还未登录
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.NOLOGIN,"您还未登录,获取还未创建角色!");
-            session.messageSend(decodeData);
-            return;
-        }
-        //获取属性值
-        String message = GetBean.getAttributesService().viewRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
-        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,message));
-    }
-
 
 }

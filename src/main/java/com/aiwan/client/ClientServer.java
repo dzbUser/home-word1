@@ -49,7 +49,7 @@ public class ClientServer {
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
             System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏\n" +
-                    "10.背包系统 11.坐骑系统");
+                    "10.背包系统  11.坐骑系统");
             while(true){
                 DecodeData decodeData = new DecodeData();
                 byte[] data = "初始化".getBytes();

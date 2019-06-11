@@ -10,9 +10,7 @@ public class SMToDecodeData {
     public static DecodeData shift(int type,Object object){
         DecodeData decodeData = new DecodeData();
         decodeData.setType(type);
-        byte[] data = ObjectToBytes.writeInto(object);
-        decodeData.setLength(data.length);
-        decodeData.setData(data);
+        decodeData.setObject(object);
         return decodeData;
     }
 }

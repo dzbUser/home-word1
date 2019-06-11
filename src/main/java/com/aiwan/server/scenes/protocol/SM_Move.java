@@ -11,10 +11,15 @@ public class SM_Move implements Serializable {
     private int targetY;
     private String mapMessage;
 
-    public SM_Move(int targetX, int targetY, String mapMessage) {
-        this.targetX = targetX;
-        this.targetY = targetY;
-        this.mapMessage = mapMessage;
+    public SM_Move(){}
+
+    /**  获取对象 */
+    public static SM_Move valueOf(int targetX, int targetY, String mapMessage){
+        SM_Move sm_move = new SM_Move();
+        sm_move.setMapMessage(mapMessage);
+        sm_move.setTargetX(targetX);
+        sm_move.setTargetY(targetY);
+        return sm_move;
     }
 
     public int getTargetX() {

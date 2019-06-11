@@ -25,13 +25,11 @@ public class TaskDispatcher {
 
 
     /** 人物分配 */
-    public void dispatcherTask(DecodeData decodeData, final Channel channel){
+    public void dispatcherTask(final DecodeData decodeData, final Channel channel){
 
         final Method method = ReflectionManager.getMethod(ReflectionManager.getProtocolClass(decodeData.getType()));
 
         //获取方法对应的bean
-        //反序列化对象
-        final Object obj = ObjectToBytes.restore(decodeData.getData());
 
         final Object bean = ReflectionManager.getBean(method);
 
@@ -41,7 +39,7 @@ public class TaskDispatcher {
             ThreadPoolManager.executeUserThread(session.getUser().getAcountId(), new Runnable() {
                 @Override
                 public void run() {
-                    ReflectionUtils.invokeMethod(method,bean,obj,session);
+                    ReflectionUtils.invokeMethod(method,bean,decodeData.getObject(),session);
                 }
             });
         }else {
@@ -49,7 +47,7 @@ public class TaskDispatcher {
                     new Runnable() {
                         @Override
                         public void run() {
-                            ReflectionUtils.invokeMethod(method,bean,obj,session);
+                            ReflectionUtils.invokeMethod(method,bean,decodeData.getObject(),session);
                         }
                     }
             );

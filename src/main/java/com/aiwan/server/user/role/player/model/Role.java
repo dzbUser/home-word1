@@ -95,7 +95,7 @@ public class Role {
         buffer.append(" 升级所需经验："+getUpgradeRequest()+"\n");
         //~~~~~~~~~~~~~~~~~~~~~~~新~~~~~~~~~~~~~~~~~~
         for (Map.Entry<String, AttributeItem> entry:roleEnt.getAttribute().getAttributeItemMap().entrySet()){
-            buffer.append(entry.getKey()+":"+entry.getValue().getValue()+" ");
+            buffer.append(entry.getKey() + ":" + entry.getValue().getOverValue() + " ");
         }
         buffer.append("\n");
         return buffer.toString();

@@ -46,4 +46,5 @@ public class EquipmentManager {
         equipmentEntity.setId(rId);
         cache.writeBack(equipmentEntity.getId(),equipmentEntity);
     }
+
 }

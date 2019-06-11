@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         if(userMessage == null){
             logger.debug("输入错误");
             String content = "输入错误";
-            decodeData = SMToDecodeData.shift(StatusCode.REGISTDAIL,content);
+            decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,content);
             session.messageSend(decodeData);
         }
         //账号可用
@@ -106,12 +106,12 @@ public class UserServiceImpl implements UserService {
             userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY,1);
             GetBean.getBackpackService().createBackpack(userMessage.getUsername());
             String content = "恭喜您，注册成功！";
-            decodeData = SMToDecodeData.shift(StatusCode.REGISTSUCCESS,content);
+            decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,content);
             session.messageSend(decodeData);
         }else {//账号已被注册
             logger.debug("用户已存在");
             String content = "抱歉，用户账号已被注册，请选择其他账号";
-            decodeData = SMToDecodeData.shift(StatusCode.REGISTDAIL,content);
+            decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,content);
             session.messageSend(decodeData);
         }
     }
@@ -135,10 +135,6 @@ public class UserServiceImpl implements UserService {
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
         //session移除用户信息
         session.setUser(null);
-        //若有人物角色，移除人物属性映射
-        if (user.getRoleNum() != 0){
-//            GetBean.getAttributesService().removeRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
-        }
         session.messageSend(decodeData);
     }
 
@@ -182,9 +178,6 @@ public class UserServiceImpl implements UserService {
         if (user.getRoleNum() == 0){
             sm_userMessage.setCreated(false);
             sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
-        }else {
-            //加入人物属性映射
-//            GetBean.getAttributesService().putRoleAttributes(user.getUserBaseInfo().getRoles().get(0));
         }
 
         sm_userMessage.setUsername(user.getAcountId());
@@ -212,13 +205,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         String mapContent = GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
-        type = StatusCode.GETMESSAGESUCCESS;
-        SM_UserMessage sm_userMessage = new SM_UserMessage();
-        sm_userMessage.setMapMessage(mapContent);
-        sm_userMessage.setCurrentX(user.getCurrentX());
-        sm_userMessage.setCurrentY(user.getCurrentY());
-        sm_userMessage.setMap(user.getMap());
-        DecodeData decodeData = SMToDecodeData.shift(type,sm_userMessage);
+        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,mapContent);
         session.messageSend(decodeData);
     }
 
@@ -229,13 +216,9 @@ public class UserServiceImpl implements UserService {
     public void createRole(final CM_CreateRole cm_createRole, final Session session){
         logger.debug(cm_createRole.getAccountId()+"创建角色");
         User user = session.getUser();
-        if (user == null){
-            //还未登录
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLEFAIL,"您还未登录!");
-            session.messageSend(decodeData);
-        }else if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){
+        if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){
             //查看角色量
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLEFAIL,"您角色数已上限！");
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"您角色数已上限！");
             session.messageSend(decodeData);
         }
         else {
@@ -250,7 +233,7 @@ public class UserServiceImpl implements UserService {
         User user = session.getUser();
         if (user == null){
             //还未登录
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.NOLOGIN,"您还未登录!");
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"您还未登录!");
             session.messageSend(decodeData);
         }
         else {

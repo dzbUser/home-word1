@@ -70,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
             logger.error("角色id："+cm_roleMessage.getrId()+"为空");
         }
         String message = role.getRoleMessage();
-        DecodeData decodeData = SMToDecodeData.shift(StatusCode.ROLEMESSAGE,message);
+        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,message);
         session.messageSend(decodeData);
     }
 

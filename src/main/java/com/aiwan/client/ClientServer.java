@@ -3,6 +3,7 @@ package com.aiwan.client;
 import com.aiwan.client.clientservice.MountSystem;
 import com.aiwan.client.clientservice.PropSystem;
 import com.aiwan.client.clientservice.RoleService;
+import com.aiwan.client.handler.ClientInfoHandler;
 import com.aiwan.server.netty.Decoder;
 import com.aiwan.server.netty.Encoder;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
@@ -39,7 +40,7 @@ public class ClientServer {
                 protected void initChannel(Channel ch) throws Exception {
                     ch.pipeline().addLast(new Decoder());
                     ch.pipeline().addLast(new Encoder());
-                    ch.pipeline().addLast(new ClientHandler());
+                    ch.pipeline().addLast(new ClientInfoHandler());
                 }
             });
             ChannelFuture channelFuture = bootstrap.connect(ip, port).sync();
@@ -98,9 +99,8 @@ public class ClientServer {
                     move.setTargetY(y);
                     move.setUsername(LoginUser.getUsername());
                     decodeData.setType(Protocol.MOVE);
-                    data = ObjectToBytes.writeInto(move);
                     decodeData.setLength(data.length);
-                    decodeData.setData(data);
+                    decodeData.setObject(move);
                     channel.writeAndFlush(decodeData);
                 }else if (num == 6){
                     if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
@@ -119,9 +119,8 @@ public class ClientServer {
                         cm_shift.setMap(map);
                         cm_shift.setUsername(LoginUser.getUsername());
                         decodeData.setType(Protocol.SHIFT);
-                        data = ObjectToBytes.writeInto(cm_shift);
                         decodeData.setLength(data.length);
-                        decodeData.setData(data);
+                        decodeData.setObject(cm_shift);
                         channel.writeAndFlush(decodeData);
                     }
                 }else if (num == 7){
@@ -184,10 +183,8 @@ public class ClientServer {
         String password = scanner.nextLine();
         cm_login.setUsername(username);
         cm_login.setPassword(password);
-        byte[] data  = ObjectToBytes.writeInto(cm_login);
         decodeData.setType(Protocol.LOGIN);
-        decodeData.setLength(data.length);
-        decodeData.setData(data);
+        decodeData.setObject(cm_login);
         channel.writeAndFlush(decodeData);
     }
 
@@ -201,20 +198,16 @@ public class ClientServer {
         String hpassword = scanner.nextLine();
         cm_login.setUsername(username);
         cm_login.setHpassword(hpassword);
-        byte[]data  = ObjectToBytes.writeInto(cm_login);
         decodeData.setType(Protocol.HLOGIN);
-        decodeData.setLength(data.length);
-        decodeData.setData(data);
+        decodeData.setObject(cm_login);
         channel.writeAndFlush(decodeData);
     }
     //注销函数
     private static void logout(Channel channel, Scanner scanner, DecodeData decodeData){
         CM_Logout cm_logout = new CM_Logout();
         cm_logout.setUsername(LoginUser.getUsername());
-        byte[] data = ObjectToBytes.writeInto(cm_logout);
         decodeData.setType(Protocol.LOGOUT);
-        decodeData.setLength(data.length);
-        decodeData.setData(data);
+        decodeData.setObject(cm_logout);
         channel.writeAndFlush(decodeData);
     }
     private static void registered(Channel channel,Scanner scanner,DecodeData decodeData){
@@ -229,17 +222,14 @@ public class ClientServer {
         cm_registered.setUsername(username);
         cm_registered.setPassword(password);
         cm_registered.setHpassword(hpassword);
-        byte[] data = ObjectToBytes.writeInto(cm_registered);
         decodeData.setType(Protocol.REGIST);
-        decodeData.setLength(data.length);
-        decodeData.setData(data);
+        decodeData.setObject(cm_registered);
         channel.writeAndFlush(decodeData);
     }
 
     //发送心跳
     public static void sendHear(final Channel channel){
         final DecodeData decodeData = new DecodeData();
-        final byte[] data = ObjectToBytes.writeInto("heart");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -250,8 +240,7 @@ public class ClientServer {
                         e.printStackTrace();
                     }
                     decodeData.setType(Protocol.HEART);
-                    decodeData.setLength(data.length);
-                    decodeData.setData(data);
+                    decodeData.setObject("heart");
                     channel.writeAndFlush(decodeData);
                 }
             }

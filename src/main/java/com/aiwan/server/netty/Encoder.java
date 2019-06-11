@@ -1,6 +1,7 @@
 package com.aiwan.server.netty;
 
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.util.ObjectToBytes;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -17,7 +18,8 @@ public class Encoder extends MessageToByteEncoder<DecodeData> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, DecodeData decodeData, ByteBuf byteBuf) throws Exception {
         byteBuf.writeShort(decodeData.getType());
-        byteBuf.writeInt(decodeData.getLength());
-        byteBuf.writeBytes(decodeData.getData());
+        byte[] data = ObjectToBytes.writeInto(decodeData.getObject());
+        byteBuf.writeInt(data.length);
+        byteBuf.writeBytes(data);
     }
 }

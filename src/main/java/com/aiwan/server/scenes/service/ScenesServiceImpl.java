@@ -46,12 +46,12 @@ public class ScenesServiceImpl implements ScenesService{
             user.setCurrentX(cm_move.getTargetX());
             user.setCurrentY(cm_move.getTargetY());
             String content = "移动成功\n" + GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
-            SM_Move sm_move = new SM_Move(cm_move.getTargetX(), cm_move.getCurrentY(), content);
+            SM_Move sm_move = SM_Move.valueOf(cm_move.getTargetX(), cm_move.getCurrentY(), content);
             data = sm_move;
             type = StatusCode.MOVESUCCESS;
         } else {
             data = "此处不可移动！";
-            type = StatusCode.MOVEFAIL;
+            type = StatusCode.MESSAGE;
         }
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
         session.messageSend(decodeData);
@@ -72,10 +72,9 @@ public class ScenesServiceImpl implements ScenesService{
         //添加到地图资源中
         GetBean.getMapManager().putUser(user);
         //加入缓存
-
         userManager.save(user);
         String content = "跳转成功\n"+ GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
-        SM_Shift sm_shift = new SM_Shift(mapResource.getOriginX(),mapResource.getOriginY(),cm_shift.getMap(),content);
+        SM_Shift sm_shift = SM_Shift.valueOf(mapResource.getOriginX(),mapResource.getOriginY(),cm_shift.getMap(),content);
         Object data = sm_shift;
         int type = StatusCode.SHIFTSUCCESS;
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);

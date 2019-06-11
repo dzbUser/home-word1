@@ -37,6 +37,5 @@ public class RoleResourceInit {
         }
         list.get(0).init();
         roleResourceManager.setRoleResource(list.get(0));
-
     }
 }

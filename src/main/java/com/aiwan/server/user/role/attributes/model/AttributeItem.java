@@ -13,6 +13,9 @@ public class AttributeItem {
     /** 属性值 */
     private int value;
 
+    /** 叠加属性 */
+    private int overValue;
+
     public String getName() {
         return name;
     }
@@ -28,6 +31,16 @@ public class AttributeItem {
 
     public AttributeItem setValue(int value) {
         this.value = value;
+        setOverValue(value);
+        return this;
+    }
+
+    public int getOverValue() {
+        return overValue;
+    }
+
+    public AttributeItem setOverValue(int overValue) {
+        this.overValue = overValue;
         return this;
     }
 }

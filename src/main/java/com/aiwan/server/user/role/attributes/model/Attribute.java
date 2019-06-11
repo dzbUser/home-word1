@@ -59,6 +59,8 @@ public class Attribute {
     }
 
     public Map<String, AttributeItem> getAttributeItemMap() {
+        //暂用
+        attributeItemMap.get("攻击力").setOverValue(attributeItemMap.get("攻击力").getValue()+attributeItemMap.get("攻击力").getValue()*attributeItemMap.get("攻击加成").getValue()/100);
         return attributeItemMap;
     }
 

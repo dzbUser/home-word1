@@ -1,5 +1,6 @@
 package com.aiwan.server.netty;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.util.ObjectToBytes;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -42,7 +43,7 @@ public class Decoder extends ByteToMessageDecoder implements Serializable {
                 byteBuf.readBytes(data);
                 decodeData.setType(type);
                 decodeData.setLength(length);
-                decodeData.setData(data);
+                decodeData.setObject(ObjectToBytes.restore(data));
                 list.add(decodeData);
             }
         }

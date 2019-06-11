@@ -9,6 +9,7 @@ import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.user.role.equipment.model.EquipmentElement;
 import com.aiwan.server.user.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
+import com.aiwan.server.user.role.equipment.protocol.SM_EquipmentMessage;
 import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.util.GetBean;
@@ -19,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**

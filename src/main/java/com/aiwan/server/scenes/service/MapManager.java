@@ -1,8 +1,6 @@
 package com.aiwan.server.scenes.service;
 
 import com.aiwan.server.scenes.mapresource.MapResource;
-//import com.aiwan.server.scenes.mapresource.PositionMeaning;
-//import com.aiwan.server.user.account.entity.User;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.user.account.model.User;
 import org.springframework.stereotype.Component;
@@ -17,10 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * */
 @Component("mapManager")
 public class MapManager {
-    //存地图
+    /** 地图资源 */
     private Map<Integer, MapResource> mapResourceMap = new ConcurrentHashMap<>();
 
-    //获取地图
+    /** 获取地图 */
     public MapResource getMapResource(Integer mapType){
         return mapResourceMap.get(mapType);
     }
@@ -33,24 +31,27 @@ public class MapManager {
      * */
     public void init(){
         for (Map.Entry<Integer,MapResource> entry:mapResourceMap.entrySet()){
-            userMap.put(entry.getKey(),new ConcurrentHashMap<String, User>());
+            userMap.put(entry.getKey(),new ConcurrentHashMap<String, User>(36));
         }
     }
-    //存入地图资源
+
+    /**  存入地图资源*/
     public void putMapResource(MapResource mapResource){
 
         mapResourceMap.put(mapResource.getMapType(),mapResource);
     }
 
-    //添加用户
+    /** 添加用户 */
     public void putUser(User user){
         userMap.get(user.getMap()).put(user.getAcountId(),user);
     }
-    //获取用户
+
+    /** 获取用户 */
     public User getUser(Integer mapType,String username){
         return userMap.get(mapType).get(username);
     }
-    //删除用户
+
+    /** 删除用户 */
     public void removeUser(Integer mapType,String username){
         userMap.get(mapType).remove(username);
     }
@@ -71,7 +72,8 @@ public class MapManager {
                 userflag[i][j] =0;
             }
         }
-        //添加用户标志
+
+        /** 添加用户标志 */
         for (Map.Entry<String, User> entry : userMap.get(mapType).entrySet()) {
             User  user  = entry.getValue();
             userflag[user.getCurrentX()-1][user.getCurrentY()-1] = 1;
@@ -79,10 +81,13 @@ public class MapManager {
 
         for (int i = 0;i < mapResource.getHeight();i++){
             for (int j = 0;j < mapResource.getWidth();j++){
-                if (userflag[i][j] == 1)
+                if (userflag[i][j] == 1) {
                     stringBuilder.append("用户 ");
-                else
+                }
+
+                else{
                     stringBuilder.append(mapResource.getMapMessage()[i][j]+" ");
+                }
             }
             stringBuilder.append("\n");
         }
@@ -93,7 +98,9 @@ public class MapManager {
     public boolean allowMove(int x,int y,int mapType){
         MapResource mapResource = mapResourceMap.get(mapType);
         if (x>mapResource.getHeight()||y>mapResource.getWidth())
+        {
             return false;
+        }
         Map<Integer, PositionMeaning> map = mapResource.getPositionMeaningHashMap();
         if (mapResource.getPositionMeaningHashMap().get(mapResource.getMap()[x-1][y-1]).getAllowMove() == 1){
             return true;
@@ -101,8 +108,5 @@ public class MapManager {
         return false;
     }
 
-    public Map<String,User> getUserMapByMapType(Integer mapType){
-        return userMap.get(mapType);
-    }
 
 }

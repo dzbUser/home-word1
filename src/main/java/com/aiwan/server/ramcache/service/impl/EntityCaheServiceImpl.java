@@ -15,6 +15,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * 缓存业务类
+ * @author dengzebiao
+ * */
 public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T extends IEntity<PK>> implements EntityCacheService<PK,T> {
     private static final Logger logger = LoggerFactory.getLogger(EntityCaheServiceImpl.class);
     /**  初始化标志*/
@@ -81,11 +85,6 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
         entity.serialize();
         Element element = new Element(EventType.SAVE,id,entity,entityClz);
         persister.put(element);
-//        //重新加入缓存,删除缓存
-//        if (cacheMap.get(id)!=null){
-//            cacheMap.remove(id);
-//            num--;
-//        }
     }
 
     @Override
@@ -104,10 +103,6 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
 
     }
 
-//    @Override
-//    public PK create(T entity) {
-//        return null;
-//    }
 
     public boolean isInitailzation() {
         return initailzation;

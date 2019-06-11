@@ -7,9 +7,6 @@ import java.lang.annotation.*;
  * */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-//@Documented
-//@Component
-//@Scope("prototype")
 public @interface CellMapping {
     String name();
 }

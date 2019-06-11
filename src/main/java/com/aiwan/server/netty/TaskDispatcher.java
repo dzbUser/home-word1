@@ -24,9 +24,9 @@ public class TaskDispatcher {
     private static Logger logger = LoggerFactory.getLogger(TaskDispatcher.class);
 
 
-    //任务分配
+    /** 人物分配 */
     public void dispatcherTask(DecodeData decodeData, final Channel channel){
-        //获取协议对应的方法
+
         final Method method = ReflectionManager.getMethod(ReflectionManager.getProtocolClass(decodeData.getType()));
 
         //获取方法对应的bean
@@ -38,7 +38,7 @@ public class TaskDispatcher {
         final Session session = SessionManager.getSessionByHashCode(channel.hashCode());
         /** 用户已登录 */
         if (session.getUser()!=null){
-            ThreadPoolManager.excuteUserThread(session.getUser().getAcountId(), new Runnable() {
+            ThreadPoolManager.executeUserThread(session.getUser().getAcountId(), new Runnable() {
                 @Override
                 public void run() {
                     ReflectionUtils.invokeMethod(method,bean,obj,session);

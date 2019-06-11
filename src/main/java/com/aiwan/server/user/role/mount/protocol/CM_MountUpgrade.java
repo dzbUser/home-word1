@@ -1,4 +1,4 @@
-package com.aiwan.server.prop.protocol;
+package com.aiwan.server.user.role.mount.protocol;
 
 import com.aiwan.server.publicsystem.annotation.ProtocolAnnotation;
 import com.aiwan.server.util.Protocol;
@@ -6,25 +6,23 @@ import com.aiwan.server.util.Protocol;
 import java.io.Serializable;
 
 /**
- * 道具使用
  * @author dengzebiao
+ * @since 2019.6.11
+ * 使用坐骑升阶丹
  * */
-@ProtocolAnnotation(protocol = Protocol.PROPUSER)
-public class CM_PropUse implements Serializable {
-    /** 用户id */
+@ProtocolAnnotation(protocol = Protocol.MOUNTUPGRADE)
+public class CM_MountUpgrade implements Serializable {
+    /** 用户账号 */
     private String accountId;
 
     /** 角色id */
     private Long rId;
 
-    /** 道具id */
-    private int pId;
-
     public String getAccountId() {
         return accountId;
     }
 
-    public CM_PropUse setAccountId(String accountId) {
+    public CM_MountUpgrade setAccountId(String accountId) {
         this.accountId = accountId;
         return this;
     }
@@ -33,17 +31,8 @@ public class CM_PropUse implements Serializable {
         return rId;
     }
 
-    public CM_PropUse setrId(Long rId) {
+    public CM_MountUpgrade setrId(Long rId) {
         this.rId = rId;
-        return this;
-    }
-
-    public int getpId() {
-        return pId;
-    }
-
-    public CM_PropUse setpId(int pId) {
-        this.pId = pId;
         return this;
     }
 }

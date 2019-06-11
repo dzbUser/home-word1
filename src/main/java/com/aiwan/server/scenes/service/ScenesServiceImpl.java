@@ -36,7 +36,7 @@ public class ScenesServiceImpl implements ScenesService{
      * 角色的移动
      * */
     @Override
-    public void move(Session session, CM_Move cm_move) {
+    public void move(final CM_Move cm_move, final Session session) {
         Object data;
         int type ;
         User user = session.getUser();
@@ -61,7 +61,7 @@ public class ScenesServiceImpl implements ScenesService{
      * 地图跳转
      * */
     @Override
-    public void shift(Session session,CM_Shift cm_shift) {
+    public void shift(final CM_Shift cm_shift, final Session session) {
         User user = session.getUser();
         //从旧地图中去除
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());

@@ -15,5 +15,5 @@ import java.lang.annotation.*;
 @Component
 @Scope("prototype")
 public @interface Cache {
-    public int maxmum()default 0;
+    int maxmum()default 0;
 }

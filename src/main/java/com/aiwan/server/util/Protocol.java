@@ -59,4 +59,6 @@ public class Protocol {
     public final static int VIEWMOUNT = 26;
     //查看用户属性
     public final static int VIEWATTRIBUTES = 27;
+    //使用坐骑升阶丹
+    public final static int MOUNTUPGRADE = 28;
 }

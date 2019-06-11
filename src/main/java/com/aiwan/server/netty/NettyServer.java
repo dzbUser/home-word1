@@ -36,14 +36,14 @@ public class NettyServer {
                             throws Exception {
                         logger.debug("initChannel ch:" + ch);
                         ch.pipeline()
-                                .addLast("decoder", new Decoder())   // 1
-                                .addLast("encoder", new Encoder())  // 2
+                                .addLast("decoder", new Decoder())
+                                .addLast("encoder", new Encoder())
                                 .addLast(new IdleStateHandler(30,0,0, TimeUnit.SECONDS))
                                 .addLast(new MyServerHandler())
-                                .addLast("handler", new Handler());// 4
+                                .addLast("handler", new Handler());
                     }
                 })
-                .option(ChannelOption.SO_BACKLOG, 128) // determining the number of connections queued
+                .option(ChannelOption.SO_BACKLOG, 128)
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
 
         b.bind(port).sync();

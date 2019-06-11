@@ -8,6 +8,7 @@ import java.util.List;
  * */
 public class
 UserBaseInfo {
+    /** 角色id集合 */
     private List<Long> roles;
 
     public List<Long> getRoles() {

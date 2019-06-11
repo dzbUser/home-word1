@@ -1,7 +1,10 @@
 package com.aiwan.server.publicsystem.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.aiwan.server.publicsystem.Initialization.MapInitialization;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.*;
 
 /**
@@ -9,6 +12,8 @@ import java.util.concurrent.*;
  * 线程池管理
  * */
 public class ThreadPoolManager {
+    private static final Logger logger = LoggerFactory.getLogger(ThreadPoolManager.class);
+
     /** 用户线程池 */
     private static ExecutorService[] userThreadArray;
     
@@ -19,6 +24,7 @@ public class ThreadPoolManager {
     /** 其他线程大小 */
     private static int otherPoolSize;
 
+    /** 线程池初始化 */
     public static void initialize(){
 
         /*
@@ -31,22 +37,27 @@ public class ThreadPoolManager {
         otherPoolSize = Runtime.getRuntime().availableProcessors() * 2 * 2 / 10;
         otherPoolSize = (otherPoolSize <=0)? 1:otherPoolSize;
         userThreadArray = new ExecutorService[userPoolSize];
+        logger.debug("创建用户线程数："+userPoolSize);
+        logger.debug("创建其他线程数："+otherPoolSize);
         //用户线程池初始化
         for (int i = 0;i<userPoolSize;i++){
+            //线程命名
+            ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("userThread-pool-"+i).build();
             RejectedExecutionHandler policy = new ThreadPoolExecutor.DiscardPolicy();
             BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(512);
-            userThreadArray[i] = new ThreadPoolExecutor(1,1,0, TimeUnit.SECONDS,queue,policy);
+            userThreadArray[i] = new ThreadPoolExecutor(1,1,0, TimeUnit.SECONDS,queue,nameThreadFactory,policy);
         }
 
         //其他线程池初始化
         RejectedExecutionHandler policy = new ThreadPoolExecutor.DiscardPolicy();
         BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(512);
-        otherThreadPool = new ThreadPoolExecutor(otherPoolSize,otherPoolSize,0, TimeUnit.SECONDS,queue,policy);
+        ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("otherThread-pool").build();
+        otherThreadPool = new ThreadPoolExecutor(otherPoolSize,otherPoolSize,0, TimeUnit.SECONDS,queue,nameThreadFactory,policy);
     }
 
 
     /** 根据账号交给某个线程 */
-    public static void excuteUserThread(String accountId,Runnable runnable){
+    public static void executeUserThread(String accountId, Runnable runnable){
         userThreadArray[getNum(accountId)].execute(runnable);
     }
 

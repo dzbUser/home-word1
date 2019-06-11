@@ -2,14 +2,18 @@ package com.aiwan.server.user.role.equipment.service.impl;
 
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.AttributeItem;
 import com.aiwan.server.user.role.attributes.model.AttributeModule;
+import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.user.role.equipment.model.EquipmentElement;
 import com.aiwan.server.user.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
 import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.SMToDecodeData;
+import com.aiwan.server.util.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +41,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     /**
-     *
+     *装备
      * */
     public int equip(String accountId, Long rId, int pid) {
         //获取装备栏
@@ -65,12 +69,12 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public String viewEquip(Long rId) {
+    public void viewEquip(CM_ViewEquipBar cm_viewEquipBar, Session session) {
         StringBuffer stringBuffer = new StringBuffer();
         /**
          * 获取装备栏，遍历装备栏
          * */
-        EquipmentModel equipmentModel = equipmentManager.load(rId);
+        EquipmentModel equipmentModel = equipmentManager.load(cm_viewEquipBar.getrId());
         Props prop;
         //获取装备栏数组
         EquipmentElement[] equipmentElements = equipmentModel.getEquipmentInfo().getEquipmentElements();
@@ -84,7 +88,7 @@ public class EquipmentServiceImpl implements EquipmentService {
                 stringBuffer.append(prop.getName()+"\n");
             }
         }
-        return stringBuffer.toString();
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,stringBuffer.toString()));
     }
 
 

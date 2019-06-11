@@ -16,7 +16,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * */
 public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
 
-//    Logger logger = LoggerFactory.getLogger(ClientHandler.class);
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DecodeData decodeData) throws Exception {
         Channel channel = ctx.channel();
@@ -81,7 +80,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<DecodeData> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if(null != cause) cause.printStackTrace();
-        if(null != ctx) ctx.close();
+        if(null != cause) {
+            cause.printStackTrace();
+        }
+        if(null != ctx){
+            ctx.close();
+        }
     }
 }

@@ -1,15 +1,25 @@
 package com.aiwan.server.user.role.mount.service.impl;
 
+import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.*;
 import com.aiwan.server.user.role.mount.model.MountModel;
+import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
+import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.SMToDecodeData;
+import com.aiwan.server.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * 坐骑业务类
+ * @author dengzebiao
+ * */
 @Service
 public class MountServiceImpl implements MountService {
     @Autowired
@@ -44,18 +54,18 @@ public class MountServiceImpl implements MountService {
         return 1;
     }
     @Override
-    public String viewMount(Long rId) {
+    public void viewMount(CM_ViewMount cm_viewMount, Session session) {
         StringBuffer stringBuffer =new StringBuffer();
         //获取坐骑模型
-        MountModel mountModel = mountManager.load(rId);
+        MountModel mountModel = mountManager.load(cm_viewMount.getrId());
         stringBuffer.append("坐骑名字："+GetBean.getRoleResourceManager().getMount(mountModel.getLevel())+" 坐骑阶级："+mountModel.getLevel()+" 坐骑经验："+mountModel.getExperience()
                 +"\n");
         //获取坐骑属性
-        AttributeModule attributeModule = getMountAttributes(rId);
+        AttributeModule attributeModule = getMountAttributes(cm_viewMount.getrId());
         for (Map.Entry<String,AttributeItem> entry:attributeModule.getAttributeItemMap().entrySet()){
             stringBuffer.append(entry.getKey()+":"+entry.getValue().getValue()+" ");
         }
-        return stringBuffer.toString();
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, stringBuffer.toString()));
     }
 
     @Override
@@ -72,6 +82,28 @@ public class MountServiceImpl implements MountService {
             attributeModule.putAttributeItem(attributeItem);
         }
         return attributeModule;
+    }
+
+    @Override
+    public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session) {
+        int status = GetBean.getBackpackService().deductionProp(cm_mountUpgrade.getAccountId(),2);
+        //获取道具类
+        Props props = GetBean.getPropsManager().getProps(2);
+        if (status == 0){
+            //背包没有升阶丹
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您背包中没有"+props.getName()));
+            return;
+        }
+        //增加经验
+        status = addExperience(cm_mountUpgrade.getrId(),1000);
+        if (status == 0){
+            //达到最高级
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的坐骑已经是最高级！"));
+            //返回道具
+            GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(),props,1);
+            return;
+        }
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"提升成功"));
     }
 
 

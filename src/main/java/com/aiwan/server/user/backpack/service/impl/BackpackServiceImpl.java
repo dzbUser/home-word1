@@ -1,5 +1,6 @@
 package com.aiwan.server.user.backpack.service.impl;
 
+import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.prop.service.PropsManager;
@@ -7,6 +8,7 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.PropUserManager;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.backpack.model.BackpackItem;
+import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.util.GetBean;
@@ -71,7 +73,7 @@ public class BackpackServiceImpl implements BackpackService {
     }
     /** 查看背包 */
     @Override
-    public String viewBackpack(String accountId) {
+    public void viewBackpack(CM_ViewBackpack cm_viewBackpack, Session session) {
 
         /*
         * 1.获取背包数据
@@ -80,8 +82,8 @@ public class BackpackServiceImpl implements BackpackService {
         * 4.若可以叠加直接输出
         * 5.若不可以，则一个一个输出道具名
         * */
-        logger.info("查看用户："+accountId+"的背包");
-        Backpack backpack = backPackManager.load(accountId);
+        logger.info("查看用户："+cm_viewBackpack.getAccountId()+"的背包");
+        Backpack backpack = backPackManager.load(cm_viewBackpack.getAccountId());
         StringBuffer message = new StringBuffer();
         //获取背包
         Map<Integer,BackpackItem> map = backpack.getBackpackEnt().getBackpackInfo().getBackpackItems();
@@ -110,50 +112,52 @@ public class BackpackServiceImpl implements BackpackService {
                 }
             }
         }
-        return message.toString();
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,message.toString()));
     }
 
     /** 道具使用 */
     @Override
-    public void propUse(String accountId, Long rId, int pId, Session session) {
+    public void propUse(CM_PropUse cm_propUser, Session session) {
+        Props props = GetBean.getPropsManager().getProps(cm_propUser.getpId());
+        logger.debug(cm_propUser.getAccountId()+"使用"+props.getName());
+        if (props.getUse() == 0){
+            //道具不可使用
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,props.getName()+"不可以使用"));
+            return;
+        }
+        //对应道具的使用
+        PropUserManager.getPropUse(props.getType()).propUse(cm_propUser.getAccountId(),cm_propUser.getrId(),cm_propUser.getpId(),session);
+    }
+
+    /** 扣除背包中的道具 */
+    @Override
+    public int deductionProp(String accountId, int pId) {
         /*
-        * 1.查看是否有该道具
-        * 2.若有该道具，道具数-1，若道具数0,移除该道具
-        * 3.调用道具使用
-        * 4.写回
+        * 1.背包中是否有该道具,若无返回0
+        * 2.背包道具减1，若减完为0，则从背包中消除该道具
         * */
         Props props = GetBean.getPropsManager().getProps(pId);
         //获取背包
         Backpack backpack = backPackManager.load(accountId);
         //获取背包项
         BackpackItem backpackItem = backpack.getBackpackItem(pId);
-        if (backpackItem == null ){
-            //道具数不对
+        if (backpackItem ==null){
+            //背包中没有该道具
             logger.error(accountId+"使用"+props.getName()+"失败！");
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您没有该道具"));
-        }else {
-            int num = backpackItem.getNum();
-            //道具数正确
-            int type = props.getType();
-            //道具使用,反射使用
-            int status = (int) ReflectionUtils.invokeMethod(PropUserManager.getMethod(type),GetBean.getPropService(),accountId,rId,pId,session);
-            logger.debug(accountId+"使用道具"+pId+"的状态："+status);
-            if (status == 1){
-                //使用成功
-                num--;
-            }
-            if (num == 0){
-                //道具用完
-                backpack.removeBackpackItem(pId);
-            }else {
-                //道具数
-                backpackItem.setNum(num);
-            }
-
-            //写回
-            backPackManager.writeBack(backpack);
+            return 0;
         }
-
+        int num = backpackItem.getNum();
+        num--;
+        if (num == 0){
+             //道具用完
+            backpack.removeBackpackItem(pId);
+        }else {
+            //道具数
+            backpackItem.setNum(num);
+        }
+    //写回
+        backPackManager.writeBack(backpack);
+        return 1;
     }
 
 

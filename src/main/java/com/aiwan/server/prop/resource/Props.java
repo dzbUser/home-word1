@@ -9,25 +9,29 @@ import com.aiwan.server.publicsystem.annotation.CellMapping;
  * */
 public class Props {
 
-    //id
+    /** 道具id */
     @CellMapping(name = "id")
     private int id;
 
-    //道具类型
+    /** 道具类型 */
     @CellMapping(name = "type")
     private int type;
 
-    //道具名字
+    /** 道具名字 */
     @CellMapping(name = "name")
     private String name;
 
-    //道具介绍
+    /** 道具介绍 */
     @CellMapping(name = "introduce")
     private String introduce;
 
-    //道具是否可叠加
+    /** 道具是否可叠加 */
     @CellMapping(name = "overlay")
     private int overlay;
+
+    /** 是否可以使用 */
+    @CellMapping(name = "use")
+    private int use;
 
     public int getId() {
         return id;
@@ -71,6 +75,15 @@ public class Props {
 
     public Props setOverlay(int overlay) {
         this.overlay = overlay;
+        return this;
+    }
+
+    public int getUse() {
+        return use;
+    }
+
+    public Props setUse(int use) {
+        this.use = use;
         return this;
     }
 }

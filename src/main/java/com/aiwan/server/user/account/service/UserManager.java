@@ -16,6 +16,10 @@ import java.util.ArrayList;
 public class UserManager {
     private EntityCaheServiceImpl<String, UserEnt> cache;
 
+    /**
+     * 获取用户
+     * @param 用户id
+     * */
     public User getUserByAccountId(String id){
         UserEnt userEnt = cache.load(id);
         if (userEnt == null){
@@ -37,6 +41,7 @@ public class UserManager {
      * 创建角色
      * */
     public void register(String acountId,String password,String hpassword,int map,int x,int y,int maxRole){
+        //初始化信息
         UserEnt userEnt = new UserEnt();
         userEnt.setAcountId(acountId);
         userEnt.setPassword(password);

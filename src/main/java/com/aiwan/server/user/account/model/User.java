@@ -7,6 +7,7 @@ import com.aiwan.server.user.account.entity.UserEnt;
  * 用户逻辑操作类
  * */
 public class User {
+    /** 用户实体类 */
     private UserEnt userEnt;
 
     public User(UserEnt userEnt){

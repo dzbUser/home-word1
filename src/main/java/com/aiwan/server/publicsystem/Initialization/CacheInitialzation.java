@@ -25,6 +25,7 @@ public class CacheInitialzation {
          * 3.若有EntityCacheService属性，若以创建则冲业务管理类中取出，注入
          * 4.若未创建，则创建缓存
          * */
+        logger.debug("开始加载缓存");
         ServiceManager serviceManager = new ServiceManager();
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~第一步~~~~~~~~~~~~~~~~~~~~~~~~~
         Map<String, Object> beansWithAnnotationMap = applicationContext.getBeansWithAnnotation(Service.class);

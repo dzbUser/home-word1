@@ -29,7 +29,7 @@ public class ServerStart {
         ThreadPoolManager.initialize();
         //道具资源初始化
         PropsInitialzation.init();
-        PropUserInitialization.initialization();
+        PropUseInitialization.initialization(applicationContext);
         //人物资源初始化
         RoleResourceInit.init();
         logger.debug("启动Netty服务器");

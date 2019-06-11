@@ -36,10 +36,11 @@ public class TimingPersister implements Persister{
 
     @Override
     public void put(Element element) {
-        if (element == null)
+        if (element == null){
             return;
+        }
         if (stop){
-
+            //空闲，还未做此功能
         }
         String id = element.getIdentity();
         elements.put(id,element);

@@ -2,9 +2,10 @@ package com.aiwan.server.user.role.player.entity;
 
 import com.aiwan.server.ramcache.IEntity;
 import com.aiwan.server.ramcache.anno.Cache;
-import com.aiwan.server.user.role.attributes.model.Attribute;
+import com.aiwan.server.user.role.attributes.model.RoleAttribute;
 import com.aiwan.server.user.role.player.model.Role;
-import com.aiwan.server.util.GetBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 
@@ -16,6 +17,10 @@ import javax.persistence.*;
 @Entity()
 @Table(name = "role")
 public class RoleEnt implements IEntity<Long> {
+
+    @Transient
+    Logger logger = LoggerFactory.getLogger(RoleEnt.class);
+
     @Id
     @Column(nullable = false)
     private Long id;
@@ -44,7 +49,7 @@ public class RoleEnt implements IEntity<Long> {
 
     /** 人物属性 */
     @Transient
-    private Attribute attribute;
+    private RoleAttribute roleAttribute;
 
     @Transient
     private Role role;
@@ -66,13 +71,7 @@ public class RoleEnt implements IEntity<Long> {
 
     @Override
     public void init() {
-        attribute = new Attribute();
-        //初始化人物属性
-        attribute.putAttributeModule("role", GetBean.getRoleService().getBaseAttribute(getLevel()));
-        //初始化坐骑属性
-        attribute.putAttributeModule("mount",GetBean.getMountService().getMountAttributes(getId()));
-        //初始化装备时限
-        attribute.putAttributeModule("equip",GetBean.getEquipmentService().getEquipAttribute(getId()));
+        roleAttribute = new RoleAttribute(getId());
     }
 
     public void setId(Long id) {
@@ -145,12 +144,12 @@ public class RoleEnt implements IEntity<Long> {
         return this;
     }
 
-    public Attribute getAttribute() {
-        return attribute;
+    public RoleAttribute getAttribute() {
+        return roleAttribute;
     }
 
-    public RoleEnt setAttribute(Attribute attribute) {
-        this.attribute = attribute;
+    public RoleEnt setAttribute(RoleAttribute attribute) {
+        this.roleAttribute = attribute;
         return this;
     }
 }

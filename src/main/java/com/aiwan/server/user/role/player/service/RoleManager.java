@@ -1,13 +1,16 @@
 package com.aiwan.server.user.role.player.service;
 
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
-import com.aiwan.server.user.role.attributes.model.AttributeModule;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.AttributesModule;
 import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.IDUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -58,8 +61,8 @@ public class RoleManager {
     /**
      * 修改人物属性
      * */
-    public void setRoleAttribute(String name,AttributeModule attribute,Long rId){
+    public void setRoleAttribute(String name, Map<AttributeType, AttributeElement> map, Long rId){
         RoleEnt roleEnt = cache.load(rId);
-        roleEnt.getAttribute().putAttributeModule(name,attribute);
+        roleEnt.getAttribute().updateModule(AttributesModule.getType(name),map);
     }
 }

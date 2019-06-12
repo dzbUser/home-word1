@@ -20,10 +20,13 @@ public class ClientReceiveMap {
     private static Logger logger = LoggerFactory.getLogger(ClientReceiveMap.class);
 
     /** 协议编号与类的映射 */
-    private static Map<Method,Object> objectMap = new HashMap<>();
+    private static Map<Method,Object> objectMap = new HashMap<>(16);
 
     /** 协议编号与方法的映射 */
-    private static Map<Integer, Method> methodMap = new HashMap<>();
+    private static Map<Integer, Method> methodMap = new HashMap<>(16);
+
+    /** 协议号与协议类的映射 */
+    private static Map<Integer,Class<?>> classMap = new HashMap<>(16);
 
     /** 插入编号与类的映射 */
     public static void putObject(Method method,Object object){
@@ -45,6 +48,16 @@ public class ClientReceiveMap {
         return methodMap.get(status);
     }
 
+    /** 插入编号与协议类的映射 */
+    public static void putClass(int status,Class<?> clazz){
+        classMap.put(status,clazz);
+    }
+
+    /** 根据编号获取协议类 */
+    public static Class<?> getClass(int status){
+        return classMap.get(status);
+    }
+
     /** 初始化类 */
     public static void init(ClassPathXmlApplicationContext applicationContext){
         //获取自定义为协议类的类
@@ -63,6 +76,11 @@ public class ClientReceiveMap {
                     //存到映射中
                     putMethod(status,element);
                     putObject(element,entry.getValue());
+                    Class[] classes = element.getParameterTypes();
+                    if (classes.length>0){
+                        //储存参数类型与方法的映射
+                        putClass(status,classes[0]);
+                    }
                 }
             }
         }

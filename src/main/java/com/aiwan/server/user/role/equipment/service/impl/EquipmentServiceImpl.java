@@ -3,13 +3,12 @@ package com.aiwan.server.user.role.equipment.service.impl;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.role.attributes.model.AttributeItem;
-import com.aiwan.server.user.role.attributes.model.AttributeModule;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
 import com.aiwan.server.user.role.equipment.model.EquipmentElement;
 import com.aiwan.server.user.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
-import com.aiwan.server.user.role.equipment.protocol.SM_EquipmentMessage;
 import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.util.GetBean;
@@ -20,8 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -66,7 +64,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         equipmentManager.writeBack(equipmentModel);
 
         //修改人物属性
-        GetBean.getRoleService().putAttributeModule("equip", getEquipAttribute(rId),rId);
+        GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rId),rId);
         //返回装备id
         return oldId;
     }
@@ -94,10 +92,10 @@ public class EquipmentServiceImpl implements EquipmentService {
         session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,stringBuffer.toString()));
     }
 
-
     @Override
-    public AttributeModule getEquipAttribute(Long rId) {
-        AttributeModule attributeModule = new AttributeModule();
+    public Map<AttributeType, AttributeElement> getEquipAttributes(Long rId) {
+        //创建属性列表
+        Map<AttributeType, AttributeElement> elementHashMap = new HashMap<>();
         EquipmentModel equipmentModel = equipmentManager.load(rId);
         for (int i = 1;i<=equipmentModel.getLength();i++){
             //遍历所有装备
@@ -106,23 +104,25 @@ public class EquipmentServiceImpl implements EquipmentService {
                 //装备不为空
                 Equipment equipment = GetBean.getPropsManager().getEquipment(pid);
                 //获取装备属性映射
-                Map<String,Integer> map = equipment.getMap();
-                for (Map.Entry<String,Integer> entry:map.entrySet()) {
+                Map<Integer,Integer> map = equipment.getMap();
+                for (Map.Entry<Integer,Integer> entry:map.entrySet()) {
+                    //获取属性类型
+                    AttributeType attributeType = AttributeType.getType(entry.getKey());
                     //遍历所有属性
-                    AttributeItem attributeItem = attributeModule.getAttributeItem(entry.getKey());
-                    if (attributeItem == null) {
+                    AttributeElement attributeElement = elementHashMap.get(attributeType);
+                    if (attributeElement == null) {
                         //还未创建该类属性,添加该属性到模块中
-                        attributeItem = new AttributeItem();
-                        attributeItem.setName(entry.getKey());
-                        attributeItem.setValue(entry.getValue());
-                        attributeModule.putAttributeItem(attributeItem);
+                        attributeElement = AttributeElement.valueOf(attributeType,entry.getValue());
+                        elementHashMap.put(attributeType,attributeElement);
                     }else {
                         //已经存在该属性，则叠加
-                        attributeItem.setValue(entry.getValue()+attributeItem.getValue());
+                        attributeElement.setValue(entry.getValue()+attributeElement.getValue());
                     }
                 }
             }
         }
-        return attributeModule;
+
+        return elementHashMap;
     }
+
 }

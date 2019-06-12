@@ -61,4 +61,6 @@ public class Protocol {
     public final static int VIEWATTRIBUTES = 27;
     //使用坐骑升阶丹
     public final static int MOUNTUPGRADE = 28;
+    //心跳（测试）
+    public final static int HEARTNEW = 29;
 }

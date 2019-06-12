@@ -2,7 +2,8 @@ package com.aiwan.server.user.role.mount.service.impl;
 
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.role.attributes.model.*;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
 import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
@@ -14,6 +15,7 @@ import com.aiwan.server.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -50,7 +52,7 @@ public class MountServiceImpl implements MountService {
         mountManager.writeBack(mountModel);
 
         //更新人物属性
-        GetBean.getRoleService().putAttributeModule("mount",getMountAttributes(rId),rId);
+        GetBean.getRoleService().putAttributeModule("mount",getAttributes(rId),rId);
         return 1;
     }
     @Override
@@ -60,28 +62,7 @@ public class MountServiceImpl implements MountService {
         MountModel mountModel = mountManager.load(cm_viewMount.getrId());
         stringBuffer.append("坐骑名字："+GetBean.getRoleResourceManager().getMount(mountModel.getLevel())+" 坐骑阶级："+mountModel.getLevel()+" 坐骑经验："+mountModel.getExperience()
                 +"\n");
-        //获取坐骑属性
-        AttributeModule attributeModule = getMountAttributes(cm_viewMount.getrId());
-        for (Map.Entry<String,AttributeItem> entry:attributeModule.getAttributeItemMap().entrySet()){
-            stringBuffer.append(entry.getKey()+":"+entry.getValue().getValue()+" ");
-        }
         session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, stringBuffer.toString()));
-    }
-
-    @Override
-    public AttributeModule getMountAttributes(Long rId) {
-        MountModel mountModel = mountManager.load(rId);
-        AttributeModule attributeModule = new AttributeModule();
-        //获取人物基本属性
-        String[] mountAttribute = GetBean.getRoleResourceManager().getRoleResource().getMountAttributes();
-        for (String element:mountAttribute){
-            //遍历添加基本属性
-            AttributeItem attributeItem = new AttributeItem();
-            attributeItem.setName(element);
-            attributeItem.setValue(mountModel.getLevel()*5);
-            attributeModule.putAttributeItem(attributeItem);
-        }
-        return attributeModule;
     }
 
     @Override
@@ -111,4 +92,21 @@ public class MountServiceImpl implements MountService {
     private int getUpgradeRequest(int level){
         return (level+1)*500;
     }
+
+    /** 返回坐骑属性 */
+    @Override
+    public Map<AttributeType, AttributeElement> getAttributes(Long rId) {
+        //获取坐骑
+        MountModel mountModel = mountManager.load(rId);
+        //获取坐骑属性项
+        int[] mountAttribute = GetBean.getRoleResourceManager().getRoleResource().getMountAttributes();
+        //创建属性列表
+        Map<AttributeType, AttributeElement> map = new HashMap<>();
+        for (int i = 0;i< mountAttribute.length;i++){
+            AttributeElement attributeElement = AttributeElement.valueOf(AttributeType.getType(mountAttribute[i]),mountModel.getLevel()*10);
+            map.put(attributeElement.getAttributeType(),attributeElement);
+        }
+        return map;
+    }
+
 }

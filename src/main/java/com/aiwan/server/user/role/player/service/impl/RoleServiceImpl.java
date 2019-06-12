@@ -3,8 +3,8 @@ package com.aiwan.server.user.role.player.service.impl;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.user.role.attributes.model.AttributeItem;
-import com.aiwan.server.user.role.attributes.model.AttributeModule;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
@@ -20,6 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 角色业务类
@@ -97,7 +100,7 @@ public class RoleServiceImpl implements RoleService {
         roleManager.sava(role);
 
         //更新人物属性
-        putAttributeModule("role", getBaseAttribute(level),rId);
+        putAttributeModule("role", getAttributes(rId),rId);
         return 1;
     }
 
@@ -114,24 +117,26 @@ public class RoleServiceImpl implements RoleService {
         return id;
     }
 
+    /** 返回角色属性 */
     @Override
-    public AttributeModule getBaseAttribute(int level) {
-        AttributeModule attributeModule = new AttributeModule();
-        //获取人物基本属性
-        String[] roleAttribute = GetBean.getRoleResourceManager().getRoleResource().getRoleAttributes();
-        for (String element:roleAttribute){
-            //遍历添加基本属性
-            AttributeItem attributeItem = new AttributeItem();
-            attributeItem.setName(element);
-            attributeItem.setValue(level*3);
-            attributeModule.putAttributeItem(attributeItem);
+    public Map<AttributeType, AttributeElement> getAttributes(Long rId) {
+        //获取角色
+        Role role = roleManager.load(rId);
+        //获取人物属性项
+        int[] roleAttribute = GetBean.getRoleResourceManager().getRoleResource().getRoleAttributes();
+        //创建属性列表
+        Map<AttributeType, AttributeElement> map = new HashMap<>();
+        for (int i = 0;i< roleAttribute.length;i++){
+            AttributeElement attributeElement = AttributeElement.valueOf(AttributeType.getType(roleAttribute[i]),role.getLevel()*3);
+            map.put(attributeElement.getAttributeType(),attributeElement);
         }
-        return attributeModule;
+        return map;
     }
 
     @Override
-    public void putAttributeModule(String name,AttributeModule attributeModule,Long rId) {
-        roleManager.setRoleAttribute(name,attributeModule,rId);
+    public void putAttributeModule(String name,Map<AttributeType, AttributeElement> map,Long rId) {
+        roleManager.setRoleAttribute(name,map ,rId);
+
     }
 
     /**获取升级要求(暂用)*/

@@ -39,12 +39,12 @@ public class Equipment {
     @CellMapping(name = "attribute")
     private String attribute;
 
-    private Map<String,Integer> map = new HashMap<>();
+    private Map<Integer,Integer> map = new HashMap<>();
     public void init(){
         String[] attributeString = attribute.split(" ");
         for (String element:attributeString){
             String[] item = element.split(":");
-            map.put(item[0],Integer.parseInt(item[1]));
+            map.put(Integer.parseInt(item[0]),Integer.parseInt(item[1]));
         }
     }
 
@@ -111,11 +111,11 @@ public class Equipment {
         return this;
     }
 
-    public Map<String, Integer> getMap() {
+    public Map<Integer, Integer> getMap() {
         return map;
     }
 
-    public Equipment setMap(Map<String, Integer> map) {
+    public Equipment setMap(Map<Integer, Integer> map) {
         this.map = map;
         return this;
     }

@@ -1,8 +1,11 @@
 package com.aiwan.server.user.role.equipment.service;
 
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.role.attributes.model.AttributeModule;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
+
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -21,6 +24,6 @@ public interface EquipmentService {
     void viewEquip(CM_ViewEquipBar cm_viewEquipBar, Session session);
 
 
-    /** 获取装备属性(new) */
-    AttributeModule getEquipAttribute(Long rId);
+    /** 获取装备属性 */
+    Map<AttributeType, AttributeElement> getEquipAttributes(Long rId);
 }

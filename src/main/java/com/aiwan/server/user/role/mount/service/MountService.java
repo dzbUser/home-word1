@@ -1,9 +1,12 @@
 package com.aiwan.server.user.role.mount.service;
 
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.role.attributes.model.AttributeModule;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
 import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
+
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -12,17 +15,17 @@ import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
  * */
 public interface MountService {
     /** 创建坐骑 */
-    public void createMount(Long rId);
+    void createMount(Long rId);
 
     /** 经验增加 */
-    public int addExperience(Long rId,int experienceNum);
+    int addExperience(Long rId,int experienceNum);
 
     /** 查看坐骑 */
-    public void viewMount(CM_ViewMount cm_viewMount, Session session);
-
-    /** 获取坐骑属性 */
-    AttributeModule getMountAttributes(Long rId);
+    void viewMount(CM_ViewMount cm_viewMount, Session session);
 
     /** 坐骑升阶丹 */
-    public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session);
+    void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session);
+
+    /** 获取坐骑属性 */
+    Map<AttributeType, AttributeElement> getAttributes(Long rId);
 }

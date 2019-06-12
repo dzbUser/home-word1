@@ -56,18 +56,27 @@ public class RoleResource {
     private Map<Integer,String> mountNames = new HashMap<>();
 
     /** 人物属性转换数组 */
-    private String[] roleAttributes;
+    private int[] roleAttributes;
 
     /** 坐骑属性转换数组 */
-    private String[] mountAttributes;
+    private int[] mountAttributes;
 
     /** 初始化 */
     public void init(){
         //初始化
         initSex();initEquip();initJob();initMount();
-        //初始化属性
-        roleAttributes = roleAttribute.split(" ");
-        mountAttributes = mountAttribute.split(" ");
+        //初始化人物属性项
+        String[] role = roleAttribute.split(" ");
+        roleAttributes = new int[role.length];
+        for (int i = 0;i<role.length;i++){
+            roleAttributes[i] = Integer.parseInt(role[i]);
+        }
+        //初始化坐骑属性项
+        String[] mount = mountAttribute.split(" ");
+        mountAttributes = new int[mount.length];
+        for (int i = 0;i<role.length;i++){
+            mountAttributes[i] = Integer.parseInt(mount[i]);
+        }
     }
 
     /** 职业初始化 */
@@ -196,20 +205,38 @@ public class RoleResource {
         return this;
     }
 
-    public String[] getRoleAttributes() {
+    public String getRoleAttribute() {
+        return roleAttribute;
+    }
+
+    public RoleResource setRoleAttribute(String roleAttribute) {
+        this.roleAttribute = roleAttribute;
+        return this;
+    }
+
+    public String getMountAttribute() {
+        return mountAttribute;
+    }
+
+    public RoleResource setMountAttribute(String mountAttribute) {
+        this.mountAttribute = mountAttribute;
+        return this;
+    }
+
+    public int[] getRoleAttributes() {
         return roleAttributes;
     }
 
-    public RoleResource setRoleAttributes(String[] roleAttributes) {
+    public RoleResource setRoleAttributes(int[] roleAttributes) {
         this.roleAttributes = roleAttributes;
         return this;
     }
 
-    public String[] getMountAttributes() {
+    public int[] getMountAttributes() {
         return mountAttributes;
     }
 
-    public RoleResource setMountAttributes(String[] mountAttributes) {
+    public RoleResource setMountAttributes(int[] mountAttributes) {
         this.mountAttributes = mountAttributes;
         return this;
     }

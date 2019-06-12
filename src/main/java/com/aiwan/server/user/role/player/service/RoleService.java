@@ -1,9 +1,12 @@
 package com.aiwan.server.user.role.player.service;
 
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.role.attributes.model.AttributeModule;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.user.account.protocol.CM_CreateRole;
+
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -25,13 +28,10 @@ public interface RoleService {
 
     /** 装备装备 */
     int equip(String accountId,Long rId,int pId);
-//
-//    /** 获取人物属性 */
-//    String getRoleAttribute(Long rId);
-
-    /** 获取基本人物属性（新）*/
-    AttributeModule getBaseAttribute(int level);
 
     /** 修改人物属性 */
-    void putAttributeModule(String name,AttributeModule attributeModule,Long rId);
+    void putAttributeModule(String name,Map<AttributeType, AttributeElement> map,Long rId);
+
+    /** 返回角色属性 */
+    Map<AttributeType, AttributeElement> getAttributes(Long rId);
 }

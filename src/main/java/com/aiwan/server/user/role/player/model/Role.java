@@ -1,7 +1,8 @@
 package com.aiwan.server.user.role.player.model;
 
-import com.aiwan.server.user.role.attributes.model.Attribute;
-import com.aiwan.server.user.role.attributes.model.AttributeItem;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.RoleAttribute;
 import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.util.GetBean;
 
@@ -93,9 +94,11 @@ public class Role {
         buffer.append(" 等级："+roleEnt.getLevel());
         buffer.append(" 经验值："+roleEnt.getExperience());
         buffer.append(" 升级所需经验："+getUpgradeRequest()+"\n");
+
+        Map <AttributeType, AttributeElement> map = roleEnt.getAttribute().getFinalAttribute();
         //~~~~~~~~~~~~~~~~~~~~~~~新~~~~~~~~~~~~~~~~~~
-        for (Map.Entry<String, AttributeItem> entry:roleEnt.getAttribute().getAttributeItemMap().entrySet()){
-            buffer.append(entry.getKey() + ":" + entry.getValue().getOverValue() + " ");
+        for (Map.Entry<AttributeType, AttributeElement> entry:roleEnt.getAttribute().getFinalAttribute().entrySet()){
+            buffer.append(entry.getValue().toString()+" ");
         }
         buffer.append("\n");
         return buffer.toString();
@@ -106,11 +109,11 @@ public class Role {
         return (getLevel()+1)*50;
     }
 
-    public Attribute getAttribute() {
+    public RoleAttribute getAttribute() {
         return roleEnt.getAttribute();
     }
 
-    public void setAttribute(Attribute attribute) {
+    public void setAttribute(RoleAttribute attribute) {
         roleEnt.setAttribute(attribute);
     }
 

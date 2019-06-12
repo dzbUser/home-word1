@@ -4,13 +4,12 @@ import com.aiwan.client.clientservice.MountSystem;
 import com.aiwan.client.clientservice.PropSystem;
 import com.aiwan.client.clientservice.RoleService;
 import com.aiwan.client.handler.ClientInfoHandler;
-import com.aiwan.server.netty.Decoder;
-import com.aiwan.server.netty.Encoder;
+import com.aiwan.client.socket.ClientDecoder;
+import com.aiwan.client.socket.ClientEncoder;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.user.account.protocol.*;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
-import com.aiwan.server.util.ObjectToBytes;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 import io.netty.bootstrap.Bootstrap;
@@ -24,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ClientServer {
     private static Logger logger = LoggerFactory.getLogger(ClientServer.class);
@@ -38,8 +39,8 @@ public class ClientServer {
             bootstrap.handler(new ChannelInitializer<Channel>() {
                 @Override
                 protected void initChannel(Channel ch) throws Exception {
-                    ch.pipeline().addLast(new Decoder());
-                    ch.pipeline().addLast(new Encoder());
+                    ch.pipeline().addLast(new ClientDecoder());
+                    ch.pipeline().addLast(new ClientEncoder());
                     ch.pipeline().addLast(new ClientInfoHandler());
                 }
             });
@@ -230,17 +231,17 @@ public class ClientServer {
     //发送心跳
     public static void sendHear(final Channel channel){
         final DecodeData decodeData = new DecodeData();
+        decodeData.setType(Protocol.HEART);
+        decodeData.setObject("hear");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(20000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    decodeData.setType(Protocol.HEART);
-                    decodeData.setObject("heart");
                     channel.writeAndFlush(decodeData);
                 }
             }

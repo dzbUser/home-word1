@@ -1,4 +1,4 @@
-package com.aiwan.server.netty;
+package com.aiwan.client.socket;
 
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.util.JsonUtil;
@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
  * @author dengzebiao
  * 编码器
  * */
-public class Encoder extends MessageToByteEncoder<DecodeData> {
+public class ClientEncoder extends MessageToByteEncoder<DecodeData> {
 
-    Logger logger = LoggerFactory.getLogger(Encoder.class);
+    Logger logger = LoggerFactory.getLogger(ClientEncoder.class);
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, DecodeData decodeData, ByteBuf byteBuf) throws Exception {
         byteBuf.writeInt(decodeData.getType());

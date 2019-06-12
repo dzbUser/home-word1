@@ -6,9 +6,11 @@ import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.PropUserManager;
+import com.aiwan.server.user.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.backpack.model.BackpackItem;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
+import com.aiwan.server.user.backpack.protocol.SM_Package;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.util.GetBean;
@@ -88,31 +90,29 @@ public class BackpackServiceImpl implements BackpackService {
         //获取背包
         Map<Integer,BackpackItem> map = backpack.getBackpackEnt().getBackpackInfo().getBackpackItems();
         BackpackItem backpackItem;
-        if (map.size() == 0){
+        if (map.size() == 0) {
             //背包为空
             message.append("您的背包是空的！\n");
-        }else {
-            for (Map.Entry<Integer,BackpackItem> entry:map.entrySet()){
-                backpackItem = entry.getValue();
-                Props props = GetBean.getPropService().getProp(backpackItem.getId());
-                if (props.getOverlay() == 1){
-                    message.append("id:"+props.getId()+" 道具名:"+props.getName()+" 描述:"+props.getIntroduce()+" 数量:"+backpackItem.getNum()+"\n");
-                }else {
-                    for (int i = 0;i<backpackItem.getNum();i++){
-                        message.append("id:"+props.getId()+" 道具名:"+props.getName()+" 描述:"+props.getIntroduce());
-                        if (props.getType() == PropsManager.EQUIP){
-                            //是装备，加装备描述
-                            Equipment equipment = GetBean.getPropsManager().getEquipment(backpackItem.getId());
-                            message.append(" 攻击力"+equipment.getPower()+" 血量:"+equipment.getBlood()+" 攻击加成:"+equipment.getPowerBonus()+"%"+
-                                    " 等级要求："+equipment.getLevel()+"\n");
-                        }else {
-                            message.append("\n");
-                        }
-                    }
+        }
+        //创建背包返回类
+        SM_Package sm_package = new SM_Package();
+
+        //添加背包道具
+        for (Map.Entry<Integer,BackpackItem> entry:map.entrySet()){
+            Props props = GetBean.getPropsManager().getProps(entry.getValue().getId());
+            if (props.getOverlay() == 0){
+                //不可叠加
+                for (int i = 0;i<entry.getValue().getNum();i++){
+                    //叠加添加道具
+                    PropInfo propInfo = PropInfo.valueOf(entry.getValue().getId(),1);
+                    sm_package.putProp(propInfo);
                 }
+            }else {
+                PropInfo propInfo = PropInfo.valueOf(entry.getValue().getId(),entry.getValue().getNum());
+                sm_package.putProp(propInfo);
             }
         }
-        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,message.toString()));
+        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWPACKAGE,sm_package));
     }
 
     /** 道具使用 */

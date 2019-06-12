@@ -119,4 +119,12 @@ public class Equipment {
         this.map = map;
         return this;
     }
+
+    @Override
+    public String toString(){
+        return "攻击力:"+power+
+                " 血量:"+blood+
+                " 攻击加成:"+powerBonus+
+                " 等级要求:"+level;
+    }
 }

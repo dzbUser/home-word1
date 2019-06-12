@@ -86,4 +86,10 @@ public class Props {
         this.use = use;
         return this;
     }
+
+    @Override
+    public String toString(){
+        return "名字:"+name+
+                " 描述:"+introduce;
+    }
 }

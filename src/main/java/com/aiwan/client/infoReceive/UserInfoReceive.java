@@ -63,4 +63,10 @@ public class UserInfoReceive {
         LoginUser.setMapMessage(sm_shift.getMapMessage());
         System.out.println(sm_shift.getMapMessage());
     }
+
+    /** 被顶号 */
+    @InfoReceiveMethod(status = StatusCode.INSIST)
+    public void insit(String message){
+        logout(message);
+    }
 }

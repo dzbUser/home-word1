@@ -8,6 +8,8 @@ import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.StatusCode;
 
+import javax.swing.*;
+
 /**
  * 用户信息接收类
  * */
@@ -15,8 +17,13 @@ import com.aiwan.server.util.StatusCode;
 public class UserInfoReceive {
 
     /** 用户信息接收方法 */
-    @InfoReceiveMethod(status = StatusCode.LOGINSUCCESS)
+    @InfoReceiveMethod(status = StatusCode.LOGIN)
     public void userMessage(SM_UserMessage userMessage){
+        if (!userMessage.isStatus()){
+            //登录失败
+            System.out.println(userMessage.getOtherMessage());
+            return;
+        }
         LoginUser.setUsername (userMessage.getUsername());
         LoginUser.setCurrentX(userMessage.getCurrentX());
         LoginUser.setCurrentY(userMessage.getCurrentY());

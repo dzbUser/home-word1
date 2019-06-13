@@ -32,7 +32,7 @@ public class JsonUtil {
         try {
             return mapper.writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            logger.error("JsonProcessingException",e);
+            logger.error("对象转二进制:JsonProcessingException",e);
         }
         return null;
     }
@@ -45,7 +45,7 @@ public class JsonUtil {
         try {
             return mapper.readValue(bytes,clz);
         } catch (IOException e) {
-            logger.error("IOException",e);
+            logger.error("二进制转对象:JsonProcessingException",e);
         }
         return null;
     }

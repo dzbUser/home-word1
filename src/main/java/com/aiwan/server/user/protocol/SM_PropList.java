@@ -1,14 +1,16 @@
-package com.aiwan.server.user.backpack.protocol;
+package com.aiwan.server.user.protocol;
 
 import com.aiwan.server.user.Item.PropInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-/** 背包类 */
-public class SM_Package {
+/**
+ * @author dengzebiao
+ * @since 2019.9.17
+ * 道具查看类
+ * */
+public class SM_PropList {
 
     /** 道具id-》数量 */
     private List<PropInfo> list = new ArrayList<>(16);
@@ -23,7 +25,7 @@ public class SM_Package {
         return list;
     }
 
-    public SM_Package setList(List<PropInfo> list) {
+    public SM_PropList setList(List<PropInfo> list) {
         this.list = list;
         return this;
     }

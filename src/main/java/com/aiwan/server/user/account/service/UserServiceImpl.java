@@ -44,11 +44,14 @@ public class UserServiceImpl implements UserService {
         * 4.查看是否有角色，若无角色返回角色注册提醒
         * */
         DecodeData decodeData;
+        SM_UserMessage sm_userMessage = new SM_UserMessage();
         //~~~~~~~~~~第一步~``````
         Session session1 = SessionManager.getSessionByUsername(userMessage.getUsername());
         if (session1 !=null){
             logger.debug("您已经登录过了");
-            decodeData = SMToDecodeData.shift(StatusCode.LOGINFAIL,"用户已在线，若想顶替，请选择高级登录");
+            sm_userMessage.setStatus(false);
+            sm_userMessage.setOtherMessage("用户已在线，若想顶替，请选择高级登录");
+            decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
             session.messageSend(decodeData);
             return;
         }
@@ -57,8 +60,9 @@ public class UserServiceImpl implements UserService {
         //账号或者密码错误~~~~~~~第二步~~~~~~~~~
         if (user == null||!user.getPassword().equals(userMessage.getPassword())){
             logger.debug(userMessage.getUsername()+"登录失败");
-            String msg = new String("账号或者密码错误");
-            decodeData = SMToDecodeData.shift(StatusCode.LOGINFAIL,msg);
+            sm_userMessage.setStatus(false);
+            sm_userMessage.setOtherMessage("账号或者密码错误");
+            decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         }
         else {
             //~~~~~~~~~~~~第三步~~~~~~~~~~~~
@@ -71,7 +75,7 @@ public class UserServiceImpl implements UserService {
             //把用户添加到地图资源中
             GetBean.getMapManager().putUser(user);
 
-            SM_UserMessage sm_userMessage = new SM_UserMessage();
+
             //~~~~~~~~~~~第四步~~~~~~~~~~~~~
             if (user.getRoleNum() == 0){
                 sm_userMessage.setCreated(false);
@@ -81,9 +85,10 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setMap(user.getMap());
             sm_userMessage.setCurrentX(user.getCurrentX());
             sm_userMessage.setCurrentY(user.getCurrentY());
+            sm_userMessage.setStatus(true);
             sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
             sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
-            decodeData = SMToDecodeData.shift(StatusCode.LOGINSUCCESS,sm_userMessage);
+            decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         }
         session.messageSend(decodeData);
     }
@@ -186,7 +191,7 @@ public class UserServiceImpl implements UserService {
         sm_userMessage.setCurrentY(user.getCurrentY());
         sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
         sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
-        decodeData = SMToDecodeData.shift(StatusCode.LOGINSUCCESS,sm_userMessage);
+        decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         session.messageSend(decodeData);
     }
     /**

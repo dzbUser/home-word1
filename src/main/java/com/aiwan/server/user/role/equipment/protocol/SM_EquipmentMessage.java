@@ -35,7 +35,6 @@ public class SM_EquipmentMessage implements Serializable {
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
         for (Equipment equipment:list){
-            stringBuffer.append(GetBean.getRoleResourceManager().getEquip(equipment.getPosition())+":");
             Props prop = GetBean.getPropsManager().getProps(equipment.getId());
             stringBuffer.append(prop.getName()+"\n");
         }

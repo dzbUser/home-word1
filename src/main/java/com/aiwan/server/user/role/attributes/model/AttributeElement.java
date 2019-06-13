@@ -1,11 +1,13 @@
 package com.aiwan.server.user.role.attributes.model;
 
+import java.io.Serializable;
+
 /**
  * @author dengzebiao
  * @since 2019.6.12
  * 属性单元
  */
-public class AttributeElement {
+public class AttributeElement implements Serializable {
 
     /** 属性类型 */
     private AttributeType attributeType;

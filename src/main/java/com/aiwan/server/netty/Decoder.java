@@ -49,7 +49,7 @@ public class Decoder extends ByteToMessageDecoder implements Serializable {
                 decodeData.setLength(length);
                 if (type == Protocol.HEART){
                     //心跳包
-                    decodeData.setObject(JsonUtil.bytes2Object(data,new String().getClass()));
+                    decodeData.setObject(JsonUtil.bytes2Object(data,String.class));
                 }else {
                     if (ReflectionManager.getProtocolClass(type) == null){
                         //错误编码

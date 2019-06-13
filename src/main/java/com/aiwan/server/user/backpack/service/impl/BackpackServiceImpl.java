@@ -1,27 +1,23 @@
 package com.aiwan.server.user.backpack.service.impl;
 
 import com.aiwan.server.prop.protocol.CM_PropUse;
-import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
-import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.PropUserManager;
 import com.aiwan.server.user.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.backpack.model.BackpackItem;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
-import com.aiwan.server.user.backpack.protocol.SM_Package;
+import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
 import java.util.Map;
 
@@ -95,7 +91,7 @@ public class BackpackServiceImpl implements BackpackService {
             message.append("您的背包是空的！\n");
         }
         //创建背包返回类
-        SM_Package sm_package = new SM_Package();
+        SM_PropList sm_propList = new SM_PropList();
 
         //添加背包道具
         for (Map.Entry<Integer,BackpackItem> entry:map.entrySet()){
@@ -105,14 +101,14 @@ public class BackpackServiceImpl implements BackpackService {
                 for (int i = 0;i<entry.getValue().getNum();i++){
                     //叠加添加道具
                     PropInfo propInfo = PropInfo.valueOf(entry.getValue().getId(),1);
-                    sm_package.putProp(propInfo);
+                    sm_propList.putProp(propInfo);
                 }
             }else {
                 PropInfo propInfo = PropInfo.valueOf(entry.getValue().getId(),entry.getValue().getNum());
-                sm_package.putProp(propInfo);
+                sm_propList.putProp(propInfo);
             }
         }
-        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWPACKAGE,sm_package));
+        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWPROPLIST, sm_propList));
     }
 
     /** 道具使用 */

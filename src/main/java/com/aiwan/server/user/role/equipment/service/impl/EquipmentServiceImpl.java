@@ -3,6 +3,8 @@ package com.aiwan.server.user.role.equipment.service.impl;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.user.Item.PropInfo;
+import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
@@ -19,7 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -79,17 +83,16 @@ public class EquipmentServiceImpl implements EquipmentService {
         Props prop;
         //获取装备栏数组
         EquipmentElement[] equipmentElements = equipmentModel.getEquipmentInfo().getEquipmentElements();
+        //创建列表
+        List<PropInfo> list = new ArrayList<>();
         //遍历装备栏
         for (int i =1;i<equipmentElements.length;i++){
-            stringBuffer.append(GetBean.getRoleResourceManager().getEquip(equipmentElements[i].getPosition())+":");
-            if (equipmentElements[i] == null||equipmentElements[i].getId() == 0){
-                stringBuffer.append("无\n");
-            }else {
-                prop = GetBean.getPropsManager().getProps(equipmentElements[i].getId());
-                stringBuffer.append(prop.getName()+"\n");
-            }
+            PropInfo propInfo = PropInfo.valueOf(equipmentElements[i].getId(),1);
+            list.add(propInfo);
         }
-        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,stringBuffer.toString()));
+        SM_PropList sm_propList = new SM_PropList();
+        sm_propList.setList(list);
+        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWPROPLIST,sm_propList));
     }
 
     @Override

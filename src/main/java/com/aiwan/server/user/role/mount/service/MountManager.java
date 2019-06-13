@@ -1,11 +1,15 @@
 package com.aiwan.server.user.role.mount.service;
 
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.mount.entity.MountEntity;
 import com.aiwan.server.user.role.mount.model.MountModel;
+import com.aiwan.server.user.role.mount.resource.MountResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author dengzebiao
@@ -16,6 +20,9 @@ import org.springframework.stereotype.Service;
 public class MountManager {
     /** 坐骑缓存 */
     private EntityCaheServiceImpl<Long, MountEntity> cache;
+
+    /** 坐骑静态资源 */
+    private MountResource mountResource;
 
     Logger logger = LoggerFactory.getLogger(MountManager.class);
 
@@ -43,10 +50,19 @@ public class MountManager {
     }
 
     /**
-     * 创建装备栏
+     * 创建坐骑
      * */
     public void createMount(Long rId){
         MountEntity mountEntity = MountEntity.getInitValue(rId);
         cache.writeBack(mountEntity.getId(),mountEntity);
+    }
+
+    public MountResource getMountResource() {
+        return mountResource;
+    }
+
+    public MountManager setMountResource(MountResource mountResource) {
+        this.mountResource = mountResource;
+        return this;
     }
 }

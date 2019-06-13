@@ -30,6 +30,7 @@ public class ClientServer {
     private static Logger logger = LoggerFactory.getLogger(ClientServer.class);
     private static int port = 8001;
     private static String ip = "localhost";
+    private static Channel channel;
     public static Channel connect(){
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup worker = new NioEventLoopGroup();
@@ -48,6 +49,7 @@ public class ClientServer {
             Channel channel = channelFuture.channel();
             //发送心跳
             sendHear(channel);
+            ClientServer.channel = channel;
             //获取客户端屏幕的写入
             Scanner scanner = new Scanner(System.in);
             System.out.println("请输入1.登录 2.注册 3.注销  4.进入角色系统 5.角色移动 6.地图跳转 7.高级登录 8获取用户信息 9.退出游戏\n" +
@@ -254,5 +256,9 @@ public class ClientServer {
         cm_userMessage.setUsername(username);
         DecodeData decodeData = SMToDecodeData.shift(Protocol.USERMESSAGE,cm_userMessage);
         channel.writeAndFlush(decodeData);
+    }
+
+    public static void sendMessage(Object object){
+        ClientServer.channel.writeAndFlush(object);
     }
 }

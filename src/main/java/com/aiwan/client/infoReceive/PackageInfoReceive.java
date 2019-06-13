@@ -1,22 +1,18 @@
 package com.aiwan.client.infoReceive;
 
-import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
-import com.aiwan.client.service.ClientReceiveMap;
+import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.user.Item.PropInfo;
-import com.aiwan.server.user.backpack.protocol.SM_Package;
-import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
+import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.StatusCode;
-import org.hibernate.type.IntegerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author dengzebiao
@@ -32,16 +28,21 @@ public class PackageInfoReceive {
     private static Logger logger = LoggerFactory.getLogger(PackageInfoReceive.class);
 
     /** 创建角色有接收信息 */
-    @InfoReceiveMethod(status = StatusCode.VIEWPACKAGE)
-    public void viewPackage(SM_Package sm_package){
+    @InfoReceiveMethod(status = StatusCode.VIEWPROPLIST)
+    public void viewPackage(SM_PropList sm_propList){
         //输出道具
-        for (PropInfo propInfo:sm_package.getList()){
+        printPropByList(sm_propList.getList());
+    }
+
+    /** 根据list输出道具 */
+    public void printPropByList(List<PropInfo> list){
+        for (PropInfo propInfo:list){
             Props props = GetBean.getPropsManager().getProps(propInfo.getId());
             System.out.print(props.toString()+" ");
             if (props.getType() == EQUIP){
                 //是装备
                 Equipment equipment = GetBean.getPropsManager().getEquipment(propInfo.getId());
-                System.out.print(equipment.toString());
+                System.out.print("位置:"+ ClientResourseManager.getContent("equipPosition",equipment.getPosition()) +equipment.toString());
             }else {
                 System.out.print("数量:"+propInfo.getNum());
             }

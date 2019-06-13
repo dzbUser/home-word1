@@ -84,25 +84,6 @@ public class Role {
     }
 
 
-    /**
-     * 返回角色信息
-     * */
-    public String getRoleMessage(){
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("职业："+ GetBean.getRoleResourceManager().getJob(roleEnt.getJob()));
-        buffer.append(" 性别："+GetBean.getRoleResourceManager().getSex(roleEnt.getSex()));
-        buffer.append(" 等级："+roleEnt.getLevel());
-        buffer.append(" 经验值："+roleEnt.getExperience());
-        buffer.append(" 升级所需经验："+getUpgradeRequest()+"\n");
-
-        Map <AttributeType, AttributeElement> map = roleEnt.getAttribute().getFinalAttribute();
-        //~~~~~~~~~~~~~~~~~~~~~~~新~~~~~~~~~~~~~~~~~~
-        for (Map.Entry<AttributeType, AttributeElement> entry:roleEnt.getAttribute().getFinalAttribute().entrySet()){
-            buffer.append(entry.getValue().toString()+" ");
-        }
-        buffer.append("\n");
-        return buffer.toString();
-    }
 
     /** 升级所需经验 */
     public int getUpgradeRequest(){

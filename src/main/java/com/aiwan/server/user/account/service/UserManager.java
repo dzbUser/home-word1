@@ -18,7 +18,7 @@ public class UserManager {
 
     /**
      * 获取用户
-     * @param 用户id
+     * @param id
      * */
     public User getUserByAccountId(String id){
         UserEnt userEnt = cache.load(id);

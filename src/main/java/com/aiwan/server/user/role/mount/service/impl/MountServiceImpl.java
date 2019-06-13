@@ -7,8 +7,11 @@ import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
 import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
+import com.aiwan.server.user.role.mount.protocol.SM_ViewMount;
+import com.aiwan.server.user.role.mount.resource.MountResource;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
+import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +41,7 @@ public class MountServiceImpl implements MountService {
         //获取等级，计算升阶经验，循环升阶
         MountModel mountModel = mountManager.load(rId);
         int level = mountModel.getLevel();
-        if (level >= GetBean.getRoleResourceManager().getMaxMountLevel()){
+        if (level >= mountManager.getMountResource().getMaxLevel()){
             //以达到最高等级
             return 0;
         }
@@ -60,9 +64,9 @@ public class MountServiceImpl implements MountService {
         StringBuffer stringBuffer =new StringBuffer();
         //获取坐骑模型
         MountModel mountModel = mountManager.load(cm_viewMount.getrId());
-        stringBuffer.append("坐骑名字："+GetBean.getRoleResourceManager().getMount(mountModel.getLevel())+" 坐骑阶级："+mountModel.getLevel()+" 坐骑经验："+mountModel.getExperience()
-                +"\n");
-        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, stringBuffer.toString()));
+        //创建坐骑返回数据
+        SM_ViewMount sm_viewMount = SM_ViewMount.valueOf(mountModel.getLevel(),mountModel.getExperience(),getUpgradeRequest(mountModel.getLevel()),getAttributes(cm_viewMount.getrId()));
+        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWMOUNT, sm_viewMount));
     }
 
     @Override
@@ -98,15 +102,12 @@ public class MountServiceImpl implements MountService {
     public Map<AttributeType, AttributeElement> getAttributes(Long rId) {
         //获取坐骑
         MountModel mountModel = mountManager.load(rId);
-        //获取坐骑属性项
-        int[] mountAttribute = GetBean.getRoleResourceManager().getRoleResource().getMountAttributes();
+        //获取坐骑初始化属性
+        List<AttributeElement> list = mountManager.getMountResource().getList();
         //创建属性列表
-        Map<AttributeType, AttributeElement> map = new HashMap<>();
-        for (int i = 0;i< mountAttribute.length;i++){
-            AttributeElement attributeElement = AttributeElement.valueOf(AttributeType.getType(mountAttribute[i]),mountModel.getLevel()*10);
-            map.put(attributeElement.getAttributeType(),attributeElement);
-        }
+        Map<AttributeType, AttributeElement> map = AttributeUtil.getMapAttributeWithLevel(list,mountModel.getLevel());
         return map;
     }
+
 
 }

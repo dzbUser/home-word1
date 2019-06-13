@@ -21,33 +21,11 @@ public class RoleResourceManager {
         return this;
     }
 
-    /** 获取对应职业 */
-    public String getJob(int job){
-        return roleResource.getJobs().get(job);
-    }
 
-    /** 获取对应性别 */
-    public String getSex(int sex){
-        return roleResource.getSexs().get(sex);
-    }
-
-    /** 获取对应装备名字 */
-    public String getEquip(int equip){
-        return roleResource.getEquipments().get(equip);
-    }
-
-    /** 获取对应坐骑名字 */
-    public String getMount(int mount){
-        return roleResource.getMountNames().get(mount);
-    }
 
     /** 获取人物最高等级 */
     public int getMaxlevel(){
         return roleResource.getMaxLevel();
     }
 
-    /** 获取坐骑最高等级 */
-    public int getMaxMountLevel(){
-        return roleResource.getMaxMountLevel();
-    }
 }

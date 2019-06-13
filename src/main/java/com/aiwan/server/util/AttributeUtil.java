@@ -3,6 +3,9 @@ package com.aiwan.server.util;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,5 +45,32 @@ public class AttributeUtil {
             rate += pureAttribute.get(type).getValue();
         }
         return value+rate*value/100;
+    }
+
+    /** 字符串转化为初始属性 */
+    public static List<AttributeElement> getAttributeInitByString(String attributeString){
+        List<AttributeElement> list = new ArrayList<>();
+        String[] attributeStrings = attributeString.split(" ");
+        for (String element:attributeStrings){
+            //遍历所有属性项
+            String[] strings = element.split(":");
+            AttributeType attributeType = AttributeType.getType(Integer.parseInt(strings[0]));
+            AttributeElement attributeElement = AttributeElement.valueOf(attributeType,Integer.parseInt(strings[1]));
+            list.add(attributeElement);
+        }
+        return list;
+    }
+
+    /** 把基础初始属性按照等级计算的最终属性
+     * value*level
+     * */
+    public static Map<AttributeType, AttributeElement> getMapAttributeWithLevel(List<AttributeElement> list,int level){
+        Map<AttributeType, AttributeElement> map = new HashMap<>();
+        for (AttributeElement element:list){
+            //属性项垴村
+            AttributeElement attributeElement = AttributeElement.valueOf(element.getAttributeType(),element.getValue()*level);
+            map.put(attributeElement.getAttributeType(),attributeElement);
+        }
+        return map;
     }
 }

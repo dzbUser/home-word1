@@ -8,11 +8,13 @@ import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
+import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
 import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.CM_CreateRole;
 import com.aiwan.server.user.account.service.UserManager;
+import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
 import com.aiwan.server.util.SMToDecodeData;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,8 +75,9 @@ public class RoleServiceImpl implements RoleService {
         if (role == null){
             logger.error("角色id："+cm_roleMessage.getrId()+"为空");
         }
-        String message = role.getRoleMessage();
-        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,message);
+        SM_RoleMessage sm_roleMessage = SM_RoleMessage.valueOf(role.getJob(),role.getSex(),role.getLevel(),role.getExperience(),getUpgradeRequest(role.getLevel()),role.getAttribute().getFinalAttribute());
+
+        DecodeData decodeData = SMToDecodeData.shift(StatusCode.VIEWROLEMESSAGE,sm_roleMessage);
         session.messageSend(decodeData);
     }
 
@@ -123,13 +127,9 @@ public class RoleServiceImpl implements RoleService {
         //获取角色
         Role role = roleManager.load(rId);
         //获取人物属性项
-        int[] roleAttribute = GetBean.getRoleResourceManager().getRoleResource().getRoleAttributes();
+        List<AttributeElement> list = GetBean.getRoleResourceManager().getRoleResource().getList();
         //创建属性列表
-        Map<AttributeType, AttributeElement> map = new HashMap<>();
-        for (int i = 0;i< roleAttribute.length;i++){
-            AttributeElement attributeElement = AttributeElement.valueOf(AttributeType.getType(roleAttribute[i]),role.getLevel()*3);
-            map.put(attributeElement.getAttributeType(),attributeElement);
-        }
+        Map<AttributeType, AttributeElement> map = AttributeUtil.getMapAttributeWithLevel(list,role.getLevel());
         return map;
     }
 

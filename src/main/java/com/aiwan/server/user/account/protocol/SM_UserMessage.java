@@ -8,6 +8,9 @@ import java.util.List;
  * @author dengzebiao
  * */
 public class SM_UserMessage implements Serializable {
+    /** 登录状态*/
+    private boolean status;
+    /** 用户账号 */
     private String username;
     private int map;
     private int currentX;
@@ -82,6 +85,15 @@ public class SM_UserMessage implements Serializable {
 
     public SM_UserMessage setRoles(List<Long> roles) {
         this.roles = roles;
+        return this;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public SM_UserMessage setStatus(boolean status) {
+        this.status = status;
         return this;
     }
 }

@@ -6,7 +6,7 @@ package com.aiwan.server.util;
  * */
 public class StatusCode {
     //登录成功
-    public final static int LOGINSUCCESS = 1;
+    public final static int LOGIN = 1;
     //登录失败
     public final static int LOGINFAIL = 2;
     //注销用户成功
@@ -19,12 +19,14 @@ public class StatusCode {
     public final static int SHIFTFAIL = 6;
     //顶替下线
     public final static int INSIST = 7;
-    //查看背包
-    public final static  int VIEWPACKAGE = 8;
-
+    //查看道具列表
+    public final static  int VIEWPROPLIST = 8;
     //创建角色成功
     public final static int CREATEROLESUCESS = 9;
-
     //Message;
     public final static int MESSAGE = 10;
+    /** 查看坐骑详细 */
+    public final static int VIEWMOUNT = 11;
+    /** 查看角色信息 */
+    public final static int VIEWROLEMESSAGE = 12;
 }

@@ -1,7 +1,5 @@
 package com.aiwan.server.user.Item;
 
-import com.aiwan.server.user.backpack.protocol.SM_Package;
-
 /**
  * @author dengzebiao
  * @since 2019.6.12

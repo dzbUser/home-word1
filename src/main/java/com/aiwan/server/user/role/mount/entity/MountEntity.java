@@ -33,7 +33,7 @@ public class MountEntity implements IEntity<Long> {
     /** 创建对象 */
     public static MountEntity getInitValue(Long rId){
         MountEntity mountEntity = new MountEntity();
-        mountEntity.setLevel(0);
+        mountEntity.setLevel(1);
         mountEntity.setExperience(0);
         mountEntity.setId(rId);
         return mountEntity;

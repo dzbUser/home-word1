@@ -8,7 +8,6 @@ import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
 import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.user.role.mount.protocol.SM_ViewMount;
-import com.aiwan.server.user.role.mount.resource.MountResource;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.util.AttributeUtil;
@@ -17,8 +16,6 @@ import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +56,7 @@ public class MountServiceImpl implements MountService {
         GetBean.getRoleService().putAttributeModule("mount",getAttributes(rId),rId);
         return 1;
     }
+
     @Override
     public void viewMount(CM_ViewMount cm_viewMount, Session session) {
         StringBuffer stringBuffer =new StringBuffer();

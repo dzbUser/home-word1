@@ -3,7 +3,7 @@ package com.aiwan.server.user.role.equipment.service;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
+import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
 
 import java.util.Map;
 

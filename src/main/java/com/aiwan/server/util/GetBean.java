@@ -8,7 +8,7 @@ import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.user.role.player.service.RoleService;
-import com.aiwan.server.user.role.service.RoleResourceManager;
+import com.aiwan.server.user.role.player.service.impl.RoleResourceManager;
 import com.aiwan.server.scenes.service.MapManager;
 import com.aiwan.server.scenes.service.ScenesService;
 import com.aiwan.server.user.account.service.UserManager;

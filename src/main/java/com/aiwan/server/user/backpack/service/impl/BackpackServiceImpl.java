@@ -4,7 +4,7 @@ import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.PropUserManager;
-import com.aiwan.server.user.Item.PropInfo;
+import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.backpack.model.BackpackItem;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
@@ -85,7 +85,6 @@ public class BackpackServiceImpl implements BackpackService {
         StringBuffer message = new StringBuffer();
         //获取背包
         Map<Integer,BackpackItem> map = backpack.getBackpackEnt().getBackpackInfo().getBackpackItems();
-        BackpackItem backpackItem;
         if (map.size() == 0) {
             //背包为空
             message.append("您的背包是空的！\n");

@@ -1,12 +1,10 @@
-package com.aiwan.server.user.role.resource;
+package com.aiwan.server.user.role.player.resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.util.AttributeUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author dengzebiao

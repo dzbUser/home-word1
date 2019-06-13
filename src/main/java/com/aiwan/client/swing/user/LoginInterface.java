@@ -109,7 +109,7 @@ public class LoginInterface extends JFrame {
             System.out.println(userText.getText()+":"+passwordText.getText());
             CM_Login cm_login = new CM_Login();
             cm_login.setUsername(userText.getText());
-            cm_login.setPassword(passwordText.getText());
+            cm_login.setPassword(String.valueOf(passwordText.getPassword()));
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.LOGIN,cm_login));
         }
     }
@@ -126,7 +126,7 @@ public class LoginInterface extends JFrame {
     }
 
     /** 用户登录消息接收 */
-//    @InfoReceiveMethod(status = StatusCode.LOGIN)
+    @InfoReceiveMethod(status = StatusCode.LOGIN)
     public void userMessage(SM_UserMessage userMessage){
         if (!userMessage.isStatus()){
             //登录失败

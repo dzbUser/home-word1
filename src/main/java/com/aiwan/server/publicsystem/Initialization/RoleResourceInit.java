@@ -1,8 +1,8 @@
 package com.aiwan.server.publicsystem.Initialization;
 
 import com.aiwan.server.user.role.mount.resource.MountResource;
-import com.aiwan.server.user.role.resource.RoleResource;
-import com.aiwan.server.user.role.service.RoleResourceManager;
+import com.aiwan.server.user.role.player.resource.RoleResource;
+import com.aiwan.server.user.role.player.service.impl.RoleResourceManager;
 import com.aiwan.server.util.ExcelUtil;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class RoleResourceInit {
         List<RoleResource> roleList = null;
         List<MountResource> mountList = null;
         try {
-            //资源读取
+            //资源读取，角色资源以及坐骑资源
             roleList = ExcelUtil.analysisExcelFile(FILEPATH, RoleResource.class);
             mountList = ExcelUtil.analysisExcelFile(MOUNTFILEPATH, MountResource.class);
         } catch (IllegalAccessException e) {

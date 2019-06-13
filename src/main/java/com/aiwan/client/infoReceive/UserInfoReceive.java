@@ -5,6 +5,7 @@ import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.scenes.protocol.SM_Shift;
+import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.StatusCode;
 
@@ -75,5 +76,16 @@ public class UserInfoReceive {
     @InfoReceiveMethod(status = StatusCode.INSIST)
     public void insit(String message){
         logout(message);
+    }
+
+    /** 注册*/
+    @InfoReceiveMethod(status = StatusCode.REGISTER)
+    public void register(SM_Register sm_register){
+        if (sm_register.getStatus() == 1){
+            //注册成功
+            System.out.println(sm_register.getAccountId()+"注册成功");
+        }else {
+            System.out.println(sm_register.getAccountId()+"注册失败");
+        }
     }
 }

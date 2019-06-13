@@ -11,7 +11,9 @@ import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
  * */
 public interface PropService {
 
-    /** 获取道具 */
+    /** 获取道具
+     * @param id 道具id
+     * */
     Props getProp(int id);
 
     /** 生成道具到角色背包 */

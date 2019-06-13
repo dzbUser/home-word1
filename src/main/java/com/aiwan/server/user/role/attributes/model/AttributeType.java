@@ -1,6 +1,9 @@
 package com.aiwan.server.user.role.attributes.model;
 
+import com.aiwan.server.util.AttributeUtil;
+
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -13,6 +16,11 @@ public enum  AttributeType implements Serializable {
         @Override
         public AttributeType[] getBeEffectAttribute(){
             return new AttributeType[]{ATTACK_RATE};
+        }
+
+        @Override
+        public Long calculate(AttributeElement attributeElement, Map<AttributeType,AttributeElement> map){
+            return AttributeUtil.calculateItem(attributeElement,map);
         }
     },
 
@@ -84,6 +92,11 @@ public enum  AttributeType implements Serializable {
     public AttributeType setDesc(String desc) {
         this.desc = desc;
         return this;
+    }
+
+    /** 计算最终属性 */
+    public Long calculate(AttributeElement attributeElement, Map<AttributeType,AttributeElement> map){
+        return attributeElement.getValue();
     }
 
 }

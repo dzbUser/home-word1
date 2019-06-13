@@ -3,11 +3,11 @@ package com.aiwan.server.user.role.equipment.service.impl;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.Item.PropInfo;
+import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.equipment.CM_ViewEquipBar;
+import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
 import com.aiwan.server.user.role.equipment.model.EquipmentElement;
 import com.aiwan.server.user.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
@@ -75,7 +75,6 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public void viewEquip(CM_ViewEquipBar cm_viewEquipBar, Session session) {
-        StringBuffer stringBuffer = new StringBuffer();
         /**
          * 获取装备栏，遍历装备栏
          * */

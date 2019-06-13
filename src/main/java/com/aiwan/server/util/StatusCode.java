@@ -29,4 +29,6 @@ public class StatusCode {
     public final static int VIEWMOUNT = 11;
     /** 查看角色信息 */
     public final static int VIEWROLEMESSAGE = 12;
+    /** 注销返回协议码 */
+    public final static int REGISTER = 13;
 }

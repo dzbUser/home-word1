@@ -1,4 +1,4 @@
-package com.aiwan.server.user.Item;
+package com.aiwan.server.user.protocol.Item;
 
 /**
  * @author dengzebiao

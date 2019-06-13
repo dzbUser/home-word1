@@ -1,4 +1,4 @@
-package com.aiwan.server.user.role.equipment;
+package com.aiwan.server.user.role.equipment.protocol;
 
 import com.aiwan.server.publicsystem.annotation.ProtocolAnnotation;
 import com.aiwan.server.util.Protocol;

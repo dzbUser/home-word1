@@ -22,7 +22,7 @@ public class JsonUtil {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         // 如果json中有新增的字段并且是实体类类中不存在的，不报错
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
     }
 
     /**

@@ -18,7 +18,7 @@ public interface UserService {
     /**
      * 用户注册
      * */
-    void registUser(CM_Registered userMessage, Session session);
+    void registerUser(CM_Registered userMessage, Session session);
 
     /**
      * 用户注销

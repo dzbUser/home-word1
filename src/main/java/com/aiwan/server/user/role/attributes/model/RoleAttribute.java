@@ -45,7 +45,7 @@ public class RoleAttribute {
         //计算最终属性
         for (Map.Entry<AttributeType,AttributeElement> entry:pureAttribute.entrySet()){
             //获取最终属性值
-            long value = AttributeUtil.calculateItem(entry.getValue(),pureAttribute);
+            long value = entry.getKey().calculate(entry.getValue(),pureAttribute);
             finalAttribute.put(entry.getKey(),AttributeElement.valueOf(entry.getKey(),value));
         }
     }

@@ -29,7 +29,7 @@ public class RoleManager {
         Long id = IDUtil.getId();
         roleEnt.setId(id);
         roleEnt.setAccountId(accountId);
-        roleEnt.setLevel(0);
+        roleEnt.setLevel(1);
         roleEnt.setJob(job);
         roleEnt.setSex(sex);
         Long time = Calendar.getInstance().getTimeInMillis();

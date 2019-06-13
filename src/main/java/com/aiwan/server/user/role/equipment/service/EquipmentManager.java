@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 
+/**
+ * 装备数据管理类
+ * @author dengzebiao
+ * @since 2019.6.13
+ * */
 @Service()
 public class EquipmentManager {
     Logger logger = LoggerFactory.getLogger(EquipmentManager.class);

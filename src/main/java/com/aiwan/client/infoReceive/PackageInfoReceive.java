@@ -5,7 +5,7 @@ import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
-import com.aiwan.server.user.Item.PropInfo;
+import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;

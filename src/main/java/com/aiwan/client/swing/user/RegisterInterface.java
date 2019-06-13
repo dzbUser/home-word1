@@ -6,6 +6,8 @@ import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.InterfaceManager;
 import com.aiwan.server.user.account.protocol.CM_Login;
+import com.aiwan.server.user.account.protocol.CM_Registered;
+import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
@@ -20,7 +22,7 @@ import java.awt.event.ActionListener;
  * @since 2019.6.13
  * 注册页面
  * */
-@InfoReceiveObject
+//@InfoReceiveObject
 public class RegisterInterface extends JFrame {
 
     /** 用户账号输入框 */
@@ -29,10 +31,13 @@ public class RegisterInterface extends JFrame {
     /** 用户密码输入框 */
     private JPasswordField passwordText;
 
+    /** 高级密码框 */
+    private JPasswordField hightPasswordText;
+
     public RegisterInterface(){
         // Setting the width and height of frame
         setTitle("注册");
-        setSize(400, 400);
+        setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         /* 创建面板，这个类似于 HTML 的 div 标签
@@ -83,6 +88,16 @@ public class RegisterInterface extends JFrame {
         passwordText.setBounds(50,200,300,40);
         panel.add(passwordText);
 
+        // 输入高级密码的文本域
+        JLabel hPasswordLabel = new JLabel("高级密码:");
+        hPasswordLabel.setBounds(50,250,50,40);
+        panel.add(hPasswordLabel);
+
+        //创建高级密码框
+        this.hightPasswordText = new JPasswordField(20);
+        hightPasswordText.setBounds(50,300,300,40);
+        panel.add(hightPasswordText);
+
         // 创建登录按钮
         JButton loginButton = new JButton("登录");
         //添加登录事件事件监听
@@ -93,8 +108,8 @@ public class RegisterInterface extends JFrame {
         //添加注册事件事件监听
         registerButton.addActionListener(new RegisterListener());
 
-        registerButton.setBounds(90, 250, 100, 40);
-        loginButton.setBounds(210, 250, 100, 40);
+        registerButton.setBounds(90, 350, 100, 40);
+        loginButton.setBounds(210, 350, 100, 40);
         panel.add(loginButton);
         panel.add(registerButton);
 
@@ -117,7 +132,12 @@ public class RegisterInterface extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println("注册");
+            //注册
+            CM_Registered cm_registered = new CM_Registered();
+            cm_registered.setUsername(userText.getText());
+            cm_registered.setPassword(String.valueOf(passwordText.getPassword()));
+            cm_registered.setHpassword(String.valueOf(hightPasswordText.getPassword()));
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.REGIST,cm_registered));
         }
     }
 
@@ -128,5 +148,37 @@ public class RegisterInterface extends JFrame {
 
     public JPasswordField getPasswordText() {
         return passwordText;
+    }
+
+    public JPasswordField getHightPasswordText() {
+        return hightPasswordText;
+    }
+
+    public RegisterInterface setHightPasswordText(JPasswordField hightPasswordText) {
+        this.hightPasswordText = hightPasswordText;
+        return this;
+    }
+
+    public RegisterInterface setUserText(JTextField userText) {
+        this.userText = userText;
+        return this;
+    }
+
+    public RegisterInterface setPasswordText(JPasswordField passwordText) {
+        this.passwordText = passwordText;
+        return this;
+    }
+
+    /** 登录返回接收 */
+    @InfoReceiveMethod(status = StatusCode.REGISTER)
+    public void register(SM_Register sm_register){
+        if (sm_register.getStatus() == 1){
+            //注册成功
+            JOptionPane.showMessageDialog(new JPanel(), sm_register.getAccountId()+"注册成功", "标题",JOptionPane.WARNING_MESSAGE);
+            InterfaceManager.getFrame("register").setVisible(false);
+            InterfaceManager.getFrame("login").setVisible(true);
+        }else {
+            JOptionPane.showMessageDialog(new JPanel(), sm_register.getAccountId()+"账号已存在", "标题",JOptionPane.WARNING_MESSAGE);
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.aiwan.server.user.protocol;
 
-import com.aiwan.server.user.Item.PropInfo;
+import com.aiwan.server.user.protocol.Item.PropInfo;
 
 import java.util.ArrayList;
 import java.util.List;

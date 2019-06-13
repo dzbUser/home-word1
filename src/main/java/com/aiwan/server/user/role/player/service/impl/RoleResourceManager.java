@@ -1,6 +1,6 @@
-package com.aiwan.server.user.role.service;
+package com.aiwan.server.user.role.player.service.impl;
 
-import com.aiwan.server.user.role.resource.RoleResource;
+import com.aiwan.server.user.role.player.resource.RoleResource;
 import org.springframework.stereotype.Service;
 
 /**

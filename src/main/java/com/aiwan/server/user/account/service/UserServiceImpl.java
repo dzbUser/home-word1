@@ -93,31 +93,24 @@ public class UserServiceImpl implements UserService {
         session.messageSend(decodeData);
     }
 
-    //用户注册
+    /**用户注册*/
     @Override
-    public void registUser(CM_Registered userMessage, Session session) {
+    public void registerUser(CM_Registered userMessage, Session session) {
         User user = userManager.getUserByAccountId(userMessage.getUsername());
-        DecodeData decodeData = new DecodeData();
         //错误输入
         if(userMessage == null){
             logger.debug("输入错误");
-            String content = "输入错误";
-            decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,content);
-            session.messageSend(decodeData);
+            session.messageSend(SMToDecodeData.shift(StatusCode.REGISTER,SM_Register.valueOf(0,userMessage.getUsername())));
         }
         //账号可用
         else if (user == null){
             logger.debug("注册新用户");
             userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY,1);
             GetBean.getBackpackService().createBackpack(userMessage.getUsername());
-            String content = "恭喜您，注册成功！";
-            decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,content);
-            session.messageSend(decodeData);
+            session.messageSend(SMToDecodeData.shift(StatusCode.REGISTER,SM_Register.valueOf(1,userMessage.getUsername())));
         }else {//账号已被注册
             logger.debug("用户已存在");
-            String content = "抱歉，用户账号已被注册，请选择其他账号";
-            decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,content);
-            session.messageSend(decodeData);
+            session.messageSend(SMToDecodeData.shift(StatusCode.REGISTER,SM_Register.valueOf(0,userMessage.getUsername())));
         }
     }
 

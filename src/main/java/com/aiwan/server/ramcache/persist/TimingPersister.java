@@ -13,9 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TimingPersister implements Persister{
     private static final Logger logger = LoggerFactory.getLogger(TimingPersister.class);
     /**  等待更新的信息缓存*/
-    private ConcurrentHashMap<String,Element> elements = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String,Element> elements = new ConcurrentHashMap<String,Element>();
     /** 正在更新的信息缓存 */
-    private HashMap<String,IEntity> updating = new HashMap<>();
+    private HashMap<String,IEntity> updating = new HashMap<String,IEntity>();
     /**初始化标志*/
     private boolean initailize;
     /**消费线程*/
@@ -58,7 +58,7 @@ public class TimingPersister implements Persister{
 
     Collection<Element> clearElements(){
         Collection<Element> vlues = elements.values();
-        ArrayList<Element>  arrayList = new ArrayList<>(vlues);
+        ArrayList<Element>  arrayList = new ArrayList<Element>(vlues);
         for (Element element:vlues){
             if (element.getEntity()!=null){
                 updating.put(element.getIdentity(),element.getEntity());

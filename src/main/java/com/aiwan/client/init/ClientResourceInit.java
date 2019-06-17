@@ -20,7 +20,7 @@ public class ClientResourceInit {
     static Logger logger = LoggerFactory.getLogger(ClientResourceInit.class);
 
     /** 客户端资源静态文件路径 */
-    private final static String FILEPATH="src/main/resources/client/ClientResource.xls";
+    private final static String FILEPATH="C:\\ideaProject\\homeword1\\src\\main\\resources\\client\\clientResource.xls";
 
     public static void init(){
         logger.debug("初始化客户端查看资源");
@@ -35,7 +35,7 @@ public class ClientResourceInit {
         for (ClientViewResource clientViewResource:list){
             //模块类型为空
             if (ClientResourseManager.getResourceMap().get(clientViewResource.getType()) == null){
-                Map<Integer,ClientViewResource> map = new HashMap<>(16);
+                Map<Integer,ClientViewResource> map = new HashMap<Integer,ClientViewResource>(16);
                 ClientResourseManager.getResourceMap().put(clientViewResource.getType(),map);
             }
             ClientResourseManager.getResourceMap().get(clientViewResource.getType()).put(clientViewResource.getId(),clientViewResource);

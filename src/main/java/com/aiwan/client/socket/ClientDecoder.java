@@ -2,7 +2,6 @@ package com.aiwan.client.socket;
 import com.aiwan.client.service.ClientReceiveMap;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.util.JsonUtil;
-import com.aiwan.server.util.ObjectToBytes;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;

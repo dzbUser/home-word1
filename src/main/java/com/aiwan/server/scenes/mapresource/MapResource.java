@@ -36,7 +36,7 @@ public class MapResource {
     private String positionString;
 
     //存地图数字涵义
-    private Map<Integer, PositionMeaning> positionMeaningHashMap = new HashMap<>();
+    private Map<Integer, PositionMeaning> positionMeaningHashMap = new HashMap<Integer, PositionMeaning>();
     //存地图数据
     private int[][] map;
     //地图动态内容

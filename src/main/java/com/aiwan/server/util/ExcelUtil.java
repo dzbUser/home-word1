@@ -1,10 +1,13 @@
 package com.aiwan.server.util;
 
 
+import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
 import com.aiwan.server.publicsystem.annotation.CellMapping;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +24,8 @@ import java.util.Map;
 
 public class ExcelUtil
 {
+
+    static Logger logger = LoggerFactory.getLogger(ExcelUtil.class);
     /**
      * 解析文件
      *
@@ -49,14 +54,15 @@ public class ExcelUtil
     public static <T> List<T> analysisExcelFile(String filePath, int bgnIgnore, int endIgnore, Class<T> cls) throws IllegalAccessException, InstantiationException
     {
         // 表格数据对象
-        List<T> modelList = new ArrayList<>();
+        List<T> modelList = new ArrayList<T>();
 
         // 用来存放表格中数据
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
         // 判断文件是否存在
         if (!new File(filePath).exists())
         {
+            logger.debug(filePath+"：为空");
             return null;
         }
         // 读取excel文件信息
@@ -64,6 +70,7 @@ public class ExcelUtil
 
         if (null == wb)
         {
+
             return modelList;
         }
 
@@ -95,7 +102,7 @@ public class ExcelUtil
             for (int rowIndex = rowBgn; rowIndex < rowNum; rowIndex++)
             {
                 // 行map
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<String, Object>(16);
                 // 行信息
                 Row row = sheet.getRow(rowIndex);
 

@@ -1,13 +1,14 @@
 package com.aiwan.client.swing.start;
 
 import com.aiwan.client.service.ClientReceiveMap;
+import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
+import com.aiwan.client.swing.NavigationBar;
+import com.aiwan.client.util.GetBean;
 import com.aiwan.server.publicsystem.Initialization.PropUseInitialization;
 import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
 import com.aiwan.server.publicsystem.Initialization.RoleResourceInit;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import javax.swing.*;
 
 /**
  * @author dengzebia
@@ -20,6 +21,7 @@ public class GameStart {
     public static void main(String[] args) {
         resourceInit();
         connet();
+        swingInit();
     }
 
     /** 静态资源初始化 */
@@ -33,6 +35,7 @@ public class GameStart {
         //人物资源初始化
         RoleResourceInit.init();
         ClientReceiveMap.init(applicationContext);
+        GetBean.setApplicationContext(applicationContext);
     }
 
     /** 网络连接 */
@@ -48,5 +51,9 @@ public class GameStart {
                     }
                 }
         ).start();
+    }
+
+    /** 界面初始化 */
+    public static void swingInit(){
     }
 }

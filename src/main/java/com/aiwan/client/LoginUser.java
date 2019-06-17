@@ -1,5 +1,8 @@
 package com.aiwan.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -7,6 +10,7 @@ import java.util.List;
  * 保存登录成功的用户信息
  * */
 public class LoginUser {
+
 
     private static String username = "";
     private static int map;

@@ -31,4 +31,6 @@ public class StatusCode {
     public final static int VIEWROLEMESSAGE = 12;
     /** 注销返回协议码 */
     public final static int REGISTER = 13;
+    /** 用户提示信息返回 */
+    public final static int MAPMESSAGE = 14;
 }

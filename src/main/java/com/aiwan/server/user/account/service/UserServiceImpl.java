@@ -89,8 +89,10 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
             sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
+            //给其他玩家发送信息
         }
         session.messageSend(decodeData);
+        GetBean.getMapManager().sendMessageToUsers(user.getMap());
     }
 
     /**用户注册*/
@@ -134,6 +136,8 @@ public class UserServiceImpl implements UserService {
         //session移除用户信息
         session.setUser(null);
         session.messageSend(decodeData);
+        //给其余玩家发送信息
+        GetBean.getMapManager().sendMessageToUsers(user.getMap());
     }
 
     /**
@@ -186,6 +190,8 @@ public class UserServiceImpl implements UserService {
         sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
         decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         session.messageSend(decodeData);
+        //给其他玩家发送信息
+        GetBean.getMapManager().sendMessageToUsers(user.getMap());
     }
     /**
      * 查看个人信息
@@ -228,16 +234,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session) {
         logger.debug("获取角色信息"+cm_roleMessage.getAccountId());
-        User user = session.getUser();
-        if (user == null){
-            //还未登录
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"您还未登录!");
-            session.messageSend(decodeData);
-        }
-        else {
-            //转交给角色业务
-            GetBean.getRoleService().getRoleMessage(session,cm_roleMessage);
-        }
+        //转交给角色业务
+        GetBean.getRoleService().getRoleMessage(session,cm_roleMessage);
     }
 
 
@@ -252,6 +250,8 @@ public class UserServiceImpl implements UserService {
         userManager.save(user);
         //把用户从地图资源中移除
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
+        //给他玩家发送信息
+        GetBean.getMapManager().sendMessageToUsers(user.getMap());
     }
 
 }

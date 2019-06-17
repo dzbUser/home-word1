@@ -14,7 +14,7 @@ import java.util.Map;
  * */
 public class ServiceManager {
     //存储所有创建的缓存
-    public static Map<Class,EntityCaheServiceImpl> cacheMaps = new HashMap<>();
+    public static Map<Class,EntityCaheServiceImpl> cacheMaps = new HashMap<Class,EntityCaheServiceImpl>();
     /**
      * 创建缓存
      * */

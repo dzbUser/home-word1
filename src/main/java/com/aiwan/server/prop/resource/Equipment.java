@@ -39,7 +39,7 @@ public class Equipment {
     @CellMapping(name = "attribute")
     private String attribute;
 
-    private Map<Integer,Integer> map = new HashMap<>();
+    private Map<Integer,Integer> map = new HashMap<Integer,Integer>();
     public void init(){
         String[] attributeString = attribute.split(" ");
         for (String element:attributeString){

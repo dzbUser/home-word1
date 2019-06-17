@@ -4,7 +4,7 @@ import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.socket.ClientServerStart;
-import com.aiwan.client.swing.InterfaceManager;
+import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.server.user.account.protocol.CM_Login;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.Protocol;
@@ -106,7 +106,6 @@ public class LoginInterface extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println(userText.getText()+":"+passwordText.getText());
             CM_Login cm_login = new CM_Login();
             cm_login.setUsername(userText.getText());
             cm_login.setPassword(String.valueOf(passwordText.getPassword()));
@@ -133,15 +132,25 @@ public class LoginInterface extends JFrame {
             JOptionPane.showMessageDialog(new JPanel(), userMessage.getOtherMessage(), "标题",JOptionPane.WARNING_MESSAGE);
             return;
         }
+        //设置登录缓存
         LoginUser.setUsername (userMessage.getUsername());
         LoginUser.setCurrentX(userMessage.getCurrentX());
         LoginUser.setCurrentY(userMessage.getCurrentY());
         LoginUser.setMap(userMessage.getMap());
         LoginUser.setMapMessage(userMessage.getMapMessage());
+        UserSystemInterface userSystemInterface = (UserSystemInterface) InterfaceManager.getFrame("userSystem");
+
         if (!userMessage.isCreated()){
+
+            userSystemInterface.printMessage(userMessage.getOtherMessage());
         }else {
             LoginUser.setRoles(userMessage.getRoles());
+            userSystemInterface.printMessage("登录成功");
+            userSystemInterface.printMessage(userMessage.getMapMessage());
         }
+
+        InterfaceManager.getFrame("userSystem").setVisible(true);
+        this.setVisible(false);
     }
 
     public JTextField getUserText() {

@@ -10,11 +10,11 @@ import java.util.Map;
  * */
 public class ReflectionManager {
     //储存协议与协议类的映射
-    private static Map<Integer,Class<?>> protocolMaps = new HashMap<>();
+    private static Map<Integer,Class<?>> protocolMaps = new HashMap<Integer,Class<?>>();
     //储存bean与mathod
-    private static Map<Method,Object> beanMaps = new HashMap<>();
+    private static Map<Method,Object> beanMaps = new HashMap<Method,Object>();
     //储存Class类型与方法的映射
-    private static Map<Class<?>,Method> methodMaps = new HashMap<>();
+    private static Map<Class<?>,Method> methodMaps = new HashMap<Class<?>,Method>();
 
     //获取协议类
     public static Class<?> getProtocolClass(Integer type){

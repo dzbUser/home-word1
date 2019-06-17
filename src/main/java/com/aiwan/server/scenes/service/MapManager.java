@@ -1,8 +1,12 @@
 package com.aiwan.server.scenes.service;
 
+import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.user.account.model.User;
+import com.aiwan.server.util.SMToDecodeData;
+import com.aiwan.server.util.StatusCode;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -16,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component("mapManager")
 public class MapManager {
     /** 地图资源 */
-    private Map<Integer, MapResource> mapResourceMap = new ConcurrentHashMap<>();
+    private Map<Integer, MapResource> mapResourceMap = new ConcurrentHashMap<Integer, MapResource>();
 
     /** 获取地图 */
     public MapResource getMapResource(Integer mapType){
@@ -24,7 +28,7 @@ public class MapManager {
     }
 
     /**存储在本地图中的用户*/
-    private Map<Integer,Map<String, User>> userMap = new ConcurrentHashMap<>();
+    private Map<Integer,Map<String, User>> userMap = new ConcurrentHashMap<Integer,Map<String, User>>();
 
     /**
      * 初始化资源
@@ -106,6 +110,22 @@ public class MapManager {
             return true;
         }
         return false;
+    }
+
+    /** 地图内所有用户发送地图消息 */
+    public void sendMessageToUsers(int id){
+        //获取地图中的所有用户
+        Map<String,User> map = userMap.get(id);
+        //遍历所有用户，发送消息
+        for (Map.Entry<String,User> entry:map.entrySet()){
+            //获取session
+            Session session = SessionManager.getSessionByUsername(entry.getValue().getAcountId());
+            //用户角色数大于0
+            if (session != null||entry.getValue().getUserBaseInfo().getRoles().size() > 0){
+                //发送信息
+                session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE,getMapContent(entry.getValue().getCurrentX(),entry.getValue().getCurrentY(),id)));
+            }
+        }
     }
 
 

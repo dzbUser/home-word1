@@ -12,10 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * */
 public class SessionManager {
     //hashcode与session的映射
-    private static Map<Integer, Session> sessionMap = new ConcurrentHashMap<>();
+    private static Map<Integer, Session> sessionMap = new ConcurrentHashMap<Integer, Session>();
 
     //username与session的映射
-    private static Map<String,Session> userMap = new ConcurrentHashMap<>();
+    private static Map<String,Session> userMap = new ConcurrentHashMap<String,Session>();
     public static void putSessionByHashCode(Integer hashcode,Session session){
         sessionMap.put(hashcode,session);
     }

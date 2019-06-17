@@ -2,7 +2,7 @@ package com.aiwan.client;
 
 import com.aiwan.client.clientservice.MountSystem;
 import com.aiwan.client.clientservice.PropSystem;
-import com.aiwan.client.clientservice.RoleService;
+import com.aiwan.client.clientservice.RoleSystem;
 import com.aiwan.client.handler.ClientInfoHandler;
 import com.aiwan.client.socket.ClientDecoder;
 import com.aiwan.client.socket.ClientEncoder;
@@ -23,8 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ClientServer {
     private static Logger logger = LoggerFactory.getLogger(ClientServer.class);
@@ -82,7 +80,7 @@ public class ClientServer {
                         System.out.println("您还未登录，请登录游戏！");
                         continue;
                     }
-                    RoleService.roleSystem(channel);
+                    RoleSystem.roleSystem(channel);
                 }
                 else  if (num == 5){
                     if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){

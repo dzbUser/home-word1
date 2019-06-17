@@ -9,7 +9,6 @@ import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.StatusCode;
 
-import javax.swing.*;
 
 /**
  * 用户信息接收类
@@ -35,7 +34,6 @@ public class UserInfoReceive {
         }else {
             LoginUser.setRoles(userMessage.getRoles());
             System.out.println(userMessage.getUsername()+"登录成功");
-            System.out.println(userMessage.getMapMessage());
         }
     }
 
@@ -58,8 +56,9 @@ public class UserInfoReceive {
     public void move(SM_Move sm_move){
         LoginUser.setCurrentY(sm_move.getTargetY());
         LoginUser.setCurrentX(sm_move.getTargetX());
-        LoginUser.setMapMessage(sm_move.getMapMessage());
-        System.out.println(sm_move.getMapMessage());
+        if (sm_move.getStatus() == 1){
+            System.out.println("移动成功");
+        }
     }
 
     /** 地图跳转 */
@@ -69,7 +68,6 @@ public class UserInfoReceive {
         LoginUser.setCurrentX(sm_shift.getTargetX());
         LoginUser.setMap(sm_shift.getMap());
         LoginUser.setMapMessage(sm_shift.getMapMessage());
-        System.out.println(sm_shift.getMapMessage());
     }
 
     /** 被顶号 */
@@ -87,5 +85,11 @@ public class UserInfoReceive {
         }else {
             System.out.println(sm_register.getAccountId()+"注册失败");
         }
+    }
+
+    /** 接收地图信息 */
+    @InfoReceiveMethod(status = StatusCode.MAPMESSAGE)
+    public void getMapMessage(String message){
+        System.out.println(message);
     }
 }

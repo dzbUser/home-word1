@@ -11,7 +11,7 @@ import java.util.Map;
 public class BackpackInfo {
 
     /** 背包数据 */
-    private Map<Integer,BackpackItem> backpackItems = new HashMap<>();
+    private Map<Integer,BackpackItem> backpackItems = new HashMap<Integer,BackpackItem>();
 
     public Map<Integer, BackpackItem> getBackpackItems() {
         return backpackItems;

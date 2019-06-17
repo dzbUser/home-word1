@@ -20,13 +20,13 @@ public class ClientReceiveMap {
     private static Logger logger = LoggerFactory.getLogger(ClientReceiveMap.class);
 
     /** 协议编号与类的映射 */
-    private static Map<Method,Object> objectMap = new HashMap<>(16);
+    private static Map<Method,Object> objectMap = new HashMap<Method,Object>(16);
 
     /** 协议编号与方法的映射 */
-    private static Map<Integer, Method> methodMap = new HashMap<>(16);
+    private static Map<Integer, Method> methodMap = new HashMap<Integer, Method>(16);
 
     /** 协议号与协议类的映射 */
-    private static Map<Integer,Class<?>> classMap = new HashMap<>(16);
+    private static Map<Integer,Class<?>> classMap = new HashMap<Integer,Class<?>>(16);
 
     /** 插入编号与类的映射 */
     public static void putObject(Method method,Object object){

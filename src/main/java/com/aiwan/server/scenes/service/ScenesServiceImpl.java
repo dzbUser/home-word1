@@ -40,20 +40,21 @@ public class ScenesServiceImpl implements ScenesService{
         Object data;
         int type ;
         User user = session.getUser();
-        int map = user.getMap();
         if (GetBean.getMapManager().allowMove(cm_move.getTargetX(),cm_move.getTargetY(),user.getMap())) {
             userManager.save(user);
             user.setCurrentX(cm_move.getTargetX());
             user.setCurrentY(cm_move.getTargetY());
-            String content = "移动成功\n" + GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
-            SM_Move sm_move = SM_Move.valueOf(cm_move.getTargetX(), cm_move.getCurrentY(), content);
+            SM_Move sm_move = SM_Move.valueOf(cm_move.getTargetX(), cm_move.getCurrentY(),1);
             data = sm_move;
             type = StatusCode.MOVESUCCESS;
+            //对所有在线用户发送地图信息
+            GetBean.getMapManager().sendMessageToUsers(user.getMap());
         } else {
             data = "此处不可移动！";
             type = StatusCode.MESSAGE;
         }
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
+
         session.messageSend(decodeData);
     }
 
@@ -63,6 +64,8 @@ public class ScenesServiceImpl implements ScenesService{
     @Override
     public void shift(final CM_Shift cm_shift, final Session session) {
         User user = session.getUser();
+        //获取就地图位置
+        int oldMap = user.getMap();
         //从旧地图中去除
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
         MapResource mapResource = GetBean.getMapManager().getMapResource((int) cm_shift.getMap());
@@ -79,5 +82,11 @@ public class ScenesServiceImpl implements ScenesService{
         int type = StatusCode.SHIFTSUCCESS;
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
         session.messageSend(decodeData);
+        //给所有玩家发送消息
+        GetBean.getMapManager().sendMessageToUsers(user.getMap());
+        //如果与换到新的地图，需要给旧的地图发送改变消息
+        if (user.getMap()!=oldMap){
+            GetBean.getMapManager().sendMessageToUsers(oldMap);
+        }
     }
 }

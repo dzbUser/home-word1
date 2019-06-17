@@ -49,7 +49,7 @@ public class AttributeUtil {
 
     /** 字符串转化为初始属性 */
     public static List<AttributeElement> getAttributeInitByString(String attributeString){
-        List<AttributeElement> list = new ArrayList<>();
+        List<AttributeElement> list = new ArrayList<AttributeElement>();
         String[] attributeStrings = attributeString.split(" ");
         for (String element:attributeStrings){
             //遍历所有属性项
@@ -65,7 +65,7 @@ public class AttributeUtil {
      * value*level
      * */
     public static Map<AttributeType, AttributeElement> getMapAttributeWithLevel(List<AttributeElement> list,int level){
-        Map<AttributeType, AttributeElement> map = new HashMap<>();
+        Map<AttributeType, AttributeElement> map = new HashMap<AttributeType, AttributeElement>();
         for (AttributeElement element:list){
             //属性项垴村
             AttributeElement attributeElement = AttributeElement.valueOf(element.getAttributeType(),element.getValue()*level);

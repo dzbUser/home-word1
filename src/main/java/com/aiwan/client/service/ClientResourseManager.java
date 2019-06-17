@@ -13,7 +13,7 @@ import java.util.Map;
 public class ClientResourseManager {
 
     /** 资源存储类 */
-    private static Map<String,Map<Integer, ClientViewResource>> resourceMap = new HashMap<>(16);
+    private static Map<String,Map<Integer, ClientViewResource>> resourceMap = new HashMap<String,Map<Integer, ClientViewResource>>(16);
 
     public static String getContent(String type,int id){
         if (ClientResourseManager.resourceMap.get(type) == null){

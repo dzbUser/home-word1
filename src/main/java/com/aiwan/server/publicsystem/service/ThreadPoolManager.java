@@ -44,13 +44,13 @@ public class ThreadPoolManager {
             //线程命名
             ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("userThread-pool-"+i).build();
             RejectedExecutionHandler policy = new ThreadPoolExecutor.DiscardPolicy();
-            BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(512);
+            BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(512);
             userThreadArray[i] = new ThreadPoolExecutor(1,1,0, TimeUnit.SECONDS,queue,nameThreadFactory,policy);
         }
 
         //其他线程池初始化
         RejectedExecutionHandler policy = new ThreadPoolExecutor.DiscardPolicy();
-        BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(512);
+        BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(512);
         ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("otherThread-pool").build();
         otherThreadPool = new ThreadPoolExecutor(otherPoolSize,otherPoolSize,0, TimeUnit.SECONDS,queue,nameThreadFactory,policy);
     }

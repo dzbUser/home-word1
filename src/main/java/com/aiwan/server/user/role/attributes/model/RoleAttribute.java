@@ -12,13 +12,13 @@ import java.util.Map;
  * */
 public class RoleAttribute {
     /** 模块属性 */
-    public Map<AttributesModule,Map<AttributeType,AttributeElement>> moduleMap = new HashMap<>(16);
+    public Map<AttributesModule,Map<AttributeType,AttributeElement>> moduleMap = new HashMap<AttributesModule,Map<AttributeType,AttributeElement>>(16);
 
     /** 纯净属性 */
-    public Map<AttributeType,AttributeElement> pureAttribute = new HashMap<>(16);
+    public Map<AttributeType,AttributeElement> pureAttribute = new HashMap<AttributeType,AttributeElement>(16);
 
     /** 最终属性 */
-    public Map<AttributeType,AttributeElement> finalAttribute = new HashMap<>(16);
+    public Map<AttributeType,AttributeElement> finalAttribute = new HashMap<AttributeType,AttributeElement>(16);
 
     /** 构造函数 */
     public RoleAttribute(Long rId){

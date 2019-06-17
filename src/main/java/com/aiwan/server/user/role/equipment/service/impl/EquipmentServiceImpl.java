@@ -83,7 +83,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         //获取装备栏数组
         EquipmentElement[] equipmentElements = equipmentModel.getEquipmentInfo().getEquipmentElements();
         //创建列表
-        List<PropInfo> list = new ArrayList<>();
+        List<PropInfo> list = new ArrayList<PropInfo>();
         //遍历装备栏
         for (int i =1;i<equipmentElements.length;i++){
             PropInfo propInfo = PropInfo.valueOf(equipmentElements[i].getId(),1);
@@ -97,7 +97,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public Map<AttributeType, AttributeElement> getEquipAttributes(Long rId) {
         //创建属性列表
-        Map<AttributeType, AttributeElement> elementHashMap = new HashMap<>();
+        Map<AttributeType, AttributeElement> elementHashMap = new HashMap<AttributeType, AttributeElement>();
         EquipmentModel equipmentModel = equipmentManager.load(rId);
         for (int i = 1;i<=equipmentModel.getLength();i++){
             //遍历所有装备

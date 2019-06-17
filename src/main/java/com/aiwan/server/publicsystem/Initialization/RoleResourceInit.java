@@ -19,11 +19,10 @@ public class RoleResourceInit {
     static Logger logger = LoggerFactory.getLogger(RoleResourceInit.class);
 
     /** 人物静态文件路径 */
-    private final static String FILEPATH="src/main/resources/role/role.xls";
+    private final static String FILEPATH="C:\\ideaProject\\homeword1\\src\\main\\resources\\role\\role.xls";
 
     /** 坐骑静态文件路径 */
-    private final static String MOUNTFILEPATH="src/main/resources/mount/mount.xls";
-
+    private final static String MOUNTFILEPATH="C:\\ideaProject\\homeword1\\src\\main\\resources\\mount\\mount.xls";
     public static void init(){
         List<RoleResource> roleList = null;
         List<MountResource> mountList = null;

@@ -13,7 +13,7 @@ import java.util.List;
 public class SM_PropList {
 
     /** 道具id-》数量 */
-    private List<PropInfo> list = new ArrayList<>(16);
+    private List<PropInfo> list = new ArrayList<PropInfo>(16);
 
 
     /**  添加道具*/

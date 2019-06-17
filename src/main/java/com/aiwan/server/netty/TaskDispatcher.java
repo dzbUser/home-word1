@@ -5,7 +5,6 @@ import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.ReflectionManager;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.publicsystem.service.ThreadPoolManager;
-import com.aiwan.server.util.ObjectToBytes;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

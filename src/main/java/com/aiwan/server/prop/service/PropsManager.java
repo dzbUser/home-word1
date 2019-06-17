@@ -19,9 +19,9 @@ public class PropsManager {
     public final static int DEVELOP = 2;
 
     /** 道具静态资源映射 */
-    private Map<Integer, Props> propsMap = new ConcurrentHashMap<>();
+    private Map<Integer, Props> propsMap = new ConcurrentHashMap<Integer, Props>();
     /** 装备静态资源映射类 */
-    private Map<Integer, Equipment> equipmentMap = new ConcurrentHashMap<>();
+    private Map<Integer, Equipment> equipmentMap = new ConcurrentHashMap<Integer, Equipment>();
 
     /**
      * 获取某种道具

@@ -20,7 +20,7 @@ import java.util.Map;
  * */
 public class Handler extends SimpleChannelInboundHandler<DecodeData> {
 
-    Map<String,Channel> channelMap = new HashMap<>();
+    Map<String,Channel> channelMap = new HashMap<String,Channel>();
     Logger logger = LoggerFactory.getLogger(Handler.class);
 
     /**

@@ -6,6 +6,8 @@ import com.aiwan.server.publicsystem.Initialization.PropUseInitialization;
 import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
 import com.aiwan.server.publicsystem.Initialization.RoleResourceInit;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -14,9 +16,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @since 2019.6.11
  * */
 public class ClientStart {
+
+    private static Logger logger = LoggerFactory.getLogger(ClientStart.class);
+
     public static void main(String[] args) throws Exception {
+
+        logger.debug("加载资源");
         //初始化资源
         final ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("Spring-Hibernate-All-Cfg.xml");
+        logger.debug("开始加载静态资源");
         //道具资源初始化
         PropsInitialzation.init();
         PropUseInitialization.initialization(applicationContext);

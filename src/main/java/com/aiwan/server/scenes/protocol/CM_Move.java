@@ -2,6 +2,7 @@ package com.aiwan.server.scenes.protocol;
 
 import com.aiwan.server.publicsystem.annotation.ProtocolAnnotation;
 import com.aiwan.server.util.Protocol;
+import org.openxmlformats.schemas.presentationml.x2006.main.CmAuthorLstDocument;
 
 import java.io.Serializable;
 
@@ -16,6 +17,16 @@ public class CM_Move implements Serializable {
     private int targetX;
     private int targetY;
     private String username;
+
+    public static CM_Move valueOf(int currentX,int currentY,int targetX,int targetY,String username){
+        CM_Move cm_move = new CM_Move();
+        cm_move.setCurrentX(currentX);
+        cm_move.setCurrentY(currentY);
+        cm_move.setTargetX(targetX);
+        cm_move.setTargetY(targetY);
+        cm_move.setUsername(username);
+        return cm_move;
+    }
 
 
     public int getCurrentX() {

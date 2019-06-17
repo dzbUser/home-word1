@@ -8,7 +8,6 @@ import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
-import com.aiwan.server.util.ObjectToBytes;
 import com.aiwan.server.util.StatusCode;
 
 import java.util.Map;

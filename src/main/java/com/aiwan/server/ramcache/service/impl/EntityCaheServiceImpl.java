@@ -30,9 +30,9 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
     /** 持久化缓存器*/
     private Persister persister;
     /** 实体缓存*/
-    private Map<PK,T> cacheMap = new ConcurrentHashMap<>();
+    private Map<PK,T> cacheMap = new ConcurrentHashMap<PK,T>();
     /** 储存主键的队列*/
-    ConcurrentLinkedQueue<PK> linkedQueue = new ConcurrentLinkedQueue<>();
+    ConcurrentLinkedQueue<PK> linkedQueue = new ConcurrentLinkedQueue<PK>();
     /**  缓存容量*/
     private int num = 0;
     /** 最大缓存容量 */

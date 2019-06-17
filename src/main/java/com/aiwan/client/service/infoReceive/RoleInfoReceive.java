@@ -1,13 +1,16 @@
-package com.aiwan.client.infoReceive;
+package com.aiwan.client.service.infoReceive;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
+import com.aiwan.client.service.InterfaceManager;
+import com.aiwan.client.swing.clientInterface.GameInterface;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
+import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
 
 import java.util.Map;
@@ -25,7 +28,8 @@ public class RoleInfoReceive {
     public void createRoleInfo(SM_CreateRole createRole){
         //角色创建成功
         LoginUser.setRoles(createRole.getRoles());
-        System.out.println(createRole.getMessage());
+        GameInterface GameInterface = (GameInterface)InterfaceManager.getFrame("game");
+        GameInterface.printOtherMessage(createRole.getMessage());
     }
 
     /** 查看角色属性 */

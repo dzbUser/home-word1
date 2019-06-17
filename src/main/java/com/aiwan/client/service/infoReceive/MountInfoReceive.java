@@ -1,4 +1,4 @@
-package com.aiwan.client.infoReceive;
+package com.aiwan.client.service.infoReceive;
 
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
@@ -6,7 +6,6 @@ import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.protocol.SM_ViewMount;
-import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
 
 import java.util.Map;

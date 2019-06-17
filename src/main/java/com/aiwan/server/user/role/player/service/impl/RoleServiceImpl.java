@@ -67,6 +67,7 @@ public class RoleServiceImpl implements RoleService {
         logger.debug(decodeData.getLength()+"");
         //返回信息到客户端
         session.messageSend(decodeData);
+        GetBean.getMapManager().sendMessageToUsers(user.getMap());
     }
 
     @Override

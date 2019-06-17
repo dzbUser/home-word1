@@ -1,4 +1,4 @@
-package com.aiwan.client.swing.user;
+package com.aiwan.client.swing.clientInterface;
 
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
@@ -19,7 +19,7 @@ import java.awt.event.ActionListener;
  * @since 2019.6.13
  * 注册页面
  * */
-//@InfoReceiveObject
+@InfoReceiveObject
 public class RegisterInterface extends JFrame {
 
     /** 用户账号输入框 */

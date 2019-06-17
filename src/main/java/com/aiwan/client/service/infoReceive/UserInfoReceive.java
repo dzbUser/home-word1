@@ -1,8 +1,10 @@
-package com.aiwan.client.infoReceive;
+package com.aiwan.client.service.infoReceive;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
+import com.aiwan.client.service.InterfaceManager;
+import com.aiwan.client.swing.clientInterface.GameInterface;
 import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.protocol.SM_Register;
@@ -68,6 +70,9 @@ public class UserInfoReceive {
         LoginUser.setCurrentX(sm_shift.getTargetX());
         LoginUser.setMap(sm_shift.getMap());
         LoginUser.setMapMessage(sm_shift.getMapMessage());
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        gameInterface.printMapMessage(sm_shift.getMapMessage());
+        gameInterface.printOtherMessage("跳转成功");
     }
 
     /** 被顶号 */
@@ -90,6 +95,7 @@ public class UserInfoReceive {
     /** 接收地图信息 */
     @InfoReceiveMethod(status = StatusCode.MAPMESSAGE)
     public void getMapMessage(String message){
-        System.out.println(message);
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        gameInterface.printMapMessage(message);
     }
 }

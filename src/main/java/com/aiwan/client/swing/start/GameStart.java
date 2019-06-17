@@ -4,6 +4,7 @@ import com.aiwan.client.service.ClientReceiveMap;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.NavigationBar;
+import com.aiwan.client.swing.clientInterface.GameInterface;
 import com.aiwan.client.util.GetBean;
 import com.aiwan.server.publicsystem.Initialization.PropUseInitialization;
 import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
@@ -19,6 +20,7 @@ public class GameStart {
 
 
     public static void main(String[] args) {
+        swingInit();
         resourceInit();
         connet();
         swingInit();
@@ -55,5 +57,6 @@ public class GameStart {
 
     /** 界面初始化 */
     public static void swingInit(){
+        new GameInterface();
     }
 }

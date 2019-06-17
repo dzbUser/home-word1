@@ -1,7 +1,5 @@
 package com.aiwan.client.socket;
 
-import com.aiwan.client.ClientServer;
-import com.aiwan.client.handler.ClientInfoHandler;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.util.Protocol;
 import io.netty.bootstrap.Bootstrap;

@@ -1,10 +1,11 @@
-package com.aiwan.client.swing.user;
+package com.aiwan.client.swing.clientInterface;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.service.InterfaceManager;
+import com.aiwan.client.swing.user.UserSystemInterface;
 import com.aiwan.server.user.account.protocol.CM_Login;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.Protocol;
@@ -20,7 +21,7 @@ import java.awt.event.ActionListener;
  * @since 2019.6.13
  * 登录界面
  * */
-//@InfoReceiveObject
+@InfoReceiveObject
 public class LoginInterface extends JFrame {
 
     /** 用户账号输入框 */
@@ -138,18 +139,18 @@ public class LoginInterface extends JFrame {
         LoginUser.setCurrentY(userMessage.getCurrentY());
         LoginUser.setMap(userMessage.getMap());
         LoginUser.setMapMessage(userMessage.getMapMessage());
-        UserSystemInterface userSystemInterface = (UserSystemInterface) InterfaceManager.getFrame("userSystem");
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
 
         if (!userMessage.isCreated()){
 
-            userSystemInterface.printMessage(userMessage.getOtherMessage());
+            gameInterface.printOtherMessage(userMessage.getOtherMessage());
         }else {
             LoginUser.setRoles(userMessage.getRoles());
-            userSystemInterface.printMessage("登录成功");
-            userSystemInterface.printMessage(userMessage.getMapMessage());
+            gameInterface.printOtherMessage("登录成功");
+            gameInterface.printMapMessage(userMessage.getMapMessage());
         }
 
-        InterfaceManager.getFrame("userSystem").setVisible(true);
+        InterfaceManager.getFrame("game").setVisible(true);
         this.setVisible(false);
     }
 

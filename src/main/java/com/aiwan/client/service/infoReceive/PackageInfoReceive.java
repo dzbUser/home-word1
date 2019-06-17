@@ -1,4 +1,4 @@
-package com.aiwan.client.infoReceive;
+package com.aiwan.client.service.infoReceive;
 
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;

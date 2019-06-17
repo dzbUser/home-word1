@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         //~~~~~~~~~~第一步~``````
         Session session1 = SessionManager.getSessionByUsername(userMessage.getUsername());
         if (session1 !=null){
-            logger.debug("您已经登录过了");
+            logger.debug("用户已在线，若想顶替，请选择高级登录");
             sm_userMessage.setStatus(false);
             sm_userMessage.setOtherMessage("用户已在线，若想顶替，请选择高级登录");
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
@@ -80,6 +80,8 @@ public class UserServiceImpl implements UserService {
             if (user.getRoleNum() == 0){
                 sm_userMessage.setCreated(false);
                 sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
+            }else {
+                GetBean.getMapManager().sendMessageToUsers(user.getMap());
             }
             sm_userMessage.setUsername(user.getAcountId());
             sm_userMessage.setMap(user.getMap());
@@ -92,7 +94,6 @@ public class UserServiceImpl implements UserService {
             //给其他玩家发送信息
         }
         session.messageSend(decodeData);
-        GetBean.getMapManager().sendMessageToUsers(user.getMap());
     }
 
     /**用户注册*/
@@ -180,6 +181,8 @@ public class UserServiceImpl implements UserService {
         if (user.getRoleNum() == 0){
             sm_userMessage.setCreated(false);
             sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
+        }else{
+            GetBean.getMapManager().sendMessageToUsers(user.getMap());
         }
 
         sm_userMessage.setUsername(user.getAcountId());
@@ -191,7 +194,7 @@ public class UserServiceImpl implements UserService {
         decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         session.messageSend(decodeData);
         //给其他玩家发送信息
-        GetBean.getMapManager().sendMessageToUsers(user.getMap());
+
     }
     /**
      * 查看个人信息

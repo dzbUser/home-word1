@@ -43,7 +43,12 @@ public enum  AttributeType implements Serializable {
         public AttributeType getEffectAttribute(){
             return ATTACK;
         }
-    };
+    },
+    /** 魔法基本属性 */
+    MAGIC(4,"魔法"){
+
+    },
+    ;
     /** 属性id */
     private int id;
 

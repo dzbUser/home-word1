@@ -12,6 +12,7 @@ import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
 import org.slf4j.Logger;
@@ -82,12 +83,12 @@ public class BackpackServiceImpl implements BackpackService {
         * */
         logger.info("查看用户："+cm_viewBackpack.getAccountId()+"的背包");
         Backpack backpack = backPackManager.load(cm_viewBackpack.getAccountId());
-        StringBuffer message = new StringBuffer();
         //获取背包
         Map<Integer,BackpackItem> map = backpack.getBackpackEnt().getBackpackInfo().getBackpackItems();
         if (map.size() == 0) {
             //背包为空
-            message.append("您的背包是空的！\n");
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的背包是空的"));
+            return;
         }
         //创建背包返回类
         SM_PropList sm_propList = new SM_PropList();

@@ -3,6 +3,8 @@ package com.aiwan.client.service.infoReceive;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
+import com.aiwan.client.service.InterfaceManager;
+import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.protocol.SM_ViewMount;
@@ -28,6 +30,7 @@ public class MountInfoReceive {
         for (Map.Entry<AttributeType, AttributeElement> elementEntry:sm_viewMount.getAttributes().entrySet()){
             stringBuffer.append(elementEntry.getValue().toString()+" ");
         }
-        System.out.println(stringBuffer.toString());
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        gameInterface.printOtherMessage(stringBuffer.toString());
     }
 }

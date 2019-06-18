@@ -21,10 +21,16 @@ public class PropsInitialzation {
 
     static Logger logger = LoggerFactory.getLogger(PropsInitialzation.class);
 
-    /** 道具静态文件路径 */
+    /**
+     * 道具静态文件路径
+     * 注意：此路径为绝对路径
+     * */
     private final static String FILEPATH = "C:\\ideaProject\\homeword1\\src\\main\\resources\\prop\\prop.xls";
 
-    /** 装备静态文件路径 */
+    /**
+     * 装备静态文件路径
+     * 注意：此路径为绝对路径
+     * */
     private final static String FILEPATH1="C:\\ideaProject\\homeword1\\src\\main\\resources\\prop\\equipment.xls";
 
     public static void init(){

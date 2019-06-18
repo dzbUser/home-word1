@@ -1,11 +1,10 @@
-package com.aiwan.client.swing.clientInterface;
+package com.aiwan.client.swing.clientinterface;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.service.InterfaceManager;
-import com.aiwan.client.swing.user.UserSystemInterface;
 import com.aiwan.server.user.account.protocol.CM_Login;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.Protocol;
@@ -94,11 +93,18 @@ public class LoginInterface extends JFrame {
         //添加注册事件事件监听
         registerButton.addActionListener(new RegisterListener());
 
-        loginButton.setBounds(90, 250, 100, 40);
-        registerButton.setBounds(210, 250, 100, 40);
+        // 创建高级登录按钮
+        JButton hLoginButton = new JButton("高级登录");
+        //添加登录事件事件监听
+        hLoginButton.addActionListener(new HLoginListener());
+
+        loginButton.setBounds(50, 250, 100, 40);
+        registerButton.setBounds(160, 250, 100, 40);
+        hLoginButton.setBounds(270,250,100,40);
 
         panel.add(loginButton);
         panel.add(registerButton);
+        panel.add(hLoginButton);
     }
 
     /** 处理登录事件的匿名内部类 */
@@ -113,6 +119,16 @@ public class LoginInterface extends JFrame {
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.LOGIN,cm_login));
         }
     }
+    /** 处理点击高级登录事件的匿名内部类 */
+    class HLoginListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            InterfaceManager.getFrame("heightLogin").setVisible(true);
+            LoginInterface.super.setVisible(false);
+        }
+    }
 
     /** 处理注册事件的匿名内部类 */
     class RegisterListener implements ActionListener
@@ -125,34 +141,7 @@ public class LoginInterface extends JFrame {
         }
     }
 
-    /** 用户登录消息接收 */
-    @InfoReceiveMethod(status = StatusCode.LOGIN)
-    public void userMessage(SM_UserMessage userMessage){
-        if (!userMessage.isStatus()){
-            //登录失败
-            JOptionPane.showMessageDialog(new JPanel(), userMessage.getOtherMessage(), "标题",JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        //设置登录缓存
-        LoginUser.setUsername (userMessage.getUsername());
-        LoginUser.setCurrentX(userMessage.getCurrentX());
-        LoginUser.setCurrentY(userMessage.getCurrentY());
-        LoginUser.setMap(userMessage.getMap());
-        LoginUser.setMapMessage(userMessage.getMapMessage());
-        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
 
-        if (!userMessage.isCreated()){
-
-            gameInterface.printOtherMessage(userMessage.getOtherMessage());
-        }else {
-            LoginUser.setRoles(userMessage.getRoles());
-            gameInterface.printOtherMessage("登录成功");
-            gameInterface.printMapMessage(userMessage.getMapMessage());
-        }
-
-        InterfaceManager.getFrame("game").setVisible(true);
-        this.setVisible(false);
-    }
 
     public JTextField getUserText() {
         return userText;

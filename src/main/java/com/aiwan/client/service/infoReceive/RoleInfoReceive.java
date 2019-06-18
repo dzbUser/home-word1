@@ -5,9 +5,13 @@ import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.client.service.InterfaceManager;
-import com.aiwan.client.swing.clientInterface.GameInterface;
+import com.aiwan.client.swing.clientinterface.GameInterface;
+import com.aiwan.server.prop.resource.Equipment;
+import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
+import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
 import com.aiwan.server.util.GetBean;
@@ -28,8 +32,9 @@ public class RoleInfoReceive {
     public void createRoleInfo(SM_CreateRole createRole){
         //角色创建成功
         LoginUser.setRoles(createRole.getRoles());
-        GameInterface GameInterface = (GameInterface)InterfaceManager.getFrame("game");
-        GameInterface.printOtherMessage(createRole.getMessage());
+        GameInterface gameInterface = (GameInterface)InterfaceManager.getFrame("game");
+        gameInterface.printOtherMessage(createRole.getMessage());
+        gameInterface.printMapMessage(createRole.getMapMessage());
     }
 
     /** 查看角色属性 */
@@ -38,15 +43,37 @@ public class RoleInfoReceive {
         //角色创建成功
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("职业:"+ ClientResourseManager.getContent("job",sm_roleMessage.getJob()));
-        stringBuffer.append(" 性别:"+ ClientResourseManager.getContent("sex",sm_roleMessage.getSex()));
-        stringBuffer.append(" 等级:"+ sm_roleMessage.getLevel());
+        stringBuffer.append(" 性别:"+ ClientResourseManager.getContent("sex",sm_roleMessage.getSex())+"\n");
+        stringBuffer.append("等级:"+ sm_roleMessage.getLevel());
         stringBuffer.append(" 经验:"+ sm_roleMessage.getExperience());
         stringBuffer.append(" 升级所需经验:"+ sm_roleMessage.getNeedExperience()+"\n");
         //输出属性
         for (Map.Entry<AttributeType, AttributeElement> elementEntry:sm_roleMessage.getMap().entrySet()){
-            stringBuffer.append(elementEntry.getValue().toString()+" ");
+            stringBuffer.append(elementEntry.getValue().toString()+"\n");
         }
+        //输出到游戏界面
+        GameInterface GameInterface = (GameInterface)InterfaceManager.getFrame("game");
+        GameInterface.printOtherMessage(stringBuffer.toString());
+    }
 
-        System.out.println(stringBuffer.toString());
+    /** 查看用户装备返回 */
+    @InfoReceiveMethod(status = StatusCode.VIEWEQUIP)
+    public void viewEquip(SM_ViewEquip sm_viewEquip){
+        GameInterface gameInterface = (GameInterface)InterfaceManager.getFrame("game");
+        StringBuffer stringBuffer = new StringBuffer();
+        for (EquipInfo equipInfo:sm_viewEquip.getList()){
+            if (equipInfo.getId() == 0){
+                //无装备
+                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipInfo.getPosition())+" 装备:空\n");
+            }else {
+                //有装备
+                Props props = GetBean.getPropsManager().getProps(equipInfo.getId());
+                Equipment equipment = GetBean.getPropsManager().getEquipment(equipInfo.getId());
+                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipment.getPosition()));
+                stringBuffer.append(" 装备:"+props.getName());
+                stringBuffer.append("\n属性添加:"+equipment.toString()+"\n");
+            }
+        }
+        gameInterface.printOtherMessage(stringBuffer.toString()+"\n");
     }
 }

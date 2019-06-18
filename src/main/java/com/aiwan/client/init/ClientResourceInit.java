@@ -19,7 +19,9 @@ public class ClientResourceInit {
 
     static Logger logger = LoggerFactory.getLogger(ClientResourceInit.class);
 
-    /** 客户端资源静态文件路径 */
+    /** 客户端资源静态文件路径
+     * 注意：此路径为绝对路径
+     * */
     private final static String FILEPATH="C:\\ideaProject\\homeword1\\src\\main\\resources\\client\\clientResource.xls";
 
     public static void init(){
@@ -40,5 +42,6 @@ public class ClientResourceInit {
             }
             ClientResourseManager.getResourceMap().get(clientViewResource.getType()).put(clientViewResource.getId(),clientViewResource);
         }
+
     }
 }

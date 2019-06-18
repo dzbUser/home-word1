@@ -1,4 +1,4 @@
-package com.aiwan.client.swing.clientInterface;
+package com.aiwan.client.swing.clientinterface;
 
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
@@ -166,16 +166,5 @@ public class RegisterInterface extends JFrame {
         return this;
     }
 
-    /** 登录返回接收 */
-    @InfoReceiveMethod(status = StatusCode.REGISTER)
-    public void register(SM_Register sm_register){
-        if (sm_register.getStatus() == 1){
-            //注册成功
-            JOptionPane.showMessageDialog(new JPanel(), sm_register.getAccountId()+"注册成功", "标题",JOptionPane.WARNING_MESSAGE);
-            InterfaceManager.getFrame("register").setVisible(false);
-            InterfaceManager.getFrame("login").setVisible(true);
-        }else {
-            JOptionPane.showMessageDialog(new JPanel(), sm_register.getAccountId()+"账号已存在", "标题",JOptionPane.WARNING_MESSAGE);
-        }
-    }
+
 }

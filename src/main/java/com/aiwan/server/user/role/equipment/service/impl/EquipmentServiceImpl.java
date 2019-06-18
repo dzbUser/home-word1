@@ -3,14 +3,14 @@ package com.aiwan.server.user.role.equipment.service.impl;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.protocol.Item.PropInfo;
-import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
 import com.aiwan.server.user.role.equipment.model.EquipmentElement;
 import com.aiwan.server.user.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
+import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
+import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
 import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.util.GetBean;
@@ -83,15 +83,14 @@ public class EquipmentServiceImpl implements EquipmentService {
         //获取装备栏数组
         EquipmentElement[] equipmentElements = equipmentModel.getEquipmentInfo().getEquipmentElements();
         //创建列表
-        List<PropInfo> list = new ArrayList<PropInfo>();
+        List<EquipInfo> list = new ArrayList<EquipInfo>();
         //遍历装备栏
         for (int i =1;i<equipmentElements.length;i++){
-            PropInfo propInfo = PropInfo.valueOf(equipmentElements[i].getId(),1);
-            list.add(propInfo);
+            EquipInfo equipInfo = EquipInfo.valueOf(equipmentElements[i].getId(),equipmentElements[i].getPosition());
+            list.add(equipInfo);
         }
-        SM_PropList sm_propList = new SM_PropList();
-        sm_propList.setList(list);
-        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWPROPLIST,sm_propList));
+        SM_ViewEquip sm_viewEquip = SM_ViewEquip.valueOf(list);
+        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWEQUIP,sm_viewEquip));
     }
 
     @Override

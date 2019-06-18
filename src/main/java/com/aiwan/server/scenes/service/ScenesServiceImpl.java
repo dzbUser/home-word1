@@ -44,11 +44,11 @@ public class ScenesServiceImpl implements ScenesService{
             userManager.save(user);
             user.setCurrentX(cm_move.getTargetX());
             user.setCurrentY(cm_move.getTargetY());
-            SM_Move sm_move = SM_Move.valueOf(cm_move.getTargetX(), cm_move.getCurrentY(),1);
+            SM_Move sm_move = SM_Move.valueOf(cm_move.getTargetX(), cm_move.getCurrentY(),1,GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
             data = sm_move;
             type = StatusCode.MOVESUCCESS;
             //对所有在线用户发送地图信息
-            GetBean.getMapManager().sendMessageToUsers(user.getMap());
+            GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
         } else {
             data = "此处不可移动！";
             type = StatusCode.MESSAGE;
@@ -64,6 +64,11 @@ public class ScenesServiceImpl implements ScenesService{
     @Override
     public void shift(final CM_Shift cm_shift, final Session session) {
         User user = session.getUser();
+        //是否有该地图，若无则放回无该地图
+        if (GetBean.getMapManager().getMapResource(cm_shift.getMap()) == null){
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"没有该地图"));
+            return;
+        }
         //获取就地图位置
         int oldMap = user.getMap();
         //从旧地图中去除
@@ -76,17 +81,17 @@ public class ScenesServiceImpl implements ScenesService{
         GetBean.getMapManager().putUser(user);
         //加入缓存
         userManager.save(user);
-        String content = "跳转成功\n"+ GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
+        String content = GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
         SM_Shift sm_shift = SM_Shift.valueOf(mapResource.getOriginX(),mapResource.getOriginY(),cm_shift.getMap(),content);
         Object data = sm_shift;
         int type = StatusCode.SHIFTSUCCESS;
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
         session.messageSend(decodeData);
         //给所有玩家发送消息
-        GetBean.getMapManager().sendMessageToUsers(user.getMap());
+        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
         //如果与换到新的地图，需要给旧的地图发送改变消息
         if (user.getMap()!=oldMap){
-            GetBean.getMapManager().sendMessageToUsers(oldMap);
+            GetBean.getMapManager().sendMessageToUsers(oldMap,user.getAcountId());
         }
     }
 }

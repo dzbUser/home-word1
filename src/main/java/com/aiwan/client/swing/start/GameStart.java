@@ -1,10 +1,10 @@
 package com.aiwan.client.swing.start;
 
+import com.aiwan.client.init.ClientResourceInit;
 import com.aiwan.client.service.ClientReceiveMap;
-import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
-import com.aiwan.client.swing.NavigationBar;
-import com.aiwan.client.swing.clientInterface.GameInterface;
+import com.aiwan.client.swing.clientinterface.GameInterface;
+import com.aiwan.client.swing.clientinterface.HeightLoginInterface;
 import com.aiwan.client.util.GetBean;
 import com.aiwan.server.publicsystem.Initialization.PropUseInitialization;
 import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
@@ -37,6 +37,8 @@ public class GameStart {
         //人物资源初始化
         RoleResourceInit.init();
         ClientReceiveMap.init(applicationContext);
+        //客户端静态资源初始化
+        ClientResourceInit.init();
         GetBean.setApplicationContext(applicationContext);
     }
 
@@ -58,5 +60,6 @@ public class GameStart {
     /** 界面初始化 */
     public static void swingInit(){
         new GameInterface();
+        new HeightLoginInterface();
     }
 }

@@ -36,10 +36,6 @@ public interface UserService {
      */
     void createRole(CM_CreateRole cm_createRole,Session session);
 
-    /**
-     * 获取角色信息
-     * */
-    void getRoleMessage(CM_RoleMessage cm_roleMessage,Session session);
 
 
     /** 删除人物储存 */

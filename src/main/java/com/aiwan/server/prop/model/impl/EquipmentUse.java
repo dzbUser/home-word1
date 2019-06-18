@@ -14,7 +14,7 @@ import com.aiwan.server.util.StatusCode;
  * 装备的使用
  * */
 @PropType(type = 3)
-public class EquipmentUser implements PropUseInterface {
+public class EquipmentUse implements PropUseInterface {
     /** 装备的使用 */
     @Override
     public int propUse(String accountId, Long rId, int pId, Session session) {
@@ -31,6 +31,8 @@ public class EquipmentUser implements PropUseInterface {
         //装备错误
         if (id == -1){
             session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的等级未达到要求"));
+            //装备返回
+            GetBean.getBackpackService().obtainProp(accountId,props,1);
             return 0;
         }
         if (id != 0){

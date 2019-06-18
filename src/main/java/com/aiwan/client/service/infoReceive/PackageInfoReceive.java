@@ -3,6 +3,8 @@ package com.aiwan.client.service.infoReceive;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
+import com.aiwan.client.service.InterfaceManager;
+import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.prop.resource.Equipment;
 import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.user.protocol.Item.PropInfo;
@@ -36,17 +38,20 @@ public class PackageInfoReceive {
 
     /** 根据list输出道具 */
     public void printPropByList(List<PropInfo> list){
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        StringBuffer stringBuffer = new StringBuffer();
         for (PropInfo propInfo:list){
             Props props = GetBean.getPropsManager().getProps(propInfo.getId());
-            System.out.print(props.toString()+" ");
+            stringBuffer.append(props.toString()+" ");
             if (props.getType() == EQUIP){
                 //是装备
                 Equipment equipment = GetBean.getPropsManager().getEquipment(propInfo.getId());
-                System.out.print("位置:"+ ClientResourseManager.getContent("equipPosition",equipment.getPosition()) +equipment.toString());
+                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipment.getPosition()) +equipment.toString());
             }else {
-                System.out.print("数量:"+propInfo.getNum());
+                stringBuffer.append("数量:"+propInfo.getNum());
             }
-            System.out.println();
+            stringBuffer.append("\n");
         }
+        gameInterface.printOtherMessage(stringBuffer.toString());
     }
 }

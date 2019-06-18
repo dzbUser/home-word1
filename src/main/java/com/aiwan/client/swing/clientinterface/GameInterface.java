@@ -1,9 +1,16 @@
-package com.aiwan.client.swing.clientInterface;
+package com.aiwan.client.swing.clientinterface;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.service.infoSend.MessageSendModule;
+import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.NavigationBar;
+import com.aiwan.client.util.Verification;
+import com.aiwan.server.user.account.protocol.CM_Logout;
+import com.aiwan.server.util.Protocol;
+import com.aiwan.server.util.SMToDecodeData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +25,7 @@ import java.awt.event.WindowEvent;
  * @since 2019.6.17
  * */
 public class GameInterface extends JFrame{
+    private static Logger logger = LoggerFactory.getLogger(GameInterface.class);
     /** 导航栏 */
     private NavigationBar navigationBar = new NavigationBar();
 
@@ -35,44 +43,68 @@ public class GameInterface extends JFrame{
         //接入界面管理
         InterfaceManager.putFrame("game",this);
         //设置长宽
-        setSize(600, 600);
+        setSize(1000, 600);
         //添加导航栏
         this.add(navigationBar);
         //消除格式
         this.setLayout(null);
 
         //添加信息输入 功能选择框+输入框+按钮
+        JLabel funcPrompt = new JLabel("功能框：");
+        funcPrompt.setFont(new Font("楷体",Font.BOLD,16));
+        funcPrompt.setBounds(150,50,80,50);
+        JLabel messagePrompt = new JLabel("指令框：");
+        messagePrompt.setBounds(360,50,80,50);
+        messagePrompt.setFont(new Font("楷体",Font.BOLD,16));
+
+        //添加指示
+        this.add(funcPrompt);
+        this.add(messagePrompt);
+
+        //添加输入输入框
         final JTextField message = new JTextField();
         final JTextField func = new JTextField();
-        message.setBounds(150,50,300,50);
-        func.setBounds(50,50,100,50);
+        message.setFont(new Font("楷体",Font.BOLD,16));
+        func.setFont(new Font("楷体",Font.BOLD,16));
+
+        message.setBounds(430,50,100,50);
+        func.setBounds(220,50,100,50);
         JButton submit = new JButton("提交");
         //添加监听器
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //角色是否有
-                if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
-                   printOtherMessage("您还未创建角色，请创建角色！");
+                if (!Verification.canParseInt(func.getText())){
+                    //功能验证
+                    printOtherMessage("功能框输入不规范");
                     return;
                 }
-                //获取功能选择
                 int num  = Integer.parseInt(func.getText());
+                //角色是否有
+                if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
+                    //验证是否为创建角色
+                    if (navigationBar.getNum() != 1 || num != 1){
+                        printOtherMessage("您还未创建角色，请创建角色！");
+                        return;
+                    }
+                }
+                //获取功能选择
                 MessageSendModule.getMessageModule(navigationBar.getNum()).sendMessage(message.getText(),num);
             }
         });
 
-        submit.setBounds(450,50,80,50);
+        submit.setBounds(550,50,80,50);
         this.add(message);
         this.add(submit);
         this.add(func);
-        //添加提示信息
-        promptMessage = newJTextArea(0,100,600,120,5,60);
+
+        //添加提示信息文本框
+        promptMessage = newJTextArea(0,100,800,120,5,80);
         promptMessage.append(NavigationBar.ROLEMESSAGE+"\n");
         //添加其他信息文本
-        otherMessage = newJTextArea(0,220,300,300,15,30);
+        otherMessage = newJTextArea(0,220,500,300,15,50);
         //添加地图文本
-        mapMessage = newJTextArea(300,220,300,300,15,25);
+        mapMessage = newJTextArea(500,220,500,300,15,50);
         //可见
         this.setVisible(false);
 
@@ -82,15 +114,7 @@ public class GameInterface extends JFrame{
             @Override
             public void windowClosing ( WindowEvent e )
             {
-                int exi = JOptionPane.showConfirmDialog (null, "要退出该程序吗？", "友情提示", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (exi == JOptionPane.YES_OPTION)
-                {
-                    System.exit (0);
-                }
-                else
-                {
-                    return;
-                }
+                logout();
             }
         });
     }
@@ -120,18 +144,57 @@ public class GameInterface extends JFrame{
 
     /** 输出提示信息 */
     public void printPromptMessage(String message){
-        //清空信息
-        promptMessage.setText("");
-        promptMessage.append(message+"\n");
+        promptMessage.setText(message+"\n");
     }
 
     /** 输出地图提示信息 */
     public void printMapMessage(String message){
-        mapMessage.append(message+"\n");
+        mapMessage.setText(message+"\n");
     }
 
     /** 输出其他提示信息 */
     public void printOtherMessage(String message){
-        otherMessage.append(message+"\n");
+        otherMessage.setText(message+"\n");
+    }
+
+    /** 用户注销 */
+    public static void logout(){
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        //清空文本域
+        gameInterface.getMapMessage().setText("");
+        gameInterface.getOtherMessage().setText("");
+        //发送注销协议
+        CM_Logout cm_logout = new CM_Logout();
+        cm_logout.setUsername(LoginUser.getUsername());
+        ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.LOGOUT,cm_logout));
+        InterfaceManager.getFrame("game").setVisible(false);
+        InterfaceManager.getFrame("login").setVisible(true);
+    }
+
+    public JTextArea getPromptMessage() {
+        return promptMessage;
+    }
+
+    public GameInterface setPromptMessage(JTextArea promptMessage) {
+        this.promptMessage = promptMessage;
+        return this;
+    }
+
+    public JTextArea getMapMessage() {
+        return mapMessage;
+    }
+
+    public GameInterface setMapMessage(JTextArea mapMessage) {
+        this.mapMessage = mapMessage;
+        return this;
+    }
+
+    public JTextArea getOtherMessage() {
+        return otherMessage;
+    }
+
+    public GameInterface setOtherMessage(JTextArea otherMessage) {
+        this.otherMessage = otherMessage;
+        return this;
     }
 }

@@ -62,16 +62,17 @@ public class RoleServiceImpl implements RoleService {
         SM_CreateRole sm_createRole = new SM_CreateRole();
         sm_createRole.setRoles(user.getUserBaseInfo().getRoles());
         sm_createRole.setMessage("角色创建成功");
+        sm_createRole.setMapMessage( GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
         //发送协议
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLESUCESS,sm_createRole);
         logger.debug(decodeData.getLength()+"");
         //返回信息到客户端
         session.messageSend(decodeData);
-        GetBean.getMapManager().sendMessageToUsers(user.getMap());
+        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
     }
 
     @Override
-    public void getRoleMessage(Session session, CM_RoleMessage cm_roleMessage) {
+    public void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session) {
         Role role = roleManager.load(cm_roleMessage.getrId());
         if (role == null){
             logger.error("角色id："+cm_roleMessage.getrId()+"为空");

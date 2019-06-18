@@ -27,7 +27,7 @@
                   <resource>META-INF/spring.tooling</resource>
                 </transformer>
                 <transformer>
-                  <mainClass>com.aiwan.client.ClientStart</mainClass>
+                  <mainClass>com.aiwan.client.swing.start.GameStart</mainClass>
                 </transformer>
               </transformers>
             </configuration>

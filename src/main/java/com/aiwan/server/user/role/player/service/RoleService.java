@@ -21,7 +21,7 @@ public interface RoleService {
     /**
      * 获取角色信息
      * */
-    void getRoleMessage(Session session, CM_RoleMessage cm_roleMessage);
+    void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session);
 
     /** 角色经验增加 */
     int addExperience(String accountId,Long rId,int experienceNum);

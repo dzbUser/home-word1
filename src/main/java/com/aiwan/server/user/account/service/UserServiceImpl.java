@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 sm_userMessage.setCreated(false);
                 sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
             }else {
-                GetBean.getMapManager().sendMessageToUsers(user.getMap());
+                GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
             }
             sm_userMessage.setUsername(user.getAcountId());
             sm_userMessage.setMap(user.getMap());
@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
         session.setUser(null);
         session.messageSend(decodeData);
         //给其余玩家发送信息
-        GetBean.getMapManager().sendMessageToUsers(user.getMap());
+        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
     }
 
     /**
@@ -151,12 +151,15 @@ public class UserServiceImpl implements UserService {
          * 2.顶替用户上线，更新缓存
          * 3.查看是否创建新角色，若创建则加入人物属性映射
          * */
+        SM_UserMessage sm_userMessage = new SM_UserMessage();
         DecodeData decodeData;
         User user = userManager.getUserByAccountId(cm_hlogin.getUsername());
         //账号或者密码错误
         if (user == null||!user.getHpassword().equals(cm_hlogin.getHpassword())){
-            String msg = new String("账号或者高级密码错误");
-            decodeData = SMToDecodeData.shift(StatusCode.LOGINFAIL,msg);
+            logger.debug(sm_userMessage.getUsername()+"登录失败");
+            sm_userMessage.setStatus(false);
+            sm_userMessage.setOtherMessage("账号或者高级密码错误");
+            decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
             session.messageSend(decodeData);
             return;
         }
@@ -175,14 +178,15 @@ public class UserServiceImpl implements UserService {
         GetBean.getMapManager().putUser(user);
 
         //设置和发送信息
-        SM_UserMessage sm_userMessage = new SM_UserMessage();
+
 
         //是否创建新角色
         if (user.getRoleNum() == 0){
             sm_userMessage.setCreated(false);
             sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
         }else{
-            GetBean.getMapManager().sendMessageToUsers(user.getMap());
+            //给其余玩家发送地图信息
+            GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
         }
 
         sm_userMessage.setUsername(user.getAcountId());
@@ -191,11 +195,11 @@ public class UserServiceImpl implements UserService {
         sm_userMessage.setCurrentY(user.getCurrentY());
         sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
         sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
+        sm_userMessage.setStatus(true);
         decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         session.messageSend(decodeData);
-        //给其他玩家发送信息
-
     }
+
     /**
      * 查看个人信息
      * */
@@ -234,14 +238,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session) {
-        logger.debug("获取角色信息"+cm_roleMessage.getAccountId());
-        //转交给角色业务
-        GetBean.getRoleService().getRoleMessage(session,cm_roleMessage);
-    }
-
-
 
     @Override
     public void deleteSave(String accountId) {
@@ -254,7 +250,7 @@ public class UserServiceImpl implements UserService {
         //把用户从地图资源中移除
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
         //给他玩家发送信息
-        GetBean.getMapManager().sendMessageToUsers(user.getMap());
+        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
     }
 
 }

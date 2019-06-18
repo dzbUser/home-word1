@@ -1,5 +1,7 @@
 package com.aiwan.client.service.infoSend;
 
+import com.aiwan.client.service.infoSend.element.MountMessageSend;
+import com.aiwan.client.service.infoSend.element.PackMessageSend;
 import com.aiwan.client.service.infoSend.element.RoleMessageSend;
 
 /**
@@ -13,7 +15,33 @@ public enum  MessageSendModule {
     ROLE_MODULE(1){
         @Override
         public void  sendMessage(String message,int num){
+            RoleMessageSend roleMessageSend = RoleMessageSend.getRoleMessageSend(num);
+            if (roleMessageSend == null){
+                return;
+            }
             RoleMessageSend.getRoleMessageSend(num).messageSend(message);
+        }
+    },
+    /** 背包发送模块 */
+    PACK_MODULE(2){
+        @Override
+        public void  sendMessage(String message,int num){
+            PackMessageSend packMessageSend = PackMessageSend.getPackMessageSend(num);
+            if (packMessageSend == null){
+                return;
+            }
+            PackMessageSend.getPackMessageSend(num).messageSend(message);
+        }
+    },
+    /** 背包发送模块 */
+    MOUNT_MODULE(3){
+        @Override
+        public void  sendMessage(String message,int num){
+            MountMessageSend mountMessageSend = MountMessageSend.getMountMessageSend(num);
+            if (mountMessageSend == null){
+                return;
+            }
+            MountMessageSend.getMountMessageSend(num).messageSend(message);
         }
     }
     ;
@@ -46,4 +74,5 @@ public enum  MessageSendModule {
         }
         throw new RuntimeException("匹配错误:" + num);
     }
+
 }

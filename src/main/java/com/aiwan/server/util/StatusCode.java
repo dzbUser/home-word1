@@ -33,4 +33,6 @@ public class StatusCode {
     public final static int REGISTER = 13;
     /** 用户提示信息返回 */
     public final static int MAPMESSAGE = 14;
+    /** 查看用户装备 */
+    public final static int VIEWEQUIP = 15;
 }

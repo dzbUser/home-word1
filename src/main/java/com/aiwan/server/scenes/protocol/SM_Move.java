@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class SM_Move implements Serializable {
     private int targetX;
     private int targetY;
+    private String mapMessage;
     /** 状态
      * 1.移动成功
      * 0.移动失败
@@ -18,12 +19,22 @@ public class SM_Move implements Serializable {
     public SM_Move(){}
 
     /**  获取对象 */
-    public static SM_Move valueOf(int targetX, int targetY,int status){
+    public static SM_Move valueOf(int targetX, int targetY,int status,String mapMessage){
         SM_Move sm_move = new SM_Move();
         sm_move.setTargetX(targetX);
         sm_move.setTargetY(targetY);
         sm_move.setStatus(status);
+        sm_move.setMapMessage(mapMessage);
         return sm_move;
+    }
+
+    public String getMapMessage() {
+        return mapMessage;
+    }
+
+    public SM_Move setMapMessage(String mapMessage) {
+        this.mapMessage = mapMessage;
+        return this;
     }
 
     public int getTargetX() {

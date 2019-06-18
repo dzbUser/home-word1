@@ -1,12 +1,17 @@
 package com.aiwan.server.scenes.mapresource;
 
-/** 存储地图二维数组内数字的含义 */
+/** 存储地图二维数组内数字的含义
+ * @author dengzebiao
+ * */
 public class PositionMeaning {
-    //二维数组中的数字
+
+    /**地图动态内容*/
     private int num;
-    //名字
+
+    /**名字*/
     private String name;
-    //是否可移动,1可移动，0不可移动
+
+    /**是否可移动,1可移动，0不可移动*/
     private int allowMove;
 
     public PositionMeaning(int num, String name, int allowMove) {

@@ -84,7 +84,6 @@ public enum  RoleMessageSend {
         public boolean verify(String message){
             String[] messages = message.split(" ");
             if (messages.length != 2|| !Verification.canParseInt(messages[0])||!Verification.canParseInt(messages[1])){
-                System.out.println(message.length());
                 return false;
             }
             return true;

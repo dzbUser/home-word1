@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 @Scope("singleton")
 @Service("scenesService")
 public class ScenesServiceImpl implements ScenesService{
+
     Logger logger = LoggerFactory.getLogger(ScenesServiceImpl.class);
 
     private UserManager userManager;
@@ -37,6 +38,7 @@ public class ScenesServiceImpl implements ScenesService{
      * */
     @Override
     public void move(final CM_Move cm_move, final Session session) {
+        logger.info(cm_move.getUsername()+"请求移动到"+cm_move.getTargetX()+","+cm_move.getTargetY());
         Object data;
         int type ;
         User user = session.getUser();
@@ -49,8 +51,10 @@ public class ScenesServiceImpl implements ScenesService{
             type = StatusCode.MOVESUCCESS;
             //对所有在线用户发送地图信息
             GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+            logger.info(cm_move.getUsername()+"移动成功");
         } else {
             data = "此处不可移动！";
+            logger.info(cm_move.getUsername()+"移动失败");
             type = StatusCode.MESSAGE;
         }
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
@@ -63,10 +67,12 @@ public class ScenesServiceImpl implements ScenesService{
      * */
     @Override
     public void shift(final CM_Shift cm_shift, final Session session) {
+        logger.info(cm_shift.getUsername()+"请求地图跳转到"+cm_shift.getMap());
         User user = session.getUser();
         //是否有该地图，若无则放回无该地图
         if (GetBean.getMapManager().getMapResource(cm_shift.getMap()) == null){
             session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"没有该地图"));
+            logger.info(cm_shift.getUsername()+"请求失败，原因：没有该地图");
             return;
         }
         //获取就地图位置
@@ -93,5 +99,6 @@ public class ScenesServiceImpl implements ScenesService{
         if (user.getMap()!=oldMap){
             GetBean.getMapManager().sendMessageToUsers(oldMap,user.getAcountId());
         }
+        logger.info("请求成功");
     }
 }

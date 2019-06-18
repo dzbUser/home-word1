@@ -158,7 +158,6 @@ public class ExcelUtil
 
                         // 获取model属性的类型
                         Class<?> modelType = field.getType();
-//                        System.out.println(modelType);
                         // 获取map中的数据
                         Object value = map.get(mappedName);
                         DecimalFormat df = new DecimalFormat("######0");

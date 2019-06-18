@@ -8,6 +8,8 @@ import com.aiwan.server.user.role.mount.entity.MountEntity;
  * 业务实体类
  * */
 public class MountModel {
+
+    /** 坐骑实体 */
     private MountEntity mountEntity;
 
     public MountEntity getMountEntity() {

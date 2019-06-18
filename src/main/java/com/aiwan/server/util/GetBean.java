@@ -1,6 +1,5 @@
 package com.aiwan.server.util;
 
-import com.aiwan.server.prop.service.PropService;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
@@ -31,7 +30,6 @@ public class GetBean {
     private static RoleService roleService;
     private static PropsManager propsManager;
     private static BackpackService backpackService;
-    private static PropService propService;
     private static EquipmentService equipmentService;
     private static MountService mountService;
     private static RoleResourceManager roleResourceManager;
@@ -64,15 +62,6 @@ public class GetBean {
     @Autowired
     public void setMountService(MountService mountService) {
         GetBean.mountService = mountService;
-    }
-
-    public static PropService getPropService() {
-        return propService;
-    }
-
-    @Autowired
-    public void setPropService(PropService propService) {
-        GetBean.propService = propService;
     }
 
     public static BackpackService getBackpackService() {

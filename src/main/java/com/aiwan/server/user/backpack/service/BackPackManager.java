@@ -1,12 +1,16 @@
 package com.aiwan.server.user.backpack.service;
 
+import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.backpack.model.BackpackInfo;
+import com.aiwan.server.user.backpack.model.BackpackItem;
+import com.aiwan.server.util.GetBean;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -53,5 +57,43 @@ public class BackPackManager {
         backpackEnt.setCreateTime(time);
         backpackEnt.setBackpackInfo(new BackpackInfo());
         cache.writeBack(backpackEnt.getAccountId(),backpackEnt);
+    }
+
+    /** 添加道具后，背包是否为满 */
+    public boolean isFull(String accountId,int num,int pid){
+        //获取用户背包
+        Backpack backpack = load(accountId);
+        //获取背包当前道具数量
+        int backNum = 0;
+        Map<Integer, BackpackItem> backpackItems = backpack.getBackpackInfo().getBackpackItems();
+        //遍历所有背包中的道具，获取背包所占格数
+        for (Map.Entry<Integer, BackpackItem> itemEntry:backpackItems.entrySet()){
+            //获取道具
+            Props props = GetBean.getPropsManager().getProps(itemEntry.getValue().getId());
+            if (props.getOverlay() == 0){
+                //不可叠加
+                backNum += itemEntry.getValue().getNum();
+            }else {
+                //可叠加
+                backNum++;
+            }
+        }
+        //获取欲添加的道具
+        Props props = GetBean.getPropsManager().getProps(pid);
+        if (props.getOverlay() == 1){
+            //可叠加，查看背包中是否有该道具
+            if (backpackItems.get(pid) == null){
+                //没有改道具
+                backNum++;
+            }
+        }else {
+            //不可叠加
+            backNum += num;
+        }
+        if (backNum > backpack.getMaxNum()){
+            //大于最大容量
+            return true;
+        }
+        return false;
     }
 }

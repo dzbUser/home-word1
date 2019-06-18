@@ -3,7 +3,6 @@ package com.aiwan.server.user.account.service;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.*;
 import com.aiwan.server.util.*;
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
         //~~~~~~~~~~第一步~``````
         Session session1 = SessionManager.getSessionByUsername(userMessage.getUsername());
         if (session1 !=null){
-            logger.debug("用户已在线，若想顶替，请选择高级登录");
+            logger.info(userMessage.getUsername()+"用户在线");
             sm_userMessage.setStatus(false);
             sm_userMessage.setOtherMessage("用户已在线，若想顶替，请选择高级登录");
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         //账号或者密码错误~~~~~~~第二步~~~~~~~~~
         if (user == null||!user.getPassword().equals(userMessage.getPassword())){
-            logger.debug(userMessage.getUsername()+"登录失败");
+            logger.info(userMessage.getUsername()+"登录失败");
             sm_userMessage.setStatus(false);
             sm_userMessage.setOtherMessage("账号或者密码错误");
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
@@ -91,7 +90,7 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
             sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
-            //给其他玩家发送信息
+            logger.info(user.getAcountId()+"登录成功！");
         }
         session.messageSend(decodeData);
     }
@@ -102,17 +101,17 @@ public class UserServiceImpl implements UserService {
         User user = userManager.getUserByAccountId(userMessage.getUsername());
         //错误输入
         if(userMessage == null){
-            logger.debug("输入错误");
+            logger.info("输入错误");
             session.messageSend(SMToDecodeData.shift(StatusCode.REGISTER,SM_Register.valueOf(0,userMessage.getUsername())));
         }
         //账号可用
         else if (user == null){
-            logger.debug("注册新用户");
+            logger.info(userMessage.getUsername()+"注册新用户成功");
             userManager.register(userMessage.getUsername(),userMessage.getPassword(),userMessage.getHpassword(),ORINGINMAP,ORINGINX,ORINGINY,1);
             GetBean.getBackpackService().createBackpack(userMessage.getUsername());
             session.messageSend(SMToDecodeData.shift(StatusCode.REGISTER,SM_Register.valueOf(1,userMessage.getUsername())));
         }else {//账号已被注册
-            logger.debug("用户已存在");
+            logger.info(userMessage.getUsername()+"用户已存在");
             session.messageSend(SMToDecodeData.shift(StatusCode.REGISTER,SM_Register.valueOf(0,userMessage.getUsername())));
         }
     }
@@ -126,7 +125,7 @@ public class UserServiceImpl implements UserService {
         * 2.从地图资源中删除
         * */
         SessionManager.removeSessionByUsername(userMessage.getUsername());
-        logger.debug("注销成功！");
+        logger.info(userMessage.getUsername()+"注销成功！");
         String content = new String("注销用户成功！");
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.LOGOUTSUCCESS,content);
         User user = userManager.getUserByAccountId(userMessage.getUsername());
@@ -146,17 +145,13 @@ public class UserServiceImpl implements UserService {
      * */
     @Override
     public void hLogin(CM_HLogin cm_hlogin, Session session) {
-        /*
-         * 1.查看账号以及高级密码，若错误则返回错误
-         * 2.顶替用户上线，更新缓存
-         * 3.查看是否创建新角色，若创建则加入人物属性映射
-         * */
+
         SM_UserMessage sm_userMessage = new SM_UserMessage();
         DecodeData decodeData;
         User user = userManager.getUserByAccountId(cm_hlogin.getUsername());
         //账号或者密码错误
         if (user == null||!user.getHpassword().equals(cm_hlogin.getHpassword())){
-            logger.debug(sm_userMessage.getUsername()+"登录失败");
+            logger.info(sm_userMessage.getUsername()+"高级登录失败");
             sm_userMessage.setStatus(false);
             sm_userMessage.setOtherMessage("账号或者高级密码错误");
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
@@ -177,8 +172,6 @@ public class UserServiceImpl implements UserService {
         //把用户添加到地图资源中
         GetBean.getMapManager().putUser(user);
 
-        //设置和发送信息
-
 
         //是否创建新角色
         if (user.getRoleNum() == 0){
@@ -196,41 +189,25 @@ public class UserServiceImpl implements UserService {
         sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
         sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
         sm_userMessage.setStatus(true);
+
+        logger.info(cm_hlogin.getUsername()+"高级登录成功");
         decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         session.messageSend(decodeData);
     }
 
-    /**
-     * 查看个人信息
-     * */
-    public void userMessage(CM_UserMessage userMessage,Session session){
-        User user = SessionManager.getSessionByUsername(userMessage.getUsername()).getUser();
-        Object data = "获取个人信息失败";
-        int type = StatusCode.SHIFTFAIL;
-        //判断是否登录
-        if (user == null){
-            data  = "您还未登录！";
-            type = StatusCode.SHIFTFAIL;
-            DecodeData decodeData = SMToDecodeData.shift(type,data);
-            session.messageSend(decodeData);
-            return;
-        }
-        String mapContent = GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
-        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,mapContent);
-        session.messageSend(decodeData);
-    }
 
     /**
      * 创建角色
      * */
     @Override
     public void createRole(final CM_CreateRole cm_createRole, final Session session){
-        logger.debug(cm_createRole.getAccountId()+"创建角色");
+        logger.info(cm_createRole.getAccountId()+"创建角色");
         User user = session.getUser();
         if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){
             //查看角色量
             DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"您角色数已上限！");
             session.messageSend(decodeData);
+            logger.info(cm_createRole.getAccountId()+"：用户角色已上限");
         }
         else {
             //转交给角色业务
@@ -243,7 +220,7 @@ public class UserServiceImpl implements UserService {
     public void deleteSave(String accountId) {
         //删除人物session缓存
         SessionManager.removeSessionByUsername(accountId);
-        logger.debug("删除人物缓存");
+        logger.info(accountId+":删除人物缓存与保存信息");
         User user = userManager.getUserByAccountId(accountId);
         //保存用户数据
         userManager.save(user);

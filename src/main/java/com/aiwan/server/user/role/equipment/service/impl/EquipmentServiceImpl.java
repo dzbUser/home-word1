@@ -56,7 +56,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         //判断位置是否正确
         if (equipment == null||equipment.getPosition() > equipmentModel.getLength()){
             //位置错误
-            logger.error(accountId+"中的"+rId+"装备错误");
+            logger.info(accountId+"中的"+rId+"装备错误");
             return -1;
         }
         EquipmentInfo equipmentInfo = equipmentModel.getEquipmentInfo();
@@ -69,6 +69,8 @@ public class EquipmentServiceImpl implements EquipmentService {
 
         //修改人物属性
         GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rId),rId);
+
+        logger.info(accountId+"装备"+pid+"成功");
         //返回装备id
         return oldId;
     }
@@ -78,6 +80,8 @@ public class EquipmentServiceImpl implements EquipmentService {
         /**
          * 获取装备栏，遍历装备栏
          * */
+
+        logger.info(cm_viewEquipBar.getAccountId()+"：查看装备信息");
         EquipmentModel equipmentModel = equipmentManager.load(cm_viewEquipBar.getrId());
         Props prop;
         //获取装备栏数组
@@ -95,6 +99,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public Map<AttributeType, AttributeElement> getEquipAttributes(Long rId) {
+        logger.info(rId+":获取属性");
         //创建属性列表
         Map<AttributeType, AttributeElement> elementHashMap = new HashMap<AttributeType, AttributeElement>();
         EquipmentModel equipmentModel = equipmentManager.load(rId);

@@ -35,7 +35,10 @@ public enum  AttributeType implements Serializable {
         public boolean isRateAttribute(){
             return true;
         }
-
+        @Override
+        public Long calculate(AttributeElement attributeElement, Map<AttributeType,AttributeElement> map){
+            return attributeElement.getValue()/100;
+        }
         @Override
         public AttributeType getEffectAttribute(){
             return ATTACK;

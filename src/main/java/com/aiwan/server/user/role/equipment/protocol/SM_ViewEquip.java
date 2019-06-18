@@ -11,6 +11,8 @@ import java.util.List;
  * 装备查看协议
  * */
 public class SM_ViewEquip implements Serializable {
+
+    /** 装备列表 */
     private List<EquipInfo> list;
 
     public static SM_ViewEquip valueOf(List<EquipInfo> list){

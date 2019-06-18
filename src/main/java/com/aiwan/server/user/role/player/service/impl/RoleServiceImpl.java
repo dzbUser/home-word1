@@ -65,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
         sm_createRole.setMapMessage( GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
         //发送协议
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLESUCESS,sm_createRole);
-        logger.debug(decodeData.getLength()+"");
+        logger.info(user.getAcountId()+"创建角色"+id+"成功");
         //返回信息到客户端
         session.messageSend(decodeData);
         GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
@@ -138,7 +138,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void putAttributeModule(String name,Map<AttributeType, AttributeElement> map,Long rId) {
         roleManager.setRoleAttribute(name,map ,rId);
-
     }
 
     /**获取升级要求(暂用)*/

@@ -4,6 +4,7 @@ import com.aiwan.server.prop.resource.Props;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.equipment.service.impl.EquipmentServiceImpl;
 import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
 import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
@@ -14,6 +15,8 @@ import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -25,6 +28,8 @@ import java.util.Map;
  * */
 @Service
 public class MountServiceImpl implements MountService {
+    Logger logger = LoggerFactory.getLogger(MountServiceImpl.class);
+
     @Autowired
     private MountManager mountManager;
 
@@ -35,11 +40,13 @@ public class MountServiceImpl implements MountService {
 
     @Override
     public int addExperience(Long rId,int experienceNum) {
+        logger.info(rId+"角色请求坐骑提升");
         //获取等级，计算升阶经验，循环升阶
         MountModel mountModel = mountManager.load(rId);
         int level = mountModel.getLevel();
         if (level >= mountManager.getMountResource().getMaxLevel()){
             //以达到最高等级
+            logger.info(rId+"角色请求坐骑提升失败，以达到最大等级");
             return 0;
         }
         int totalExperience = mountModel.getExperience()+experienceNum;
@@ -59,6 +66,8 @@ public class MountServiceImpl implements MountService {
 
     @Override
     public void viewMount(CM_ViewMount cm_viewMount, Session session) {
+
+        logger.info(cm_viewMount.getAccountId()+":查看坐骑信息");
         StringBuffer stringBuffer =new StringBuffer();
         //获取坐骑模型
         MountModel mountModel = mountManager.load(cm_viewMount.getrId());
@@ -81,7 +90,7 @@ public class MountServiceImpl implements MountService {
         status = addExperience(cm_mountUpgrade.getrId(),1000);
         if (status == 0){
             //达到最高级
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的坐骑已经是最高级！"));
+                session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的坐骑已经是最高级！"));
             //返回道具
             GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(),props,1);
             return;

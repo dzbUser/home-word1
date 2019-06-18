@@ -6,8 +6,7 @@ import java.util.List;
  * @author dengzebiao
  * 用户实体类信息
  * */
-public class
-UserBaseInfo {
+public class UserBaseInfo {
     /** 角色id集合 */
     private List<Long> roles;
 

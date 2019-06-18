@@ -31,20 +31,20 @@ public class AttributeUtil {
     public static long calculateItem(AttributeElement element, Map<AttributeType, AttributeElement> pureAttribute) {
         long value = element.getValue();
         if (element.getAttributeType().isRateAttribute()||element.getAttributeType().getBeEffectAttribute() == null){
-            //若为百分比值,或者该属性没有被影响
+            //若为万分比值,或者该属性没有被影响
             return value;
         }
-        //初始化百分比
+        //初始化万分比
         int rate = 0;
         for (AttributeType type:element.getAttributeType().getBeEffectAttribute()){
             //叠加的属性在角色属性列表中不存在
             if (pureAttribute.get(type) == null){
                 continue;
             }
-            //叠加百分比
+            //叠加万分比比
             rate += pureAttribute.get(type).getValue();
         }
-        return value+rate*value/100;
+        return value+rate*value/10000;
     }
 
     /** 字符串转化为初始属性 */

@@ -75,7 +75,6 @@ public class UserInfoReceive {
     /** 注销 */
     @InfoReceiveMethod(status = StatusCode.LOGOUTSUCCESS)
     public void logout(String message){
-        System.out.println(message);
         LoginUser.setUsername("");
         LoginUser.setRoles(null);
     }

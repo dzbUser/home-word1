@@ -10,36 +10,45 @@ import java.util.Map;
  * 地图资源类
  * */
 public class MapResource {
-    //地图类型
+    /**地图类型*/
     @CellMapping(name = "mapType")
     private Integer mapType;
-    //地图名字
+
+    /**地图名字*/
     @CellMapping(name = "name")
     private String name;
-    //地图高度
+
+    /**地图高度*/
     @CellMapping(name = "height")
     private Integer height;
-    //地图宽度
+
+    /**地图宽度*/
     @CellMapping(name = "width")
     private Integer width;
-    //地图初始x坐标
+
+    /**地图初始x坐标*/
     @CellMapping(name = "originX")
     private Integer originX;
-    //地图初始化y纵坐标
+
+    /**地图初始化y纵坐标*/
     @CellMapping(name = "originY")
     private Integer originY;
-    //地图字符串
+
+    /**地图字符串*/
     @CellMapping(name = "mapString")
     private String mapString;
-    //位置信息字符串
+
+    /**位置信息字符串*/
     @CellMapping(name = "positionString")
     private String positionString;
 
-    //存地图数字涵义
+    /**存地图数字涵义*/
     private Map<Integer, PositionMeaning> positionMeaningHashMap = new HashMap<Integer, PositionMeaning>();
-    //存地图数据
+
+    /**存地图数据*/
     private int[][] map;
-    //地图动态内容
+
+    /**地图动态内容*/
     private String[][] mapMessage;
 
 

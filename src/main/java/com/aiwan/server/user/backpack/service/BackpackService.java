@@ -1,7 +1,7 @@
 package com.aiwan.server.user.backpack.service;
 
 import com.aiwan.server.prop.protocol.CM_PropUse;
-import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
@@ -20,9 +20,9 @@ public interface BackpackService {
     /** 获取道具
      * @param accountId 用户账号
      * @param num 道具数目
-     * @param props 道具
+     * @param propsResource 道具
      * */
-    void obtainProp(String accountId, Props props, int num);
+    void obtainProp(String accountId, PropsResource propsResource, int num);
 
     /** 查看背包
      * @param cm_viewBackpack 查看背包协议类

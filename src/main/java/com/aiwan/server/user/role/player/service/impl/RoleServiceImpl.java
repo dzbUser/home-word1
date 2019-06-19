@@ -1,6 +1,6 @@
 package com.aiwan.server.user.role.player.service.impl;
 
-import com.aiwan.server.prop.resource.Equipment;
+import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,8 +112,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public int equip(String accountId, Long rId, int pId) {
         Role role = roleManager.load(rId);
-        Equipment equipment = GetBean.getPropsManager().getEquipment(pId);
-        if (role.getLevel()<equipment.getLevel()){
+        EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(pId);
+        if (role.getLevel()< equipmentResource.getLevel()){
             //等级达不到要求等级
             return -1;
         }

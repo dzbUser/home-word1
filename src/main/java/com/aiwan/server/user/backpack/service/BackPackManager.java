@@ -1,6 +1,6 @@
 package com.aiwan.server.user.backpack.service;
 
-import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
 import com.aiwan.server.user.backpack.model.Backpack;
@@ -69,8 +69,8 @@ public class BackPackManager {
         //遍历所有背包中的道具，获取背包所占格数
         for (Map.Entry<Integer, BackpackItem> itemEntry:backpackItems.entrySet()){
             //获取道具
-            Props props = GetBean.getPropsManager().getProps(itemEntry.getValue().getId());
-            if (props.getOverlay() == 0){
+            PropsResource propsResource = GetBean.getPropsManager().getProps(itemEntry.getValue().getId());
+            if (propsResource.getOverlay() == 0){
                 //不可叠加
                 backNum += itemEntry.getValue().getNum();
             }else {
@@ -79,8 +79,8 @@ public class BackPackManager {
             }
         }
         //获取欲添加的道具
-        Props props = GetBean.getPropsManager().getProps(pid);
-        if (props.getOverlay() == 1){
+        PropsResource propsResource = GetBean.getPropsManager().getProps(pid);
+        if (propsResource.getOverlay() == 1){
             //可叠加，查看背包中是否有该道具
             if (backpackItems.get(pid) == null){
                 //没有改道具

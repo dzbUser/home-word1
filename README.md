@@ -65,7 +65,7 @@
 		* model：1.Attribute:属性元素实体  2.角色属性：RoleAttributes
 		* service：属性业务类
 		* protocol:属性协议包
-	3. equipment:装备系统包
+	3. equipmentResource:装备系统包
 		* entity:role 实体类
 		* model：模型包
 		* service：业务包

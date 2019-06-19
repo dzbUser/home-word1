@@ -5,8 +5,8 @@ import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
-import com.aiwan.server.prop.resource.Equipment;
-import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.prop.resource.EquipmentResource;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.util.GetBean;
@@ -41,12 +41,12 @@ public class PackageInfoReceive {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
         StringBuffer stringBuffer = new StringBuffer();
         for (PropInfo propInfo:list){
-            Props props = GetBean.getPropsManager().getProps(propInfo.getId());
-            stringBuffer.append(props.toString()+" ");
-            if (props.getType() == EQUIP){
+            PropsResource propsResource = GetBean.getPropsManager().getProps(propInfo.getId());
+            stringBuffer.append(propsResource.toString()+" ");
+            if (propsResource.getType() == EQUIP){
                 //是装备
-                Equipment equipment = GetBean.getPropsManager().getEquipment(propInfo.getId());
-                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipment.getPosition()) +equipment.toString());
+                EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(propInfo.getId());
+                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition", equipmentResource.getPosition()) + equipmentResource.toString());
             }else {
                 stringBuffer.append("数量:"+propInfo.getNum());
             }

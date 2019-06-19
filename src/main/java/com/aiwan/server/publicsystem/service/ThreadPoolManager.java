@@ -16,13 +16,10 @@ public class ThreadPoolManager {
 
     /** 用户线程池 */
     private static ExecutorService[] userThreadArray;
-    
-    /** 其他线程池 */
-    private static ExecutorService otherThreadPool;
+
     /** 用户线程池大小 */
     private static int userPoolSize;
-    /** 其他线程大小 */
-    private static int otherPoolSize;
+
 
     /** 线程池初始化 */
     public static void initialize(){
@@ -33,12 +30,8 @@ public class ThreadPoolManager {
         * 2.创建线程池
         * */
         userPoolSize = Runtime.getRuntime().availableProcessors() * 2 * 6 / 10;
-        //获取其他线程池
-        otherPoolSize = Runtime.getRuntime().availableProcessors() * 2 * 2 / 10;
-        otherPoolSize = (otherPoolSize <=0)? 1:otherPoolSize;
         userThreadArray = new ExecutorService[userPoolSize];
         logger.debug("创建用户线程数："+userPoolSize);
-        logger.debug("创建其他线程数："+otherPoolSize);
         //用户线程池初始化
         for (int i = 0;i<userPoolSize;i++){
             //线程命名
@@ -48,11 +41,6 @@ public class ThreadPoolManager {
             userThreadArray[i] = new ThreadPoolExecutor(1,1,0, TimeUnit.SECONDS,queue,nameThreadFactory,policy);
         }
 
-        //其他线程池初始化
-        RejectedExecutionHandler policy = new ThreadPoolExecutor.DiscardPolicy();
-        BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(512);
-        ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("otherThread-pool").build();
-        otherThreadPool = new ThreadPoolExecutor(otherPoolSize,otherPoolSize,0, TimeUnit.SECONDS,queue,nameThreadFactory,policy);
     }
 
 
@@ -66,8 +54,4 @@ public class ThreadPoolManager {
         return accountId.hashCode()%userPoolSize;
     }
 
-    /** 执行其他线程池 */
-    public static void excuteOtherThread(Runnable runnable){
-        otherThreadPool.execute(runnable);
-    }
 }

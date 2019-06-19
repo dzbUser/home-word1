@@ -13,8 +13,6 @@ public interface PropUseInterface {
      * @param accountId 账号id
      * @param rId 角色id
      * @param pId 道具id
-     * @param session 会话
-     * @return 0:使用失败 1：使用成功
-     * */
-    public int propUse(String accountId,Long rId, int pId, Session session);
+     * @param session 会话 */
+     void propUse(String accountId, Long rId, int pId, Session session);
 }

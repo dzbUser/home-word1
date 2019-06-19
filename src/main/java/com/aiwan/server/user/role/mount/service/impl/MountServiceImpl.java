@@ -1,10 +1,9 @@
 package com.aiwan.server.user.role.mount.service.impl;
 
-import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.equipment.service.impl.EquipmentServiceImpl;
 import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
 import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
@@ -80,10 +79,10 @@ public class MountServiceImpl implements MountService {
     public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session) {
         int status = GetBean.getBackpackService().deductionProp(cm_mountUpgrade.getAccountId(),2);
         //获取道具类
-        Props props = GetBean.getPropsManager().getProps(2);
+        PropsResource propsResource = GetBean.getPropsManager().getProps(2);
         if (status == 0){
             //背包没有升阶丹
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您背包中没有"+props.getName()));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您背包中没有"+ propsResource.getName()));
             return;
         }
         //增加经验
@@ -92,7 +91,7 @@ public class MountServiceImpl implements MountService {
             //达到最高级
                 session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的坐骑已经是最高级！"));
             //返回道具
-            GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(),props,1);
+            GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(), propsResource,1);
             return;
         }
         session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"提升成功"));

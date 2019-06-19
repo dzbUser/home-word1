@@ -1,7 +1,7 @@
 package com.aiwan.server.user.backpack.service.impl;
 
 import com.aiwan.server.prop.protocol.CM_PropUse;
-import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.PropUserManager;
@@ -14,7 +14,6 @@ import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
 import org.slf4j.Logger;
@@ -45,7 +44,7 @@ public class BackpackServiceImpl implements BackpackService {
 
     /** 获取道具 */
     @Override
-    public void obtainProp(String accountId, Props props, int num) {
+    public void obtainProp(String accountId, PropsResource propsResource, int num) {
         /*
          * 1.判断是否可以叠加
          * 2.查看背包中是否有该道具
@@ -54,12 +53,12 @@ public class BackpackServiceImpl implements BackpackService {
          * */
         Backpack backpack = backPackManager.load(accountId);
         //获取背包中该道具
-        BackpackItem backpackItem = backpack.getBackpackItem(props.getId());
+        BackpackItem backpackItem = backpack.getBackpackItem(propsResource.getId());
         //若无该道具
         if (backpackItem == null){
             //背包无该道具
             backpackItem = new BackpackItem();
-            backpackItem.setId(props.getId());
+            backpackItem.setId(propsResource.getId());
             //无期限
             backpackItem.setLimit(false);
             backpackItem.setDeadline(0L);
@@ -102,8 +101,8 @@ public class BackpackServiceImpl implements BackpackService {
 
         //添加背包道具
         for (Map.Entry<Integer,BackpackItem> entry:map.entrySet()){
-            Props props = GetBean.getPropsManager().getProps(entry.getValue().getId());
-            if (props.getOverlay() == 0){
+            PropsResource propsResource = GetBean.getPropsManager().getProps(entry.getValue().getId());
+            if (propsResource.getOverlay() == 0){
                 //不可叠加
                 for (int i = 0;i<entry.getValue().getNum();i++){
                     //叠加添加道具
@@ -121,15 +120,15 @@ public class BackpackServiceImpl implements BackpackService {
     /** 道具使用 */
     @Override
     public void propUse(CM_PropUse cm_propUser, Session session) {
-        Props props = GetBean.getPropsManager().getProps(cm_propUser.getpId());
-        logger.info(cm_propUser.getAccountId()+"使用"+props.getName());
-        if (props.getUse() == 0){
+        PropsResource propsResource = GetBean.getPropsManager().getProps(cm_propUser.getpId());
+        logger.info(cm_propUser.getAccountId()+"使用"+ propsResource.getName());
+        if (propsResource.getUse() == 0){
             //道具不可使用
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,props.getName()+"不可以使用"));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, propsResource.getName()+"不可以使用"));
             return;
         }
         //对应道具的使用
-        PropUserManager.getPropUse(props.getType()).propUse(cm_propUser.getAccountId(),cm_propUser.getrId(),cm_propUser.getpId(),session);
+        PropUserManager.getPropUse(propsResource.getType()).propUse(cm_propUser.getAccountId(),cm_propUser.getrId(),cm_propUser.getpId(),session);
     }
 
     /** 扣除背包中的道具 */
@@ -140,14 +139,14 @@ public class BackpackServiceImpl implements BackpackService {
         * 2.背包道具减1，若减完为0，则从背包中消除该道具
         * */
         logger.info(accountId+"扣除道具"+pId);
-        Props props = GetBean.getPropsManager().getProps(pId);
+        PropsResource propsResource = GetBean.getPropsManager().getProps(pId);
         //获取背包
         Backpack backpack = backPackManager.load(accountId);
         //获取背包项
         BackpackItem backpackItem = backpack.getBackpackItem(pId);
         if (backpackItem ==null){
             //背包中没有该道具
-            logger.info(accountId+"使用"+props.getName()+"失败！");
+            logger.info(accountId+"使用"+ propsResource.getName()+"失败！");
             return 0;
         }
         int num = backpackItem.getNum();
@@ -172,8 +171,8 @@ public class BackpackServiceImpl implements BackpackService {
          * 1.获取道具
          * 2.若道具为空，则发送获取错误
          * */
-        Props props = GetBean.getPropsManager().getProps(cm_obtainProp.getId());
-        if (props == null){
+        PropsResource propsResource = GetBean.getPropsManager().getProps(cm_obtainProp.getId());
+        if (propsResource == null){
             DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"没有该道具");
             session.messageSend(decodeData);
             logger.info(cm_obtainProp+":添加道具失败，没有该道具");
@@ -188,9 +187,9 @@ public class BackpackServiceImpl implements BackpackService {
         }
 
         //添加该道具到背包
-        obtainProp(cm_obtainProp.getAccountId(),props,cm_obtainProp.getNum());
-        logger.info("用户："+cm_obtainProp.getAccountId()+"添加"+props.getName()+"成功");
-        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,props.getName()+"添加成功,数量："+cm_obtainProp.getNum());
+        obtainProp(cm_obtainProp.getAccountId(), propsResource,cm_obtainProp.getNum());
+        logger.info("用户："+cm_obtainProp.getAccountId()+"添加"+ propsResource.getName()+"成功");
+        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, propsResource.getName()+"添加成功,数量："+cm_obtainProp.getNum());
         session.messageSend(decodeData);
     }
 

@@ -57,7 +57,7 @@ public class NavigationBar extends JPanel {
      * 创建菜单项
      * @param name 菜单名
      * */
-    public JButton createItem(final String name, String message, int x, int y,int num){
+    public JButton createItem(final String name, final String message, int x, int y,final int num){
         JButton jButton = new JButton(name);
         jButton.setBounds(x,y,40,40);
 

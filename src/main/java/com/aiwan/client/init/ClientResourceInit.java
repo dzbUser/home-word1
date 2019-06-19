@@ -21,8 +21,10 @@ public class ClientResourceInit {
 
     /** 客户端资源静态文件路径
      * 注意：此路径为绝对路径
+     * 绝对路径："C:\\ideaProject\\homeword1\\src\\main\\resources\\client\\clientResource.xls";
      * */
-    private final static String FILEPATH="C:\\ideaProject\\homeword1\\src\\main\\resources\\client\\clientResource.xls";
+    private final static String FILEPATH=ClientResourceInit.class.getClassLoader().getResource("client/clientResource.xls").getPath();
+
 
     public static void init(){
         logger.debug("初始化客户端查看资源");

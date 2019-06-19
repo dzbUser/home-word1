@@ -9,6 +9,8 @@ import com.aiwan.client.util.GetBean;
 import com.aiwan.server.publicsystem.Initialization.PropUseInitialization;
 import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
 import com.aiwan.server.publicsystem.Initialization.RoleResourceInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -18,8 +20,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * */
 public class GameStart {
 
+    static Logger logger = LoggerFactory.getLogger(GameStart.class);
 
     public static void main(String[] args) {
+        logger.info("客户端启动开始");
         swingInit();
         resourceInit();
         connet();

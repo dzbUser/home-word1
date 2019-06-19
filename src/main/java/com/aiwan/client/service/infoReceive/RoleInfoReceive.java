@@ -6,8 +6,8 @@ import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
-import com.aiwan.server.prop.resource.Equipment;
-import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.prop.resource.EquipmentResource;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
@@ -67,11 +67,11 @@ public class RoleInfoReceive {
                 stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipInfo.getPosition())+" 装备:空\n");
             }else {
                 //有装备
-                Props props = GetBean.getPropsManager().getProps(equipInfo.getId());
-                Equipment equipment = GetBean.getPropsManager().getEquipment(equipInfo.getId());
-                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipment.getPosition()));
-                stringBuffer.append(" 装备:"+props.getName());
-                stringBuffer.append("\n属性添加:"+equipment.toString()+"\n");
+                PropsResource propsResource = GetBean.getPropsManager().getProps(equipInfo.getId());
+                EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(equipInfo.getId());
+                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition", equipmentResource.getPosition()));
+                stringBuffer.append(" 装备:"+ propsResource.getName());
+                stringBuffer.append("\n属性添加:"+ equipmentResource.toString()+"\n");
             }
         }
         gameInterface.printOtherMessage(stringBuffer.toString()+"\n");

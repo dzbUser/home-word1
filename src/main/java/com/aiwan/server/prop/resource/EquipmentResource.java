@@ -10,7 +10,7 @@ import java.util.Map;
  * @since 2019.6.3
  * 装备静态初始化类
  * */
-public class Equipment {
+public class EquipmentResource {
     /** 唯一标识*/
     @CellMapping(name = "id")
     private int id;
@@ -53,7 +53,7 @@ public class Equipment {
         return id;
     }
 
-    public Equipment setId(int id) {
+    public EquipmentResource setId(int id) {
         this.id = id;
         return this;
     }
@@ -62,7 +62,7 @@ public class Equipment {
         return power;
     }
 
-    public Equipment setPower(int power) {
+    public EquipmentResource setPower(int power) {
         this.power = power;
         return this;
     }
@@ -71,7 +71,7 @@ public class Equipment {
         return blood;
     }
 
-    public Equipment setBlood(int blood) {
+    public EquipmentResource setBlood(int blood) {
         this.blood = blood;
         return this;
     }
@@ -80,7 +80,7 @@ public class Equipment {
         return position;
     }
 
-    public Equipment setPosition(int position) {
+    public EquipmentResource setPosition(int position) {
         this.position = position;
         return this;
     }
@@ -89,7 +89,7 @@ public class Equipment {
         return powerBonus;
     }
 
-    public Equipment setPowerBonus(int powerBonus) {
+    public EquipmentResource setPowerBonus(int powerBonus) {
         this.powerBonus = powerBonus;
         return this;
     }
@@ -98,7 +98,7 @@ public class Equipment {
         return level;
     }
 
-    public Equipment setLevel(int level) {
+    public EquipmentResource setLevel(int level) {
         this.level = level;
         return this;
     }
@@ -107,7 +107,7 @@ public class Equipment {
         return attribute;
     }
 
-    public Equipment setAttribute(String attribute) {
+    public EquipmentResource setAttribute(String attribute) {
         this.attribute = attribute;
         return this;
     }
@@ -116,7 +116,7 @@ public class Equipment {
         return map;
     }
 
-    public Equipment setMap(Map<Integer, Integer> map) {
+    public EquipmentResource setMap(Map<Integer, Integer> map) {
         this.map = map;
         return this;
     }

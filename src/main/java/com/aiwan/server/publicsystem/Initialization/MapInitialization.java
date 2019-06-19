@@ -16,7 +16,7 @@ import java.util.List;
  * */
 public class MapInitialization {
     private static final Logger logger = LoggerFactory.getLogger(MapInitialization.class);
-    private final static String FILEPATH="src/main/resources/map1/map.xls";
+    private final static String FILEPATH=MapInitialization.class.getClassLoader().getResource("map1/map.xls").getPath();
     public static void init() throws IOException, InstantiationException, IllegalAccessException {
 
         //加载资源

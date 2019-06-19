@@ -5,6 +5,9 @@ import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.ReflectionManager;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.publicsystem.service.ThreadPoolManager;
+import com.aiwan.server.user.account.protocol.CM_HLogin;
+import com.aiwan.server.user.account.protocol.CM_Login;
+import com.aiwan.server.user.account.protocol.CM_Registered;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +36,38 @@ public class TaskDispatcher {
         final Object bean = ReflectionManager.getBean(method);
 
         final Session session = SessionManager.getSessionByHashCode(channel.hashCode());
+        //判断时属于什么协议
+        if (decodeData.getObject() instanceof CM_Login){
+            //普通登录协议类
+            CM_Login cm_login = (CM_Login)decodeData.getObject();
+            ThreadPoolManager.executeUserThread(cm_login.getUsername(), new Runnable() {
+                @Override
+                public void run() {
+                    ReflectionUtils.invokeMethod(method,bean,decodeData.getObject(),session);
+                }
+            });
+        }else if (decodeData.getObject() instanceof CM_Registered){
+            //注册协议类
+            CM_Registered cm_registered = (CM_Registered) decodeData.getObject();
+            ThreadPoolManager.executeUserThread(cm_registered.getUsername(), new Runnable() {
+                @Override
+                public void run() {
+                    ReflectionUtils.invokeMethod(method,bean,decodeData.getObject(),session);
+                }
+            });
+        }
+        else if (decodeData.getObject() instanceof CM_HLogin){
+            //高级登录协议
+            CM_HLogin cm_hLogin = (CM_HLogin) decodeData.getObject();
+            ThreadPoolManager.executeUserThread(cm_hLogin.getUsername(), new Runnable() {
+                @Override
+                public void run() {
+                    ReflectionUtils.invokeMethod(method,bean,decodeData.getObject(),session);
+                }
+            });
+        }
         /** 用户已登录 */
-        if (session.getUser()!=null){
+        else if (session.getUser()!=null){
             ThreadPoolManager.executeUserThread(session.getUser().getAcountId(), new Runnable() {
                 @Override
                 public void run() {
@@ -42,14 +75,7 @@ public class TaskDispatcher {
                 }
             });
         }else {
-            ThreadPoolManager.excuteOtherThread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            ReflectionUtils.invokeMethod(method,bean,decodeData.getObject(),session);
-                        }
-                    }
-            );
+            logger.info("错误包");
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.aiwan.server.user.role.equipment.service.impl;
 
-import com.aiwan.server.prop.resource.Equipment;
-import com.aiwan.server.prop.resource.Props;
+import com.aiwan.server.prop.resource.EquipmentResource;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
@@ -52,9 +52,9 @@ public class EquipmentServiceImpl implements EquipmentService {
         //获取装备栏
         EquipmentModel equipmentModel = equipmentManager.load(rId);
         //获取装备
-        Equipment equipment = GetBean.getPropsManager().getEquipment(pid);
+        EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(pid);
         //判断位置是否正确
-        if (equipment == null||equipment.getPosition() > equipmentModel.getLength()){
+        if (equipmentResource == null|| equipmentResource.getPosition() > equipmentModel.getLength()){
             //位置错误
             logger.info(accountId+"中的"+rId+"装备错误");
             return -1;
@@ -62,9 +62,9 @@ public class EquipmentServiceImpl implements EquipmentService {
         EquipmentInfo equipmentInfo = equipmentModel.getEquipmentInfo();
 
         //旧装备的id,0表示装备栏无装备
-        int oldId = equipmentInfo.getEquipmentElements()[equipment.getPosition()].getId();
+        int oldId = equipmentInfo.getEquipmentElements()[equipmentResource.getPosition()].getId();
         //装备转换
-        equipmentInfo.getEquipmentElements()[equipment.getPosition()].setId(pid);
+        equipmentInfo.getEquipmentElements()[equipmentResource.getPosition()].setId(pid);
         equipmentManager.writeBack(equipmentModel);
 
         //修改人物属性
@@ -83,7 +83,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 
         logger.info(cm_viewEquipBar.getAccountId()+"：查看装备信息");
         EquipmentModel equipmentModel = equipmentManager.load(cm_viewEquipBar.getrId());
-        Props prop;
+        PropsResource prop;
         //获取装备栏数组
         EquipmentElement[] equipmentElements = equipmentModel.getEquipmentInfo().getEquipmentElements();
         //创建列表
@@ -108,9 +108,9 @@ public class EquipmentServiceImpl implements EquipmentService {
             int pid = equipmentModel.getEquipmentInfo().getEquipmentElements()[i].getId();
             if (pid != 0){
                 //装备不为空
-                Equipment equipment = GetBean.getPropsManager().getEquipment(pid);
+                EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(pid);
                 //获取装备属性映射
-                Map<Integer,Integer> map = equipment.getMap();
+                Map<Integer,Integer> map = equipmentResource.getMap();
                 for (Map.Entry<Integer,Integer> entry:map.entrySet()) {
                     //获取属性类型
                     AttributeType attributeType = AttributeType.getType(entry.getKey());

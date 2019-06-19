@@ -7,7 +7,7 @@ import com.aiwan.server.publicsystem.annotation.CellMapping;
  * @since 2019.6.3
  * 道具静态初始化类
  * */
-public class Props {
+public class PropsResource{
 
     /** 道具id */
     @CellMapping(name = "id")
@@ -33,20 +33,20 @@ public class Props {
     @CellMapping(name = "use")
     private int use;
 
-    public int getId() {
-        return id;
-    }
-
-    public Props setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public int getType() {
         return type;
     }
 
-    public Props setType(int type) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public PropsResource setType(int type) {
         this.type = type;
         return this;
     }
@@ -55,7 +55,7 @@ public class Props {
         return name;
     }
 
-    public Props setName(String name) {
+    public PropsResource setName(String name) {
         this.name = name;
         return this;
     }
@@ -64,7 +64,7 @@ public class Props {
         return introduce;
     }
 
-    public Props setIntroduce(String introduce) {
+    public PropsResource setIntroduce(String introduce) {
         this.introduce = introduce;
         return this;
     }
@@ -73,7 +73,7 @@ public class Props {
         return overlay;
     }
 
-    public Props setOverlay(int overlay) {
+    public PropsResource setOverlay(int overlay) {
         this.overlay = overlay;
         return this;
     }
@@ -82,7 +82,7 @@ public class Props {
         return use;
     }
 
-    public Props setUse(int use) {
+    public PropsResource setUse(int use) {
         this.use = use;
         return this;
     }

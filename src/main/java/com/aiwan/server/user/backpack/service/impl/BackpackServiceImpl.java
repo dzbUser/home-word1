@@ -5,11 +5,9 @@ import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.publicsystem.service.PropUserManager;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
-import com.aiwan.server.user.backpack.model.BackpackItem;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.backpack.service.BackPackManager;
@@ -22,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +31,7 @@ import java.util.Map;
  * */
 @Service
 public class BackpackServiceImpl implements BackpackService {
-    Logger logger = LoggerFactory.getLogger(BackpackServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(BackpackServiceImpl.class);
 
     /** 注入管理类 */
     @Autowired
@@ -79,10 +79,13 @@ public class BackpackServiceImpl implements BackpackService {
         SM_PropList sm_propList = new SM_PropList();
         //获取背包数组
         AbstractProps[] array = backpack.getBackpackInfo().getAbstractProps();
+        List<PropInfo> list = new ArrayList<PropInfo>();
         //添加背包道具
-        for (int i = 0; i < array.length; i++) {
-            PropInfo propInfo = PropInfo.valueOf(array[i].getId(), array[i].getNum());
+        for (AbstractProps abstractProps : array) {
+            PropInfo propInfo = PropInfo.valueOf(abstractProps.getId(), abstractProps.getNum());
+            list.add(propInfo);
         }
+        sm_propList.setList(list);
         session.messageSend(SMToDecodeData.shift(StatusCode.VIEWPROPLIST, sm_propList));
     }
 
@@ -103,6 +106,7 @@ public class BackpackServiceImpl implements BackpackService {
             session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, "您的背包中没有该道具"));
         } else {
             abstractProps.propUser(cm_propUser.getAccountId(), cm_propUser.getrId());
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, abstractProps.getPropsResource().getName() + "使用成功"));
         }
     }
 
@@ -154,7 +158,7 @@ public class BackpackServiceImpl implements BackpackService {
             return;
         }
         //添加该道具到背包
-        obtainProp(cm_obtainProp.getAccountId(), cm_obtainProp.getNum());
+        int num = cm_obtainProp.getNum();
         for (int i = 0; i < cm_obtainProp.getNum(); i++) {
             if (!obtainProp(cm_obtainProp.getAccountId(), cm_obtainProp.getId())) {
                 logger.info(cm_obtainProp.getAccountId() + "背包已满");

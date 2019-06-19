@@ -109,8 +109,8 @@ public class Backpack {
                 //不可叠加
                 for (int i = 0; i < array.length; i++) {
                     if (array[i].getId() == PropsType.emptyId) {
-                        abstractProps = PropsType.getType(propsResource.getType()).createProp();
-                        abstractProps.init(pid);
+                        array[i] = PropsType.getType(propsResource.getType()).createProp();
+                        array[i].init(GetBean.getPropsManager().getPropsResource(pid));
                         return true;
                     }
                 }

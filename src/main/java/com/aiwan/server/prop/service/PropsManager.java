@@ -26,7 +26,7 @@ public class PropsManager {
     /**
      * 获取某种道具
      * */
-    public PropsResource getProps(Integer id){
+    public PropsResource getPropsResource(Integer id) {
         return propsMap.get(id);
     }
 

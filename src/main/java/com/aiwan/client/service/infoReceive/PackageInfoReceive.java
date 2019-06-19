@@ -41,7 +41,10 @@ public class PackageInfoReceive {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
         StringBuffer stringBuffer = new StringBuffer();
         for (PropInfo propInfo:list){
-            PropsResource propsResource = GetBean.getPropsManager().getProps(propInfo.getId());
+            if (propInfo.getId() == 0) {
+                continue;
+            }
+            PropsResource propsResource = GetBean.getPropsManager().getPropsResource(propInfo.getId());
             stringBuffer.append(propsResource.toString()+" ");
             if (propsResource.getType() == EQUIP){
                 //是装备

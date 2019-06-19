@@ -19,7 +19,7 @@ public class EquipmentUse implements PropUseInterface {
     @Override
     public void propUse(String accountId, Long rId, int pId, Session session) {
         //获取道具类
-        PropsResource propsResource = GetBean.getPropsManager().getProps(pId);
+        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(pId);
         //扣除道具
         int status = GetBean.getBackpackService().deductionProp(accountId,pId);
         if (status == 0){
@@ -27,19 +27,19 @@ public class EquipmentUse implements PropUseInterface {
             return ;
         }
         //装备使用
-        int id = GetBean.getRoleService().equip(accountId,rId,pId);
+        int id = GetBean.getEquipmentService().equip(accountId, rId, pId);
         //装备错误
         if (id == -1){
             session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的等级未达到要求"));
             //装备返回
-            GetBean.getBackpackService().obtainProp(accountId, propsResource,1);
+            GetBean.getBackpackService().obtainProp(accountId, propsResource.getId());
             return ;
         }
         if (id != 0){
             //获取旧的装备
-            PropsResource oldEquipment  = GetBean.getPropsManager().getProps(id);
+            PropsResource oldEquipment = GetBean.getPropsManager().getPropsResource(id);
             //旧的装备存到背包
-            GetBean.getBackpackService().obtainProp(accountId,oldEquipment,1);
+            GetBean.getBackpackService().obtainProp(accountId, oldEquipment.getId());
         }
         session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, propsResource.getName()+"使用成功！"));
         return ;

@@ -20,7 +20,7 @@ public class ExperienceDan implements PropUseInterface {
     @Override
     public void propUse(String accountId, Long rId, int pId, Session session) {
         //获取道具类
-        PropsResource propsResource = GetBean.getPropsManager().getProps(pId);
+        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(pId);
         //扣除道具
         int status = GetBean.getBackpackService().deductionProp(accountId,pId);
         if (status == 0){

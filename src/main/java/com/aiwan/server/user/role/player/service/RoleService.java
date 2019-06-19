@@ -26,8 +26,6 @@ public interface RoleService {
     /** 角色经验增加 */
     int addExperience(String accountId,Long rId,int experienceNum);
 
-    /** 装备装备 */
-    int equip(String accountId,Long rId,int pId);
 
     /** 修改人物属性 */
     void putAttributeModule(String name,Map<AttributeType, AttributeElement> map,Long rId);

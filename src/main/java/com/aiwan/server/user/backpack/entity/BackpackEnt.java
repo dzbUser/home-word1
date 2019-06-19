@@ -47,6 +47,7 @@ public class BackpackEnt implements IEntity<String> {
     @Transient
     private BackpackInfo backpackInfo;
 
+
     @Override
     public String getId() {
         return accountId;

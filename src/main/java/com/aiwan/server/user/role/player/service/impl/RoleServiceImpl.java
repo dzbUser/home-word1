@@ -109,18 +109,6 @@ public class RoleServiceImpl implements RoleService {
         return 1;
     }
 
-    @Override
-    public int equip(String accountId, Long rId, int pId) {
-        Role role = roleManager.load(rId);
-        EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(pId);
-        if (role.getLevel()< equipmentResource.getLevel()){
-            //等级达不到要求等级
-            return -1;
-        }
-        //获取旧装备的id
-        int id = GetBean.getEquipmentService().equip(accountId,rId,pId);
-        return id;
-    }
 
     /** 返回角色属性 */
     @Override

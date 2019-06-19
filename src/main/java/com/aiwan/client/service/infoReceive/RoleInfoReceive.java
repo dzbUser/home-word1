@@ -67,7 +67,7 @@ public class RoleInfoReceive {
                 stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipInfo.getPosition())+" 装备:空\n");
             }else {
                 //有装备
-                PropsResource propsResource = GetBean.getPropsManager().getProps(equipInfo.getId());
+                PropsResource propsResource = GetBean.getPropsManager().getPropsResource(equipInfo.getId());
                 EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(equipInfo.getId());
                 stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition", equipmentResource.getPosition()));
                 stringBuffer.append(" 装备:"+ propsResource.getName());

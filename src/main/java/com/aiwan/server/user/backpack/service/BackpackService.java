@@ -19,10 +19,9 @@ public interface BackpackService {
 
     /** 获取道具
      * @param accountId 用户账号
-     * @param num 道具数目
      * @param propsResource 道具
      * */
-    void obtainProp(String accountId, PropsResource propsResource, int num);
+    boolean obtainProp(String accountId, int pid);
 
     /** 查看背包
      * @param cm_viewBackpack 查看背包协议类

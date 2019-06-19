@@ -6,6 +6,7 @@ import com.aiwan.server.netty.TaskDispatcher;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
+import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.role.player.service.impl.RoleResourceManager;
 import com.aiwan.server.scenes.service.MapManager;
@@ -34,6 +35,16 @@ public class GetBean {
     private static MountService mountService;
     private static RoleResourceManager roleResourceManager;
     private static MountManager mountManager;
+    private static RoleManager roleManager;
+
+    public static RoleManager getRoleManager() {
+        return roleManager;
+    }
+
+    @Autowired
+    public void setRoleManager(RoleManager roleManager) {
+        GetBean.roleManager = roleManager;
+    }
 
     public static MountManager getMountManager() {
         return mountManager;

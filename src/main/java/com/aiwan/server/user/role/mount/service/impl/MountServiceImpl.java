@@ -79,7 +79,7 @@ public class MountServiceImpl implements MountService {
     public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session) {
         int status = GetBean.getBackpackService().deductionProp(cm_mountUpgrade.getAccountId(),2);
         //获取道具类
-        PropsResource propsResource = GetBean.getPropsManager().getProps(2);
+        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(2);
         if (status == 0){
             //背包没有升阶丹
             session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您背包中没有"+ propsResource.getName()));
@@ -91,7 +91,7 @@ public class MountServiceImpl implements MountService {
             //达到最高级
                 session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的坐骑已经是最高级！"));
             //返回道具
-            GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(), propsResource,1);
+            GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(), propsResource.getId());
             return;
         }
         session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"提升成功"));

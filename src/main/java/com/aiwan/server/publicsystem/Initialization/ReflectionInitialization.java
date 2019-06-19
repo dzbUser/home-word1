@@ -3,6 +3,7 @@ package com.aiwan.server.publicsystem.Initialization;
 import com.aiwan.server.publicsystem.annotation.ProtocolAnnotation;
 import com.aiwan.server.publicsystem.service.ReflectionManager;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class ReflectionInitialization {
         InitialProtocol(applicationContext);
 
         //获取所有业务类
-        Map<String, Object> beansWithAnnotationMap = applicationContext.getBeansWithAnnotation(Service.class);
+        Map<String, Object> beansWithAnnotationMap = applicationContext.getBeansWithAnnotation(Controller.class);
         for (Map.Entry<String, Object> entry : beansWithAnnotationMap.entrySet()) {
 
             Class<?> clazz= entry.getValue().getClass();

@@ -13,12 +13,12 @@ public interface UserService {
     /**
      * 用户登录
      * */
-    void login(CM_Login userMessage, Session session);
+    void login(Session session, CM_Login cm_login);
 
     /**
      * 用户注册
      * */
-    void registerUser(CM_Registered userMessage, Session session);
+    void registerUser(Session session, CM_Registered cm_registered);
 
     /**
      * 用户注销

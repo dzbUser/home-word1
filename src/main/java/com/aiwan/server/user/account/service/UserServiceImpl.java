@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     //用户登录
     @Override
-    public void login(CM_Login userMessage, Session session) {
+    public void login(Session session,CM_Login userMessage) {
         /*
         * 1.查看缓存是否存在用户，若存在则说明用户已在线
         * 2.查看账号密码是否正确，若不正确则返回登录错误
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
     /**用户注册*/
     @Override
-    public void registerUser(CM_Registered userMessage, Session session) {
+    public void registerUser(Session session,CM_Registered userMessage) {
         User user = userManager.getUserByAccountId(userMessage.getUsername());
         //错误输入
         if(userMessage == null){

@@ -2,9 +2,8 @@ package com.aiwan.server.user.backpack.model;
 
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.model.PropsType;
-import com.aiwan.server.prop.resource.PropsResource;
+import com.aiwan.server.prop.model.impl.MountDan;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
-import com.aiwan.server.util.GetBean;
 
 /**
  * @author dengzebiao
@@ -79,44 +78,6 @@ public class Backpack {
         return null;
     }
 
-    /**
-     * 道具添加
-     */
-    public boolean putProps(int pid) {
-        //获取道具静态资源
-        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(pid);
-        //是否背包中有该道具
-        AbstractProps abstractProps = getBackpackItem(pid);
-        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
-        if (abstractProps == null) {
-            //背包中没有该道具
-            for (int i = 0; i < array.length; i++) {
-                if (array[i].getId() == PropsType.emptyId) {
-                    abstractProps = PropsType.getType(propsResource.getType()).createProp();
-                    abstractProps.init(pid);
-                    array[i] = abstractProps;
-                    return true;
-                }
-            }
-        } else {
-            //背包中有该道具，查看是否可以叠加
-            if (propsResource.getOverlay() == 1) {
-                //可以叠加
-                abstractProps.setNum(abstractProps.getNum() + 1);
-                return true;
-            } else {
-                //不可叠加
-                for (int i = 0; i < array.length; i++) {
-                    if (array[i].getId() == PropsType.emptyId) {
-                        array[i] = PropsType.getType(propsResource.getType()).createProp();
-                        array[i].init(GetBean.getPropsManager().getPropsResource(pid));
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
     /**
      * 是否为空
@@ -133,20 +94,6 @@ public class Backpack {
         return true;
     }
 
-    /**
-     * 删除道具
-     */
-    public void removeProps(int pid) {
-        //获取背包
-        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
-
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].getId() == pid) {
-                array[i] = PropsType.EMPTY.createProp();
-                return;
-            }
-        }
-    }
 
     /**
      * 获取对应位置的装备
@@ -156,5 +103,115 @@ public class Backpack {
             return backpackEnt.getBackpackInfo().getAbstractProps()[position];
         }
         return null;
+    }
+
+    /**
+     * 添加可叠加道具
+     */
+    public boolean putOverlayProps(AbstractProps abstractProps, int num) {
+        //道具上限
+        int limit = abstractProps.getPropsResource().getLimit();
+        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+
+        for (int i = 0; i < array.length; i++) {
+            //是否叠加到现存背包项
+            if (array[i].getId() == abstractProps.getId()) {
+                int allnum = array[i].getNum() + num;
+                if (allnum > limit) {
+                    //总数大于上限
+                    array[i].setNum(limit);
+                    num = allnum - limit;
+                } else {
+                    array[i].setNum(allnum);
+                    return true;
+                }
+            }
+        }
+        //获取背包
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].getId() == PropsType.emptyId && num > 0) {
+                array[i] = PropsType.getType(abstractProps.getPropsResource().getType()).createProp();
+                array[i].init(abstractProps.getPropsResource());
+                if (num > limit) {
+                    //大于上限
+                    array[i].setNum(limit);
+                    num = num - limit;
+                } else {
+                    array[i].setNum(num);
+                    return true;
+                }
+            }
+        }
+        if (num > 0) {
+            //不够存放
+            return false;
+        }
+        return true;
+
+    }
+
+    /**
+     * 添加不可叠加道具
+     */
+    public boolean putNoOverlayProps(AbstractProps abstractProps) {
+        //获取背包
+        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].getId() == PropsType.emptyId) {
+                array[i] = abstractProps;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 去除可叠加道具
+     */
+    public boolean deductionProp(AbstractProps abstractProps) {
+        //获取背包
+        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+        //不可叠加
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].getObjectId().equals(abstractProps.getObjectId())) {
+                //是否可叠加
+                if (abstractProps.getPropsResource().getOverlay() == 1) {
+                    int num = array[i].getNum() - 1;
+                    if (num == 0) {
+                        //道具用完了
+                        array[i] = PropsType.EMPTY.createProp();
+                        array[i].init(PropsType.emptyId);
+                    } else {
+                        array[i].setNum(num);
+                    }
+                    return true;
+                } else {
+                    array[i] = PropsType.EMPTY.createProp();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** 坐骑升阶 */
+    public boolean mountUpgrade(){
+        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].getId() == MountDan.id) {
+                int num = array[i].getNum() - 1;
+                if (num == 0) {
+                    //升阶丹用完
+                    array[i] = PropsType.EMPTY.createProp();
+                    array[i].init(PropsType.emptyId);
+                    return true;
+                } else {
+                    array[i].setNum(num);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

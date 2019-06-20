@@ -5,8 +5,6 @@ import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -46,17 +43,29 @@ public class BackpackServiceImpl implements BackpackService {
         backPackManager.createBackpack(acountId);
     }
 
-    /** 获取道具 */
+    /**
+     * 添加可叠加道具
+     */
     @Override
-    public boolean obtainProp(String accountId, int pid) {
+    public boolean obtainOverlayProp(String accountId, AbstractProps abstractProps, int num) {
         Backpack backpack = backPackManager.load(accountId);
+        //可叠加
+        boolean status = backpack.putOverlayProps(abstractProps, num);
+        backPackManager.writeBack(backpack);
         //如果添加道具成功
-        if (backpack.putProps(pid)) {
-            //写回
-            backPackManager.writeBack(backpack);
-            return true;
-        }
-        return false;
+        return status;
+    }
+
+    /**
+     * 添加不可叠加道具
+     */
+    @Override
+    public boolean obtainNoOverlayProp(String accountId, AbstractProps abstractProps) {
+        Backpack backpack = backPackManager.load(accountId);
+        //不可叠加
+        boolean status = backpack.putNoOverlayProps(abstractProps);
+        backPackManager.writeBack(backpack);
+        return status;
     }
 
     /** 查看背包 */
@@ -126,32 +135,15 @@ public class BackpackServiceImpl implements BackpackService {
 
     /** 扣除背包中的道具 */
     @Override
-    public int deductionProp(String accountId, int pId) {
-        /*
-        * 1.背包中是否有该道具,若无返回0
-        * 2.背包道具减1，若减完为0，则从背包中消除该道具
-        * */
-        logger.info(accountId+"扣除道具"+pId);
-        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(pId);
-        //获取背包
+    public int deductionProp(String accountId, AbstractProps abstractProps) {
         Backpack backpack = backPackManager.load(accountId);
-        //获取背包项
-        AbstractProps abstractProps = backpack.getBackpackItem(pId);
-        if (abstractProps == null) {
-            //背包中没有该道具
-            logger.info(accountId + "扣除" + propsResource.getName() + "失败！");
+        //去除可叠加道具
+        if (!backpack.deductionProp(abstractProps)){
+            //扣除失败
             return 0;
         }
-        int num = abstractProps.getNum();
-        num--;
-        if (num == 0){
-             //道具用完
-            backpack.removeProps(pId);
-        }else {
-            //道具数
-            abstractProps.setNum(num);
-        }
-    //写回
+        logger.info(accountId + "扣除道具" + abstractProps.getPropsResource().getName());
+        //写回
         backPackManager.writeBack(backpack);
         return 1;
     }
@@ -170,10 +162,24 @@ public class BackpackServiceImpl implements BackpackService {
             logger.info(cm_obtainProp+":添加道具失败，没有该道具");
             return;
         }
-        //添加该道具到背包
+        if (propsResource.getOverlay() == 1) {
+            //可叠加
+            AbstractProps abstractProps = PropsType.getType(propsResource.getType()).createProp();
+            abstractProps.init(propsResource);
+            if (!obtainOverlayProp(cm_obtainProp.getAccountId(), abstractProps, cm_obtainProp.getNum())) {
+                //添加失败，背包满了
+                session.sendPromptMessage(PromptCode.BACKFULL, "");
+                return;
+            }
+            session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
+            return;
+        }
+        //不可叠加道具
         int num = cm_obtainProp.getNum();
         for (int i = 0; i < cm_obtainProp.getNum(); i++) {
-            if (!obtainProp(cm_obtainProp.getAccountId(), cm_obtainProp.getId())) {
+            AbstractProps abstractProps = PropsType.getType(propsResource.getType()).createProp();
+            abstractProps.init(propsResource);
+            if (!obtainNoOverlayProp(cm_obtainProp.getAccountId(),abstractProps)) {
                 logger.info(cm_obtainProp.getAccountId() + "背包已满");
                 session.sendPromptMessage(PromptCode.BACKFULL, "");
                 return;
@@ -183,6 +189,5 @@ public class BackpackServiceImpl implements BackpackService {
         logger.info("用户："+cm_obtainProp.getAccountId()+"添加"+ propsResource.getName()+"成功");
         session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
     }
-
 
 }

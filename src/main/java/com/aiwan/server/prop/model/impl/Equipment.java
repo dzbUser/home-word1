@@ -27,7 +27,7 @@ public class Equipment extends AbstractProps {
         //获取道具类
         PropsResource propsResource = getPropsResource();
         //扣除道具
-        int status = GetBean.getBackpackService().deductionProp(accountId, propsResource.getId());
+        int status = GetBean.getBackpackService().deductionProp(accountId, this);
         if (status == 0) {
             return PromptCode.NOPROPINBACK;
         }
@@ -36,12 +36,12 @@ public class Equipment extends AbstractProps {
         //装备错误
         if (equipment == null) {
             //装备返回,未达到等级要求
-            GetBean.getBackpackService().obtainProp(accountId, propsResource.getId());
+            GetBean.getBackpackService().obtainNoOverlayProp(accountId, this);
             return PromptCode.NOREQUIREMENTINLEVEL;
         }
         if (equipment.getId() != 0) {
             //旧的装备存到背包
-            GetBean.getBackpackService().obtainProp(accountId, equipment.getId());
+            GetBean.getBackpackService().obtainNoOverlayProp(accountId, equipment);
         }
         return PromptCode.USERSUCCESS;
     }

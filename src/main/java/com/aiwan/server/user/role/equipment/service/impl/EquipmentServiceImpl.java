@@ -4,7 +4,6 @@ import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
@@ -146,7 +145,7 @@ public class EquipmentServiceImpl implements EquipmentService {
             //背包获取装备
             equipmentModel.setEmptyByPosition(position);
             equipmentManager.writeBack(equipmentModel);
-            GetBean.getBackpackService().obtainProp(accountId, equipment.getId());
+            GetBean.getBackpackService().obtainNoOverlayProp(accountId, equipment);
             //重新计算战斗力
             GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rid), rid);
             session.sendPromptMessage(PromptCode.UNLOADEQUIPSUCCESS, "");

@@ -1,5 +1,6 @@
 package com.aiwan.server.user.backpack.service;
 
+import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
@@ -19,9 +20,10 @@ public interface BackpackService {
 
     /** 获取道具
      * @param accountId 用户账号
-     * @param pid 道具
+     * @param abstractProps 道具
+     * @param num 道具数量
      * */
-    boolean obtainProp(String accountId, int pid);
+    boolean obtainOverlayProp(String accountId, AbstractProps abstractProps, int num);
 
     /** 查看背包
      * @param cm_viewBackpack 查看背包协议类
@@ -34,11 +36,17 @@ public interface BackpackService {
 
     /**扣除背包中的道具
      * @param accountId 用户账号
-     * @param pId 道具id
+     * @param abstractProps 道具id
      * @return 1：扣除成功 2：扣除失败
      * */
-    int deductionProp(String accountId, int pId);
+    int deductionProp(String accountId, AbstractProps abstractProps);
 
     /** 添加道具到背包 */
     void addPropToBack(CM_ObtainProp cm_obtainProp, Session session);
+
+    /**
+     * 不可叠加
+     */
+    boolean obtainNoOverlayProp(String accountId, AbstractProps abstractProps);
+
 }

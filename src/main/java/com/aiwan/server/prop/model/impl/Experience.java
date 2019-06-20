@@ -14,9 +14,9 @@ public class Experience extends AbstractProps {
     @Override
     public int propUser(String accountId, Long rId) {
         //扣除道具
-        int status = GetBean.getBackpackService().deductionProp(accountId, getId());
+        int status = GetBean.getBackpackService().deductionProp(accountId, this);
         if (status == 0) {
-            GetBean.getBackpackService().obtainProp(accountId, getId());
+            GetBean.getBackpackService().obtainOverlayProp(accountId, this, 1);
             return PromptCode.NOPROPINBACK;
         }
         //增加1000经验

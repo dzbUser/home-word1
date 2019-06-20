@@ -1,8 +1,11 @@
 package com.aiwan.server.user.role.mount.service.impl;
 
+import com.aiwan.server.prop.model.AbstractProps;
+import com.aiwan.server.prop.model.PropsType;
+import com.aiwan.server.prop.model.impl.MountDan;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
+import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.model.MountModel;
@@ -25,6 +28,10 @@ import java.util.Map;
  * */
 @Service
 public class MountServiceImpl implements MountService {
+    /**
+     * 升阶丹id
+     */
+    private final static int MOUNTDANID = 2;
     Logger logger = LoggerFactory.getLogger(MountServiceImpl.class);
 
     @Autowired
@@ -36,16 +43,11 @@ public class MountServiceImpl implements MountService {
     }
 
     @Override
-    public int addExperience(Long rId,int experienceNum) {
+    public void addExperience(Long rId, int experienceNum) {
         logger.info(rId+"角色请求坐骑提升");
         //获取等级，计算升阶经验，循环升阶
         MountModel mountModel = mountManager.load(rId);
         int level = mountModel.getLevel();
-        if (level >= mountManager.getMountResource().getMaxLevel()){
-            //以达到最高等级
-            logger.info(rId+"角色请求坐骑提升失败，以达到最大等级");
-            return 0;
-        }
         int totalExperience = mountModel.getExperience()+experienceNum;
         while (totalExperience >= getUpgradeRequest(level)){
             //循环判断
@@ -55,10 +57,8 @@ public class MountServiceImpl implements MountService {
         mountModel.setLevel(level);
         mountModel.setExperience(totalExperience);
         mountManager.writeBack(mountModel);
-
         //更新人物属性
         GetBean.getRoleService().putAttributeModule("mount",getAttributes(rId),rId);
-        return 1;
     }
 
     @Override
@@ -74,24 +74,26 @@ public class MountServiceImpl implements MountService {
 
     @Override
     public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session) {
-        int status = GetBean.getBackpackService().deductionProp(cm_mountUpgrade.getAccountId(),2);
-        //获取道具类
-        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(2);
-        if (status == 0){
-            //背包没有升阶丹
-            session.sendPromptMessage(PromptCode.NOMOUNTDAN, "");
-            return;
-        }
-        //增加经验
-        status = addExperience(cm_mountUpgrade.getrId(),1000);
-        if (status == 0){
-            //达到最高级
+        MountModel mountModel = mountManager.load(cm_mountUpgrade.getrId());
+        //判断是否达到做高级
+        int level = mountModel.getLevel();
+        if (level >= mountManager.getMountResource().getMaxLevel()) {
+            //以达到最高等级
+            logger.info(cm_mountUpgrade.getAccountId() + "角色请求坐骑提升失败，以达到最大等级");
             session.sendPromptMessage(PromptCode.MOUNTACHIEVEMAXLEVEL, "");
-            //返回道具
-            GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(), propsResource.getId());
             return;
         }
-        session.sendPromptMessage(PromptCode.PROMOTESUCCESS, "");
+        //获取背包
+        Backpack backpack = GetBean.getBackPackManager().load(cm_mountUpgrade.getAccountId());
+        if (backpack.mountUpgrade()) {
+            addExperience(cm_mountUpgrade.getrId(), MountDan.EXPERIENCE);
+            session.sendPromptMessage(PromptCode.PROMOTESUCCESS, "");
+            //写回
+            GetBean.getBackPackManager().writeBack(backpack);
+            return;
+        }
+        //扣除未成功
+        session.sendPromptMessage(PromptCode.NOMOUNTDAN, "");
     }
 
 

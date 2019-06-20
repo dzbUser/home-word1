@@ -18,7 +18,7 @@ public interface MountService {
     void createMount(Long rId);
 
     /** 经验增加 */
-    int addExperience(Long rId,int experienceNum);
+    void addExperience(Long rId, int experienceNum);
 
     /** 查看坐骑 */
     void viewMount(CM_ViewMount cm_viewMount, Session session);

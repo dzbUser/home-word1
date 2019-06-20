@@ -1,6 +1,5 @@
 package com.aiwan.server.publicsystem.Initialization;
 
-import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.util.ExcelUtil;
@@ -34,7 +33,6 @@ public class PropsInitialzation {
 
     public static void init(){
         propInit();
-        equipmentInit();
     }
     /**道具初始化*/
     public static void propInit(){
@@ -56,23 +54,5 @@ public class PropsInitialzation {
         }
     }
 
-    /** 装备静态资源初始化 */
-    public static void equipmentInit(){
-        logger.debug("FILEPATH1："+FILEPATH1);
-        List<EquipmentResource> list = new ArrayList<EquipmentResource>();
-        try {
-            list.addAll(ExcelUtil.analysisExcelFile(FILEPATH1, EquipmentResource.class));
-        } catch (IllegalAccessException e) {
-            logger.error(e.getLocalizedMessage());
-        } catch (InstantiationException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-        PropsManager propsManager = GetBean.getPropsManager();
-        logger.debug("装备静态资源初始化debug："+list.size());
-        for (int i = 0;i < list.size();i++){
-            list.get(i).init();
-            propsManager.putEquipment(list.get(i));
-        }
-    }
 
 }

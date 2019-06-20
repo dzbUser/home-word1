@@ -2,7 +2,9 @@ package com.aiwan.server.prop.model;
 
 import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.prop.resource.PropsResource;
+import com.aiwan.server.publicsystem.model.GameObject;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.IDUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -13,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * 道具抽象类
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
-public abstract class AbstractProps {
+public abstract class AbstractProps extends GameObject {
     /**
      * 道具资源唯一id
      */
@@ -40,6 +42,8 @@ public abstract class AbstractProps {
 
     @JsonIgnore
     public void init(PropsResource propsResource) {
+        //设置唯一id
+        setObjectId(IDUtil.getId());
         this.id = propsResource.getId();
         this.num = 1;
     }

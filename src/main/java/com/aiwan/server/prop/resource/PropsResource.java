@@ -51,10 +51,17 @@ public class PropsResource{
     private int level;
 
     /**
+     * 背包内可存上限
+     */
+    @CellMapping(name = "limit")
+    private int limit;
+
+    /**
      * 装备属性，装备独有
      */
     @CellMapping(name = "attribute")
     private String attribute;
+
 
     /**
      * 存放装备属性
@@ -185,5 +192,13 @@ public class PropsResource{
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

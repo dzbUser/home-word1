@@ -94,4 +94,6 @@ public enum PropsType {
     public void setClazz(Class<? extends AbstractProps> clazz) {
         this.clazz = clazz;
     }
+
+
 }

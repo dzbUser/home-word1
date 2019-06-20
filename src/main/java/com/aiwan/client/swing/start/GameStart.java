@@ -37,7 +37,7 @@ public class GameStart {
         //道具资源初始化
         PropsInitialzation.init();
         //人物资源初始化
-        RoleResourceInit.init();
+//        RoleResourceInit.init();
         ClientReceiveMap.init(applicationContext);
         //客户端静态资源初始化
         ClientResourceInit.init();

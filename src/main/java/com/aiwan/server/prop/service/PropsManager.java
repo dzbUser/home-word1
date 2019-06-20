@@ -1,6 +1,5 @@
 package com.aiwan.server.prop.service;
 
-import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.prop.resource.PropsResource;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,6 @@ public class PropsManager {
 
     /** 道具静态资源映射 */
     private Map<Integer, PropsResource> propsMap = new ConcurrentHashMap<Integer, PropsResource>();
-    /** 装备静态资源映射类 */
-    private Map<Integer, EquipmentResource> equipmentMap = new ConcurrentHashMap<Integer, EquipmentResource>();
 
     /**
      * 获取某种道具
@@ -37,17 +34,4 @@ public class PropsManager {
         propsMap.put(propsResource.getId(), propsResource);
     }
 
-    /**
-     *获取某类装备
-     * */
-    public EquipmentResource getEquipment(Integer id){
-        return equipmentMap.get(id);
-    }
-
-    /**
-     * 保存某类装备
-     * */
-    public void putEquipment(EquipmentResource equipmentResource){
-        equipmentMap.put(equipmentResource.getId(), equipmentResource);
-    }
 }

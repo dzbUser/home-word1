@@ -292,4 +292,144 @@ public class ExcelUtil
         }
         return cellValue;
     }
+
+    /**
+     * 解析文件
+     *
+     * @param file      文件路径
+     * @param bgnIgnore 开头忽略多少行
+     * @param endIgnore 结尾忽略多少行
+     * @param cls       泛型
+     * @return
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    public static <T> List<T> analysisExcelFile(File file, int bgnIgnore, int endIgnore, Class<T> cls) throws IllegalAccessException, InstantiationException {
+        // 表格数据对象
+        List<T> modelList = new ArrayList<T>();
+
+        // 用来存放表格中数据
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        // 读取excel文件信息
+        Workbook wb = null;
+        try {
+            wb = new HSSFWorkbook(new FileInputStream(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (null == wb) {
+
+            return modelList;
+        }
+
+        // 获取sheet总数
+        int sheetNum = wb.getNumberOfSheets();
+
+        for (int sheetIndex = 0; sheetIndex < sheetNum; sheetIndex++) {
+            // 获取sheet
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+
+            // 获取最大行数
+            int rowNum = sheet.getPhysicalNumberOfRows();
+            // 除去结尾忽略的行数
+            rowNum -= endIgnore;
+
+            // 获取开始行(0 + bgnIgnore)
+            Row titleRow = sheet.getRow(bgnIgnore);
+            if (null == titleRow) {
+                continue;
+            }
+            // 获取明细列数
+            int colNum = titleRow.getPhysicalNumberOfCells();
+
+            // 有效的数据开始行，即标题行+1
+            int rowBgn = bgnIgnore + 1;
+            // 遍历明细
+            for (int rowIndex = rowBgn; rowIndex < rowNum; rowIndex++) {
+                // 行map
+                Map<String, Object> map = new HashMap<String, Object>(16);
+                // 行信息
+                Row row = sheet.getRow(rowIndex);
+
+                if (row != null) {
+                    // 遍历行并获取到返回值
+                    for (int cellIndex = 0; cellIndex < colNum; cellIndex++) {
+                        Cell titleCell = titleRow.getCell(cellIndex);
+                        Cell cell = row.getCell(cellIndex);
+                        // 标题
+                        String titleCellData = (String) ExcelUtil.getCellFormatValue(titleCell);
+                        // 数据
+                        Object cellData = ExcelUtil.getCellFormatValue(cell);
+                        map.put(titleCellData, cellData);
+                    }
+                } else {
+                    break;
+                }
+                list.add(map);
+            }
+        }
+//        log.info("解析sheet完毕,数据共有 ：[{}]条合规记录", list.size());
+
+
+        // 将对账文件信息存储于类中
+        for (Map<String, Object> map : list) {
+            T model = cls.newInstance();
+
+            // 获取类字段
+            Field[] fields = model.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                // 获取字段上的注解
+                Annotation[] annotations = field.getAnnotations();
+                if (annotations.length == 0) {
+                    continue;
+                }
+
+                for (Annotation an : annotations) {
+                    field.setAccessible(true);
+                    // 若扫描到CellMapping注解
+                    if (an.annotationType().getName().equals(CellMapping.class.getName())) {
+                        // 获取指定类型注解
+                        CellMapping column = field.getAnnotation(CellMapping.class);
+                        String mappedName = column.name();
+
+                        // 获取model属性的类型
+                        Class<?> modelType = field.getType();
+                        // 获取map中的数据
+                        Object value = map.get(mappedName);
+                        DecimalFormat df = new DecimalFormat("######0");
+                        // 匹配字段类型
+                        if (null != value) {
+                            // 获取map中存主的字段的类型
+                            Class<?> cellType = value.getClass();
+                            // 处理int类型不匹配问题
+                            if (value instanceof Double && (modelType == int.class || modelType == Integer.class)) {
+                                value = Integer.valueOf(df.format(value));
+                            }
+                            if ((cellType == double.class || cellType == String.class) && (modelType == int.class || modelType == Integer.class)) {
+                                value = Integer.valueOf(value.toString());
+                            }
+                            // 处理double/bigDecimal类型不匹配问题
+                            if ((cellType == double.class || cellType == String.class && modelType == java.math.BigDecimal.class)) {
+                                // 不使用bigDecimal(double),否则bigDecimal(0.1)有惊喜
+                                value = new BigDecimal(value.toString());
+                            }
+                            if (cellType == String.class && modelType == double.class) {
+                                value = Double.valueOf(value.toString());
+                            }
+                            // 处理String类型不匹配问题
+                            if (cellType != String.class && modelType == String.class) {
+                                value = value.toString();
+                            }
+                        }
+                        field.set(model, value);
+                    }
+                }
+                field.setAccessible(false);
+            }
+            modelList.add(model);
+        }
+
+        return modelList;
+    }
 }

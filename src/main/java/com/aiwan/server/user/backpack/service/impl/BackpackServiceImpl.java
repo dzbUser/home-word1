@@ -5,6 +5,7 @@ import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
@@ -13,6 +14,7 @@ import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
 import org.slf4j.Logger;
@@ -72,7 +74,7 @@ public class BackpackServiceImpl implements BackpackService {
         //获取背包
         if (backpack.isEmpty()) {
             //背包为空
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的背包是空的"));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.BACKEMPTY, "")));
             return;
         }
         //创建背包返回类
@@ -96,17 +98,17 @@ public class BackpackServiceImpl implements BackpackService {
         logger.info(cm_propUser.getAccountId()+"使用"+ propsResource.getName());
         if (propsResource.getUse() == 0){
             //道具不可使用
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, propsResource.getName()+"不可以使用"));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.UNAVAILABLE, propsResource.getName())));
             return;
         }
         //对应道具的使用
         Backpack backpack = backPackManager.load(cm_propUser.getAccountId());
         AbstractProps abstractProps = backpack.getBackpackItem(cm_propUser.getpId());
         if (abstractProps == null) {
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, "您的背包中没有该道具"));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.NOPROPINBACK, "")));
         } else {
-            abstractProps.propUser(cm_propUser.getAccountId(), cm_propUser.getrId());
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, abstractProps.getPropsResource().getName() + "使用成功"));
+            int code = abstractProps.propUser(cm_propUser.getAccountId(), cm_propUser.getrId());
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(code, "")));
         }
     }
 
@@ -152,7 +154,7 @@ public class BackpackServiceImpl implements BackpackService {
          * */
         PropsResource propsResource = GetBean.getPropsManager().getPropsResource(cm_obtainProp.getId());
         if (propsResource == null){
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"没有该道具");
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.NOPROP, ""));
             session.messageSend(decodeData);
             logger.info(cm_obtainProp+":添加道具失败，没有该道具");
             return;
@@ -162,13 +164,13 @@ public class BackpackServiceImpl implements BackpackService {
         for (int i = 0; i < cm_obtainProp.getNum(); i++) {
             if (!obtainProp(cm_obtainProp.getAccountId(), cm_obtainProp.getId())) {
                 logger.info(cm_obtainProp.getAccountId() + "背包已满");
-                session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, "背包已满"));
+                session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.BACKFULL, "")));
                 return;
             }
         }
 
         logger.info("用户："+cm_obtainProp.getAccountId()+"添加"+ propsResource.getName()+"成功");
-        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, propsResource.getName()+"添加成功,数量："+cm_obtainProp.getNum());
+        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.ADDSUCCESS, propsResource.getName()));
         session.messageSend(decodeData);
     }
 

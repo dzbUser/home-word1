@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.mount.service.impl;
 
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.model.MountModel;
@@ -10,10 +11,7 @@ import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.user.role.mount.protocol.SM_ViewMount;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
-import com.aiwan.server.util.AttributeUtil;
-import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.SMToDecodeData;
-import com.aiwan.server.util.StatusCode;
+import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +65,6 @@ public class MountServiceImpl implements MountService {
     public void viewMount(CM_ViewMount cm_viewMount, Session session) {
 
         logger.info(cm_viewMount.getAccountId()+":查看坐骑信息");
-        StringBuffer stringBuffer =new StringBuffer();
         //获取坐骑模型
         MountModel mountModel = mountManager.load(cm_viewMount.getrId());
         //创建坐骑返回数据
@@ -82,19 +79,19 @@ public class MountServiceImpl implements MountService {
         PropsResource propsResource = GetBean.getPropsManager().getPropsResource(2);
         if (status == 0){
             //背包没有升阶丹
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您背包中没有"+ propsResource.getName()));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.NOMOUNTDAN, "")));
             return;
         }
         //增加经验
         status = addExperience(cm_mountUpgrade.getrId(),1000);
         if (status == 0){
             //达到最高级
-                session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"您的坐骑已经是最高级！"));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.MOUNTACHIEVEMAXLEVEL, "")));
             //返回道具
             GetBean.getBackpackService().obtainProp(cm_mountUpgrade.getAccountId(), propsResource.getId());
             return;
         }
-        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"提升成功"));
+        session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.PROMOTESUCCESS, "")));
     }
 
 

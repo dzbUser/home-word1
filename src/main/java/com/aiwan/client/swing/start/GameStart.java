@@ -6,7 +6,6 @@ import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.swing.clientinterface.HeightLoginInterface;
 import com.aiwan.client.util.GetBean;
-import com.aiwan.server.publicsystem.Initialization.PropUseInitialization;
 import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
 import com.aiwan.server.publicsystem.Initialization.RoleResourceInit;
 import org.slf4j.Logger;
@@ -37,7 +36,6 @@ public class GameStart {
         final ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("Spring-Hibernate-All-Cfg.xml");
         //道具资源初始化
         PropsInitialzation.init();
-        PropUseInitialization.initialization(applicationContext);
         //人物资源初始化
         RoleResourceInit.init();
         ClientReceiveMap.init(applicationContext);

@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.equipment.service;
 
+import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
@@ -17,7 +18,7 @@ public interface EquipmentService {
     void createEquipmentBar(Long rId);
 
     /** 装备 */
-    int equip(String accountId,Long rId,int pid);
+    Equipment equip(String accountId, Long rId, Equipment equipment);
 
     /**
      * 查看角色装备 */

@@ -1,6 +1,7 @@
 package com.aiwan.server.prop.model.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
+import com.aiwan.server.util.PromptCode;
 
 
 /**
@@ -11,7 +12,7 @@ import com.aiwan.server.prop.model.AbstractProps;
  */
 public class EmptyProps extends AbstractProps {
     @Override
-    public boolean propUser(String accountId, Long rId) {
-        return false;
+    public int propUser(String accountId, Long rId) {
+        return PromptCode.UNAVAILABLE;
     }
 }

@@ -3,8 +3,10 @@ package com.aiwan.client.service.infoReceive;
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
+import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
+import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.protocol.SM_Register;
@@ -67,9 +69,9 @@ public class UserInfoReceive {
 
     /** 发送提示信息 */
     @InfoReceiveMethod(status = StatusCode.MESSAGE)
-    public void sendMessage(String message){
+    public void sendMessage(SM_PromptMessage sm_promptMessage) {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-        gameInterface.printOtherMessage(message);
+        gameInterface.printOtherMessage(sm_promptMessage.getOtherMessage() + ClientResourseManager.getContent("prompt", sm_promptMessage.getPromptCode()));
     }
 
     /** 注销 */

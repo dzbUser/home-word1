@@ -19,7 +19,7 @@ public interface BackpackService {
 
     /** 获取道具
      * @param accountId 用户账号
-     * @param propsResource 道具
+     * @param pid 道具
      * */
     boolean obtainProp(String accountId, int pid);
 

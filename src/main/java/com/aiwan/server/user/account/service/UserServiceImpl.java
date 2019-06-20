@@ -2,6 +2,7 @@ package com.aiwan.server.user.account.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.*;
@@ -205,7 +206,7 @@ public class UserServiceImpl implements UserService {
         User user = session.getUser();
         if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){
             //查看角色量
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE,"您角色数已上限！");
+            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.ACHIEVEROLEMAXNUM, ""));
             session.messageSend(decodeData);
             logger.info(cm_createRole.getAccountId()+"：用户角色已上限");
         }

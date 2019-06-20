@@ -2,6 +2,7 @@ package com.aiwan.server.prop.model.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.PromptCode;
 
 
 /**
@@ -11,12 +12,12 @@ import com.aiwan.server.util.GetBean;
  */
 public class Experience extends AbstractProps {
     @Override
-    public boolean propUser(String accountId, Long rId) {
+    public int propUser(String accountId, Long rId) {
         //扣除道具
         int status = GetBean.getBackpackService().deductionProp(accountId, getId());
         if (status == 0) {
             GetBean.getBackpackService().obtainProp(accountId, getId());
-            return false;
+            return PromptCode.NOPROPINBACK;
         }
         //增加1000经验
         int experienceNum = 1000;
@@ -24,8 +25,8 @@ public class Experience extends AbstractProps {
         int num = GetBean.getRoleService().addExperience(accountId, rId, experienceNum);
         if (num == 0) {
             //人物达到最高级
-            return false;
+            return PromptCode.ROLEACHIEVEMAXLEVEL;
         }
-        return true;
+        return PromptCode.ROLEACHIEVEMAXLEVEL;
     }
 }

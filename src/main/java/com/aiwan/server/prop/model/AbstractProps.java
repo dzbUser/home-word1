@@ -28,7 +28,7 @@ public abstract class AbstractProps {
     /**
      * 道具使用
      */
-    public abstract boolean propUser(String accountId, Long rId);
+    public abstract int propUser(String accountId, Long rId);
 
     /**
      * 初始化
@@ -58,6 +58,17 @@ public abstract class AbstractProps {
     @JsonIgnore
     public PropsResource getPropsResource() {
         return GetBean.getPropsManager().getPropsResource(getId());
+    }
+
+    /**
+     * 比较
+     */
+    @JsonIgnore
+    public boolean equals(AbstractProps abstractProps) {
+        if (getId() == abstractProps.getId()) {
+            return true;
+        }
+        return false;
     }
 
 

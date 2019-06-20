@@ -2,8 +2,14 @@ package com.aiwan.server.prop.model.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.resource.PropsResource;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.PromptCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import java.util.Map;
 
 
 /**
@@ -14,30 +20,46 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 public class Equipment extends AbstractProps {
 
+    public final static int length = 3;
+
     @Override
-    public boolean propUser(String accountId, Long rId) {
+    public int propUser(String accountId, Long rId) {
         //获取道具类
         PropsResource propsResource = getPropsResource();
         //扣除道具
         int status = GetBean.getBackpackService().deductionProp(accountId, propsResource.getId());
         if (status == 0) {
-            return false;
+            return PromptCode.NOPROPINBACK;
         }
         //装备使用
-        int id = GetBean.getEquipmentService().equip(accountId, rId, propsResource.getId());
+        Equipment equipment = GetBean.getEquipmentService().equip(accountId, rId, this);
         //装备错误
-        if (id == -1) {
-            //装备返回
+        if (equipment == null) {
+            //装备返回,未达到等级要求
             GetBean.getBackpackService().obtainProp(accountId, propsResource.getId());
-            return false;
+            return PromptCode.NOREQUIREMENTINLEVEL;
         }
-        if (id != 0) {
-            //获取旧的装备
-            PropsResource oldEquipment = GetBean.getPropsManager().getPropsResource(id);
+        if (equipment.getId() != 0) {
             //旧的装备存到背包
-            GetBean.getBackpackService().obtainProp(accountId, propsResource.getId());
+            GetBean.getBackpackService().obtainProp(accountId, equipment.getId());
         }
-        return true;
+        return PromptCode.USERSUCCESS;
+    }
+
+    /**
+     * 获取装备属性
+     */
+    @JsonIgnore
+    public Map<AttributeType, AttributeElement> getAttribute() {
+        return getPropsResource().getAttributeMap();
+    }
+
+    /**
+     * 获取装备位置
+     */
+    @JsonIgnore
+    public int getPosition() {
+        return getPropsResource().getPosition();
     }
 
 }

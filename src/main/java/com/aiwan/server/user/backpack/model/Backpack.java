@@ -1,6 +1,5 @@
 package com.aiwan.server.user.backpack.model;
 
-import com.aiwan.server.prop.annotation.PropType;
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.resource.PropsResource;
@@ -142,8 +141,9 @@ public class Backpack {
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
 
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getId() == PropsType.emptyId && array[i].getId() == pid) {
+            if (array[i].getId() == pid) {
                 array[i] = PropsType.EMPTY.createProp();
+                return;
             }
         }
     }

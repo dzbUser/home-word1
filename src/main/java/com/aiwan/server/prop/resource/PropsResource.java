@@ -39,6 +39,18 @@ public class PropsResource{
     private int use;
 
     /**
+     * 装备位置
+     */
+    @CellMapping(name = "position")
+    private int position;
+
+    /**
+     * 装备等级
+     */
+    @CellMapping(name = "level")
+    private int level;
+
+    /**
      * 装备属性，装备独有
      */
     @CellMapping(name = "attribute")
@@ -57,6 +69,7 @@ public class PropsResource{
         String empty = "empty";
         if (attribute.equals(empty)) {
             //没有属性值
+            attributeMap = null;
             return;
         }
         String[] attributeString = attribute.split(" ");
@@ -134,5 +147,29 @@ public class PropsResource{
 
     public void setAttribute(String attribute) {
         this.attribute = attribute;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public Map<AttributeType, AttributeElement> getAttributeMap() {
+        return attributeMap;
+    }
+
+    public void setAttributeMap(Map<AttributeType, AttributeElement> attributeMap) {
+        this.attributeMap = attributeMap;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

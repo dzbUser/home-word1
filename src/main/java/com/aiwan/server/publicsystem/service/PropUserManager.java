@@ -1,8 +1,5 @@
 package com.aiwan.server.publicsystem.service;
 
-import com.aiwan.server.prop.model.PropUseInterface;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +11,6 @@ import java.util.Map;
  * */
 public class PropUserManager {
     private static Map<Integer, Method> methodMap = new HashMap<Integer, Method>();
-    private static Map<Integer, PropUseInterface> propUseMap = new HashMap<Integer, PropUseInterface>();
 
     /** 获取调用方法 */
     public static Method getMethod(int type){
@@ -26,13 +22,4 @@ public class PropUserManager {
         methodMap.put(type,method);
     }
 
-    /** 获取调用方法 */
-    public static PropUseInterface getPropUse(int type){
-        return propUseMap.get(type);
-    }
-
-    /** 插入调用方法 */
-    public static void putPropUse(int type,PropUseInterface propUseInterface){
-        propUseMap.put(type,propUseInterface);
-    }
 }

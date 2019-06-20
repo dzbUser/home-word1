@@ -1,5 +1,7 @@
 package com.aiwan.server.user.role.equipment.service.impl;
 
+import com.aiwan.server.prop.model.PropsType;
+import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
@@ -49,37 +51,31 @@ public class EquipmentServiceImpl implements EquipmentService {
     /**
      *装备
      * */
-    public int equip(String accountId, Long rId, int pid) {
+    public Equipment equip(String accountId, Long rId, Equipment equipment) {
         //判断是否达到要求
         Role role = GetBean.getRoleManager().load(rId);
-        EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(pid);
-        if (role.getLevel() < equipmentResource.getLevel()) {
+        if (role.getLevel() < equipment.getPropsResource().getLevel()) {
             //等级达不到要求等级
-            return -1;
+            return null;
         }
 
         //获取装备栏
         EquipmentModel equipmentModel = equipmentManager.load(rId);
-        //判断位置是否正确
-        if (equipmentResource == null|| equipmentResource.getPosition() > equipmentModel.getLength()){
-            //位置错误
-            logger.info(accountId+"中的"+rId+"装备错误");
-            return -1;
-        }
-        EquipmentInfo equipmentInfo = equipmentModel.getEquipmentInfo();
+        //获取装备栏数组
+        Equipment[] equipments = equipmentModel.getEquipmentInfo().getEquipments();
 
-        //旧装备的id,0表示装备栏无装备
-        int oldId = equipmentInfo.getEquipmentElements()[equipmentResource.getPosition()].getId();
+        //旧装备
+        Equipment oldEquipment = equipments[equipment.getPosition()];
         //装备转换
-        equipmentInfo.getEquipmentElements()[equipmentResource.getPosition()].setId(pid);
+        equipments[equipment.getPosition()] = equipment;
         equipmentManager.writeBack(equipmentModel);
 
         //修改人物属性
         GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rId),rId);
 
-        logger.info(accountId+"装备"+pid+"成功");
+        logger.info(accountId + "装备" + equipment.getPropsResource().getName() + "成功");
         //返回装备id
-        return oldId;
+        return oldEquipment;
     }
 
     @Override
@@ -92,12 +88,12 @@ public class EquipmentServiceImpl implements EquipmentService {
         EquipmentModel equipmentModel = equipmentManager.load(cm_viewEquipBar.getrId());
         PropsResource prop;
         //获取装备栏数组
-        EquipmentElement[] equipmentElements = equipmentModel.getEquipmentInfo().getEquipmentElements();
+        Equipment[] equipments = equipmentModel.getEquipmentInfo().getEquipments();
         //创建列表
         List<EquipInfo> list = new ArrayList<EquipInfo>();
         //遍历装备栏
-        for (int i =1;i<equipmentElements.length;i++){
-            EquipInfo equipInfo = EquipInfo.valueOf(equipmentElements[i].getId(),equipmentElements[i].getPosition());
+        for (int i = 1; i < equipments.length; i++) {
+            EquipInfo equipInfo = EquipInfo.valueOf(equipments[i].getId(), i);
             list.add(equipInfo);
         }
         SM_ViewEquip sm_viewEquip = SM_ViewEquip.valueOf(list);
@@ -110,26 +106,24 @@ public class EquipmentServiceImpl implements EquipmentService {
         //创建属性列表
         Map<AttributeType, AttributeElement> elementHashMap = new HashMap<AttributeType, AttributeElement>();
         EquipmentModel equipmentModel = equipmentManager.load(rId);
-        for (int i = 1;i<=equipmentModel.getLength();i++){
+        //获取装备数组
+        Equipment[] equipments = equipmentModel.getEquipmentInfo().getEquipments();
+        for (int i = 1; i < equipments.length; i++) {
             //遍历所有装备
-            int pid = equipmentModel.getEquipmentInfo().getEquipmentElements()[i].getId();
-            if (pid != 0){
+            if (equipments[i].getId() != PropsType.emptyId) {
                 //装备不为空
-                EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(pid);
                 //获取装备属性映射
-                Map<Integer,Integer> map = equipmentResource.getMap();
-                for (Map.Entry<Integer,Integer> entry:map.entrySet()) {
-                    //获取属性类型
-                    AttributeType attributeType = AttributeType.getType(entry.getKey());
+                Map<AttributeType, AttributeElement> map = equipments[i].getAttribute();
+                for (Map.Entry<AttributeType, AttributeElement> entry : map.entrySet()) {
                     //遍历所有属性
-                    AttributeElement attributeElement = elementHashMap.get(attributeType);
+                    AttributeElement attributeElement = elementHashMap.get(entry.getKey());
                     if (attributeElement == null) {
                         //还未创建该类属性,添加该属性到模块中
-                        attributeElement = AttributeElement.valueOf(attributeType,entry.getValue());
-                        elementHashMap.put(attributeType,attributeElement);
+                        attributeElement = AttributeElement.valueOf(entry.getKey(), entry.getValue().getValue());
+                        elementHashMap.put(entry.getKey(), attributeElement);
                     }else {
                         //已经存在该属性，则叠加
-                        attributeElement.setValue(entry.getValue()+attributeElement.getValue());
+                        attributeElement.setValue(entry.getValue().getValue() + attributeElement.getValue());
                     }
                 }
             }

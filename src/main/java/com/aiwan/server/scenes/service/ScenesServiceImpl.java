@@ -2,6 +2,7 @@ package com.aiwan.server.scenes.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.scenes.protocol.CM_Move;
@@ -71,7 +72,7 @@ public class ScenesServiceImpl implements ScenesService{
         User user = session.getUser();
         //是否有该地图，若无则放回无该地图
         if (GetBean.getMapManager().getMapResource(cm_shift.getMap()) == null){
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE,"没有该地图"));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.MAPNOEXIST, "")));
             logger.info(cm_shift.getUsername()+"请求失败，原因：没有该地图");
             return;
         }

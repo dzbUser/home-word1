@@ -1,5 +1,8 @@
 package com.aiwan.server.user.role.equipment.model;
 
+import com.aiwan.server.prop.model.PropsType;
+import com.aiwan.server.prop.model.impl.Equipment;
+
 /**
  * @author dengzebiao
  * @since 2019.6.5
@@ -7,18 +10,17 @@ package com.aiwan.server.user.role.equipment.model;
  * */
 public class EquipmentInfo {
     /** 装备栏长度 */
-    private int length = 3;
+    private int length = Equipment.length;
 
     /** 已装备数组 */
-    private EquipmentElement[] equipmentElements;
+    private Equipment[] Equipments;
 
     public EquipmentInfo() {
         //初始化
-        this.equipmentElements = new EquipmentElement[length+1];
+        this.Equipments = new Equipment[length + 1];
         for (int i = 1;i<=length;i++){
-            equipmentElements[i] = new EquipmentElement();
-            equipmentElements[i].setId(0);
-            equipmentElements[i].setPosition(i);
+            Equipments[i] = new Equipment();
+            Equipments[i].setId(PropsType.emptyId);
         }
     }
 
@@ -31,12 +33,11 @@ public class EquipmentInfo {
         return this;
     }
 
-    public EquipmentElement[] getEquipmentElements() {
-        return equipmentElements;
+    public Equipment[] getEquipments() {
+        return Equipments;
     }
 
-    public EquipmentInfo setEquipmentElements(EquipmentElement[] equipmentElements) {
-        this.equipmentElements = equipmentElements;
-        return this;
+    public void setEquipments(Equipment[] equipments) {
+        Equipments = equipments;
     }
 }

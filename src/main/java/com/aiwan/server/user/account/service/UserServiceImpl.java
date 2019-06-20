@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     //新用户初始坐标
     private final static int ORINGINX = 1;
     private final static int ORINGINY = 3;
-    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private UserManager userManager;
 
     @Autowired
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         * */
         SessionManager.removeSessionByUsername(userMessage.getUsername());
         logger.info(userMessage.getUsername()+"注销成功！");
-        String content = new String("注销用户成功！");
+        String content = "注销用户成功！";
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.LOGOUTSUCCESS,content);
         User user = userManager.getUserByAccountId(userMessage.getUsername());
         //保存用户数据
@@ -206,8 +206,7 @@ public class UserServiceImpl implements UserService {
         User user = session.getUser();
         if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){
             //查看角色量
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.ACHIEVEROLEMAXNUM, ""));
-            session.messageSend(decodeData);
+            session.sendPromptMessage(PromptCode.ACHIEVEROLEMAXNUM, "");
             logger.info(cm_createRole.getAccountId()+"：用户角色已上限");
         }
         else {

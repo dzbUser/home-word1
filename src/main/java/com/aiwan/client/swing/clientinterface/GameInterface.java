@@ -100,7 +100,7 @@ public class GameInterface extends JFrame{
 
         //添加提示信息文本框
         promptMessage = newJTextArea(0,100,800,120,5,80);
-        promptMessage.append(NavigationBar.ROLEMESSAGE+"\n");
+        promptMessage.append(NavigationBar.getDefaultMessage() + "\n");
         //添加其他信息文本
         otherMessage = newJTextArea(0,220,500,300,15,50);
         //添加地图文本

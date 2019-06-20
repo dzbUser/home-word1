@@ -137,8 +137,22 @@ public class PropsResource{
 
     @Override
     public String toString(){
-        return "名字:"+name+
-                " 描述:" + introduce;
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("名字:" + name);
+        stringBuffer.append(" 描述:" + introduce + "\n");
+        if (attributeMap != null) {
+            //属性不为空
+            stringBuffer.append("属性:");
+            for (Map.Entry<AttributeType, AttributeElement> entry : attributeMap.entrySet()) {
+                if (entry.getKey().isRateAttribute()) {
+                    stringBuffer.append(" " + entry.getKey().getDesc() + ":" + (entry.getValue().getValue() / 100) + "%");
+                } else {
+                    stringBuffer.append(" " + entry.getKey().getDesc() + ":" + entry.getValue().getValue());
+                }
+            }
+            stringBuffer.append(" 等级要求:" + level);
+        }
+        return stringBuffer.toString();
     }
 
     public String getAttribute() {

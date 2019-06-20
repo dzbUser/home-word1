@@ -1,4 +1,4 @@
-package com.aiwan.client.service.infoReceive;
+package com.aiwan.client.service.inforeceive;
 
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
@@ -6,7 +6,6 @@ import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
-import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
@@ -63,17 +62,17 @@ public class RoleInfoReceive {
         StringBuffer stringBuffer = new StringBuffer();
         int i = 1;
         for (EquipInfo equipInfo:sm_viewEquip.getList()){
+            stringBuffer.append("[" + i + "] ");
             if (equipInfo.getId() == 0){
                 //无装备
-                stringBuffer.append("位置" + i + ":" + ClientResourseManager.getContent("equipPosition", equipInfo.getPosition()) + " 装备:空\n");
+                stringBuffer.append(ClientResourseManager.getContent("equipPosition", equipInfo.getPosition()) + " 装备:空");
             }else {
                 //有装备
                 PropsResource propsResource = GetBean.getPropsManager().getPropsResource(equipInfo.getId());
-                EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(equipInfo.getId());
-                stringBuffer.append("位置" + equipInfo.getPosition() + ":" + ClientResourseManager.getContent("equipPosition", equipmentResource.getPosition()));
-                stringBuffer.append(" 装备:"+ propsResource.getName());
-                stringBuffer.append("\n属性添加:"+ equipmentResource.toString()+"\n");
+                stringBuffer.append(ClientResourseManager.getContent("equipPosition", propsResource.getPosition()));
+                stringBuffer.append("\n" + propsResource.toString());
             }
+            stringBuffer.append("\n\n");
             i++;
         }
         gameInterface.printOtherMessage(stringBuffer.toString()+"\n");

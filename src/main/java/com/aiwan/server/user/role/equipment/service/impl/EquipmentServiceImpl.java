@@ -132,7 +132,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public void unload(String accountId, Long rid, int position, Session session) {
         if (position > Equipment.length) {
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.UNLOADEQUIPFAIL, "")));
+            session.sendPromptMessage(PromptCode.UNLOADEQUIPFAIL, "");
             return;
         }
         logger.info(rid + ":卸装备");
@@ -141,7 +141,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         Equipment equipment = equipmentModel.getEquipmentByPosition(position);
         if (equipment.getId() == PropsType.emptyId) {
             //装备位置为空
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.EQUIPEMPTY, "")));
+            session.sendPromptMessage(PromptCode.EQUIPEMPTY, "");
         } else {
             //背包获取装备
             equipmentModel.setEmptyByPosition(position);
@@ -149,9 +149,8 @@ public class EquipmentServiceImpl implements EquipmentService {
             GetBean.getBackpackService().obtainProp(accountId, equipment.getId());
             //重新计算战斗力
             GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rid), rid);
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.UNLOADEQUIPSUCCESS, "")));
+            session.sendPromptMessage(PromptCode.UNLOADEQUIPSUCCESS, "");
         }
-        //写回
 
     }
 

@@ -68,11 +68,11 @@ public enum PackMessageSend {
                 return;
             }
 
-            int id = Integer.parseInt(message);
+            int position = Integer.parseInt(message);
             CM_PropUse cm_propUse = new CM_PropUse();
             cm_propUse.setAccountId(LoginUser.getUsername());
-            cm_propUse.setpId(id);
             cm_propUse.setrId(LoginUser.getRoles().get(0));
+            cm_propUse.setPosition(position);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.PROPUSER,cm_propUse));
         }
 

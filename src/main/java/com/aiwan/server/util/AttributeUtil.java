@@ -44,7 +44,7 @@ public class AttributeUtil {
             //叠加万分比比
             rate += pureAttribute.get(type).getValue();
         }
-        return value+rate*value/10000;
+        return value + (rate * value) / 10000;
     }
 
     /** 字符串转化为初始属性 */

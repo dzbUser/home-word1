@@ -1,6 +1,5 @@
 package com.aiwan.server.user.role.player.service.impl;
 
-import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;

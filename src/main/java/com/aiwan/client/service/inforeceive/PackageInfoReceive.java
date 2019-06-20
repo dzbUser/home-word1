@@ -1,11 +1,10 @@
-package com.aiwan.client.service.infoReceive;
+package com.aiwan.client.service.inforeceive;
 
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourseManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
-import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.protocol.SM_PropList;
@@ -37,22 +36,24 @@ public class PackageInfoReceive {
     }
 
     /** 根据list输出道具 */
-    public void printPropByList(List<PropInfo> list){
+    private void printPropByList(List<PropInfo> list) {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
         StringBuffer stringBuffer = new StringBuffer();
         //表示位置
         int i = 0;
         for (PropInfo propInfo:list){
             if (propInfo.getId() == 0) {
+                i++;
                 continue;
             }
+            stringBuffer.append("[" + i + "] ");
             PropsResource propsResource = GetBean.getPropsManager().getPropsResource(propInfo.getId());
-            stringBuffer.append(i + ":" + propsResource.toString() + " ");
             if (propsResource.getType() == EQUIP){
                 //是装备
-                EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(propInfo.getId());
-                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition", equipmentResource.getPosition()) + equipmentResource.toString());
+                stringBuffer.append(ClientResourseManager.getContent("equipPosition", propsResource.getPosition()) + " ");
+                stringBuffer.append(propsResource.toString());
             }else {
+                stringBuffer.append(propsResource.toString());
                 stringBuffer.append("数量:"+propInfo.getNum());
             }
             stringBuffer.append("\n\n");

@@ -1,6 +1,7 @@
 package com.aiwan.server.user.backpack.service.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
+import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
@@ -74,7 +75,7 @@ public class BackpackServiceImpl implements BackpackService {
         //获取背包
         if (backpack.isEmpty()) {
             //背包为空
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.BACKEMPTY, "")));
+            session.sendPromptMessage(PromptCode.BACKEMPTY, "");
             return;
         }
         //创建背包返回类
@@ -94,22 +95,33 @@ public class BackpackServiceImpl implements BackpackService {
     /** 道具使用 */
     @Override
     public void propUse(CM_PropUse cm_propUser, Session session) {
-        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(cm_propUser.getpId());
-        logger.info(cm_propUser.getAccountId()+"使用"+ propsResource.getName());
-        if (propsResource.getUse() == 0){
-            //道具不可使用
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.UNAVAILABLE, propsResource.getName())));
+        logger.info(cm_propUser.getAccountId() + "使用" + cm_propUser.getPosition() + "位置的道具");
+        //获取背包
+        Backpack backpack = backPackManager.load(cm_propUser.getAccountId());
+        if (cm_propUser.getPosition() > backpack.getMaxNum()) {
+            //没有该位置的道具，返回错误提示
+            session.sendPromptMessage(PromptCode.NOPOSITIONINBACK, "");
+            logger.info(cm_propUser.getAccountId() + "使用位置" + cm_propUser.getPosition() + ":没有该位置的道具");
             return;
         }
-        //对应道具的使用
-        Backpack backpack = backPackManager.load(cm_propUser.getAccountId());
-        AbstractProps abstractProps = backpack.getBackpackItem(cm_propUser.getpId());
-        if (abstractProps == null) {
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.NOPROPINBACK, "")));
-        } else {
-            int code = abstractProps.propUser(cm_propUser.getAccountId(), cm_propUser.getrId());
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(code, "")));
+
+        //有该位置的道具
+        AbstractProps props = backpack.getPropByPosition(cm_propUser.getPosition());
+        if (props.getId() == PropsType.emptyId) {
+            //该背包位置为空
+            session.sendPromptMessage(PromptCode.EMPTYINBACK, "");
+            logger.info(cm_propUser.getAccountId() + "使用位置" + cm_propUser.getPosition() + ":该背包位置为空");
+            return;
         }
+
+        if (props.getPropsResource().getUse() == 0) {
+            //该道具不可使用
+            session.sendPromptMessage(PromptCode.UNAVAILABLE, props.getPropsResource().getName());
+            logger.info(cm_propUser.getAccountId() + "使用位置" + cm_propUser.getPosition() + ":该道具不可使用");
+            return;
+        }
+        int code = props.propUser(cm_propUser.getAccountId(), cm_propUser.getrId());
+        session.sendPromptMessage(code, "");
     }
 
     /** 扣除背包中的道具 */
@@ -154,8 +166,7 @@ public class BackpackServiceImpl implements BackpackService {
          * */
         PropsResource propsResource = GetBean.getPropsManager().getPropsResource(cm_obtainProp.getId());
         if (propsResource == null){
-            DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.NOPROP, ""));
-            session.messageSend(decodeData);
+            session.sendPromptMessage(PromptCode.NOPROP, "");
             logger.info(cm_obtainProp+":添加道具失败，没有该道具");
             return;
         }
@@ -164,14 +175,13 @@ public class BackpackServiceImpl implements BackpackService {
         for (int i = 0; i < cm_obtainProp.getNum(); i++) {
             if (!obtainProp(cm_obtainProp.getAccountId(), cm_obtainProp.getId())) {
                 logger.info(cm_obtainProp.getAccountId() + "背包已满");
-                session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.BACKFULL, "")));
+                session.sendPromptMessage(PromptCode.BACKFULL, "");
                 return;
             }
         }
 
         logger.info("用户："+cm_obtainProp.getAccountId()+"添加"+ propsResource.getName()+"成功");
-        DecodeData decodeData = SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.ADDSUCCESS, propsResource.getName()));
-        session.messageSend(decodeData);
+        session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
     }
 
 

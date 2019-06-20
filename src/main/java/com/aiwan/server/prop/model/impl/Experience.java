@@ -27,6 +27,6 @@ public class Experience extends AbstractProps {
             //人物达到最高级
             return PromptCode.ROLEACHIEVEMAXLEVEL;
         }
-        return PromptCode.ROLEACHIEVEMAXLEVEL;
+        return PromptCode.USERSUCCESS;
     }
 }

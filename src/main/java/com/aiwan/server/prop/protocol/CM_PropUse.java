@@ -17,8 +17,10 @@ public class CM_PropUse implements Serializable {
     /** 角色id */
     private Long rId;
 
-    /** 道具id */
-    private int pId;
+    /**
+     * 道具位置
+     */
+    private int position;
 
     public String getAccountId() {
         return accountId;
@@ -38,12 +40,12 @@ public class CM_PropUse implements Serializable {
         return this;
     }
 
-    public int getpId() {
-        return pId;
+
+    public int getPosition() {
+        return position;
     }
 
-    public CM_PropUse setpId(int pId) {
-        this.pId = pId;
-        return this;
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

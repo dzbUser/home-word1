@@ -68,4 +68,20 @@ public class PromptCode {
      */
     public final static int UNLOADEQUIPFAIL = 16;
 
+    /**
+     * 背包中没有该位置
+     */
+    public final static int NOPOSITIONINBACK = 17;
+
+    /**
+     * 该背包位置为空
+     */
+    public final static int EMPTYINBACK = 18;
+
+    /**
+     * 此处不可移动
+     */
+    public final static int MOVEFAIL = 19;
+
+
 }

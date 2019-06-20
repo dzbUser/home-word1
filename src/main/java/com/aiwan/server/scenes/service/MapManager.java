@@ -106,7 +106,7 @@ public class MapManager {
     /** 是否可行走 */
     public boolean allowMove(int x,int y,int mapType){
         MapResource mapResource = mapResourceMap.get(mapType);
-        if (x>mapResource.getHeight()||y>mapResource.getWidth())
+        if (x < 1 || y < 1 || x > mapResource.getHeight() || y > mapResource.getWidth())
         {
             return false;
         }
@@ -126,7 +126,7 @@ public class MapManager {
             //获取session
             Session session = SessionManager.getSessionByUsername(entry.getValue().getAcountId());
             //用户角色数大于0,排除本用户
-            if (session != null&&entry.getValue().getUserBaseInfo().getRoles().size() > 0&&entry.getValue().getAcountId()!=accountId){
+            if (session != null && entry.getValue().getUserBaseInfo().getRoles().size() > 0 && entry.getValue().getAcountId().equals(accountId)) {
                 //发送信息
                 session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE,getMapContent(entry.getValue().getCurrentX(),entry.getValue().getCurrentY(),id)));
             }

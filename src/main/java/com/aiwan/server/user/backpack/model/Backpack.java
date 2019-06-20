@@ -147,4 +147,14 @@ public class Backpack {
             }
         }
     }
+
+    /**
+     * 获取对应位置的装备
+     */
+    public AbstractProps getPropByPosition(int position) {
+        if (position < getMaxNum()) {
+            return backpackEnt.getBackpackInfo().getAbstractProps()[position];
+        }
+        return null;
+    }
 }

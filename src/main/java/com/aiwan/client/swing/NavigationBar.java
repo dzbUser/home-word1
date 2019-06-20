@@ -16,15 +16,22 @@ import java.awt.event.ActionListener;
  * */
 public class NavigationBar extends JPanel {
 
+    /**
+     * 人物模块
+     */
     public static final int ROLE = 1;
+
+    /** 背包模块 */
     public static final int PACK = 2;
+
+    /** 坐骑模块 */
     public static final int MOUNT = 3;
 
     /** 只是当前所属模块 */
-    private int num;
+    public int num;
 
     /** 角色系统提示信息 */
-    public static  final String ROLEMESSAGE =
+    private static final String ROLEMESSAGE =
             "地图：1.主城 2.野外\n"+
             "1.创建角色 （指令说明: 0:战士 1:法师；  0:男 1:女；  如:输入 0 0 则为战士+男； ）\n" +
             "2.移动（指令说明: 需指定坐标如：4 4，移动到坐标(4,4)）\n" +
@@ -33,14 +40,16 @@ public class NavigationBar extends JPanel {
                     "5.查看装备(指令不用输入)\n" +
                     "6.卸装备（指令输入装备位置数）";
 
-    /** 背包系统提示信息 */
-    public static  final String PACKMESSAGE =
-            "1.添加道具 （指令：输入道具的id 数量）\n"+
-            "2.查看背包 （指令：不用输入）\n"+
-            "3.道具使用 （指令：id）";
 
     /** 背包系统提示信息 */
-    public static  final String MOUNTMESSAGE =
+    private static final String PACKMESSAGE =
+            "1.添加道具 （指令：输入道具的id 数量）\n"+
+            "2.查看背包 （指令：不用输入）\n" +
+                    "3.道具使用 （指令：背包位置）";
+
+
+    /** 背包系统提示信息 */
+    private static final String MOUNTMESSAGE =
             "1.查看坐骑信息 （指令：不用输入）\n"+
             "2.坐骑提升 （指令：不用输入）\n";
 
@@ -58,7 +67,7 @@ public class NavigationBar extends JPanel {
      * 创建菜单项
      * @param name 菜单名
      * */
-    public JButton createItem(final String name, final String message, int x, int y,final int num){
+    private JButton createItem(final String name, final String message, int x, int y, final int num){
         JButton jButton = new JButton(name);
         jButton.setBounds(x,y,40,40);
 
@@ -88,5 +97,12 @@ public class NavigationBar extends JPanel {
 
     public static void setLogger(Logger logger) {
         NavigationBar.logger = logger;
+    }
+
+    /**
+     * 获取默认消息提示
+     */
+    public static String getDefaultMessage() {
+        return ROLEMESSAGE;
     }
 }

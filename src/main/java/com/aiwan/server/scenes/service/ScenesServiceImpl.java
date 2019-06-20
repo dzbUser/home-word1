@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 @Service("scenesService")
 public class ScenesServiceImpl implements ScenesService{
 
-    Logger logger = LoggerFactory.getLogger(ScenesServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(ScenesServiceImpl.class);
 
     private UserManager userManager;
 
@@ -52,15 +52,12 @@ public class ScenesServiceImpl implements ScenesService{
             type = StatusCode.MOVESUCCESS;
             //对所有在线用户发送地图信息
             GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+            session.messageSend(SMToDecodeData.shift(type, data));
             logger.info(cm_move.getUsername()+"移动成功");
         } else {
-            data = "此处不可移动！";
+            session.sendPromptMessage(PromptCode.MOVEFAIL, "");
             logger.info(cm_move.getUsername()+"移动失败");
-            type = StatusCode.MESSAGE;
         }
-        DecodeData decodeData = SMToDecodeData.shift((short) type,data);
-
-        session.messageSend(decodeData);
     }
 
     /**
@@ -72,7 +69,7 @@ public class ScenesServiceImpl implements ScenesService{
         User user = session.getUser();
         //是否有该地图，若无则放回无该地图
         if (GetBean.getMapManager().getMapResource(cm_shift.getMap()) == null){
-            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.MAPNOEXIST, "")));
+            session.sendPromptMessage(PromptCode.MAPNOEXIST, "");
             logger.info(cm_shift.getUsername()+"请求失败，原因：没有该地图");
             return;
         }
@@ -80,7 +77,7 @@ public class ScenesServiceImpl implements ScenesService{
         int oldMap = user.getMap();
         //从旧地图中去除
         GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
-        MapResource mapResource = GetBean.getMapManager().getMapResource((int) cm_shift.getMap());
+        MapResource mapResource = GetBean.getMapManager().getMapResource(cm_shift.getMap());
         user.setMap(cm_shift.getMap());
         user.setCurrentY(mapResource.getOriginY());
         user.setCurrentX(mapResource.getOriginX());

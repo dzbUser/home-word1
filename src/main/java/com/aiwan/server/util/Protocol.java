@@ -63,4 +63,8 @@ public class Protocol {
     public final static int MOUNTUPGRADE = 28;
     //心跳（测试）
     public final static int HEARTNEW = 29;
+    /**
+     * 卸装备
+     */
+    public final static int UNLOADEQUIP = 30;
 }

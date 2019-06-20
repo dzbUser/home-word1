@@ -2,14 +2,12 @@ package com.aiwan.server.user.role.equipment.service.impl;
 
 import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.model.impl.Equipment;
-import com.aiwan.server.prop.resource.EquipmentResource;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
-import com.aiwan.server.user.role.equipment.model.EquipmentElement;
-import com.aiwan.server.user.role.equipment.model.EquipmentInfo;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
 import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
 import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
@@ -17,6 +15,7 @@ import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
 import org.slf4j.Logger;
@@ -58,18 +57,13 @@ public class EquipmentServiceImpl implements EquipmentService {
             //等级达不到要求等级
             return null;
         }
-
         //获取装备栏
         EquipmentModel equipmentModel = equipmentManager.load(rId);
-        //获取装备栏数组
-        Equipment[] equipments = equipmentModel.getEquipmentInfo().getEquipments();
-
         //旧装备
-        Equipment oldEquipment = equipments[equipment.getPosition()];
+        Equipment oldEquipment = equipmentModel.getEquipmentByPosition(equipment.getPosition());
         //装备转换
-        equipments[equipment.getPosition()] = equipment;
+        equipmentModel.putEquipmentByPosition(equipment);
         equipmentManager.writeBack(equipmentModel);
-
         //修改人物属性
         GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rId),rId);
 
@@ -88,7 +82,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         EquipmentModel equipmentModel = equipmentManager.load(cm_viewEquipBar.getrId());
         PropsResource prop;
         //获取装备栏数组
-        Equipment[] equipments = equipmentModel.getEquipmentInfo().getEquipments();
+        Equipment[] equipments = equipmentModel.getEquipmentBar();
         //创建列表
         List<EquipInfo> list = new ArrayList<EquipInfo>();
         //遍历装备栏
@@ -107,7 +101,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         Map<AttributeType, AttributeElement> elementHashMap = new HashMap<AttributeType, AttributeElement>();
         EquipmentModel equipmentModel = equipmentManager.load(rId);
         //获取装备数组
-        Equipment[] equipments = equipmentModel.getEquipmentInfo().getEquipments();
+        Equipment[] equipments = equipmentModel.getEquipmentBar();
         for (int i = 1; i < equipments.length; i++) {
             //遍历所有装备
             if (equipments[i].getId() != PropsType.emptyId) {
@@ -131,5 +125,35 @@ public class EquipmentServiceImpl implements EquipmentService {
 
         return elementHashMap;
     }
+
+    /**
+     * 卸装备
+     */
+    @Override
+    public void unload(String accountId, Long rid, int position, Session session) {
+        if (position > Equipment.length) {
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.UNLOADEQUIPFAIL, "")));
+            return;
+        }
+        logger.info(rid + ":卸装备");
+        //获取装备
+        EquipmentModel equipmentModel = equipmentManager.load(rid);
+        Equipment equipment = equipmentModel.getEquipmentByPosition(position);
+        if (equipment.getId() == PropsType.emptyId) {
+            //装备位置为空
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.EQUIPEMPTY, "")));
+        } else {
+            //背包获取装备
+            equipmentModel.setEmptyByPosition(position);
+            equipmentManager.writeBack(equipmentModel);
+            GetBean.getBackpackService().obtainProp(accountId, equipment.getId());
+            //重新计算战斗力
+            GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rid), rid);
+            session.messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(PromptCode.UNLOADEQUIPSUCCESS, "")));
+        }
+        //写回
+
+    }
+
 
 }

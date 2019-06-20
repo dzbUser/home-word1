@@ -40,12 +40,14 @@ public class PackageInfoReceive {
     public void printPropByList(List<PropInfo> list){
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
         StringBuffer stringBuffer = new StringBuffer();
+        //表示位置
+        int i = 0;
         for (PropInfo propInfo:list){
             if (propInfo.getId() == 0) {
                 continue;
             }
             PropsResource propsResource = GetBean.getPropsManager().getPropsResource(propInfo.getId());
-            stringBuffer.append(propsResource.toString()+" ");
+            stringBuffer.append(i + ":" + propsResource.toString() + " ");
             if (propsResource.getType() == EQUIP){
                 //是装备
                 EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(propInfo.getId());
@@ -53,7 +55,8 @@ public class PackageInfoReceive {
             }else {
                 stringBuffer.append("数量:"+propInfo.getNum());
             }
-            stringBuffer.append("\n");
+            stringBuffer.append("\n\n");
+            i++;
         }
         gameInterface.printOtherMessage(stringBuffer.toString());
     }

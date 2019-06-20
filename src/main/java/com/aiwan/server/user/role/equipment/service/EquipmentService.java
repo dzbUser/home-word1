@@ -27,4 +27,9 @@ public interface EquipmentService {
 
     /** 获取装备属性 */
     Map<AttributeType, AttributeElement> getEquipAttributes(Long rId);
+
+    /**
+     * 卸装备
+     */
+    void unload(String accountId, Long rid, int position, Session session);
 }

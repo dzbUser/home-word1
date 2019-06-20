@@ -30,7 +30,8 @@ public class NavigationBar extends JPanel {
             "2.移动（指令说明: 需指定坐标如：4 4，移动到坐标(4,4)）\n" +
             "3.地图跳转(指令说明: 如:1，跳转到主城 ) \n" +
             "4.查看角色信息(指令不用输入) \n" +
-            "5.查看装备(指令不用输入)";
+                    "5.查看装备(指令不用输入)\n" +
+                    "6.卸装备（指令输入装备位置数）";
 
     /** 背包系统提示信息 */
     public static  final String PACKMESSAGE =

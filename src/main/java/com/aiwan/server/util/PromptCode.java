@@ -53,5 +53,19 @@ public class PromptCode {
      */
     public final static int NOMOUNTDAN = 13;
 
+    /**
+     * 您该位置没有装备
+     */
+    public final static int EQUIPEMPTY = 14;
+
+    /**
+     * 卸装备成功
+     */
+    public final static int UNLOADEQUIPSUCCESS = 15;
+
+    /**
+     * 没有该位置的装备
+     */
+    public final static int UNLOADEQUIPFAIL = 16;
 
 }

@@ -61,18 +61,20 @@ public class RoleInfoReceive {
     public void viewEquip(SM_ViewEquip sm_viewEquip){
         GameInterface gameInterface = (GameInterface)InterfaceManager.getFrame("game");
         StringBuffer stringBuffer = new StringBuffer();
+        int i = 1;
         for (EquipInfo equipInfo:sm_viewEquip.getList()){
             if (equipInfo.getId() == 0){
                 //无装备
-                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition",equipInfo.getPosition())+" 装备:空\n");
+                stringBuffer.append("位置" + i + ":" + ClientResourseManager.getContent("equipPosition", equipInfo.getPosition()) + " 装备:空\n");
             }else {
                 //有装备
                 PropsResource propsResource = GetBean.getPropsManager().getPropsResource(equipInfo.getId());
                 EquipmentResource equipmentResource = GetBean.getPropsManager().getEquipment(equipInfo.getId());
-                stringBuffer.append("位置:"+ ClientResourseManager.getContent("equipPosition", equipmentResource.getPosition()));
+                stringBuffer.append("位置" + equipInfo.getPosition() + ":" + ClientResourseManager.getContent("equipPosition", equipmentResource.getPosition()));
                 stringBuffer.append(" 装备:"+ propsResource.getName());
                 stringBuffer.append("\n属性添加:"+ equipmentResource.toString()+"\n");
             }
+            i++;
         }
         gameInterface.printOtherMessage(stringBuffer.toString()+"\n");
     }

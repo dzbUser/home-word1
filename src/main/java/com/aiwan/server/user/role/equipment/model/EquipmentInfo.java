@@ -13,14 +13,14 @@ public class EquipmentInfo {
     private int length = Equipment.length;
 
     /** 已装备数组 */
-    private Equipment[] Equipments;
+    private Equipment[] equipments;
 
     public EquipmentInfo() {
         //初始化
-        this.Equipments = new Equipment[length + 1];
+        this.equipments = new Equipment[length + 1];
         for (int i = 1;i<=length;i++){
-            Equipments[i] = new Equipment();
-            Equipments[i].setId(PropsType.emptyId);
+            equipments[i] = new Equipment();
+            equipments[i].setId(PropsType.emptyId);
         }
     }
 
@@ -34,10 +34,36 @@ public class EquipmentInfo {
     }
 
     public Equipment[] getEquipments() {
-        return Equipments;
+        return equipments;
     }
 
     public void setEquipments(Equipment[] equipments) {
-        Equipments = equipments;
+        this.equipments = equipments;
+    }
+
+    /**
+     * 设置某位置装备为空
+     */
+    public void setEmptyByPosition(int position) {
+        if (position > 0 && position <= length) {
+            this.equipments[position] = Equipment.getEmpty();
+        }
+    }
+
+    /**
+     * 获取某个位置的装备
+     */
+    public Equipment getEquipmentByPosition(int position) {
+        if (position > 0 && position <= length) {
+            return this.equipments[position];
+        }
+        return null;
+    }
+
+    /**
+     * 设置装备
+     */
+    public void putEquipmentByPosition(Equipment equipment) {
+        this.equipments[equipment.getPosition()] = equipment;
     }
 }

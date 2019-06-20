@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.equipment.model;
 
+import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.user.role.equipment.entity.EquipmentEntity;
 
 /**
@@ -27,7 +28,29 @@ public class EquipmentModel {
     }
 
     /** 获取装备栏 */
-    public EquipmentInfo getEquipmentInfo() {
-        return equipmentEntity.getEquipmentInfo();
+    public Equipment[] getEquipmentBar() {
+        return equipmentEntity.getEquipmentInfo().getEquipments();
     }
+
+    /**
+     * 设置某位置装备为空
+     */
+    public void setEmptyByPosition(int position) {
+        equipmentEntity.getEquipmentInfo().setEmptyByPosition(position);
+    }
+
+    /**
+     * 获取某个位置的装备
+     */
+    public Equipment getEquipmentByPosition(int position) {
+        return equipmentEntity.getEquipmentInfo().getEquipmentByPosition(position);
+    }
+
+    /**
+     * 设置装备
+     */
+    public void putEquipmentByPosition(Equipment equipment) {
+        equipmentEntity.getEquipmentInfo().putEquipmentByPosition(equipment);
+    }
+
 }

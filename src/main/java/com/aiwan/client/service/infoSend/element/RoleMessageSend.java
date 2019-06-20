@@ -8,6 +8,7 @@ import com.aiwan.client.util.Verification;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
 import com.aiwan.server.user.account.protocol.CM_CreateRole;
+import com.aiwan.server.user.role.equipment.protocol.CM_UnloadingEquipment;
 import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
 import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.util.Protocol;
@@ -151,6 +152,33 @@ public enum  RoleMessageSend {
         }
 
     },
+
+    /**
+     * 卸装备
+     */
+    UNLOAD_EQUIP(6) {
+        @Override
+        public void messageSend(String message) {
+            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+            if (!verify(message)) {
+                //校验指令正确性
+                gameInterface.printOtherMessage("您的输入不规范");
+                return;
+            }
+            //解析字符串含义
+            int position = Integer.parseInt(message);
+            CM_UnloadingEquipment cm_unloadingEquipment = CM_UnloadingEquipment.valueOf(LoginUser.getUsername(), LoginUser.getRoles().get(0), position);
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.UNLOADEQUIP, cm_unloadingEquipment));
+        }
+
+        @Override
+        public boolean verify(String message) {
+            if (!Verification.canParseInt(message)) {
+                return false;
+            }
+            return true;
+        }
+    }
     ;
 
     RoleMessageSend(int num){

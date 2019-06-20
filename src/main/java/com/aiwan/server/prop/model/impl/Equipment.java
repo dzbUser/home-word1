@@ -62,4 +62,14 @@ public class Equipment extends AbstractProps {
         return getPropsResource().getPosition();
     }
 
+    /**
+     * 获取空装备
+     */
+    @JsonIgnore
+    public static Equipment getEmpty() {
+        Equipment equipment = new Equipment();
+        equipment.init(0);
+        return equipment;
+    }
+
 }

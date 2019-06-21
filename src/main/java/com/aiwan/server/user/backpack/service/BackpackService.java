@@ -18,7 +18,7 @@ public interface BackpackService {
      * */
     void createBackpack(String acountId);
 
-    /** 获取道具
+    /** 添加可叠加道具
      * @param accountId 用户账号
      * @param abstractProps 道具
      * @param num 道具数量
@@ -45,7 +45,7 @@ public interface BackpackService {
     void addPropToBack(CM_ObtainProp cm_obtainProp, Session session);
 
     /**
-     * 不可叠加
+     * 添加不可叠加
      */
     boolean obtainNoOverlayProp(String accountId, AbstractProps abstractProps);
 

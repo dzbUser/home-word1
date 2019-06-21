@@ -126,7 +126,7 @@ public class MapManager {
             //获取session
             Session session = SessionManager.getSessionByUsername(entry.getValue().getAcountId());
             //用户角色数大于0,排除本用户
-            if (session != null && entry.getValue().getUserBaseInfo().getRoles().size() > 0 && entry.getValue().getAcountId().equals(accountId)) {
+            if (session != null && entry.getValue().getUserBaseInfo().getRoles().size() > 0 && !entry.getValue().getAcountId().equals(accountId)) {
                 //发送信息
                 session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE,getMapContent(entry.getValue().getCurrentX(),entry.getValue().getCurrentY(),id)));
             }

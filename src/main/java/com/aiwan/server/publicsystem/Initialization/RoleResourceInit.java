@@ -19,17 +19,17 @@ public class RoleResourceInit {
     static Logger logger = LoggerFactory.getLogger(RoleResourceInit.class);
 
     /** 人物静态文件路径 */
-    private final static String FILEPATH="C:\\ideaProject\\homeword1\\src\\main\\resources\\role\\role.xls";
+    private final static String FILEPATH = "role/role.xls";
 
     /** 坐骑静态文件路径 */
-    private final static String MOUNTFILEPATH="C:\\ideaProject\\homeword1\\src\\main\\resources\\mount\\mount.xls";
+    private final static String MOUNTFILEPATH = "mount/mount.xls";
     public static void init(){
         List<RoleResource> roleList = null;
         List<MountResource> mountList = null;
         try {
             //资源读取，角色资源以及坐骑资源
-            roleList = ExcelUtil.analysisExcelFile(FILEPATH, RoleResource.class);
-            mountList = ExcelUtil.analysisExcelFile(MOUNTFILEPATH, MountResource.class);
+            roleList = ExcelUtil.analysisWithRelativePath(FILEPATH, RoleResource.class);
+            mountList = ExcelUtil.analysisWithRelativePath(MOUNTFILEPATH, MountResource.class);
         } catch (IllegalAccessException e) {
             logger.error(e.getLocalizedMessage());
         } catch (InstantiationException e) {

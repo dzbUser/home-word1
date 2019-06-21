@@ -16,12 +16,12 @@ import java.util.List;
  * */
 public class MapInitialization {
     private static final Logger logger = LoggerFactory.getLogger(MapInitialization.class);
-    private final static String FILEPATH=MapInitialization.class.getClassLoader().getResource("map1/map.xls").getPath();
+    private final static String FILEPATH = "map1/map.xls";
     public static void init() throws IOException, InstantiationException, IllegalAccessException {
 
         //加载资源
         logger.debug("开始加载地图静态资源");
-        List<MapResource> list = ExcelUtil.analysisExcelFile(FILEPATH, MapResource.class);
+        List<MapResource> list = ExcelUtil.analysisWithRelativePath(FILEPATH, MapResource.class);
         MapManager mapManager = GetBean.getMapManager();
         for (int i = 0;i < list.size();i++){
             list.get(i).init();

@@ -34,13 +34,13 @@ public class GameStart {
 
         //初始化资源
         final ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("Spring-Hibernate-All-Cfg.xml");
+        //客户端静态资源初始化
+        ClientResourceInit.init();
         //道具资源初始化
         PropsInitialzation.init();
         //人物资源初始化
-//        RoleResourceInit.init();
+        RoleResourceInit.init();
         ClientReceiveMap.init(applicationContext);
-        //客户端静态资源初始化
-        ClientResourceInit.init();
         GetBean.setApplicationContext(applicationContext);
     }
 

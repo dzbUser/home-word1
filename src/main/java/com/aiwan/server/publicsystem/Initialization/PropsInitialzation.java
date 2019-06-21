@@ -23,13 +23,7 @@ public class PropsInitialzation {
      * 道具静态文件路径
      * 注意：此路径为绝对路径:"C:\\ideaProject\\homeword1\\src\\main\\resources\\prop\\prop.xls"
      * */
-    private final static String FILEPATH = PropsInitialzation.class.getClassLoader().getResource("prop/prop.xls").getPath();
-
-    /**
-     * 装备静态文件路径
-     * 注意：此路径为绝对路径:"C:\\ideaProject\\homeword1\\src\\main\\resources\\prop\\equipment.xls";
-     * */
-    private final static String FILEPATH1=PropsInitialzation.class.getClassLoader().getResource("prop/equipment.xls").getPath();
+    private final static String FILEPATH = "prop/prop.xls";
 
     public static void init(){
         propInit();
@@ -41,7 +35,7 @@ public class PropsInitialzation {
 
         List<PropsResource> list = new ArrayList<PropsResource>();
         try {
-            list.addAll(ExcelUtil.analysisExcelFile(FILEPATH, PropsResource.class));
+            list.addAll(ExcelUtil.analysisWithRelativePath(FILEPATH, PropsResource.class));
             logger.debug("道具静态资源初始化debug：");
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());

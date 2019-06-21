@@ -39,7 +39,7 @@ public class Equipment extends AbstractProps {
             GetBean.getBackpackService().obtainNoOverlayProp(accountId, this);
             return PromptCode.NOREQUIREMENTINLEVEL;
         }
-        if (equipment.getId() != 0) {
+        if (equipment.getResourceId() != 0) {
             //旧的装备存到背包
             GetBean.getBackpackService().obtainNoOverlayProp(accountId, equipment);
         }

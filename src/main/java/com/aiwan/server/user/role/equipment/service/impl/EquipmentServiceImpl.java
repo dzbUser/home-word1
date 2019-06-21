@@ -86,7 +86,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         List<EquipInfo> list = new ArrayList<EquipInfo>();
         //遍历装备栏
         for (int i = 1; i < equipments.length; i++) {
-            EquipInfo equipInfo = EquipInfo.valueOf(equipments[i].getId(), i);
+            EquipInfo equipInfo = EquipInfo.valueOf(equipments[i].getResourceId(), i);
             list.add(equipInfo);
         }
         SM_ViewEquip sm_viewEquip = SM_ViewEquip.valueOf(list);
@@ -103,7 +103,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         Equipment[] equipments = equipmentModel.getEquipmentBar();
         for (int i = 1; i < equipments.length; i++) {
             //遍历所有装备
-            if (equipments[i].getId() != PropsType.emptyId) {
+            if (equipments[i].getResourceId() != PropsType.emptyId) {
                 //装备不为空
                 //获取装备属性映射
                 Map<AttributeType, AttributeElement> map = equipments[i].getAttribute();
@@ -138,7 +138,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         //获取装备
         EquipmentModel equipmentModel = equipmentManager.load(rid);
         Equipment equipment = equipmentModel.getEquipmentByPosition(position);
-        if (equipment.getId() == PropsType.emptyId) {
+        if (equipment.getResourceId() == PropsType.emptyId) {
             //装备位置为空
             session.sendPromptMessage(PromptCode.EQUIPEMPTY, "");
         } else {

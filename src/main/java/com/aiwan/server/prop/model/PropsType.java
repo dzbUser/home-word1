@@ -23,7 +23,7 @@ public enum PropsType {
     EXPERIENCE(1, Experience.class),
 
     /**
-     * 坐骑丹
+     * 坐骑升阶丹
      */
     MOUNTDAN(2, MountDan.class),
 

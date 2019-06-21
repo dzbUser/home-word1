@@ -71,7 +71,7 @@ public class Backpack {
     public AbstractProps getBackpackItem(int id) {
         AbstractProps[] abstractProps = backpackEnt.getBackpackInfo().getAbstractProps();
         for (int i = 0; i < abstractProps.length; i++) {
-            if (abstractProps[i] != null && abstractProps[i].getId() == id) {
+            if (abstractProps[i] != null && abstractProps[i].getResourceId() == id) {
                 return abstractProps[i];
             }
         }
@@ -87,7 +87,7 @@ public class Backpack {
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
 
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getId() != PropsType.emptyId) {
+            if (array[i].getResourceId() != PropsType.emptyId) {
                 return false;
             }
         }
@@ -115,7 +115,7 @@ public class Backpack {
 
         for (int i = 0; i < array.length; i++) {
             //是否叠加到现存背包项
-            if (array[i].getId() == abstractProps.getId()) {
+            if (array[i].getResourceId() == abstractProps.getResourceId()) {
                 int allnum = array[i].getNum() + num;
                 if (allnum > limit) {
                     //总数大于上限
@@ -130,7 +130,7 @@ public class Backpack {
         //获取背包
 
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getId() == PropsType.emptyId && num > 0) {
+            if (array[i].getResourceId() == PropsType.emptyId && num > 0) {
                 array[i] = PropsType.getType(abstractProps.getPropsResource().getType()).createProp();
                 array[i].init(abstractProps.getPropsResource());
                 if (num > limit) {
@@ -144,7 +144,8 @@ public class Backpack {
             }
         }
         if (num > 0) {
-            //不够存放
+            //不够存放,添加日志提示
+            // TODO: 2019/6/21
             return false;
         }
         return true;
@@ -158,7 +159,7 @@ public class Backpack {
         //获取背包
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getId() == PropsType.emptyId) {
+            if (array[i].getResourceId() == PropsType.emptyId) {
                 array[i] = abstractProps;
                 return true;
             }
@@ -199,11 +200,15 @@ public class Backpack {
         return false;
     }
 
-    /** 坐骑升阶 */
+    /**
+     * 坐骑升阶
+     * 修改为id道具扣除
+     */
+    // TODO: 2019/6/21
     public boolean mountUpgrade(){
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getId() == MountDan.id) {
+            if (array[i].getResourceId() == MountDan.id) {
                 int num = array[i].getNum() - 1;
                 if (num == 0) {
                     //升阶丹用完
@@ -225,7 +230,7 @@ public class Backpack {
     public boolean dropPropInPosition(int position, int num) {
         AbstractProps abstractProps = getPropByPosition(position);
         Backpack backpack = this;
-        if (abstractProps.getId() == PropsType.emptyId) {
+        if (abstractProps.getResourceId() == PropsType.emptyId) {
             //该背包位置为空
             return false;
         }

@@ -99,7 +99,7 @@ public class BackpackServiceImpl implements BackpackService {
         * 4.若可以叠加直接输出
         * 5.若不可以，则一个一个输出道具名
         * */
-        logger.info("查看用户："+cm_viewBackpack.getAccountId()+"的背包");
+        logger.info("查看用户：{}的背包", cm_viewBackpack.getAccountId());
         Backpack backpack = backPackManager.load(cm_viewBackpack.getAccountId());
         //获取背包
         if (backpack.isEmpty()) {
@@ -114,7 +114,7 @@ public class BackpackServiceImpl implements BackpackService {
         List<PropInfo> list = new ArrayList<PropInfo>();
         //添加背包道具
         for (AbstractProps abstractProps : array) {
-            PropInfo propInfo = PropInfo.valueOf(abstractProps.getId(), abstractProps.getNum());
+            PropInfo propInfo = PropInfo.valueOf(abstractProps.getResourceId(), abstractProps.getNum());
             list.add(propInfo);
         }
         sm_propList.setList(list);
@@ -136,7 +136,7 @@ public class BackpackServiceImpl implements BackpackService {
 
         //有该位置的道具
         AbstractProps props = backpack.getPropByPosition(cm_propUser.getPosition());
-        if (props.getId() == PropsType.emptyId) {
+        if (props.getResourceId() == PropsType.emptyId) {
             //该背包位置为空
             session.sendPromptMessage(PromptCode.EMPTYINBACK, "");
             logger.info(cm_propUser.getAccountId() + "使用位置" + cm_propUser.getPosition() + ":该背包位置为空");

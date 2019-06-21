@@ -18,6 +18,6 @@ public class EmptyProps extends AbstractProps {
 
     public EmptyProps() {
         setNum(0);
-        setId(0);
+        setResourceId(0);
     }
 }

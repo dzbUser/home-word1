@@ -19,6 +19,7 @@ public class MountDan extends AbstractProps {
      * 增加经验值
      */
     public final static int EXPERIENCE = 1000;
+
     @Override
     public int propUser(String accountId, Long rId) {
         return PromptCode.UNAVAILABLE;

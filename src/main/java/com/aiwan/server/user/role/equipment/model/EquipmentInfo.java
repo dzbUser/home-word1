@@ -20,7 +20,7 @@ public class EquipmentInfo {
         this.equipments = new Equipment[length + 1];
         for (int i = 1;i<=length;i++){
             equipments[i] = new Equipment();
-            equipments[i].setId(PropsType.emptyId);
+            equipments[i].setResourceId(PropsType.emptyId);
         }
     }
 

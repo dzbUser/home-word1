@@ -66,7 +66,7 @@ public class TaskDispatcher {
                 }
             });
         }
-        /** 用户已登录 */
+        //用户已登录
         else if (session.getUser()!=null){
             ThreadPoolManager.executeUserThread(session.getUser().getAcountId(), new Runnable() {
                 @Override

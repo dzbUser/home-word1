@@ -19,7 +19,7 @@ public abstract class AbstractProps extends GameObject {
     /**
      * 道具资源唯一id
      */
-    protected int id;
+    protected int resourceId;
 
     /**
      * 数量
@@ -35,8 +35,9 @@ public abstract class AbstractProps extends GameObject {
     /**
      * 初始化
      */
+    @JsonIgnore
     public void init(int id) {
-        this.id = id;
+        this.resourceId = id;
         this.num = 0;
     }
 
@@ -44,7 +45,7 @@ public abstract class AbstractProps extends GameObject {
     public void init(PropsResource propsResource) {
         //设置唯一id
         setObjectId(IDUtil.getId());
-        this.id = propsResource.getId();
+        this.resourceId = propsResource.getId();
         this.num = 1;
     }
 
@@ -61,7 +62,7 @@ public abstract class AbstractProps extends GameObject {
      */
     @JsonIgnore
     public PropsResource getPropsResource() {
-        return GetBean.getPropsManager().getPropsResource(getId());
+        return GetBean.getPropsManager().getPropsResource(getResourceId());
     }
 
     /**
@@ -69,19 +70,19 @@ public abstract class AbstractProps extends GameObject {
      */
     @JsonIgnore
     public boolean equals(AbstractProps abstractProps) {
-        if (getId() == abstractProps.getId()) {
+        if (getResourceId() == abstractProps.getResourceId()) {
             return true;
         }
         return false;
     }
 
 
-    public int getId() {
-        return id;
+    public int getResourceId() {
+        return resourceId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
     }
 
     public int getNum() {

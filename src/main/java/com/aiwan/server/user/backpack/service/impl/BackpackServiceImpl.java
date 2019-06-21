@@ -68,6 +68,26 @@ public class BackpackServiceImpl implements BackpackService {
         return status;
     }
 
+    /**
+     * 丢弃道具
+     */
+    @Override
+    public void dropProps(String accountId, int position, int num, Session session) {
+        logger.info(accountId + "丢弃道具" + " 位置：" + position);
+        Backpack backpack = backPackManager.load(accountId);
+        AbstractProps abstractProps = backpack.getPropByPosition(position);
+        if (!backpack.dropPropInPosition(position, num)) {
+            logger.info(accountId + ":丢弃失败" + " 位置：" + position);
+            //该位置没有道具,或者不够数量
+            session.sendPromptMessage(PromptCode.DRAOPFAIL, "");
+        } else {
+            logger.info(accountId + ":丢弃成功" + " 位置：" + position);
+            //丢弃成功
+            backPackManager.writeBack(backpack);
+            session.sendPromptMessage(PromptCode.DROPSUCCESS, abstractProps.getPropsResource().getName());
+        }
+    }
+
     /** 查看背包 */
     @Override
     public void viewBackpack(CM_ViewBackpack cm_viewBackpack, Session session) {
@@ -157,13 +177,15 @@ public class BackpackServiceImpl implements BackpackService {
          * 2.若道具为空，则发送获取错误
          * */
         PropsResource propsResource = GetBean.getPropsManager().getPropsResource(cm_obtainProp.getId());
-        if (propsResource == null){
+        if (propsResource == null) {
+            //没有该类道具
             session.sendPromptMessage(PromptCode.NOPROP, "");
             logger.info(cm_obtainProp+":添加道具失败，没有该道具");
             return;
         }
+
         if (propsResource.getOverlay() == 1) {
-            //可叠加
+            //可叠加道具添加
             AbstractProps abstractProps = PropsType.getType(propsResource.getType()).createProp();
             abstractProps.init(propsResource);
             if (!obtainOverlayProp(cm_obtainProp.getAccountId(), abstractProps, cm_obtainProp.getNum())) {
@@ -174,7 +196,7 @@ public class BackpackServiceImpl implements BackpackService {
             session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
             return;
         }
-        //不可叠加道具
+        //不可叠加道具添加
         int num = cm_obtainProp.getNum();
         for (int i = 0; i < cm_obtainProp.getNum(); i++) {
             AbstractProps abstractProps = PropsType.getType(propsResource.getType()).createProp();

@@ -83,5 +83,13 @@ public class PromptCode {
      */
     public final static int MOVEFAIL = 19;
 
+    /**
+     * 丢弃成功
+     */
+    public final static int DROPSUCCESS = 20;
 
+    /**
+     * 丢弃失败
+     */
+    public final static int DRAOPFAIL = 21;
 }

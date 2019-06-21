@@ -45,7 +45,8 @@ public class NavigationBar extends JPanel {
     private static final String PACKMESSAGE =
             "1.添加道具 （指令：输入道具的id 数量）\n"+
             "2.查看背包 （指令：不用输入）\n" +
-                    "3.道具使用 （指令：背包位置）";
+                    "3.道具使用 （指令：背包位置）\n"
+                    + "4.道具丢弃 （指令：输入背包位置 数量）";
 
 
     /** 背包系统提示信息 */

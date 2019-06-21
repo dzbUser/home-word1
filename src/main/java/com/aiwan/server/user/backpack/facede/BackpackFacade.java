@@ -2,6 +2,7 @@ package com.aiwan.server.user.backpack.facede;
 
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.user.backpack.protocol.CM_DropProps;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.util.GetBean;
@@ -30,5 +31,12 @@ public class BackpackFacade {
     /** 添加道具到背包 */
     public void addPropToBack(CM_ObtainProp cm_obtainProp, Session session){
         GetBean.getBackpackService().addPropToBack(cm_obtainProp,session);
+    }
+
+    /**
+     * 丢弃道具
+     */
+    public void DropProps(CM_DropProps cm_dropProps, Session session) {
+        GetBean.getBackpackService().dropProps(cm_dropProps.getAccountId(), cm_dropProps.getPosition(), cm_dropProps.getNum(), session);
     }
 }

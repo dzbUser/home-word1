@@ -22,6 +22,7 @@ public interface BackpackService {
      * @param accountId 用户账号
      * @param abstractProps 道具
      * @param num 道具数量
+     * @return false 背包已满，true添加成功
      * */
     boolean obtainOverlayProp(String accountId, AbstractProps abstractProps, int num);
 
@@ -46,7 +47,16 @@ public interface BackpackService {
 
     /**
      * 添加不可叠加
+     * @return false 背包已满，true添加成功
      */
     boolean obtainNoOverlayProp(String accountId, AbstractProps abstractProps);
+
+    /**
+     * 丢弃道具
+     *
+     * @param position 背包位置
+     * @param num      丢弃数量
+     */
+    void dropProps(String accountId, int position, int num, Session session);
 
 }

@@ -37,7 +37,7 @@ public abstract class AbstractProps extends GameObject {
      */
     public void init(int id) {
         this.id = id;
-        this.num = 1;
+        this.num = 0;
     }
 
     @JsonIgnore

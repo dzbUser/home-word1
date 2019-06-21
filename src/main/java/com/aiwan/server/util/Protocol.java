@@ -67,4 +67,9 @@ public class Protocol {
      * 卸装备
      */
     public final static int UNLOADEQUIP = 30;
+
+    /**
+     * 丢弃道具
+     */
+    public final static int DROPPROP = 31;
 }

@@ -174,6 +174,10 @@ public class Backpack {
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
         //不可叠加
         for (int i = 0; i < array.length; i++) {
+            if (array[i].getObjectId() == null) {
+                //空位置
+                continue;
+            }
             if (array[i].getObjectId().equals(abstractProps.getObjectId())) {
                 //是否可叠加
                 if (abstractProps.getPropsResource().getOverlay() == 1) {
@@ -213,5 +217,39 @@ public class Backpack {
             }
         }
         return false;
+    }
+
+    /**
+     * 丢弃某个位置的道具
+     */
+    public boolean dropPropInPosition(int position, int num) {
+        AbstractProps abstractProps = getPropByPosition(position);
+        Backpack backpack = this;
+        if (abstractProps.getId() == PropsType.emptyId) {
+            //该背包位置为空
+            return false;
+        }
+        if (abstractProps.getNum() < num) {
+            //数量不够
+            return false;
+        }
+        int finalNum = abstractProps.getNum() - num;
+        if (finalNum == 0) {
+            //设置为空
+            setEmptyInPosition(position);
+        } else {
+            abstractProps.setNum(finalNum);
+        }
+
+        return true;
+    }
+
+    /**
+     * 是指某位置为空
+     */
+    public void setEmptyInPosition(int position) {
+        if (position < getMaxNum()) {
+            getBackpackInfo().getAbstractProps()[position] = PropsType.EMPTY.createProp();
+        }
     }
 }

@@ -15,4 +15,9 @@ public class EmptyProps extends AbstractProps {
     public int propUser(String accountId, Long rId) {
         return PromptCode.UNAVAILABLE;
     }
+
+    public EmptyProps() {
+        setNum(0);
+        setId(0);
+    }
 }

@@ -23,7 +23,7 @@ public class PropsInitialzation {
      * 道具静态文件路径
      * 注意：此路径为绝对路径:"C:\\ideaProject\\homeword1\\src\\main\\resources\\prop\\prop.xls"
      * */
-    private final static String FILEPATH = "prop/prop.xls";
+    private final static String FILEPATH = "staticresource/prop.xls";
 
     public static void init(){
         propInit();

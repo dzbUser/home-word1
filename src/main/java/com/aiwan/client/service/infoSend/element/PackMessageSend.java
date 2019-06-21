@@ -6,6 +6,7 @@ import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
 import com.aiwan.server.prop.protocol.CM_PropUse;
+import com.aiwan.server.user.backpack.protocol.CM_DropProps;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.util.Protocol;
@@ -79,6 +80,36 @@ public enum PackMessageSend {
         @Override
         public boolean verify(String message){
             if (!Verification.canParseInt(message)){
+                return false;
+            }
+            return true;
+        }
+    },
+    /**
+     * 丢弃道具
+     */
+    DROP_PROPS(4) {
+        @Override
+        public void messageSend(String message) {
+            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+            if (!verify(message)) {
+                //校验指令正确性
+                gameInterface.printOtherMessage("您的输入不规范");
+                return;
+            }
+
+            String[] messages = message.split(" ");
+            int position = Integer.parseInt(messages[0]);
+            int num = Integer.parseInt(messages[1]);
+
+            CM_DropProps cm_dropProps = CM_DropProps.valueOf(LoginUser.getUsername(), position, num);
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.DROPPROP, cm_dropProps));
+        }
+
+        @Override
+        public boolean verify(String message) {
+            String[] messages = message.split(" ");
+            if (messages.length != 2 || !Verification.canParseInt(messages[0]) || !Verification.canParseInt(messages[1])) {
                 return false;
             }
             return true;

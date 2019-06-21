@@ -24,7 +24,7 @@ public class ClientResourceInit {
      * 注意：此路径为绝对路径
      * 绝对路径："C:\\ideaProject\\homeword1\\src\\main\\resources\\client\\clientResource.xls";
      * */
-    private final static String FILEPATH = "client/clientResource.xls";
+    private final static String FILEPATH = "staticresource/clientResource.xls";
 
 
     public static void init(){

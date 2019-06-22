@@ -92,4 +92,9 @@ public class PromptCode {
      * 丢弃失败
      */
     public final static int DRAOPFAIL = 21;
+
+    /**
+     * 该位置的道具的数量不足
+     */
+    public final static int PROPNUMINSUFFICIENT = 22;
 }

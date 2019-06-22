@@ -69,17 +69,21 @@ public enum PackMessageSend {
                 return;
             }
 
-            int position = Integer.parseInt(message);
+            String[] messages = message.split(" ");
+            int position = Integer.parseInt(messages[0]);
+            int num = Integer.parseInt(messages[1]);
             CM_PropUse cm_propUse = new CM_PropUse();
             cm_propUse.setAccountId(LoginUser.getUsername());
             cm_propUse.setrId(LoginUser.getRoles().get(0));
             cm_propUse.setPosition(position);
+            cm_propUse.setNum(num);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.PROPUSER,cm_propUse));
         }
 
         @Override
         public boolean verify(String message){
-            if (!Verification.canParseInt(message)){
+            String[] messages = message.split(" ");
+            if (messages.length != 2 || !Verification.canParseInt(messages[0]) || !Verification.canParseInt(messages[1])) {
                 return false;
             }
             return true;

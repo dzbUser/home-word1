@@ -18,6 +18,16 @@ public class CM_MountUpgrade implements Serializable {
     /** 角色id */
     private Long rId;
 
+    /**
+     * 坐骑丹资源id
+     */
+    private int resourceId;
+
+    /**
+     * 消耗数量
+     */
+    private int num;
+
     public String getAccountId() {
         return accountId;
     }
@@ -34,5 +44,21 @@ public class CM_MountUpgrade implements Serializable {
     public CM_MountUpgrade setrId(Long rId) {
         this.rId = rId;
         return this;
+    }
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 }

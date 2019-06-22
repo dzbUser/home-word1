@@ -29,8 +29,10 @@ public abstract class AbstractProps extends GameObject {
 
     /**
      * 道具使用
+     * @param num 道具数量
+     * @param position 道具位置
      */
-    public abstract int propUser(String accountId, Long rId);
+    public abstract int propUse(String accountId, Long rId, int num, int position);
 
     /**
      * 初始化
@@ -38,7 +40,7 @@ public abstract class AbstractProps extends GameObject {
     @JsonIgnore
     public void init(int id) {
         this.resourceId = id;
-        this.num = 0;
+        this.num = 1;
     }
 
     @JsonIgnore

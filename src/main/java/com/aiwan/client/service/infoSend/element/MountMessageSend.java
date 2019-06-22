@@ -34,6 +34,8 @@ public enum  MountMessageSend {
             CM_MountUpgrade cm_mountUpgrade = new CM_MountUpgrade();
             cm_mountUpgrade.setAccountId(LoginUser.getUsername());
             cm_mountUpgrade.setrId(LoginUser.getRoles().get(0));
+            cm_mountUpgrade.setResourceId(2);
+            cm_mountUpgrade.setNum(1);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.MOUNTUPGRADE,cm_mountUpgrade));
         }
     }

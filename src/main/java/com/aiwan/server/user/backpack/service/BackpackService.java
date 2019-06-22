@@ -35,12 +35,12 @@ public interface BackpackService {
     /** 道具使用 */
     void propUse(CM_PropUse cm_propUser, Session session);
 
-    /**扣除背包中的道具
-     * @param accountId 用户账号
-     * @param abstractProps 道具id
-     * @return 1：扣除成功 2：扣除失败
-     * */
-    int deductionProp(String accountId, AbstractProps abstractProps);
+//    /**扣除背包中的道具
+//     * @param accountId 用户账号
+//     * @param abstractProps 道具id
+//     * @return 1：扣除成功 2：扣除失败
+//     * */
+//    int deductionProp(String accountId, AbstractProps abstractProps);
 
     /** 添加道具到背包 */
     void addPropToBack(CM_ObtainProp cm_obtainProp, Session session);

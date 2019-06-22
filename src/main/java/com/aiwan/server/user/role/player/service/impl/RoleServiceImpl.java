@@ -89,23 +89,34 @@ public class RoleServiceImpl implements RoleService {
         //获取经验，循环解决升级
         Role role = roleManager.load(rId);
         int level = role.getLevel();
-        if (level >= GetBean.getRoleResourceManager().getMaxlevel()){
-            //人物已达到最高级
-            return 0;
-        }
         int totalExperience = role.getExperience()+experienceNum;
-        while (totalExperience >= role.getUpgradeRequest()){
+        while (level < GetBean.getRoleResourceManager().getMaxlevel() && totalExperience >= role.getUpgradeRequest()) {
             //循环增加经验
             totalExperience = totalExperience - getUpgradeRequest(level);
             level = level+1;
         }
-        role.setLevel(level);
-        role.setExperience(totalExperience);
-        roleManager.sava(role);
 
-        //更新人物属性
-        putAttributeModule("role", getAttributes(rId),rId);
-        return 1;
+        if (level < GetBean.getRoleResourceManager().getMaxlevel()) {
+            //叠加后等级人小于最高等级
+            if (role.getLevel() != level) {
+                //等级发生改变
+                role.setLevel(level);
+            }
+            role.setExperience(totalExperience);
+            roleManager.sava(role);
+            return 0;
+        } else if (level == GetBean.getRoleResourceManager().getMaxlevel() && role.getLevel() != level) {
+            //达到最高级，且等级改变
+            role.setLevel(level);
+            role.setExperience(0);
+            roleManager.sava(role);
+        }
+        //等级发生改变更新人物属性
+        if (role.getLevel() != level) {
+            putAttributeModule("role", getAttributes(rId), rId);
+        }
+        //返回剩余经验
+        return totalExperience;
     }
 
 

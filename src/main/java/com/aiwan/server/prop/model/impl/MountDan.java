@@ -21,7 +21,7 @@ public class MountDan extends AbstractProps {
     public final static int EXPERIENCE = 1000;
 
     @Override
-    public int propUser(String accountId, Long rId) {
+    public int propUse(String accountId, Long rId, int num, int position) {
         return PromptCode.UNAVAILABLE;
     }
 }

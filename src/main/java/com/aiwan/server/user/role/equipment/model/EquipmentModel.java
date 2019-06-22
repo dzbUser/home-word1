@@ -49,7 +49,7 @@ public class EquipmentModel {
     /**
      * 设置装备
      */
-    public void putEquipmentByPosition(Equipment equipment) {
+    public void putEquipment(Equipment equipment) {
         equipmentEntity.getEquipmentInfo().putEquipmentByPosition(equipment);
     }
 

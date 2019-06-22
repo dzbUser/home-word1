@@ -22,6 +22,11 @@ public class CM_PropUse implements Serializable {
      */
     private int position;
 
+    /**
+     * 使用数量
+     */
+    private int num;
+
     public String getAccountId() {
         return accountId;
     }
@@ -47,5 +52,13 @@ public class CM_PropUse implements Serializable {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 }

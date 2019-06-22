@@ -12,7 +12,6 @@ import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
 import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
 import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
-import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.util.SMToDecodeData;
@@ -50,22 +49,15 @@ public class EquipmentServiceImpl implements EquipmentService {
      *装备
      * */
     public Equipment equip(String accountId, Long rId, Equipment equipment) {
-        //判断是否达到要求
-        Role role = GetBean.getRoleManager().load(rId);
-        if (role.getLevel() < equipment.getPropsResource().getLevel()) {
-            //等级达不到要求等级
-            return null;
-        }
         //获取装备栏
         EquipmentModel equipmentModel = equipmentManager.load(rId);
         //旧装备
         Equipment oldEquipment = equipmentModel.getEquipmentByPosition(equipment.getPosition());
         //装备转换
-        equipmentModel.putEquipmentByPosition(equipment);
+        equipmentModel.putEquipment(equipment);
         equipmentManager.writeBack(equipmentModel);
         //修改人物属性
         GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rId),rId);
-
         logger.info(accountId + "装备" + equipment.getPropsResource().getName() + "成功");
         //返回装备id
         return oldEquipment;

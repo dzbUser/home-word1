@@ -3,7 +3,9 @@ package com.aiwan.server.user.backpack.model;
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.model.impl.MountDan;
+import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
+import com.aiwan.server.util.GetBean;
 
 /**
  * @author dengzebiao
@@ -66,20 +68,6 @@ public class Backpack {
     }
 
     /**
-     * 获取对应道具
-     */
-    public AbstractProps getBackpackItem(int id) {
-        AbstractProps[] abstractProps = backpackEnt.getBackpackInfo().getAbstractProps();
-        for (int i = 0; i < abstractProps.length; i++) {
-            if (abstractProps[i] != null && abstractProps[i].getResourceId() == id) {
-                return abstractProps[i];
-            }
-        }
-        return null;
-    }
-
-
-    /**
      * 是否为空
      */
     public boolean isEmpty() {
@@ -96,7 +84,7 @@ public class Backpack {
 
 
     /**
-     * 获取对应位置的装备
+     * 获取对应位置的道具
      */
     public AbstractProps getPropByPosition(int position) {
         if (position < getMaxNum()) {
@@ -109,6 +97,7 @@ public class Backpack {
      * 添加可叠加道具
      */
     public boolean putOverlayProps(AbstractProps abstractProps, int num) {
+        //查看是否可以叠加数量为num的该道具到背包
         //道具上限
         int limit = abstractProps.getPropsResource().getLimit();
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
@@ -116,19 +105,18 @@ public class Backpack {
         for (int i = 0; i < array.length; i++) {
             //是否叠加到现存背包项
             if (array[i].getResourceId() == abstractProps.getResourceId()) {
-                int allnum = array[i].getNum() + num;
-                if (allnum > limit) {
+                int allNum = array[i].getNum() + num;
+                if (allNum > limit) {
                     //总数大于上限
                     array[i].setNum(limit);
-                    num = allnum - limit;
+                    num = allNum - limit;
                 } else {
-                    array[i].setNum(allnum);
+                    array[i].setNum(allNum);
                     return true;
                 }
             }
         }
         //获取背包
-
         for (int i = 0; i < array.length; i++) {
             if (array[i].getResourceId() == PropsType.emptyId && num > 0) {
                 array[i] = PropsType.getType(abstractProps.getPropsResource().getType()).createProp();
@@ -139,14 +127,10 @@ public class Backpack {
                     num = num - limit;
                 } else {
                     array[i].setNum(num);
+                    //以存完
                     return true;
                 }
             }
-        }
-        if (num > 0) {
-            //不够存放,添加日志提示
-            // TODO: 2019/6/21
-            return false;
         }
         return true;
 
@@ -168,66 +152,9 @@ public class Backpack {
     }
 
     /**
-     * 去除可叠加道具
+     * 扣除某个位置的道具
      */
-    public boolean deductionProp(AbstractProps abstractProps) {
-        //获取背包
-        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
-        //不可叠加
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].getObjectId() == null) {
-                //空位置
-                continue;
-            }
-            if (array[i].getObjectId().equals(abstractProps.getObjectId())) {
-                //是否可叠加
-                if (abstractProps.getPropsResource().getOverlay() == 1) {
-                    int num = array[i].getNum() - 1;
-                    if (num == 0) {
-                        //道具用完了
-                        array[i] = PropsType.EMPTY.createProp();
-                        array[i].init(PropsType.emptyId);
-                    } else {
-                        array[i].setNum(num);
-                    }
-                    return true;
-                } else {
-                    array[i] = PropsType.EMPTY.createProp();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 坐骑升阶
-     * 修改为id道具扣除
-     */
-    // TODO: 2019/6/21
-    public boolean mountUpgrade(){
-        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].getResourceId() == MountDan.id) {
-                int num = array[i].getNum() - 1;
-                if (num == 0) {
-                    //升阶丹用完
-                    array[i] = PropsType.EMPTY.createProp();
-                    array[i].init(PropsType.emptyId);
-                    return true;
-                } else {
-                    array[i].setNum(num);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 丢弃某个位置的道具
-     */
-    public boolean dropPropInPosition(int position, int num) {
+    public boolean deductionPropInPosition(int position, int num) {
         AbstractProps abstractProps = getPropByPosition(position);
         Backpack backpack = this;
         if (abstractProps.getResourceId() == PropsType.emptyId) {
@@ -257,4 +184,82 @@ public class Backpack {
             getBackpackInfo().getAbstractProps()[position] = PropsType.EMPTY.createProp();
         }
     }
+
+    /**
+     * 是否可以添加数量为num的该道具到背包
+     */
+    public boolean isCanSavePropsInNum(int resourceId, int num) {
+        //获取该道具资源
+        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(resourceId);
+        //该物品的上限
+        int limit = propsResource.getLimit();
+        //可以存的数量
+        int allNum = 0;
+        //获取背包道具
+        AbstractProps[] array = getBackpackInfo().getAbstractProps();
+
+        for (int i = 0; i < array.length; i++) {
+            //叠加可存总数
+            if (array[i].getResourceId() == resourceId) {
+                allNum += limit - array[i].getNum();
+            } else if (array[i].getResourceId() == PropsType.emptyId) {
+                allNum += limit;
+            }
+            if (allNum >= num) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * 查看背包中该资源id的数量
+     */
+    public int getNumOfResourceId(int resourceId) {
+        //获取背包栏
+        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+        int num = 0;
+        for (int i = 0; i < array.length; i++) {
+            //获取道具数
+            if (array[i].getResourceId() == resourceId) {
+                num += array[i].getNum();
+            }
+        }
+        return num;
+    }
+
+    /**
+     * 按照资源id扣除道具
+     */
+    public boolean deductionByResourceIdInNum(int resourceId, int num) {
+        //检查数量是否足够
+        int haveNum = getNumOfResourceId(resourceId);
+        if (haveNum < num) {
+            return false;
+        }
+        //获取背包栏
+        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].getResourceId() == resourceId) {
+                int surplusNum = num - array[i].getNum();
+                if (surplusNum > 0) {
+                    //不够扣除
+                    num = surplusNum;
+                    array[i] = PropsType.EMPTY.createProp();
+                } else {
+                    if (surplusNum == 0) {
+                        //扣完
+                        array[i] = PropsType.EMPTY.createProp();
+                    } else {
+                        array[i].setNum(array[i].getNum() - num);
+                    }
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
+
+
 }

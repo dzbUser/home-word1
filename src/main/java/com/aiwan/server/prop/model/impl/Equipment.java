@@ -2,8 +2,10 @@ package com.aiwan.server.prop.model.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.resource.PropsResource;
+import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,26 +25,30 @@ public class Equipment extends AbstractProps {
     public final static int length = 3;
 
     @Override
-    public int propUser(String accountId, Long rId) {
+    public int propUse(String accountId, Long rId, int num, int position) {
+
+        //获取背包
+        Backpack backpack = GetBean.getBackPackManager().load(accountId);
         //获取道具类
         PropsResource propsResource = getPropsResource();
-        //扣除道具
-        int status = GetBean.getBackpackService().deductionProp(accountId, this);
-        if (status == 0) {
-            return PromptCode.NOPROPINBACK;
-        }
-        //装备使用
-        Equipment equipment = GetBean.getEquipmentService().equip(accountId, rId, this);
-        //装备错误
-        if (equipment == null) {
-            //装备返回,未达到等级要求
-            GetBean.getBackpackService().obtainNoOverlayProp(accountId, this);
+        //判断是否达到要求
+        Role role = GetBean.getRoleManager().load(rId);
+        if (role.getLevel() < propsResource.getLevel()) {
+            //等级达不到要求等级
             return PromptCode.NOREQUIREMENTINLEVEL;
         }
+        //扣除道具
+        backpack.deductionPropInPosition(position, num);
+        //装备使用
+        Equipment equipment = GetBean.getEquipmentService().equip(accountId, rId, this);
         if (equipment.getResourceId() != 0) {
             //旧的装备存到背包
-            GetBean.getBackpackService().obtainNoOverlayProp(accountId, equipment);
+            backpack.putNoOverlayProps(equipment);
         }
+        //写回
+        GetBean.getBackPackManager().writeBack(backpack);
+        //装备属性修改
+
         return PromptCode.USERSUCCESS;
     }
 

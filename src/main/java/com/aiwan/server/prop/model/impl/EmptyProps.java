@@ -12,7 +12,7 @@ import com.aiwan.server.util.PromptCode;
  */
 public class EmptyProps extends AbstractProps {
     @Override
-    public int propUser(String accountId, Long rId) {
+    public int propUse(String accountId, Long rId, int num, int position) {
         return PromptCode.UNAVAILABLE;
     }
 

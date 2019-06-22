@@ -74,6 +74,7 @@ public class MountServiceImpl implements MountService {
 
     @Override
     public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session) {
+        //获取坐骑模型
         MountModel mountModel = mountManager.load(cm_mountUpgrade.getrId());
         //判断是否达到做高级
         int level = mountModel.getLevel();
@@ -85,7 +86,7 @@ public class MountServiceImpl implements MountService {
         }
         //获取背包
         Backpack backpack = GetBean.getBackPackManager().load(cm_mountUpgrade.getAccountId());
-        if (backpack.mountUpgrade()) {
+        if (backpack.deductionByResourceIdInNum(cm_mountUpgrade.getResourceId(), cm_mountUpgrade.getNum())) {
             addExperience(cm_mountUpgrade.getrId(), MountDan.EXPERIENCE);
             session.sendPromptMessage(PromptCode.PROMOTESUCCESS, "");
             //写回

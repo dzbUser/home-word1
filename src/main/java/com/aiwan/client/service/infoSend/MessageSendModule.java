@@ -1,7 +1,7 @@
 package com.aiwan.client.service.infoSend;
 
 import com.aiwan.client.service.infoSend.element.MountMessageSend;
-import com.aiwan.client.service.infoSend.element.PackMessageSend;
+import com.aiwan.client.service.infoSend.element.BackMessageSend;
 import com.aiwan.client.service.infoSend.element.RoleMessageSend;
 
 /**
@@ -26,11 +26,11 @@ public enum  MessageSendModule {
     PACK_MODULE(2){
         @Override
         public void  sendMessage(String message,int num){
-            PackMessageSend packMessageSend = PackMessageSend.getPackMessageSend(num);
-            if (packMessageSend == null){
+            BackMessageSend backMessageSend = BackMessageSend.getPackMessageSend(num);
+            if (backMessageSend == null) {
                 return;
             }
-            PackMessageSend.getPackMessageSend(num).messageSend(message);
+            BackMessageSend.getPackMessageSend(num).messageSend(message);
         }
     },
     /** 背包发送模块 */

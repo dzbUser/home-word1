@@ -38,10 +38,10 @@ public class Equipment extends AbstractProps {
             return PromptCode.NOREQUIREMENTINLEVEL;
         }
         //扣除道具
-        backpack.deductionPropInPosition(position, num);
+        backpack.deductionPropByObjectId(getObjectId(), 1);
         //装备使用
         Equipment equipment = GetBean.getEquipmentService().equip(accountId, rId, this);
-        if (equipment.getResourceId() != 0) {
+        if (equipment != null) {
             //旧的装备存到背包
             backpack.putNoOverlayProps(equipment);
         }

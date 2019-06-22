@@ -75,7 +75,7 @@ public class Backpack {
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
 
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getResourceId() != PropsType.emptyId) {
+            if (array[i] != null) {
                 return false;
             }
         }
@@ -104,7 +104,7 @@ public class Backpack {
 
         for (int i = 0; i < array.length; i++) {
             //是否叠加到现存背包项
-            if (array[i].getResourceId() == abstractProps.getResourceId()) {
+            if (array[i] != null && array[i].getResourceId() == abstractProps.getResourceId()) {
                 int allNum = array[i].getNum() + num;
                 if (allNum > limit) {
                     //总数大于上限
@@ -118,7 +118,7 @@ public class Backpack {
         }
         //获取背包
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getResourceId() == PropsType.emptyId && num > 0) {
+            if (array[i] == null && num > 0) {
                 array[i] = PropsType.getType(abstractProps.getPropsResource().getType()).createProp();
                 array[i].init(abstractProps.getPropsResource());
                 if (num > limit) {
@@ -143,7 +143,7 @@ public class Backpack {
         //获取背包
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getResourceId() == PropsType.emptyId) {
+            if (array[i] == null) {
                 array[i] = abstractProps;
                 return true;
             }
@@ -151,38 +151,24 @@ public class Backpack {
         return false;
     }
 
-    /**
-     * 扣除某个位置的道具
-     */
-    public boolean deductionPropInPosition(int position, int num) {
-        AbstractProps abstractProps = getPropByPosition(position);
-        Backpack backpack = this;
-        if (abstractProps.getResourceId() == PropsType.emptyId) {
-            //该背包位置为空
-            return false;
-        }
-        if (abstractProps.getNum() < num) {
-            //数量不够
-            return false;
-        }
-        int finalNum = abstractProps.getNum() - num;
-        if (finalNum == 0) {
-            //设置为空
-            setEmptyInPosition(position);
-        } else {
-            abstractProps.setNum(finalNum);
-        }
-
-        return true;
-    }
 
     /**
-     * 是指某位置为空
+     * 按照唯一id去除道具
      */
-    public void setEmptyInPosition(int position) {
-        if (position < getMaxNum()) {
-            getBackpackInfo().getAbstractProps()[position] = PropsType.EMPTY.createProp();
+    public boolean deductionPropByObjectId(Long objectId, int num) {
+        //获取背包
+        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null && array[i].getObjectId().equals(objectId) && array[i].getNum() >= num) {
+                if (array[i].getNum() > num) {
+                    array[i].setNum(array[i].getNum() - num);
+                    return true;
+                }
+                array[i] = null;
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -200,9 +186,9 @@ public class Backpack {
 
         for (int i = 0; i < array.length; i++) {
             //叠加可存总数
-            if (array[i].getResourceId() == resourceId) {
+            if (array[i] != null && array[i].getResourceId() == resourceId) {
                 allNum += limit - array[i].getNum();
-            } else if (array[i].getResourceId() == PropsType.emptyId) {
+            } else if (array[i] == null) {
                 allNum += limit;
             }
             if (allNum >= num) {
@@ -222,7 +208,7 @@ public class Backpack {
         int num = 0;
         for (int i = 0; i < array.length; i++) {
             //获取道具数
-            if (array[i].getResourceId() == resourceId) {
+            if (array[i] != null && array[i].getResourceId() == resourceId) {
                 num += array[i].getNum();
             }
         }
@@ -241,16 +227,16 @@ public class Backpack {
         //获取背包栏
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getResourceId() == resourceId) {
+            if (array[i] != null && array[i].getResourceId() == resourceId) {
                 int surplusNum = num - array[i].getNum();
                 if (surplusNum > 0) {
                     //不够扣除
                     num = surplusNum;
-                    array[i] = PropsType.EMPTY.createProp();
+                    array[i] = null;
                 } else {
                     if (surplusNum == 0) {
                         //扣完
-                        array[i] = PropsType.EMPTY.createProp();
+                        array[i] = null;
                     } else {
                         array[i].setNum(array[i].getNum() - num);
                     }

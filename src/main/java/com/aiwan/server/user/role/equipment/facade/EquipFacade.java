@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 public class EquipFacade {
     /**查看角色装备 */
     public void viewEquip(CM_ViewEquipBar cm_viewEquipBar, Session session){
-        GetBean.getEquipmentService().viewEquip(cm_viewEquipBar,session);
+        GetBean.getEquipmentService().viewEquip(cm_viewEquipBar.getAccountId(), cm_viewEquipBar.getrId(), session);
     }
 
     /**

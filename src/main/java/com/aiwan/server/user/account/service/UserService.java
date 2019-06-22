@@ -13,28 +13,28 @@ public interface UserService {
     /**
      * 用户登录
      * */
-    void login(Session session, CM_Login cm_login);
+    void login(Session session, String accountId, String password);
 
     /**
      * 用户注册
      * */
-    void registerUser(Session session, CM_Registered cm_registered);
+    void registerUser(Session session, String accountId, String password, String hPassword);
 
     /**
      * 用户注销
      * */
-    void logout(CM_Logout userMessage, Session session);
+    void logout(String accountId, Session session);
 
     /**
      * 高级登录
      * */
-    void hLogin(CM_HLogin cm_hlogin,Session session);
+    void hLogin(String accountId, String hPassword, Session session);
 
 
     /**
      * 创建角色
      */
-    void createRole(CM_CreateRole cm_createRole,Session session);
+    void createRole(String accountId, int job, int sex, Session session);
 
 
 

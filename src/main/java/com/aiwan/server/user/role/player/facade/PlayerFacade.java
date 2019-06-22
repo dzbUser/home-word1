@@ -19,6 +19,6 @@ public class PlayerFacade {
      * 获取角色信息
      * */
     public void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session){
-        GetBean.getRoleService().getRoleMessage(cm_roleMessage,session);
+        GetBean.getRoleService().getRoleMessage(cm_roleMessage.getAccountId(), cm_roleMessage.getrId(), session);
     }
 }

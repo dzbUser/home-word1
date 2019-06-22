@@ -18,7 +18,7 @@ public class Experience extends AbstractProps {
         //获取背包
         Backpack backpack = GetBean.getBackPackManager().load(accountId);
         //扣除道具
-        if (!backpack.deductionPropInPosition(position, num)) {
+        if (!backpack.deductionPropByObjectId(getObjectId(), num)) {
             GetBean.getBackpackService().obtainOverlayProp(accountId, this, 1);
             return PromptCode.NOPROPINBACK;
         }

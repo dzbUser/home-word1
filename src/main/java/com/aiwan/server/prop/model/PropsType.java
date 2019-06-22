@@ -13,11 +13,6 @@ import org.slf4j.LoggerFactory;
 public enum PropsType {
 
     /**
-     * 空道具
-     */
-    EMPTY(0, EmptyProps.class) {
-    },
-    /**
      * 经验丹
      */
     EXPERIENCE(1, Experience.class),

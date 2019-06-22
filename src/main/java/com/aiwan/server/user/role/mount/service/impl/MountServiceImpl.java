@@ -62,34 +62,34 @@ public class MountServiceImpl implements MountService {
     }
 
     @Override
-    public void viewMount(CM_ViewMount cm_viewMount, Session session) {
+    public void viewMount(String accountId, Long rId, Session session) {
 
-        logger.info(cm_viewMount.getAccountId()+":查看坐骑信息");
+        logger.info("{}:查看坐骑信息", rId);
         //获取坐骑模型
-        MountModel mountModel = mountManager.load(cm_viewMount.getrId());
+        MountModel mountModel = mountManager.load(rId);
         //创建坐骑返回数据
-        SM_ViewMount sm_viewMount = SM_ViewMount.valueOf(mountModel.getLevel(),mountModel.getExperience(),getUpgradeRequest(mountModel.getLevel()),getAttributes(cm_viewMount.getrId()));
+        SM_ViewMount sm_viewMount = SM_ViewMount.valueOf(mountModel.getLevel(), mountModel.getExperience(), getUpgradeRequest(mountModel.getLevel()), getAttributes(rId));
         session.messageSend(SMToDecodeData.shift(StatusCode.VIEWMOUNT, sm_viewMount));
     }
 
     @Override
-    public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session) {
+    public void mountUpgrade(String accountId, Long rId, int resourceId, int num, Session session) {
         //获取坐骑模型
-        MountModel mountModel = mountManager.load(cm_mountUpgrade.getrId());
+        MountModel mountModel = mountManager.load(rId);
         //判断是否达到做高级
         int level = mountModel.getLevel();
         if (level >= mountManager.getMountResource().getMaxLevel()) {
             //以达到最高等级
-            logger.info(cm_mountUpgrade.getAccountId() + "角色请求坐骑提升失败，以达到最大等级");
+            logger.info("角色{}请求坐骑提升失败，以达到最大等级", rId);
             session.sendPromptMessage(PromptCode.MOUNTACHIEVEMAXLEVEL, "");
             return;
         }
         //获取背包
-        Backpack backpack = GetBean.getBackPackManager().load(cm_mountUpgrade.getAccountId());
+        Backpack backpack = GetBean.getBackPackManager().load(accountId);
         //获取坐骑升阶丹静态资源
-        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(cm_mountUpgrade.getResourceId());
-        if (backpack.deductionByResourceIdInNum(cm_mountUpgrade.getResourceId(), cm_mountUpgrade.getNum())) {
-            addExperience(cm_mountUpgrade.getrId(), propsResource.getEffect());
+        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(resourceId);
+        if (backpack.deductionByResourceIdInNum(resourceId, num)) {
+            addExperience(rId, propsResource.getEffect());
             session.sendPromptMessage(PromptCode.PROMOTESUCCESS, "");
             //写回
             GetBean.getBackPackManager().writeBack(backpack);

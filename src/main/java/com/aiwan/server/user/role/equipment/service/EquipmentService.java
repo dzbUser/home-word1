@@ -22,7 +22,7 @@ public interface EquipmentService {
 
     /**
      * 查看角色装备 */
-    void viewEquip(CM_ViewEquipBar cm_viewEquipBar, Session session);
+    void viewEquip(String accountId, Long rId, Session session);
 
 
     /** 获取装备属性 */

@@ -7,6 +7,7 @@ import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
 import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.user.backpack.protocol.CM_DropProps;
+import com.aiwan.server.user.backpack.protocol.CM_Equip;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.util.Protocol;
@@ -17,7 +18,7 @@ import com.aiwan.server.util.SMToDecodeData;
  * @since 2019.6.18
  * 背包系统枚举类
  * */
-public enum PackMessageSend {
+public enum BackMessageSend {
     /** 添加道具 */
     ADD_PROP(1){
         @Override
@@ -118,9 +119,37 @@ public enum PackMessageSend {
             }
             return true;
         }
-    }
+    },
+
+    /**
+     * 使用装备
+     */
+    EQUIP(5) {
+        @Override
+        public void messageSend(String message) {
+            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+            if (!verify(message)) {
+                //校验指令正确性
+                gameInterface.printOtherMessage("您的输入不规范");
+                return;
+            }
+            //解析字符串含义
+            int position = Integer.parseInt(message);
+            CM_Equip cm_equip = CM_Equip.valueOf(LoginUser.getUsername(), LoginUser.getRoles().get(0), position);
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.EQUIP, cm_equip));
+        }
+
+        @Override
+        public boolean verify(String message) {
+            if (!Verification.canParseInt(message)) {
+                return false;
+            }
+            return true;
+        }
+    },
     ;
-    PackMessageSend(int num){
+
+    BackMessageSend(int num){
         this.num = num;
     }
     /** 所属位置 */
@@ -131,10 +160,10 @@ public enum PackMessageSend {
     }
 
     /** 获取对应发送类 */
-    public static PackMessageSend getPackMessageSend(int num){
-        for (PackMessageSend packMessageSend:values()){
-            if (packMessageSend.getNum() == num){
-                return packMessageSend;
+    public static BackMessageSend getPackMessageSend(int num) {
+        for (BackMessageSend backMessageSend : values()) {
+            if (backMessageSend.getNum() == num) {
+                return backMessageSend;
             }
         }
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
@@ -147,7 +176,7 @@ public enum PackMessageSend {
         return num;
     }
 
-    public PackMessageSend setNum(int num) {
+    public BackMessageSend setNum(int num) {
         this.num = num;
         return this;
     }

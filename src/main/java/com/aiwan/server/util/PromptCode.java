@@ -97,4 +97,9 @@ public class PromptCode {
      * 该位置的道具的数量不足
      */
     public final static int PROPNUMINSUFFICIENT = 22;
+
+    /**
+     * 该道具不是装备
+     */
+    public final static int NOEQUIPMENT = 23;
 }

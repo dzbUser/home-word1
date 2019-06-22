@@ -27,13 +27,13 @@ public interface BackpackService {
     boolean obtainOverlayProp(String accountId, AbstractProps abstractProps, int num);
 
     /** 查看背包
-     * @param cm_viewBackpack 查看背包协议类
+     * @param accountId 用户账号
      * @param session 会话
      * */
-    void viewBackpack(CM_ViewBackpack cm_viewBackpack, Session session);
+    void viewBackpack(String accountId, Session session);
 
     /** 道具使用 */
-    void propUse(CM_PropUse cm_propUser, Session session);
+    void propUse(String accountId, int position, int num, Long rId, Session session);
 
 //    /**扣除背包中的道具
 //     * @param accountId 用户账号
@@ -43,7 +43,7 @@ public interface BackpackService {
 //    int deductionProp(String accountId, AbstractProps abstractProps);
 
     /** 添加道具到背包 */
-    void addPropToBack(CM_ObtainProp cm_obtainProp, Session session);
+    void addPropToBack(String accountId, int resourceId, int num, Session session);
 
     /**
      * 添加不可叠加
@@ -58,5 +58,10 @@ public interface BackpackService {
      * @param num      丢弃数量
      */
     void dropProps(String accountId, int position, int num, Session session);
+
+    /**
+     * 使用装备
+     */
+    void userEquipment(String accountId, int position, Long rid, Session session);
 
 }

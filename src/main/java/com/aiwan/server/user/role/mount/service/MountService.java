@@ -21,10 +21,12 @@ public interface MountService {
     void addExperience(Long rId, int experienceNum);
 
     /** 查看坐骑 */
-    void viewMount(CM_ViewMount cm_viewMount, Session session);
+    void viewMount(String accountId, Long rId, Session session);
 
-    /** 坐骑升阶丹 */
-    void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session);
+    /**
+     * 坐骑升阶
+     */
+    void mountUpgrade(String accountId, Long rId, int resourceId, int num, Session session);
 
     /** 获取坐骑属性 */
     Map<AttributeType, AttributeElement> getAttributes(Long rId);

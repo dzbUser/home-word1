@@ -22,12 +22,6 @@ public class BackpackInfo {
     public BackpackInfo(int maxNum) {
         //初始化数组
         this.abstractProps = new AbstractProps[maxNum];
-        //初始化所有元素0,0代表为空
-        for (int i = 0; i < abstractProps.length; i++) {
-            AbstractProps props = PropsType.EMPTY.createProp();
-            props.init(0);
-            this.abstractProps[i] = props;
-        }
     }
 
     public BackpackInfo() {

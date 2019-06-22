@@ -64,13 +64,13 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public void viewEquip(CM_ViewEquipBar cm_viewEquipBar, Session session) {
+    public void viewEquip(String accountId, Long rId, Session session) {
         /**
          * 获取装备栏，遍历装备栏
          * */
 
-        logger.info(cm_viewEquipBar.getAccountId()+"：查看装备信息");
-        EquipmentModel equipmentModel = equipmentManager.load(cm_viewEquipBar.getrId());
+        logger.info("{}：查看装备信息", rId);
+        EquipmentModel equipmentModel = equipmentManager.load(rId);
         PropsResource prop;
         //获取装备栏数组
         Equipment[] equipments = equipmentModel.getEquipmentBar();
@@ -78,7 +78,12 @@ public class EquipmentServiceImpl implements EquipmentService {
         List<EquipInfo> list = new ArrayList<EquipInfo>();
         //遍历装备栏
         for (int i = 1; i < equipments.length; i++) {
-            EquipInfo equipInfo = EquipInfo.valueOf(equipments[i].getResourceId(), i);
+            EquipInfo equipInfo;
+            if (equipments[i] == null) {
+                equipInfo = EquipInfo.valueOf(0, i);
+            } else {
+                equipInfo = EquipInfo.valueOf(equipments[i].getResourceId(), i);
+            }
             list.add(equipInfo);
         }
         SM_ViewEquip sm_viewEquip = SM_ViewEquip.valueOf(list);
@@ -95,7 +100,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         Equipment[] equipments = equipmentModel.getEquipmentBar();
         for (int i = 1; i < equipments.length; i++) {
             //遍历所有装备
-            if (equipments[i].getResourceId() != PropsType.emptyId) {
+            if (equipments[i] != null) {
                 //装备不为空
                 //获取装备属性映射
                 Map<AttributeType, AttributeElement> map = equipments[i].getAttribute();
@@ -130,7 +135,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         //获取装备
         EquipmentModel equipmentModel = equipmentManager.load(rid);
         Equipment equipment = equipmentModel.getEquipmentByPosition(position);
-        if (equipment.getResourceId() == PropsType.emptyId) {
+        if (equipment == null) {
             //装备位置为空
             session.sendPromptMessage(PromptCode.EQUIPEMPTY, "");
         } else {

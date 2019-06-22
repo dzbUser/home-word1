@@ -42,11 +42,11 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public void create(Session session, CM_CreateRole cm_createRole) {
+    public void create(Session session, String accountId, int job, int sex) {
         //创建角色
-        Long id =  roleManager.createRole(cm_createRole.getAccountId(),cm_createRole.getSex(),cm_createRole.getJob());
+        Long id = roleManager.createRole(accountId, sex, job);
         //把角色id存到用户数据库中
-        User user = userManager.getUserByAccountId(cm_createRole.getAccountId());
+        User user = userManager.getUserByAccountId(accountId);
         user.addRole(id);
         //写回
         userManager.save(user);
@@ -70,10 +70,10 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void getRoleMessage(final CM_RoleMessage cm_roleMessage, final Session session) {
-        Role role = roleManager.load(cm_roleMessage.getrId());
+    public void getRoleMessage(String accountId, Long rId, final Session session) {
+        Role role = roleManager.load(rId);
         if (role == null){
-            logger.error("角色id："+cm_roleMessage.getrId()+"为空");
+            logger.error("角色id：" + rId + "为空");
         }
         SM_RoleMessage sm_roleMessage = SM_RoleMessage.valueOf(role.getJob(),role.getSex(),role.getLevel(),role.getExperience(),getUpgradeRequest(role.getLevel()),role.getAttribute().getFinalAttribute());
 
@@ -90,7 +90,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleManager.load(rId);
         int level = role.getLevel();
         int totalExperience = role.getExperience()+experienceNum;
-        while (level < GetBean.getRoleResourceManager().getMaxlevel() && totalExperience >= role.getUpgradeRequest()) {
+        while (level < GetBean.getRoleResourceManager().getMaxlevel() && totalExperience >= getUpgradeRequest(level)) {
             //循环增加经验
             totalExperience = totalExperience - getUpgradeRequest(level);
             level = level+1;

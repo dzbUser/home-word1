@@ -15,11 +15,11 @@ import org.springframework.stereotype.Controller;
 public class MountFacade {
     /** 查看坐骑 */
     public void viewMount(CM_ViewMount cm_viewMount, Session session){
-        GetBean.getMountService().viewMount(cm_viewMount,session);
+        GetBean.getMountService().viewMount(cm_viewMount.getAccountId(), cm_viewMount.getrId(), session);
     }
 
     /** 坐骑升阶丹 */
     public void mountUpgrade(CM_MountUpgrade cm_mountUpgrade, Session session){
-        GetBean.getMountService().mountUpgrade(cm_mountUpgrade,session);
+        GetBean.getMountService().mountUpgrade(cm_mountUpgrade.getAccountId(), cm_mountUpgrade.getrId(), cm_mountUpgrade.getResourceId(), cm_mountUpgrade.getNum(), session);
     }
 }

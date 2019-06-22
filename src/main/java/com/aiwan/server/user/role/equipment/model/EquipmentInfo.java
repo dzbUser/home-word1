@@ -18,10 +18,6 @@ public class EquipmentInfo {
     public EquipmentInfo() {
         //初始化
         this.equipments = new Equipment[length + 1];
-        for (int i = 1;i<=length;i++){
-            equipments[i] = new Equipment();
-            equipments[i].setResourceId(PropsType.emptyId);
-        }
     }
 
     public int getLength() {
@@ -46,7 +42,7 @@ public class EquipmentInfo {
      */
     public void setEmptyByPosition(int position) {
         if (position > 0 && position <= length) {
-            this.equipments[position] = Equipment.getEmpty();
+            this.equipments[position] = null;
         }
     }
 

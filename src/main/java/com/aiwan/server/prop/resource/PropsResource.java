@@ -57,6 +57,12 @@ public class PropsResource{
     private int limit;
 
     /**
+     * 道具效果
+     */
+    @CellMapping(name = "effect")
+    private int effect;
+
+    /**
      * 装备属性，装备独有
      */
     @CellMapping(name = "attribute")
@@ -200,5 +206,13 @@ public class PropsResource{
 
     public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    public int getEffect() {
+        return effect;
+    }
+
+    public void setEffect(int effect) {
+        this.effect = effect;
     }
 }

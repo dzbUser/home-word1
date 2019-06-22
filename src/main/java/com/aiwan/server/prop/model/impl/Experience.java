@@ -22,13 +22,13 @@ public class Experience extends AbstractProps {
             GetBean.getBackpackService().obtainOverlayProp(accountId, this, 1);
             return PromptCode.NOPROPINBACK;
         }
-        //增加1000经验
-        int experienceNum = 1000 * num;
+        //增加经验
+        int experienceNum = getPropsResource().getEffect() * num;
         //角色经验添加
         int surplusExperience = GetBean.getRoleService().addExperience(accountId, rId, experienceNum);
         if (surplusExperience > 0) {
             //获取剩余数量
-            int surplusNum = surplusExperience / 1000;
+            int surplusNum = surplusExperience / getPropsResource().getEffect();
             backpack.putOverlayProps(this, surplusNum);
             //人物达到最高级
             GetBean.getBackPackManager().writeBack(backpack);

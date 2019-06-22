@@ -86,8 +86,10 @@ public class MountServiceImpl implements MountService {
         }
         //获取背包
         Backpack backpack = GetBean.getBackPackManager().load(cm_mountUpgrade.getAccountId());
+        //获取坐骑升阶丹静态资源
+        PropsResource propsResource = GetBean.getPropsManager().getPropsResource(cm_mountUpgrade.getResourceId());
         if (backpack.deductionByResourceIdInNum(cm_mountUpgrade.getResourceId(), cm_mountUpgrade.getNum())) {
-            addExperience(cm_mountUpgrade.getrId(), MountDan.EXPERIENCE);
+            addExperience(cm_mountUpgrade.getrId(), propsResource.getEffect());
             session.sendPromptMessage(PromptCode.PROMOTESUCCESS, "");
             //写回
             GetBean.getBackPackManager().writeBack(backpack);

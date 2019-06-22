@@ -10,15 +10,7 @@ import com.aiwan.server.util.PromptCode;
  * 坐骑升阶丹
  */
 public class MountDan extends AbstractProps {
-    /**
-     * 升阶丹id
-     */
-    public final static int id = 2;
 
-    /**
-     * 增加经验值
-     */
-    public final static int EXPERIENCE = 1000;
 
     @Override
     public int propUse(String accountId, Long rId, int num, int position) {

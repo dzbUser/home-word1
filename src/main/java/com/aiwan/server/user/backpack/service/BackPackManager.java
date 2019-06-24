@@ -22,7 +22,6 @@ public class BackPackManager {
 
 
     private EntityCaheServiceImpl<String, BackpackEnt> cache;
-    private final static int MAXNUM = 50;
 
     /**
      * 获取背包业务对象
@@ -49,13 +48,15 @@ public class BackPackManager {
      * 背包新建
      * */
     public void createBackpack(String accountId){
+        //获取最大容量
+        int maxNum = GetBean.getBackResourceManager().getBackResource().getMaxNum();
         BackpackEnt backpackEnt = new BackpackEnt();
         backpackEnt.setAccountId(accountId);
-        backpackEnt.setMaxNum(MAXNUM);
+        backpackEnt.setMaxNum(maxNum);
         Long time = Calendar.getInstance().getTimeInMillis();
         backpackEnt.setUpdateTime(time);
         backpackEnt.setCreateTime(time);
-        backpackEnt.setBackpackInfo(new BackpackInfo(MAXNUM));
+        backpackEnt.setBackpackInfo(new BackpackInfo(maxNum));
         cache.writeBack(backpackEnt.getAccountId(),backpackEnt);
     }
 }

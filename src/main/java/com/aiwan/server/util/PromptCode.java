@@ -13,8 +13,6 @@ public class PromptCode {
     /*** 不可以使用*/
     public final static int UNAVAILABLE = 1;
 
-    /*** 您的背包中没有该道具*/
-    public final static int NOPROPINBACK = 2;
 
     /***  使用成功*/
     public final static int USERSUCCESS = 3;
@@ -68,10 +66,6 @@ public class PromptCode {
      */
     public final static int UNLOADEQUIPFAIL = 16;
 
-    /**
-     * 背包中没有该位置
-     */
-    public final static int NOPOSITIONINBACK = 17;
 
     /**
      * 该背包位置为空
@@ -91,7 +85,7 @@ public class PromptCode {
     /**
      * 丢弃失败
      */
-    public final static int DRAOPFAIL = 21;
+    public final static int DROPFAIL = 21;
 
     /**
      * 该位置的道具的数量不足
@@ -102,4 +96,9 @@ public class PromptCode {
      * 该道具不是装备
      */
     public final static int NOEQUIPMENT = 23;
+
+    /**
+     * 您所输入的背包位置不符合规范
+     */
+    public final static int INREGUARPOSITION = 24;
 }

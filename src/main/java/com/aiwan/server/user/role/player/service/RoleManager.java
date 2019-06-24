@@ -52,7 +52,7 @@ public class RoleManager {
     /**
      *保存角色
      * */
-    public void sava(Role role){
+    public void save(Role role) {
         RoleEnt roleEnt = role.getRoleEnt();
         roleEnt.setUpdateTime(Calendar.getInstance().getTimeInMillis());
         cache.writeBack(roleEnt.getId(),roleEnt);
@@ -61,7 +61,7 @@ public class RoleManager {
     /**
      * 修改人物属性
      * */
-    public void setRoleAttribute(String name, Map<AttributeType, AttributeElement> map, Long rId){
+    public void updateAttributeModule(String name, Map<AttributeType, AttributeElement> map, Long rId) {
         RoleEnt roleEnt = cache.load(rId);
         roleEnt.getAttribute().updateModule(AttributesModule.getType(name),map);
     }

@@ -20,12 +20,7 @@ public class EquipmentModel {
         this.equipmentEntity = equipmentEntity;
         return this;
     }
-    
 
-    /** 获取装备长度 */
-    public int getLength(){
-        return equipmentEntity.getEquipmentInfo().getLength();
-    }
 
     /** 获取装备栏 */
     public Equipment[] getEquipmentBar() {

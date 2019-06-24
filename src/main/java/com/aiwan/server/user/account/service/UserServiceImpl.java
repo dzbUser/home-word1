@@ -2,7 +2,6 @@ package com.aiwan.server.user.account.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.*;
@@ -83,7 +82,7 @@ public class UserServiceImpl implements UserService {
             }else {
                 GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
             }
-            sm_userMessage.setUsername(user.getAcountId());
+            sm_userMessage.setAccountId(user.getAcountId());
             sm_userMessage.setMap(user.getMap());
             sm_userMessage.setCurrentX(user.getCurrentX());
             sm_userMessage.setCurrentY(user.getCurrentY());
@@ -147,7 +146,7 @@ public class UserServiceImpl implements UserService {
         User user = userManager.getUserByAccountId(accountId);
         //账号或者密码错误
         if (user == null || !user.getHpassword().equals(hPassword)) {
-            logger.info(sm_userMessage.getUsername()+"高级登录失败");
+            logger.info(sm_userMessage.getAccountId() + "高级登录失败");
             sm_userMessage.setStatus(false);
             sm_userMessage.setOtherMessage("账号或者高级密码错误");
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
@@ -178,7 +177,7 @@ public class UserServiceImpl implements UserService {
             GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
         }
 
-        sm_userMessage.setUsername(user.getAcountId());
+        sm_userMessage.setAccountId(user.getAcountId());
         sm_userMessage.setMap(user.getMap());
         sm_userMessage.setCurrentX(user.getCurrentX());
         sm_userMessage.setCurrentY(user.getCurrentY());

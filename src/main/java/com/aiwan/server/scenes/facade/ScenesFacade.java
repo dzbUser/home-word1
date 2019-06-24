@@ -15,11 +15,11 @@ import org.springframework.stereotype.Controller;
 public class ScenesFacade {
     /** 角色移动 */
     public void move(final CM_Move cm_move, final Session session){
-        GetBean.getScenesService().move(cm_move,session);
+        GetBean.getScenesService().move(cm_move.getUsername(), cm_move.getTargetX(), cm_move.getTargetY(), session);
     }
 
     /** 角色地图跳转 */
     public void shift(final CM_Shift cm_shift, final Session session){
-        GetBean.getScenesService().shift(cm_shift,session);
+        GetBean.getScenesService().shift(cm_shift.getUsername(), cm_shift.getMap(), session);
     }
 }

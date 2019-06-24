@@ -1,6 +1,6 @@
 package com.aiwan.server.netty;
 
-import com.aiwan.server.publicsystem.handler.MyServerHandler;
+import com.aiwan.server.publicsystem.handler.HeardExaminationHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -39,7 +39,7 @@ public class NettyServer {
                                 .addLast("decoder", new Decoder())
                                 .addLast("encoder", new Encoder())
                                 .addLast(new IdleStateHandler(30,0,0, TimeUnit.SECONDS))
-                                .addLast(new MyServerHandler())
+                                .addLast(new HeardExaminationHandler())
                                 .addLast("handler", new Handler());
                     }
                 })

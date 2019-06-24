@@ -27,6 +27,7 @@ public class CM_ViewAttributes implements Serializable {
         return this;
     }
 
+
     public int getrId() {
         return rId;
     }

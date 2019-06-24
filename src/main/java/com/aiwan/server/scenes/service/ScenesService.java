@@ -10,8 +10,8 @@ import com.aiwan.server.scenes.protocol.CM_Shift;
  * */
 public interface ScenesService {
     /** 角色移动 */
-    void move(final CM_Move cm_move, final Session session);
+    void move(String accountId, int x, int y, final Session session);
 
     /** 角色地图跳转 */
-    void shift(final CM_Shift cm_shift, final Session session);
+    void shift(String accountId, int map, final Session session);
 }

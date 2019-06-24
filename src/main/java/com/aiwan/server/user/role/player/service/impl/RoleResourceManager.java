@@ -24,7 +24,7 @@ public class RoleResourceManager {
 
 
     /** 获取人物最高等级 */
-    public int getMaxlevel(){
+    public int getMaxLevel() {
         return roleResource.getMaxLevel();
     }
 

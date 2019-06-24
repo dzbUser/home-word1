@@ -19,7 +19,7 @@ import java.util.List;
 public class Decoder extends ByteToMessageDecoder implements Serializable {
     private DecodeData decodeData;
     Logger logger = LoggerFactory.getLogger(Decoder.class);
-    private final int MINSIZE = 6;
+    private final int MINSIZE = 8;
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
         /*
@@ -46,15 +46,9 @@ public class Decoder extends ByteToMessageDecoder implements Serializable {
                 byteBuf.readBytes(data);
                 decodeData.setType(type);
                 decodeData.setLength(length);
-                if (type == Protocol.HEART){
-                    //心跳包
-                    decodeData.setObject(JsonUtil.bytes2Object(data,String.class));
-                }else {
-                    if (ReflectionManager.getProtocolClass(type) == null){
-                        //错误编码
-                        logger.debug("错误编码"+type);
-                        return;
-                    }
+                // TODO: 2019/6/24  为什么不能发生空包
+                if (ReflectionManager.getProtocolClass(type) != null) {
+                    //错误编码
                     decodeData.setObject(JsonUtil.bytes2Object(data,ReflectionManager.getProtocolClass(type)));
                 }
                 list.add(decodeData);

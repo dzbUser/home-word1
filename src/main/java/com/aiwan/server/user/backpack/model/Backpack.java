@@ -2,7 +2,6 @@ package com.aiwan.server.user.backpack.model;
 
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.model.PropsType;
-import com.aiwan.server.prop.model.impl.MountDan;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
 import com.aiwan.server.util.GetBean;
@@ -96,8 +95,10 @@ public class Backpack {
     /**
      * 添加可叠加道具
      */
-    public boolean putOverlayProps(AbstractProps abstractProps, int num) {
+    public boolean putOverlayProps(AbstractProps abstractProps) {
+        int num = abstractProps.getNum();
         //查看是否可以叠加数量为num的该道具到背包
+
         //道具上限
         int limit = abstractProps.getPropsResource().getLimit();
         AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
@@ -116,7 +117,8 @@ public class Backpack {
                 }
             }
         }
-        //获取背包
+
+        //若还有则存到新的背包项中
         for (int i = 0; i < array.length; i++) {
             if (array[i] == null && num > 0) {
                 array[i] = PropsType.getType(abstractProps.getPropsResource().getType()).createProp();
@@ -166,6 +168,8 @@ public class Backpack {
                 }
                 array[i] = null;
                 return true;
+            } else if (array[i] != null && array[i].getObjectId().equals(objectId)) {
+                return false;
             }
         }
         return false;

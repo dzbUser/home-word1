@@ -29,10 +29,10 @@ public abstract class AbstractProps extends GameObject {
 
     /**
      * 道具使用
+     * @param accountId 用户账号
      * @param num 道具数量
-     * @param position 道具位置
      */
-    public abstract int propUse(String accountId, Long rId, int num, int position);
+    public abstract int propUse(String accountId, Long rId, int num);
 
     /**
      * 初始化
@@ -43,6 +43,9 @@ public abstract class AbstractProps extends GameObject {
         this.num = 1;
     }
 
+    /**
+     * 初始化
+     */
     @JsonIgnore
     public void init(PropsResource propsResource) {
         //设置唯一id

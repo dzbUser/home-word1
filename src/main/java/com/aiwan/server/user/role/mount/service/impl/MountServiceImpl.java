@@ -1,16 +1,11 @@
 package com.aiwan.server.user.role.mount.service.impl;
 
-import com.aiwan.server.prop.model.AbstractProps;
-import com.aiwan.server.prop.model.PropsType;
-import com.aiwan.server.prop.model.impl.MountDan;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.mount.model.MountModel;
-import com.aiwan.server.user.role.mount.protocol.CM_MountUpgrade;
-import com.aiwan.server.user.role.mount.protocol.CM_ViewMount;
 import com.aiwan.server.user.role.mount.protocol.SM_ViewMount;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
@@ -58,7 +53,7 @@ public class MountServiceImpl implements MountService {
         mountModel.setExperience(totalExperience);
         mountManager.writeBack(mountModel);
         //更新人物属性
-        GetBean.getRoleService().putAttributeModule("mount",getAttributes(rId),rId);
+        GetBean.getRoleService().updateAttributeModule("mount", getAttributes(rId), rId);
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.aiwan.server.prop.model.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
+import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
-import com.sun.corba.se.impl.ior.GenericIdentifiable;
 
 
 /**
@@ -14,14 +14,11 @@ import com.sun.corba.se.impl.ior.GenericIdentifiable;
  */
 public class Experience extends AbstractProps {
     @Override
-    public int propUse(String accountId, Long rId, int num, int position) {
+    public int propUse(String accountId, Long rId, int num) {
         //获取背包
         Backpack backpack = GetBean.getBackPackManager().load(accountId);
         //扣除道具
-        if (!backpack.deductionPropByObjectId(getObjectId(), num)) {
-            GetBean.getBackpackService().obtainOverlayProp(accountId, this, 1);
-            return PromptCode.NOPROPINBACK;
-        }
+        backpack.deductionPropByObjectId(getObjectId(), num);
         //增加经验
         int experienceNum = getPropsResource().getEffect() * num;
         //角色经验添加
@@ -29,7 +26,12 @@ public class Experience extends AbstractProps {
         if (surplusExperience > 0) {
             //获取剩余数量
             int surplusNum = surplusExperience / getPropsResource().getEffect();
-            backpack.putOverlayProps(this, surplusNum);
+            //创建剩余道具返回背包
+            AbstractProps abstractProps = PropsType.EXPERIENCE.createProp();
+            abstractProps.init(this.getPropsResource());
+            abstractProps.setNum(surplusNum);
+            //存回背包中
+            backpack.putOverlayProps(abstractProps);
             //人物达到最高级
             GetBean.getBackPackManager().writeBack(backpack);
             return PromptCode.ROLEACHIEVEMAXLEVEL;

@@ -18,13 +18,6 @@ public interface BackpackService {
      * */
     void createBackpack(String acountId);
 
-    /** 添加可叠加道具
-     * @param accountId 用户账号
-     * @param abstractProps 道具
-     * @param num 道具数量
-     * @return false 背包已满，true添加成功
-     * */
-    boolean obtainOverlayProp(String accountId, AbstractProps abstractProps, int num);
 
     /** 查看背包
      * @param accountId 用户账号
@@ -49,7 +42,7 @@ public interface BackpackService {
      * 添加不可叠加
      * @return false 背包已满，true添加成功
      */
-    boolean obtainNoOverlayProp(String accountId, AbstractProps abstractProps);
+    void obtainProp(String accountId, AbstractProps abstractProps);
 
     /**
      * 丢弃道具
@@ -62,6 +55,11 @@ public interface BackpackService {
     /**
      * 使用装备
      */
-    void userEquipment(String accountId, int position, Long rid, Session session);
+    void useEquipment(String accountId, int position, Long rid, Session session);
+
+    /**
+     * 位置是否符合规范
+     */
+    boolean isRegularPosition(int position);
 
 }

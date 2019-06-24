@@ -27,8 +27,10 @@ public interface RoleService {
     int addExperience(String accountId,Long rId,int experienceNum);
 
 
-    /** 修改人物属性 */
-    void putAttributeModule(String name,Map<AttributeType, AttributeElement> map,Long rId);
+    /**
+     * 更新人物属性
+     */
+    void updateAttributeModule(String name, Map<AttributeType, AttributeElement> map, Long rId);
 
     /** 返回角色属性 */
     Map<AttributeType, AttributeElement> getAttributes(Long rId);

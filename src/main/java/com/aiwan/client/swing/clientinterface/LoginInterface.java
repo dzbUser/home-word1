@@ -12,6 +12,7 @@ import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,7 +35,7 @@ public class LoginInterface extends JFrame {
         setTitle("登录");
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setFont(new Font("楷体", Font.BOLD, 16));
         /* 创建面板，这个类似于 HTML 的 div 标签
          * 我们可以创建多个面板并在 JFrame 中指定位置
          * 面板中我们可以添加文本字段，按钮及其他组件。

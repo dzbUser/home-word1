@@ -1,6 +1,5 @@
 package com.aiwan.server.prop.model;
 
-import com.aiwan.server.prop.model.impl.EmptyProps;
 import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.prop.model.impl.Experience;
 import com.aiwan.server.prop.model.impl.MountDan;

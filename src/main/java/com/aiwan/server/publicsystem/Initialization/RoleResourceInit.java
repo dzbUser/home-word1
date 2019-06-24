@@ -1,5 +1,6 @@
 package com.aiwan.server.publicsystem.Initialization;
 
+import com.aiwan.server.user.backpack.resource.BackResource;
 import com.aiwan.server.user.role.mount.resource.MountResource;
 import com.aiwan.server.user.role.player.resource.RoleResource;
 import com.aiwan.server.user.role.player.service.impl.RoleResourceManager;
@@ -23,13 +24,22 @@ public class RoleResourceInit {
 
     /** 坐骑静态文件路径 */
     private final static String MOUNTFILEPATH = "staticresource/mount.xls";
+
+    /**
+     * 背包静态资源理解
+     */
+    private final static String BACKFILEPATH = "staticresource/back.xls";
+
+
     public static void init(){
         List<RoleResource> roleList = null;
         List<MountResource> mountList = null;
+        List<BackResource> backResourceList = null;
         try {
-            //资源读取，角色资源以及坐骑资源
+            //资源读取，角色资源以及坐骑资源,背包资源
             roleList = ExcelUtil.analysisWithRelativePath(FILEPATH, RoleResource.class);
             mountList = ExcelUtil.analysisWithRelativePath(MOUNTFILEPATH, MountResource.class);
+            backResourceList = ExcelUtil.analysisWithRelativePath(BACKFILEPATH, BackResource.class);
         } catch (IllegalAccessException e) {
             logger.error(e.getLocalizedMessage());
         } catch (InstantiationException e) {
@@ -46,5 +56,6 @@ public class RoleResourceInit {
         mountList.get(0).init();
         roleResourceManager.setRoleResource(roleList.get(0));
         GetBean.getMountManager().setMountResource(mountList.get(0));
+        GetBean.getBackResourceManager().setBackResource(backResourceList.get(0));
     }
 }

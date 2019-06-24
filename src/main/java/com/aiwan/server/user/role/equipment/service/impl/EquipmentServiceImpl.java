@@ -1,12 +1,10 @@
 package com.aiwan.server.user.role.equipment.service.impl;
 
-import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
 import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
 import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
@@ -57,7 +55,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         equipmentModel.putEquipment(equipment);
         equipmentManager.writeBack(equipmentModel);
         //修改人物属性
-        GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rId),rId);
+        GetBean.getRoleService().updateAttributeModule("equip", getEquipAttributes(rId), rId);
         logger.info(accountId + "装备" + equipment.getPropsResource().getName() + "成功");
         //返回装备id
         return oldEquipment;
@@ -127,7 +125,7 @@ public class EquipmentServiceImpl implements EquipmentService {
      */
     @Override
     public void unload(String accountId, Long rid, int position, Session session) {
-        if (position > Equipment.length) {
+        if (position < 1 || position > Equipment.length) {
             session.sendPromptMessage(PromptCode.UNLOADEQUIPFAIL, "");
             return;
         }
@@ -142,9 +140,9 @@ public class EquipmentServiceImpl implements EquipmentService {
             //背包获取装备
             equipmentModel.setEmptyByPosition(position);
             equipmentManager.writeBack(equipmentModel);
-            GetBean.getBackpackService().obtainNoOverlayProp(accountId, equipment);
+            GetBean.getBackpackService().obtainProp(accountId, equipment);
             //重新计算战斗力
-            GetBean.getRoleService().putAttributeModule("equip", getEquipAttributes(rid), rid);
+            GetBean.getRoleService().updateAttributeModule("equip", getEquipAttributes(rid), rid);
             session.sendPromptMessage(PromptCode.UNLOADEQUIPSUCCESS, "");
         }
 

@@ -25,7 +25,7 @@ public class Equipment extends AbstractProps {
     public final static int length = 3;
 
     @Override
-    public int propUse(String accountId, Long rId, int num, int position) {
+    public int propUse(String accountId, Long rId, int num) {
 
         //获取背包
         Backpack backpack = GetBean.getBackPackManager().load(accountId);

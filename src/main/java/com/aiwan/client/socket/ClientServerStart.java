@@ -1,5 +1,6 @@
 package com.aiwan.client.socket;
 
+import com.aiwan.client.swing.start.SendHeard;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.util.Protocol;
 import io.netty.bootstrap.Bootstrap;
@@ -11,6 +12,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Timer;
 
 /**
  * @author dengzebia
@@ -55,22 +58,8 @@ public class ClientServerStart {
 
     //发送心跳
     public static void sendHear(final Channel channel){
-        final DecodeData decodeData = new DecodeData();
-        decodeData.setType(Protocol.HEART);
-        decodeData.setObject("hear");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    channel.writeAndFlush(decodeData);
-                }
-            }
-        }).start();
+        Timer t = new Timer();
+        t.schedule(SendHeard.valueOf(channel), 0, 20 * 1000);
     }
 
     public static Channel getChannel() {

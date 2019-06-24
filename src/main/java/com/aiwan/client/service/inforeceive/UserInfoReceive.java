@@ -32,7 +32,7 @@ public class UserInfoReceive {
             return;
         }
         //设置登录缓存
-        LoginUser.setUsername (userMessage.getUsername());
+        LoginUser.setUsername(userMessage.getAccountId());
         LoginUser.setCurrentX(userMessage.getCurrentX());
         LoginUser.setCurrentY(userMessage.getCurrentY());
         LoginUser.setMap(userMessage.getMap());

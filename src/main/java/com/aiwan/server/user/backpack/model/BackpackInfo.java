@@ -1,11 +1,7 @@
 package com.aiwan.server.user.backpack.model;
 
 import com.aiwan.server.prop.model.AbstractProps;
-import com.aiwan.server.prop.model.PropsType;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author dengzebia

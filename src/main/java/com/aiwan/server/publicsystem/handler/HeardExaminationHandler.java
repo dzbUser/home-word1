@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
  * @author dengzebiao
  * 心跳检测
  * */
-public class MyServerHandler extends ChannelInboundHandlerAdapter {
-    private static Logger logger = LoggerFactory.getLogger(MyServerHandler.class);
+public class HeardExaminationHandler extends ChannelInboundHandlerAdapter {
+    private static Logger logger = LoggerFactory.getLogger(HeardExaminationHandler.class);
 
     //管道中上一个Handler触发的事件
     @Override

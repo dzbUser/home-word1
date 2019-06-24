@@ -26,6 +26,7 @@ public class MountInfoReceive {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("名字："+ ClientResourseManager.getContent("mount",sm_viewMount.getLevel()));
         stringBuffer.append(" 经验："+sm_viewMount.getExperience());
+        stringBuffer.append(" 阶数：" + sm_viewMount.getLevel());
         stringBuffer.append(" 升级所需经验："+sm_viewMount.getNeedExperience()+"\n");
         for (Map.Entry<AttributeType, AttributeElement> elementEntry:sm_viewMount.getAttributes().entrySet()){
             stringBuffer.append(elementEntry.getValue().toString()+" ");

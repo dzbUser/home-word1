@@ -11,7 +11,7 @@ public class SM_UserMessage implements Serializable {
     /** 登录状态*/
     private boolean status;
     /** 用户账号 */
-    private String username;
+    private String accountId;
     private int map;
     private int currentX;
     private int currentY;
@@ -45,12 +45,12 @@ public class SM_UserMessage implements Serializable {
         this.currentY = currentY;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public String getMapMessage() {

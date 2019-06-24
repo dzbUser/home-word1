@@ -65,8 +65,4 @@ public class RoleAttribute {
         return finalAttribute;
     }
 
-    public RoleAttribute setFinalAttribute(Map<AttributeType, AttributeElement> finalAttribute) {
-        this.finalAttribute = finalAttribute;
-        return this;
-    }
 }

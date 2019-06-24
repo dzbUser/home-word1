@@ -2,13 +2,10 @@ package com.aiwan.server.user.backpack.service.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.model.PropsType;
-import com.aiwan.server.prop.protocol.CM_PropUse;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
-import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 import com.aiwan.server.user.protocol.SM_PropList;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackpackService;
@@ -43,29 +40,21 @@ public class BackpackServiceImpl implements BackpackService {
         backPackManager.createBackpack(acountId);
     }
 
-    /**
-     * 添加可叠加道具
-     */
-    @Override
-    public boolean obtainOverlayProp(String accountId, AbstractProps abstractProps, int num) {
-        Backpack backpack = backPackManager.load(accountId);
-        //可叠加
-        boolean status = backpack.putOverlayProps(abstractProps, num);
-        backPackManager.writeBack(backpack);
-        //如果添加道具成功
-        return status;
-    }
 
     /**
      * 添加不可叠加道具
      */
     @Override
-    public boolean obtainNoOverlayProp(String accountId, AbstractProps abstractProps) {
+    public void obtainProp(String accountId, AbstractProps abstractProps) {
         Backpack backpack = backPackManager.load(accountId);
         //不可叠加
-        boolean status = backpack.putNoOverlayProps(abstractProps);
+        if (abstractProps.getPropsResource().getOverlay() == 0) {
+            backpack.putNoOverlayProps(abstractProps);
+        } else {
+            //可叠加
+            backpack.putOverlayProps(abstractProps);
+        }
         backPackManager.writeBack(backpack);
-        return status;
     }
 
     /**
@@ -73,15 +62,24 @@ public class BackpackServiceImpl implements BackpackService {
      */
     @Override
     public void dropProps(String accountId, int position, int num, Session session) {
-        logger.info(accountId + "丢弃道具" + " 位置：" + position);
+        //位置是否符合规则
+        if (!isRegularPosition(position)) {
+            session.sendPromptMessage(PromptCode.INREGUARPOSITION, "");
+            logger.info("{}用户输入的位置不符合规则", accountId);
+            return;
+        }
+
+        logger.info("{}丢弃道具 位置：{}", accountId, position);
         Backpack backpack = backPackManager.load(accountId);
         AbstractProps abstractProps = backpack.getPropByPosition(position);
-        if (abstractProps == null || !backpack.deductionPropByObjectId(abstractProps.getObjectId(), num)) {
-            logger.info(accountId + ":丢弃失败" + " 位置：" + position);
-            //该位置没有道具,或者不够数量
-            session.sendPromptMessage(PromptCode.DRAOPFAIL, "");
+        if (abstractProps == null) {
+            logger.info("{}:丢弃失败 位置：{},数量为：{},原因：背包位置为空", accountId, position, num);
+            session.sendPromptMessage(PromptCode.EMPTYINBACK, "");
+        } else if (!backpack.deductionPropByObjectId(abstractProps.getObjectId(), num)) {
+            logger.info("{}:丢弃失败 位置：{},数量为：{}，原因：背包数量不足", accountId, position, num);
+            session.sendPromptMessage(PromptCode.DROPFAIL, "");
         } else {
-            logger.info(accountId + ":丢弃成功" + " 位置：" + position);
+            logger.info("{}:丢弃成功 位置：{},数量为：{}", abstractProps, position, num);
             //丢弃成功
             backPackManager.writeBack(backpack);
             session.sendPromptMessage(PromptCode.DROPSUCCESS, abstractProps.getPropsResource().getName());
@@ -89,29 +87,46 @@ public class BackpackServiceImpl implements BackpackService {
     }
 
     @Override
-    public void userEquipment(String accountId, int position, Long rid, Session session) {
-        /*
-         * 1.获取道具
-         * 2.判断是否为装备
-         * 3.装备使用
-         * 4.返回成功协议
-         * */
+    public void useEquipment(String accountId, int position, Long rid, Session session) {
+        //位置是否符合规则
+        if (!isRegularPosition(position)) {
+            session.sendPromptMessage(PromptCode.INREGUARPOSITION, "");
+            logger.info("{}用户输入的位置不符合规则", accountId);
+            return;
+        }
+        //获取背包
         Backpack backpack = backPackManager.load(accountId);
+        //获取对应位置的装备
         AbstractProps abstractProps = backpack.getPropByPosition(position);
+        //位置为空
         if (abstractProps == null) {
-            session.sendPromptMessage(PromptCode.NOPOSITIONINBACK, "");
+            session.sendPromptMessage(PromptCode.EMPTYINBACK, "");
             logger.info("用户{}位置{}没有道具", accountId, position);
             return;
         }
+        //是装备
         if (abstractProps.isEquipment()) {
             //是装备
-            int code = abstractProps.propUse(accountId, rid, 1, position);
+            int code = abstractProps.propUse(accountId, rid, 1);
             session.sendPromptMessage(code, "");
             logger.info("用户{}位置{}使用成功", accountId, position);
             return;
         }
+        //不是装备
         session.sendPromptMessage(PromptCode.NOEQUIPMENT, "");
         logger.info("用户{}位置{}不是装备", accountId, position);
+    }
+
+    /**
+     * 位置是否符合规则
+     */
+    @Override
+    public boolean isRegularPosition(int position) {
+        int maxNum = GetBean.getBackResourceManager().getBackResource().getMaxNum();
+        if (position < 0 || position >= maxNum) {
+            return false;
+        }
+        return true;
     }
 
     /** 查看背包 */
@@ -137,6 +152,7 @@ public class BackpackServiceImpl implements BackpackService {
         SM_PropList sm_propList = new SM_PropList();
         //获取背包数组
         AbstractProps[] array = backpack.getBackpackInfo().getAbstractProps();
+        //返回背包
         List<PropInfo> list = new ArrayList<PropInfo>();
         //添加背包道具
         for (AbstractProps abstractProps : array) {
@@ -156,17 +172,24 @@ public class BackpackServiceImpl implements BackpackService {
     @Override
     public void propUse(String accountId, int position, int num, Long rId, Session session) {
         logger.info("{}使用{}位置的道具", accountId, position);
+        //位置是否符合规则
+        if (!isRegularPosition(position)) {
+            session.sendPromptMessage(PromptCode.INREGUARPOSITION, "");
+            logger.info("{}用户输入的位置不符合规则", accountId);
+            return;
+        }
         //获取背包
         Backpack backpack = backPackManager.load(accountId);
         AbstractProps abstractProps = backpack.getPropByPosition(position);
         if (abstractProps == null) {
             //该位置没有道具
-            session.sendPromptMessage(PromptCode.NOPOSITIONINBACK, "");
+            session.sendPromptMessage(PromptCode.EMPTYINBACK, "");
             logger.info("{}使用{}位置的道具:没有该位置的道具", accountId, position);
             return;
         } else if (abstractProps.getNum() < num) {
+            //数量不足
             session.sendPromptMessage(PromptCode.PROPNUMINSUFFICIENT, "");
-            logger.info("用户{}使用{}数量为{}的道具数量不足", accountId, position, num);
+            logger.info("用户{}使用{}数量为{}的道具，数量不足", accountId, position, num);
             return;
         }
         if (abstractProps.getPropsResource().getUse() == 0) {
@@ -175,7 +198,7 @@ public class BackpackServiceImpl implements BackpackService {
             logger.info(accountId + "使用位置" + position + ":该道具不可使用");
             return;
         }
-        int code = abstractProps.propUse(accountId, rId, num, position);
+        int code = abstractProps.propUse(accountId, rId, num);
         session.sendPromptMessage(code, "");
     }
 
@@ -202,7 +225,8 @@ public class BackpackServiceImpl implements BackpackService {
             //可叠加道具添加
             AbstractProps abstractProps = PropsType.getType(propsResource.getType()).createProp();
             abstractProps.init(propsResource);
-            backpack.putOverlayProps(abstractProps, num);
+            abstractProps.setNum(num);
+            backpack.putOverlayProps(abstractProps);
             backPackManager.writeBack(backpack);
             session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
             return;
@@ -211,11 +235,13 @@ public class BackpackServiceImpl implements BackpackService {
         for (int i = 0; i < num; i++) {
             AbstractProps abstractProps = PropsType.getType(propsResource.getType()).createProp();
             abstractProps.init(propsResource);
-            obtainNoOverlayProp(accountId, abstractProps);
+            obtainProp(accountId, abstractProps);
         }
 
         logger.info("用户：" + accountId + "添加" + propsResource.getName() + "成功");
         session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
     }
+
+
 
 }

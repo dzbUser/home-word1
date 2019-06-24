@@ -4,6 +4,7 @@ import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
 import com.aiwan.server.user.backpack.service.BackPackManager;
+import com.aiwan.server.user.backpack.service.BackResourceManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
@@ -38,6 +39,16 @@ public class GetBean {
     private static MountManager mountManager;
     private static RoleManager roleManager;
     private static BackPackManager backPackManager;
+    private static BackResourceManager backResourceManager;
+
+    public static BackResourceManager getBackResourceManager() {
+        return backResourceManager;
+    }
+
+    @Autowired
+    public void setBackResourceManager(BackResourceManager backResourceManager) {
+        GetBean.backResourceManager = backResourceManager;
+    }
 
     public static BackPackManager getBackPackManager() {
         return backPackManager;

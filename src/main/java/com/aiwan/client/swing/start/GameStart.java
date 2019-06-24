@@ -8,9 +8,12 @@ import com.aiwan.client.swing.clientinterface.HeightLoginInterface;
 import com.aiwan.client.util.GetBean;
 import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
 import com.aiwan.server.publicsystem.Initialization.RoleResourceInit;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.concurrent.*;
 
 /**
  * @author dengzebia
@@ -25,7 +28,7 @@ public class GameStart {
         logger.info("客户端启动开始");
         swingInit();
         resourceInit();
-        connet();
+        connect();
         swingInit();
     }
 
@@ -45,18 +48,24 @@ public class GameStart {
     }
 
     /** 网络连接 */
-    public static void connet(){
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            ClientServerStart.connect();
-                        }finally {
-                        }
-                    }
+    public static void connect() {
+        //连接客户端
+        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+                .setNameFormat("client-pool-connect").build();
+        ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+        singleThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ClientServerStart.connect();
+                } finally {
+                    ClientServerStart.close();
                 }
-        ).start();
+            }
+        });
     }
 
     /** 界面初始化 */

@@ -5,13 +5,11 @@ import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
-import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
 import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.account.model.User;
-import com.aiwan.server.user.account.protocol.CM_CreateRole;
 import com.aiwan.server.user.account.service.UserManager;
 import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
@@ -90,31 +88,30 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleManager.load(rId);
         int level = role.getLevel();
         int totalExperience = role.getExperience()+experienceNum;
-        while (level < GetBean.getRoleResourceManager().getMaxlevel() && totalExperience >= getUpgradeRequest(level)) {
+        while (level < GetBean.getRoleResourceManager().getMaxLevel() && totalExperience >= getUpgradeRequest(level)) {
             //循环增加经验
             totalExperience = totalExperience - getUpgradeRequest(level);
             level = level+1;
         }
 
-        if (level < GetBean.getRoleResourceManager().getMaxlevel()) {
+        if (level < GetBean.getRoleResourceManager().getMaxLevel()) {
             //叠加后等级人小于最高等级
             if (role.getLevel() != level) {
                 //等级发生改变
                 role.setLevel(level);
             }
             role.setExperience(totalExperience);
-            roleManager.sava(role);
+            roleManager.save(role);
+            updateAttributeModule("role", getAttributes(rId), rId);
             return 0;
-        } else if (level == GetBean.getRoleResourceManager().getMaxlevel() && role.getLevel() != level) {
+        } else if (level == GetBean.getRoleResourceManager().getMaxLevel() && role.getLevel() != level) {
             //达到最高级，且等级改变
             role.setLevel(level);
             role.setExperience(0);
-            roleManager.sava(role);
+            roleManager.save(role);
         }
         //等级发生改变更新人物属性
-        if (role.getLevel() != level) {
-            putAttributeModule("role", getAttributes(rId), rId);
-        }
+        updateAttributeModule("role", getAttributes(rId), rId);
         //返回剩余经验
         return totalExperience;
     }
@@ -133,8 +130,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void putAttributeModule(String name,Map<AttributeType, AttributeElement> map,Long rId) {
-        roleManager.setRoleAttribute(name,map ,rId);
+    public void updateAttributeModule(String name, Map<AttributeType, AttributeElement> map, Long rId) {
+        roleManager.updateAttributeModule(name, map, rId);
     }
 
     /**获取升级要求(暂用)*/

@@ -13,7 +13,7 @@ public class MountDan extends AbstractProps {
 
 
     @Override
-    public int propUse(String accountId, Long rId, int num, int position) {
+    public int propUse(String accountId, Long rId, int num) {
         return PromptCode.UNAVAILABLE;
     }
 }

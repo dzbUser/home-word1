@@ -45,6 +45,6 @@ public class BackpackFacade {
      * 使用装备
      */
     public void userEquipment(CM_Equip cm_equip, Session session) {
-        GetBean.getBackpackService().userEquipment(cm_equip.getAccountId(), cm_equip.getPosition(), cm_equip.getrId(), session);
+        GetBean.getBackpackService().useEquipment(cm_equip.getAccountId(), cm_equip.getPosition(), cm_equip.getrId(), session);
     }
 }

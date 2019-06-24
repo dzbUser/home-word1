@@ -46,7 +46,6 @@ public class Decoder extends ByteToMessageDecoder implements Serializable {
                 byteBuf.readBytes(data);
                 decodeData.setType(type);
                 decodeData.setLength(length);
-                // TODO: 2019/6/24  为什么不能发生空包
                 if (ReflectionManager.getProtocolClass(type) != null) {
                     //错误编码
                     decodeData.setObject(JsonUtil.bytes2Object(data,ReflectionManager.getProtocolClass(type)));

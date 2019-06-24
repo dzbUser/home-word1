@@ -95,13 +95,14 @@ public class EquipmentServiceImpl implements EquipmentService {
         Map<AttributeType, AttributeElement> elementHashMap = new HashMap<AttributeType, AttributeElement>();
         EquipmentModel equipmentModel = equipmentManager.load(rId);
         //获取装备数组
+        // TODO: 2019/6/24 是否会被修改
         Equipment[] equipments = equipmentModel.getEquipmentBar();
-        for (int i = 1; i < equipments.length; i++) {
+        for (Equipment equipment : equipments) {
             //遍历所有装备
-            if (equipments[i] != null) {
+            if (equipment != null) {
                 //装备不为空
                 //获取装备属性映射
-                Map<AttributeType, AttributeElement> map = equipments[i].getAttribute();
+                Map<AttributeType, AttributeElement> map = equipment.getAttribute();
                 for (Map.Entry<AttributeType, AttributeElement> entry : map.entrySet()) {
                     //遍历所有属性
                     AttributeElement attributeElement = elementHashMap.get(entry.getKey());

@@ -65,7 +65,9 @@ public class NavigationBar extends JPanel {
     private static final String SKILLMESSAGE =
             "1.学习技能 （指令：输入技能id）\n" +
                     "2.查看所学技能 (指令：无需输入)\n" +
-                    "3.技能升级 (指令：输入技能id)\n";
+                    "3.技能升级 (指令：输入技能id)\n" +
+                    "4.移动技能位置 （指令：技能id 位置）\n" +
+                    "5.查看技能栏";
 
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);
 

@@ -5,10 +5,7 @@ import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
-import com.aiwan.server.user.role.skill.protocol.CM_LearnSkill;
-import com.aiwan.server.user.role.skill.protocol.CM_MoveSkill;
-import com.aiwan.server.user.role.skill.protocol.CM_UpgradeSkill;
-import com.aiwan.server.user.role.skill.protocol.CM_ViewLearnSkill;
+import com.aiwan.server.user.role.skill.protocol.*;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 
@@ -110,6 +107,17 @@ public enum SkillMessageSend {
             }
             return true;
         }
+    },
+    /**
+     * 技能移动
+     */
+    VIEWBAR(5) {
+        @Override
+        public void messageSend(String message) {
+            CM_ViewSkillBar cm_viewSkillBar = CM_ViewSkillBar.valueOf(LoginUser.getRoles().get(0));
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEWSKILLBAR, cm_viewSkillBar));
+        }
+
     },
     ;
 

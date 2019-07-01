@@ -3,6 +3,7 @@ package com.aiwan.server.user.role.skill.model;
 import com.aiwan.server.user.role.skill.entity.SkillEntity;
 import com.aiwan.server.util.GetBean;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -70,6 +71,19 @@ public class SkillModel {
      * 移动技能到技能栏的postion位置
      */
     public void moveSkillToPosition(Skill skill, int position) {
-        skillEntity.getSkillInfo().getSkills()[position] = skill;
+        Skill[] skills = skillEntity.getSkillInfo().getSkills();
+        for (int i = 0; i < skills.length; i++) {
+            if (skills[i] != null && skills[i].getSkillId() == skill.getSkillId()) {
+                skills[i] = null;
+            }
+        }
+        skills[position] = skill;
+    }
+
+    /**
+     * 获取技能栏
+     */
+    public Skill[] getSkillBar() {
+        return skillEntity.getSkillInfo().getSkills();
     }
 }

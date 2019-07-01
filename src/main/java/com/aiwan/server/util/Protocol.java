@@ -97,4 +97,9 @@ public class Protocol {
      * 技能位置移动
      */
     public final static int MOVESKILL = 36;
+
+    /**
+     * 查看技能栏
+     */
+    public static final int VIEWSKILLBAR = 37;
 }

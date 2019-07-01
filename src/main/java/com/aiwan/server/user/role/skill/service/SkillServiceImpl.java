@@ -6,6 +6,7 @@ import com.aiwan.server.user.role.skill.model.Skill;
 import com.aiwan.server.user.role.skill.model.SkillModel;
 import com.aiwan.server.user.role.skill.model.SkillType;
 import com.aiwan.server.user.role.skill.protocol.SM_ViewLearnedSkill;
+import com.aiwan.server.user.role.skill.protocol.SM_ViewSkillBar;
 import com.aiwan.server.user.role.skill.protocol.element.SkillElement;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
@@ -170,4 +171,25 @@ public class SkillServiceImpl implements SkillService {
         skillManager.save(skillModel);
         session.sendPromptMessage(PromptCode.MOVESKILLSUCCESS, "");
     }
+
+    @Override
+    public void viewSkillBar(Long rid, Session session) {
+        SkillModel skillModel = skillManager.load(rid);
+        SkillElement[] skills = new SkillElement[skillModel.getMaxSkillBarNum()];
+        int i = 0;
+        //遍历技能栏
+        for (Skill skill : skillModel.getSkillBar()) {
+            if (skill == null) {
+                skills[i] = null;
+            } else {
+                skills[i] = SkillElement.valueOf(skill.getSkillId(), skill.getSkillLevel());
+            }
+            i++;
+        }
+
+        SM_ViewSkillBar sm_viewSkillBar = SM_ViewSkillBar.valueOf(skills);
+        session.messageSend(SMToDecodeData.shift(StatusCode.VIEWSKILLBAR, sm_viewSkillBar));
+        return;
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.aiwan.server.user.role.skill.facade;
 
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.role.skill.protocol.CM_LearnSkill;
-import com.aiwan.server.user.role.skill.protocol.CM_MoveSkill;
-import com.aiwan.server.user.role.skill.protocol.CM_UpgradeSkill;
-import com.aiwan.server.user.role.skill.protocol.CM_ViewLearnSkill;
+import com.aiwan.server.user.role.skill.protocol.*;
 import com.aiwan.server.util.GetBean;
 import org.springframework.stereotype.Controller;
 
@@ -34,5 +31,12 @@ public class SkillFacade {
      */
     public void moveSkillPosition(CM_MoveSkill cm_moveSkill, Session session) {
         GetBean.getSkillService().moveSkillToPosition(cm_moveSkill.getrId(), cm_moveSkill.getSkillId(), cm_moveSkill.getPosition(), session);
+    }
+
+    /**
+     * 查看技能栏
+     */
+    public void viewSkillBar(CM_ViewSkillBar cm_viewSkillBar, Session session) {
+        GetBean.getSkillService().viewSkillBar(cm_viewSkillBar.getrId(), session);
     }
 }

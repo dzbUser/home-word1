@@ -39,4 +39,9 @@ public class StatusCode {
      * 查看所学技能
      */
     public final static int VIEWLEARNEDSKILL = 16;
+
+    /**
+     * 查看技能栏
+     */
+    public final static int VIEWSKILLBAR = 17;
 }

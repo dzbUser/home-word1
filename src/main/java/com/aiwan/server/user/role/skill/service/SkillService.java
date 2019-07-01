@@ -44,4 +44,9 @@ public interface SkillService {
      * @param skillId  技能id
      */
     void moveSkillToPosition(Long rId, int skillId, int position, Session session);
+
+    /**
+     * 查看技能栏
+     */
+    void viewSkillBar(Long rid, Session session);
 }

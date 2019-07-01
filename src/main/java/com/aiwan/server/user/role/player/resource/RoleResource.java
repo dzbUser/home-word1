@@ -1,6 +1,7 @@
 package com.aiwan.server.user.role.player.resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
+import com.aiwan.server.publicsystem.annotation.Resource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.util.AttributeUtil;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @since 2019.6.10
  * 用来存职业，性别，装备，坐骑对应名字
  * */
+@Resource("staticresource/role.xls")
 public class RoleResource {
 
 
@@ -22,6 +24,12 @@ public class RoleResource {
     /** 人物属性对应信息 */
     @CellMapping(name = "roleAttribute")
     private String roleAttribute;
+
+    /**
+     * 技能栏最大技能数
+     */
+    @CellMapping(name = "maxSkillNum")
+    private int maxSkillNum;
 
 
 
@@ -59,5 +67,13 @@ public class RoleResource {
     public RoleResource setList(List<AttributeElement> list) {
         this.list = list;
         return this;
+    }
+
+    public int getMaxSkillNum() {
+        return maxSkillNum;
+    }
+
+    public void setMaxSkillNum(int maxSkillNum) {
+        this.maxSkillNum = maxSkillNum;
     }
 }

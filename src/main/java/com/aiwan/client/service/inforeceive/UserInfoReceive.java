@@ -3,7 +3,7 @@ package com.aiwan.client.service.inforeceive;
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
-import com.aiwan.client.service.ClientResourseManager;
+import com.aiwan.client.service.ClientResourceManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
@@ -71,7 +71,7 @@ public class UserInfoReceive {
     @InfoReceiveMethod(status = StatusCode.MESSAGE)
     public void sendMessage(SM_PromptMessage sm_promptMessage) {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-        gameInterface.printOtherMessage(sm_promptMessage.getOtherMessage() + ClientResourseManager.getContent("prompt", sm_promptMessage.getPromptCode()));
+        gameInterface.printOtherMessage(sm_promptMessage.getOtherMessage() + ClientResourceManager.getContent("prompt", sm_promptMessage.getPromptCode()));
     }
 
     /** 注销 */

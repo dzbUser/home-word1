@@ -16,6 +16,7 @@ import com.aiwan.server.scenes.service.ScenesService;
 import com.aiwan.server.user.account.service.UserManager;
 import com.aiwan.server.user.account.service.UserService;
 import com.aiwan.server.user.backpack.service.BackpackService;
+import com.aiwan.server.user.role.skill.service.SkillManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,20 @@ public class GetBean {
     private static RoleManager roleManager;
     private static BackPackManager backPackManager;
     private static BackResourceManager backResourceManager;
+
+    /**
+     * 技能管理类
+     */
+    private static SkillManager skillManager;
+
+    public static SkillManager getSkillManager() {
+        return skillManager;
+    }
+
+    @Autowired
+    public void setSkillManager(SkillManager skillManager) {
+        GetBean.skillManager = skillManager;
+    }
 
     public static BackResourceManager getBackResourceManager() {
         return backResourceManager;

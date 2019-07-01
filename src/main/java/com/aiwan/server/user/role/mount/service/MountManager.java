@@ -1,10 +1,14 @@
 package com.aiwan.server.user.role.mount.service;
 
+import com.aiwan.server.publicsystem.annotation.Manager;
+import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.mount.entity.MountEntity;
 import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.resource.MountResource;
+import com.aiwan.server.util.ExcelUtil;
+import com.aiwan.server.util.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,12 +20,13 @@ import java.util.List;
  * @since 2019.6.6
  * 坐骑缓存类
  * */
-@Service
+@Manager
 public class MountManager {
     /** 坐骑缓存 */
     private EntityCaheServiceImpl<Long, MountEntity> cache;
 
     /** 坐骑静态资源 */
+    @Static(initializeMethodName = "initMountResource")
     private MountResource mountResource;
 
     Logger logger = LoggerFactory.getLogger(MountManager.class);
@@ -64,5 +69,21 @@ public class MountManager {
     public MountManager setMountResource(MountResource mountResource) {
         this.mountResource = mountResource;
         return this;
+    }
+
+    private void initMountResource() {
+        //获取静态资源路径
+        String path = ResourceUtil.getResourcePath(MountResource.class);
+        logger.info("初始化任务静态资源");
+        List<MountResource> list = null;
+        try {
+            list = ExcelUtil.analysisWithRelativePath(path, MountResource.class);
+        } catch (IllegalAccessException e) {
+            logger.error(e.getLocalizedMessage());
+        } catch (InstantiationException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        list.get(0).init();
+        setMountResource(list.get(0));
     }
 }

@@ -101,4 +101,19 @@ public class PromptCode {
      * 您所输入的背包位置不符合规范
      */
     public final static int INREGUARPOSITION = 24;
+
+    /**
+     * 没有该技能
+     */
+    public final static int NOSKILL = 25;
+
+    /**
+     * 您的等级未达到要求
+     */
+    public final static int NOTREACHEDLEVELDEMAND = 26;
+
+    /**
+     * 您已学过该技能
+     */
+    public final static int HAVALEARN = 27;
 }

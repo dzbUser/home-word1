@@ -27,6 +27,11 @@ public class NavigationBar extends JPanel {
     /** 坐骑模块 */
     public static final int MOUNT = 3;
 
+    /**
+     * 技能模块
+     */
+    public static final int SKILL = 4;
+
     /** 只是当前所属模块 */
     public int num;
 
@@ -57,13 +62,17 @@ public class NavigationBar extends JPanel {
             "1.查看坐骑信息 （指令：不用输入）\n"+
             "2.坐骑提升 （指令：不用输入）\n";
 
+    private static final String SKILLMESSAGE =
+            "1.学习技能 （指令：输入技能id）\n";
+
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);
 
     public NavigationBar(){
         this.setBounds(0,0,600,50);
         add(createItem("角色系统",ROLEMESSAGE,50,0,ROLE));
         add(createItem("背包系统",PACKMESSAGE,100,0,PACK));
-        add(createItem("坐骑系统",MOUNTMESSAGE,150,0,MOUNT));
+        add(createItem("坐骑系统",MOUNTMESSAGE,150, 0, MOUNT));
+        add(createItem("技能系统", SKILLMESSAGE, 150,0,SKILL));
         num = ROLE;
     }
 

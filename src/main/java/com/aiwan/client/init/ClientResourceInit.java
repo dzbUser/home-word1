@@ -1,7 +1,7 @@
 package com.aiwan.client.init;
 
 import com.aiwan.client.Resource.ClientViewResource;
-import com.aiwan.client.service.ClientResourseManager;
+import com.aiwan.client.service.ClientResourceManager;
 import com.aiwan.server.util.ExcelUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +41,11 @@ public class ClientResourceInit {
 
         for (ClientViewResource clientViewResource:list){
             //模块类型为空
-            if (ClientResourseManager.getResourceMap().get(clientViewResource.getType()) == null){
+            if (ClientResourceManager.getResourceMap().get(clientViewResource.getType()) == null) {
                 Map<Integer,ClientViewResource> map = new HashMap<Integer,ClientViewResource>(16);
-                ClientResourseManager.getResourceMap().put(clientViewResource.getType(),map);
+                ClientResourceManager.getResourceMap().put(clientViewResource.getType(), map);
             }
-            ClientResourseManager.getResourceMap().get(clientViewResource.getType()).put(clientViewResource.getId(),clientViewResource);
+            ClientResourceManager.getResourceMap().get(clientViewResource.getType()).put(clientViewResource.getId(), clientViewResource);
         }
 
     }

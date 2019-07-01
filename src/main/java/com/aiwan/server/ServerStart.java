@@ -3,6 +3,7 @@ package com.aiwan.server;
 import com.aiwan.server.netty.NettyServer;
 import com.aiwan.server.publicsystem.Initialization.*;
 import com.aiwan.server.publicsystem.service.ThreadPoolManager;
+import com.aiwan.server.util.ResourceUtil;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +23,14 @@ public class ServerStart {
         logger.debug("开始加载资源");
         applicationContext.start();
         final NettyServer nettyServer = (NettyServer) applicationContext.getBean("nettyServer");
-        //地图资源初始化
-        MapInitialization.init();
+        //资源初始化
+        ResourceUtil.initResource(applicationContext);
         //初始化反射
         ReflectionInitialization.initialReflection(applicationContext);
         //缓存初始化
         CacheInitialzation.init(applicationContext);
         //线程池初始化
         ThreadPoolManager.initialize();
-        //道具资源初始化
-        PropsInitialzation.init();
-        //人物资源初始化
-        RoleResourceInit.init();
         logger.debug("启动Netty服务器");
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
                 .setNameFormat("server-pool-start-%d").build();

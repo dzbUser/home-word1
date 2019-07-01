@@ -1,12 +1,14 @@
 package com.aiwan.client.Resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
+import com.aiwan.server.publicsystem.annotation.Resource;
 
 /**
  * @author dengzebiao
  * @since 2019.6.13
  * 客户端资源查看
  * */
+@Resource("staticresource/clientResource.xls")
 public class ClientViewResource {
     /** 资源类型 */
     @CellMapping(name = "type")

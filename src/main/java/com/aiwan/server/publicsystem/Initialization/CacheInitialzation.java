@@ -1,5 +1,6 @@
 package com.aiwan.server.publicsystem.Initialization;
 
+import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.ramcache.IEntity;
 import com.aiwan.server.ramcache.ServiceManager;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class CacheInitialzation {
         logger.debug("开始加载缓存");
         ServiceManager serviceManager = new ServiceManager();
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~第一步~~~~~~~~~~~~~~~~~~~~~~~~~
-        Map<String, Object> beansWithAnnotationMap = applicationContext.getBeansWithAnnotation(Service.class);
+        Map<String, Object> beansWithAnnotationMap = applicationContext.getBeansWithAnnotation(Manager.class);
         //~~~~~~~~~~~~~~~~~~~~~~~~第二部~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         for (Map.Entry<String, Object> entry : beansWithAnnotationMap.entrySet()) {
             Class<?> clazz= entry.getValue().getClass();

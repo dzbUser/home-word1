@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.player.service;
 
+import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @author dengzebiao
  * 角色缓存管理
  * */
-@Service
+@Manager
 public class RoleManager {
     private EntityCaheServiceImpl<Long, RoleEnt> cache;
 

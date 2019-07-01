@@ -1,17 +1,18 @@
 package com.aiwan.server.scenes.service;
 
+import com.aiwan.server.publicsystem.annotation.Manager;
+import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.user.account.model.User;
-import com.aiwan.server.user.account.service.UserServiceImpl;
-import com.aiwan.server.util.SMToDecodeData;
-import com.aiwan.server.util.StatusCode;
+import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,11 +21,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author dengzebiao
  * @since 2019.5.17
  * */
-@Component("mapManager")
+@Manager
 public class MapManager {
 
     Logger logger = LoggerFactory.getLogger(MapManager.class);
     /** 地图资源 */
+    @Static(initializeMethodName = "initMapResource")
     private Map<Integer, MapResource> mapResourceMap = new ConcurrentHashMap<Integer, MapResource>();
 
     /** 获取地图 */
@@ -74,23 +76,23 @@ public class MapManager {
         stringBuilder.append("您所在位子为"+mapResource.getName()+"的("+x+","+y+")\n");
 
         //创建用户标志
-        byte[][] userflag = new byte[mapResource.getHeight()][mapResource.getWidth()];
+        byte[][] userFlag = new byte[mapResource.getHeight()][mapResource.getWidth()];
         //初始化用户标志
         for (int i = 0;i < mapResource.getHeight();i++) {
             for (int j = 0; j < mapResource.getWidth(); j++) {
-                userflag[i][j] =0;
+                userFlag[i][j] = 0;
             }
         }
 
         /** 添加用户标志 */
         for (Map.Entry<String, User> entry : userMap.get(mapType).entrySet()) {
             User  user  = entry.getValue();
-            userflag[user.getCurrentX()-1][user.getCurrentY()-1] = 1;
+            userFlag[user.getCurrentX() - 1][user.getCurrentY() - 1] = 1;
         }
 
         for (int i = 0;i < mapResource.getHeight();i++){
             for (int j = 0;j < mapResource.getWidth();j++){
-                if (userflag[i][j] == 1) {
+                if (userFlag[i][j] == 1) {
                     stringBuilder.append("用户 ");
                 }
 
@@ -131,6 +133,22 @@ public class MapManager {
                 session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE,getMapContent(entry.getValue().getCurrentX(),entry.getValue().getCurrentY(),id)));
             }
         }
+    }
+
+    /**
+     * 初始化地图静态资源
+     */
+    private void initMapResource() throws InstantiationException, IllegalAccessException {
+        //获取地图资源静态路径
+        String path = ResourceUtil.getResourcePath(MapResource.class);
+        //加载资源
+        logger.debug("开始加载地图静态资源");
+        List<MapResource> list = ExcelUtil.analysisWithRelativePath(path, MapResource.class);
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).init();
+            putMapResource(list.get(i));
+        }
+        init();
     }
 
 

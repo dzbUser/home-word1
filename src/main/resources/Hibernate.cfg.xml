@@ -17,5 +17,6 @@
         <mapping class="com.aiwan.server.user.backpack.entity.BackpackEnt"/>
         <mapping class="com.aiwan.server.user.account.entity.UserEnt"/>
         <mapping class="com.aiwan.server.user.role.player.entity.RoleEnt"/>
+        <mapping class="com.aiwan.server.user.role.skill.entity.SkillEntity"/>
     </session-factory>
 </hibernate-configuration>

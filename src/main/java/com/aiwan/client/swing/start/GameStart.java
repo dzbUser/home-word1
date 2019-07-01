@@ -1,13 +1,12 @@
 package com.aiwan.client.swing.start;
 
-import com.aiwan.client.init.ClientResourceInit;
 import com.aiwan.client.service.ClientReceiveMap;
+import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.swing.clientinterface.HeightLoginInterface;
 import com.aiwan.client.util.GetBean;
-import com.aiwan.server.publicsystem.Initialization.PropsInitialzation;
-import com.aiwan.server.publicsystem.Initialization.RoleResourceInit;
+import com.aiwan.server.util.ResourceUtil;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,8 @@ public class GameStart {
         resourceInit();
         connect();
         swingInit();
+        //启动登录界面
+        InterfaceManager.getFrame("login").setVisible(true);
     }
 
     /** 静态资源初始化 */
@@ -37,12 +38,8 @@ public class GameStart {
 
         //初始化资源
         final ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("Spring-Hibernate-All-Cfg.xml");
-        //客户端静态资源初始化
-        ClientResourceInit.init();
-        //道具资源初始化
-        PropsInitialzation.init();
-        //人物资源初始化
-        RoleResourceInit.init();
+        //静态资源初始化
+        ResourceUtil.initResource(applicationContext);
         ClientReceiveMap.init(applicationContext);
         GetBean.setApplicationContext(applicationContext);
     }

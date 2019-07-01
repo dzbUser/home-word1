@@ -1,6 +1,7 @@
 package com.aiwan.server.prop.resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
+import com.aiwan.server.publicsystem.annotation.Resource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  * @since 2019.6.3
  * 道具静态初始化类
  * */
+@Resource("staticresource/prop.xls")
 public class PropsResource{
 
     /** 道具id */

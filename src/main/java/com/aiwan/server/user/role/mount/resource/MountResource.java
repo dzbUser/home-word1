@@ -1,6 +1,7 @@
 package com.aiwan.server.user.role.mount.resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
+import com.aiwan.server.publicsystem.annotation.Resource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.util.AttributeUtil;
@@ -13,6 +14,7 @@ import java.util.List;
  * @since 2019.6.13
  * 坐骑静态资源
  * */
+@Resource("staticresource/mount.xls")
 public class MountResource {
 
     /** 属性 */

@@ -1,6 +1,7 @@
 package com.aiwan.server.user.backpack.service;
 
 import com.aiwan.server.prop.resource.PropsResource;
+import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
 import com.aiwan.server.user.backpack.model.Backpack;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @since 2019.6.4
  * 背包业务管理类
  * */
-@Service()
+@Manager
 public class BackPackManager {
 
 

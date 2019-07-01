@@ -49,7 +49,7 @@ public class LoginInterface extends JFrame {
         placeComponents(panel);
 
         // 设置界面可见
-        setVisible(true);
+        setVisible(false);
 
         //添加到界面集合中
         InterfaceManager.putFrame("login",this);

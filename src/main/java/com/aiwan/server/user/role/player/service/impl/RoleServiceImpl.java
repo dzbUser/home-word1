@@ -52,6 +52,8 @@ public class RoleServiceImpl implements RoleService {
         GetBean.getEquipmentService().createEquipmentBar(id);
         //创建坐骑
         GetBean.getMountService().createMount(id);
+        //创建技能模块
+        GetBean.getSkillManager().create(id);
         //保存用户状态到session
         session.setUser(user);
         //创建返回信息

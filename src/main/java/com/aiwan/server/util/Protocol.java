@@ -77,4 +77,9 @@ public class Protocol {
      * 装备
      */
     public final static int EQUIP = 32;
+
+    /**
+     * 学习技能
+     */
+    public final static int LEAENSKILL = 33;
 }

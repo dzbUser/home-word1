@@ -1,6 +1,5 @@
 package com.aiwan.server.publicsystem.service;
 
-import com.aiwan.server.publicsystem.Initialization.MapInitialization;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

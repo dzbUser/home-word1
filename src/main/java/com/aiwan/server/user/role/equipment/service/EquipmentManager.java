@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.equipment.service;
 
+import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
 import com.aiwan.server.user.role.equipment.entity.EquipmentEntity;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
@@ -14,7 +15,7 @@ import java.util.Calendar;
  * @author dengzebiao
  * @since 2019.6.13
  * */
-@Service()
+@Manager
 public class EquipmentManager {
     Logger logger = LoggerFactory.getLogger(EquipmentManager.class);
 

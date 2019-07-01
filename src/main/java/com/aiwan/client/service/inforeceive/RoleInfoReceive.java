@@ -3,7 +3,7 @@ package com.aiwan.client.service.inforeceive;
 import com.aiwan.client.LoginUser;
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
-import com.aiwan.client.service.ClientResourseManager;
+import com.aiwan.client.service.ClientResourceManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.prop.resource.PropsResource;
@@ -41,8 +41,8 @@ public class RoleInfoReceive {
     public void viewRoleMessage(SM_RoleMessage sm_roleMessage){
         //角色创建成功
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("职业:"+ ClientResourseManager.getContent("job",sm_roleMessage.getJob()));
-        stringBuffer.append(" 性别:"+ ClientResourseManager.getContent("sex",sm_roleMessage.getSex())+"\n");
+        stringBuffer.append("职业:" + ClientResourceManager.getContent("job", sm_roleMessage.getJob()));
+        stringBuffer.append(" 性别:" + ClientResourceManager.getContent("sex", sm_roleMessage.getSex()) + "\n");
         stringBuffer.append("等级:"+ sm_roleMessage.getLevel());
         stringBuffer.append(" 经验:"+ sm_roleMessage.getExperience());
         stringBuffer.append(" 升级所需经验:"+ sm_roleMessage.getNeedExperience()+"\n");
@@ -65,11 +65,11 @@ public class RoleInfoReceive {
             stringBuffer.append("[" + i + "] ");
             if (equipInfo.getId() == 0){
                 //无装备
-                stringBuffer.append(ClientResourseManager.getContent("equipPosition", equipInfo.getPosition()) + " 装备:空");
+                stringBuffer.append(ClientResourceManager.getContent("equipPosition", equipInfo.getPosition()) + " 装备:空");
             }else {
                 //有装备
                 PropsResource propsResource = GetBean.getPropsManager().getPropsResource(equipInfo.getId());
-                stringBuffer.append(ClientResourseManager.getContent("equipPosition", propsResource.getPosition()));
+                stringBuffer.append(ClientResourceManager.getContent("equipPosition", propsResource.getPosition()));
                 stringBuffer.append("\n" + propsResource.toString());
             }
             stringBuffer.append("\n\n");

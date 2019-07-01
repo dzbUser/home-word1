@@ -1,5 +1,6 @@
 package com.aiwan.server.user.account.service;
 
+import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
 import com.aiwan.server.user.account.entity.UserEnt;
 import com.aiwan.server.user.account.model.User;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author dengzebiao
  * 用户缓存操作类
  * */
-@Service("userManager")
+@Manager
 public class UserManager {
     private EntityCaheServiceImpl<String, UserEnt> cache;
 

@@ -1,6 +1,7 @@
 package com.aiwan.server.scenes.mapresource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
+import com.aiwan.server.publicsystem.annotation.Resource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
  * @author dengzebiao
  * 地图资源类
  * */
+@Resource("staticresource/map.xls")
 public class MapResource {
     /**地图类型*/
     @CellMapping(name = "mapType")

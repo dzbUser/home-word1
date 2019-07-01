@@ -2,7 +2,7 @@ package com.aiwan.client.service.inforeceive;
 
 import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
-import com.aiwan.client.service.ClientResourseManager;
+import com.aiwan.client.service.ClientResourceManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
@@ -24,7 +24,7 @@ public class MountInfoReceive {
     @InfoReceiveMethod(status = StatusCode.VIEWMOUNT)
     public void viewMount(SM_ViewMount sm_viewMount){
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("名字："+ ClientResourseManager.getContent("mount",sm_viewMount.getLevel()));
+        stringBuffer.append("名字：" + ClientResourceManager.getContent("mount", sm_viewMount.getLevel()));
         stringBuffer.append(" 经验："+sm_viewMount.getExperience());
         stringBuffer.append(" 阶数：" + sm_viewMount.getLevel());
         stringBuffer.append(" 升级所需经验："+sm_viewMount.getNeedExperience()+"\n");

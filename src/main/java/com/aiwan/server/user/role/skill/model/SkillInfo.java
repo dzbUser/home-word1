@@ -23,6 +23,9 @@ public class SkillInfo {
         this.skills = new Skill[num];
     }
 
+    public SkillInfo() {
+    }
+
     public Skill[] getSkills() {
         return skills;
     }

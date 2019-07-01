@@ -116,4 +116,34 @@ public class PromptCode {
      * 您已学过该技能
      */
     public final static int HAVALEARN = 27;
+
+    /**
+     * 学习技能成功
+     */
+    public final static int LEARNSKILLSUCCESS = 28;
+
+    /**
+     * 您还未学习该技能
+     */
+    public final static int NOTLEARNSKILL = 29;
+
+    /**
+     * 您未达到升级技能的条件
+     */
+    public final static int NOTREARCHDEMAND = 30;
+
+    /**
+     * 达到最高等级
+     */
+    public final static int REACHMAXLEVEL = 31;
+
+    /**
+     * 技能升级成功
+     */
+    public final static int UPGRADESKILLSUCE = 32;
+
+    /**
+     * 技能移动成功
+     */
+    public final static int MOVESKILLSUCCESS = 33;
 }

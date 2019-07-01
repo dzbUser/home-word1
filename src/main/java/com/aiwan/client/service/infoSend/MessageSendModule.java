@@ -3,6 +3,7 @@ package com.aiwan.client.service.infoSend;
 import com.aiwan.client.service.infoSend.element.MountMessageSend;
 import com.aiwan.client.service.infoSend.element.BackMessageSend;
 import com.aiwan.client.service.infoSend.element.RoleMessageSend;
+import com.aiwan.client.service.infoSend.element.SkillMessageSend;
 
 /**
  * 信息发送模块枚举类
@@ -36,12 +37,25 @@ public enum  MessageSendModule {
     /** 背包发送模块 */
     MOUNT_MODULE(3){
         @Override
-        public void  sendMessage(String message,int num){
+        public void  sendMessage(String message, int num){
             MountMessageSend mountMessageSend = MountMessageSend.getMountMessageSend(num);
             if (mountMessageSend == null){
                 return;
             }
             MountMessageSend.getMountMessageSend(num).messageSend(message);
+        }
+    },
+    /**
+     * 技能发送模块
+     */
+    SKILL_MODULE(4) {
+        @Override
+        public void sendMessage(String message, int num) {
+            SkillMessageSend skillMessageSend = SkillMessageSend.getMessageSend(num);
+            if (skillMessageSend == null) {
+                return;
+            }
+            skillMessageSend.messageSend(message);
         }
     }
     ;

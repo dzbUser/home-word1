@@ -17,6 +17,7 @@ import com.aiwan.server.user.account.service.UserManager;
 import com.aiwan.server.user.account.service.UserService;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.user.role.skill.service.SkillManager;
+import com.aiwan.server.user.role.skill.service.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,6 +47,20 @@ public class GetBean {
      * 技能管理类
      */
     private static SkillManager skillManager;
+
+    /**
+     * 技能业务
+     */
+    private static SkillService skillService;
+
+    public static SkillService getSkillService() {
+        return skillService;
+    }
+
+    @Autowired
+    public void setSkillService(SkillService skillService) {
+        GetBean.skillService = skillService;
+    }
 
     public static SkillManager getSkillManager() {
         return skillManager;

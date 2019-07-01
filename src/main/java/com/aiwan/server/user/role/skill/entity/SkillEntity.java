@@ -2,7 +2,6 @@ package com.aiwan.server.user.role.skill.entity;
 
 import com.aiwan.server.ramcache.IEntity;
 import com.aiwan.server.ramcache.anno.Cache;
-import com.aiwan.server.user.backpack.model.BackpackInfo;
 import com.aiwan.server.user.role.skill.model.SkillInfo;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.JsonUtil;

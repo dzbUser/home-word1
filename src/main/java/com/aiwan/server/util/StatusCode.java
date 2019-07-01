@@ -35,4 +35,8 @@ public class StatusCode {
     public final static int MAPMESSAGE = 14;
     /** 查看用户装备 */
     public final static int VIEWEQUIP = 15;
+    /**
+     * 查看所学技能
+     */
+    public final static int VIEWLEARNEDSKILL = 16;
 }

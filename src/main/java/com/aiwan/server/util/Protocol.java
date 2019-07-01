@@ -82,4 +82,19 @@ public class Protocol {
      * 学习技能
      */
     public final static int LEAENSKILL = 33;
+
+    /**
+     * 查看所学技能
+     */
+    public final static int VIEWLEARNSKILL = 34;
+
+    /**
+     * 技能升级
+     */
+    public final static int UPGRADESKILL = 35;
+
+    /**
+     * 技能位置移动
+     */
+    public final static int MOVESKILL = 36;
 }

@@ -31,4 +31,21 @@ public enum SkillType {
             throw new IllegalArgumentException("生成技能实例{" + skillClass.getName() + "}失败");
         }
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public static Skill getSkillById(int id) {
+        for (SkillType skillType : values()) {
+            if (skillType.getId() == id) {
+                return skillType.creator();
+            }
+        }
+        return null;
+    }
 }

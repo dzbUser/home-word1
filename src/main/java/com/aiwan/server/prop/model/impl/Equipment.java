@@ -5,6 +5,7 @@ import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
@@ -57,7 +58,7 @@ public class Equipment extends AbstractProps {
      */
     @JsonIgnore
     public Map<AttributeType, AttributeElement> getAttribute() {
-        return getPropsResource().getAttributeMap();
+        return ImmutableAttributeElement.wrapper(getPropsResource().getAttributeMap());
     }
 
     /**

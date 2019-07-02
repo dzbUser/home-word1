@@ -70,20 +70,20 @@ public class SkillModel {
     /**
      * 移动技能到技能栏的postion位置
      */
-    public void moveSkillToPosition(Skill skill, int position) {
-        Skill[] skills = skillEntity.getSkillInfo().getSkills();
+    public void moveSkillToPosition(int skillId, int position) {
+        Integer[] skills = skillEntity.getSkillInfo().getSkills();
         for (int i = 0; i < skills.length; i++) {
-            if (skills[i] != null && skills[i].getSkillId() == skill.getSkillId()) {
+            if (skills[i] != null && skills[i] == skillId) {
                 skills[i] = null;
             }
         }
-        skills[position] = skill;
+        skills[position] = skillId;
     }
 
     /**
      * 获取技能栏
      */
-    public Skill[] getSkillBar() {
+    public Integer[] getSkillBar() {
         return skillEntity.getSkillInfo().getSkills();
     }
 }

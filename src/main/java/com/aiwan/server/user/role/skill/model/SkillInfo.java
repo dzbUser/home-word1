@@ -12,7 +12,7 @@ public class SkillInfo {
     /**
      * 角色技能栏
      */
-    private Skill[] skills;
+    private Integer[] skills;
 
     /**
      * 角色学习技能容器
@@ -20,17 +20,17 @@ public class SkillInfo {
     private Map<Integer, Skill> skillMap = new HashMap<Integer, Skill>();
 
     public SkillInfo(int num) {
-        this.skills = new Skill[num];
+        this.skills = new Integer[num];
     }
 
     public SkillInfo() {
     }
 
-    public Skill[] getSkills() {
+    public Integer[] getSkills() {
         return skills;
     }
 
-    public void setSkills(Skill[] skills) {
+    public void setSkills(Integer[] skills) {
         this.skills = skills;
     }
 

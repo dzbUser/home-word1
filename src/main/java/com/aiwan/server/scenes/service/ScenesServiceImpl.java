@@ -44,9 +44,9 @@ public class ScenesServiceImpl implements ScenesService{
         int type ;
         User user = session.getUser();
         if (GetBean.getMapManager().allowMove(x, y, user.getMap())) {
-            userManager.save(user);
             user.setCurrentX(x);
             user.setCurrentY(y);
+            userManager.save(user);
             SM_Move sm_move = SM_Move.valueOf(x, y, 1, GetBean.getMapManager().getMapContent(x, y, user.getMap()));
             data = sm_move;
             type = StatusCode.MOVESUCCESS;
@@ -98,5 +98,20 @@ public class ScenesServiceImpl implements ScenesService{
             GetBean.getMapManager().sendMessageToUsers(oldMap,user.getAcountId());
         }
         logger.info("请求成功");
+    }
+
+    @Override
+    public void moveUserPosition(String accountId, int x, int y) {
+
+        //改缓存
+        User user = userManager.getUserByAccountId(accountId);
+        user.setCurrentX(x);
+        user.setCurrentY(y);
+        userManager.save(user);
+
+        //改地图内的用户
+        GetBean.getMapManager().putUser(user);
+        GetBean.getMapManager().sendMessageToUsers(user.getMap(), user.getAcountId());
+        logger.info("{}请求移动到({}.{})成功", accountId, x, y);
     }
 }

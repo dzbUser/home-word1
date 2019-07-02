@@ -1,5 +1,6 @@
 package com.aiwan.server.util;
 
+import com.aiwan.server.base.executor.account.IAccountExecutorService;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
@@ -52,6 +53,20 @@ public class GetBean {
      * 技能业务
      */
     private static SkillService skillService;
+
+    /**
+     * 用户线程业务分配类
+     */
+    private static IAccountExecutorService accountExecutorService;
+
+    public static IAccountExecutorService getAccountExecutorService() {
+        return accountExecutorService;
+    }
+
+    @Autowired
+    public void setAccountExecutorService(IAccountExecutorService accountExecutorService) {
+        GetBean.accountExecutorService = accountExecutorService;
+    }
 
     public static SkillService getSkillService() {
         return skillService;

@@ -27,6 +27,11 @@ public class SkillResource {
     private int skillLevel;
 
     /**
+     * 是否为buff技能
+     */
+    @CellMapping(name = "isBuffSkill")
+    private int isBuffSkill;
+    /**
      * 技能最高等级
      */
     @CellMapping(name = "maxLevel")
@@ -62,5 +67,13 @@ public class SkillResource {
 
     public void setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
+    }
+
+    public int getIsBuffSkill() {
+        return isBuffSkill;
+    }
+
+    public void setIsBuffSkill(int isBuffSkill) {
+        this.isBuffSkill = isBuffSkill;
     }
 }

@@ -95,7 +95,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         Map<AttributeType, AttributeElement> elementHashMap = new HashMap<AttributeType, AttributeElement>();
         EquipmentModel equipmentModel = equipmentManager.load(rId);
         //获取装备数组
-        // TODO: 2019/6/24 是否会被修改
+        // 使用Immutabble继承类防止被修改
         Equipment[] equipments = equipmentModel.getEquipmentBar();
         for (Equipment equipment : equipments) {
             //遍历所有装备

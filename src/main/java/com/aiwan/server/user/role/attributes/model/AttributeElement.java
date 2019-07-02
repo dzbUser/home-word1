@@ -10,10 +10,10 @@ import java.io.Serializable;
 public class AttributeElement implements Serializable {
 
     /** 属性类型 */
-    private AttributeType attributeType;
+    protected AttributeType attributeType;
 
     /** 属性值 */
-    private long value;
+    protected long value;
 
     /** 获取属性单元 */
     public static AttributeElement valueOf(AttributeType attributeType,long value){

@@ -48,6 +48,12 @@ public enum  AttributeType implements Serializable {
     MAGIC(4,"魔法"){
 
     },
+    /**
+     * 防御基本属性
+     */
+    DEFENSE(5, "防御") {
+
+    },
     ;
     /** 属性id */
     private int id;

@@ -48,6 +48,7 @@ public class SkillServiceImpl implements SkillService {
          * */
         SkillResource skillResource = skillManager.getSkillResourceBySkillId(skillId);
         if (skillResource == null) {
+            logger.error("角色{}学习技能[{}]失败，技能配置不存在", rId, skillId);
             //没有该技能
             session.sendPromptMessage(PromptCode.NOSKILL, "");
             return;
@@ -58,6 +59,7 @@ public class SkillServiceImpl implements SkillService {
         //获取人物
         Role role = GetBean.getRoleManager().load(rId);
         if (skillLevelResource.getRoleLevelDemand() > role.getLevel()) {
+            logger.error("角色{}学习技能[{}]失败，未达到学习条件", rId, skillId);
             //角色等级未达到要求
             session.sendPromptMessage(PromptCode.NOTREACHEDLEVELDEMAND, "");
             return;
@@ -66,6 +68,7 @@ public class SkillServiceImpl implements SkillService {
         SkillModel skillModel = skillManager.load(rId);
         Skill skill = skillModel.getSkillBySkillId(skillId);
         if (skill != null) {
+            logger.error("角色{}学习技能[{}]失败,已经学过该技能", rId, skillId);
             //技能已经学过
             session.sendPromptMessage(PromptCode.HAVALEARN, "");
             return;
@@ -114,6 +117,7 @@ public class SkillServiceImpl implements SkillService {
         SkillModel skillModel = skillManager.load(rId);
         Skill skill = skillModel.getSkillBySkillId(skillId);
         if (skill == null) {
+            logger.error("角色{}升级技能[{}]失败,还未学过该技能", rId, skillId);
             //还未学习该技能
             session.sendPromptMessage(PromptCode.NOTLEARNSKILL, "");
             return;
@@ -123,6 +127,7 @@ public class SkillServiceImpl implements SkillService {
         SkillResource skillResource = skillManager.getSkillResourceBySkillId(skillId);
         if (skill.getSkillLevel() == skillResource.getMaxLevel()) {
             //达到最高等级
+            logger.error("角色{}升级技能[{}]失败,技能达到最高级", rId, skillId);
             session.sendPromptMessage(PromptCode.REACHMAXLEVEL, "");
             return;
         }
@@ -133,6 +138,7 @@ public class SkillServiceImpl implements SkillService {
         //获取技能等级静态资源
         SkillLevelResource skillLevelResource = skillManager.getSkillLevelReById(skillId + "_" + (skill.getSkillLevel() + 1));
         if (role.getLevel() < skillLevelResource.getRoleLevelDemand() || role.getExperience() < skillLevelResource.getExperienceDemand()) {
+            logger.error("角色{}升级技能[{}]失败,未达到升级要求", rId, skillId);
             session.sendPromptMessage(PromptCode.NOTREARCHDEMAND, "");
             return;
         }
@@ -163,11 +169,12 @@ public class SkillServiceImpl implements SkillService {
         //获取技能
         Skill skill = skillModel.getSkillBySkillId(skillId);
         if (skill == null) {
+            logger.error("角色{}移动技能[{}]失败,还未学过该技能", rId, skillId);
             session.sendPromptMessage(PromptCode.NOTLEARNSKILL, "");
             return;
         }
 
-        skillModel.moveSkillToPosition(skill, position);
+        skillModel.moveSkillToPosition(skill.getSkillId(), position);
         skillManager.save(skillModel);
         session.sendPromptMessage(PromptCode.MOVESKILLSUCCESS, "");
     }
@@ -176,15 +183,15 @@ public class SkillServiceImpl implements SkillService {
     public void viewSkillBar(Long rid, Session session) {
         SkillModel skillModel = skillManager.load(rid);
         SkillElement[] skills = new SkillElement[skillModel.getMaxSkillBarNum()];
-        int i = 0;
+        Integer[] skillBar = skillModel.getSkillBar();
         //遍历技能栏
-        for (Skill skill : skillModel.getSkillBar()) {
-            if (skill == null) {
+        for (int i = 0; i < skillBar.length; i++) {
+            if (skillBar[i] == null) {
                 skills[i] = null;
             } else {
+                Skill skill = skillModel.getSkillBySkillId(skillBar[i]);
                 skills[i] = SkillElement.valueOf(skill.getSkillId(), skill.getSkillLevel());
             }
-            i++;
         }
 
         SM_ViewSkillBar sm_viewSkillBar = SM_ViewSkillBar.valueOf(skills);

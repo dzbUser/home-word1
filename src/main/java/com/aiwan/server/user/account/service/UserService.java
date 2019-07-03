@@ -34,7 +34,7 @@ public interface UserService {
     /**
      * 创建角色
      */
-    void createRole(String accountId, int job, int sex, Session session);
+    void createRole(String accountId, String name, int job, int sex, Session session);
 
 
 

@@ -41,7 +41,8 @@ public class RoleInfoReceive {
     public void viewRoleMessage(SM_RoleMessage sm_roleMessage){
         //角色创建成功
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("职业:" + ClientResourceManager.getContent("job", sm_roleMessage.getJob()));
+        stringBuffer.append("角色名:" + sm_roleMessage.getName());
+        stringBuffer.append(" 职业:" + ClientResourceManager.getContent("job", sm_roleMessage.getJob()));
         stringBuffer.append(" 性别:" + ClientResourceManager.getContent("sex", sm_roleMessage.getSex()) + "\n");
         stringBuffer.append("等级:"+ sm_roleMessage.getLevel());
         stringBuffer.append(" 经验:"+ sm_roleMessage.getExperience());

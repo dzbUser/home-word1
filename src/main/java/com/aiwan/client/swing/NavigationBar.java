@@ -38,7 +38,7 @@ public class NavigationBar extends JPanel {
     /** 角色系统提示信息 */
     private static final String ROLEMESSAGE =
             "地图：1.主城 2.野外\n"+
-            "1.创建角色 （指令说明: 0:战士 1:法师；  0:男 1:女；  如:输入 0 0 则为战士+男； ）\n" +
+                    "1.创建角色 （指令说明: 0:战士 1:法师；  0:男 1:女；  如:输入 0 0 则为战士+男； 角色名字:不可超过10个字）\n" +
             "2.移动（指令说明: 需指定坐标如：4 4，移动到坐标(4,4)）\n" +
             "3.地图跳转(指令说明: 如:1，跳转到主城 ) \n" +
             "4.查看角色信息(指令不用输入) \n" +
@@ -63,7 +63,8 @@ public class NavigationBar extends JPanel {
             "2.坐骑提升 （指令：不用输入）\n";
 
     private static final String SKILLMESSAGE =
-            "1.学习技能 （指令：输入技能id）\n" +
+            "0.查看所有技能\n" +
+                    "1.学习技能 （指令：输入技能id）\n" +
                     "2.查看所学技能 (指令：无需输入)\n" +
                     "3.技能升级 (指令：输入技能id)\n" +
                     "4.移动技能位置 （指令：技能id 位置）\n" +

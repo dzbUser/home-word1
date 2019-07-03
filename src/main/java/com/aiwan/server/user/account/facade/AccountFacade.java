@@ -45,7 +45,7 @@ public class AccountFacade {
      * 创建角色
      */
     public void createRole(CM_CreateRole cm_createRole, Session session){
-        GetBean.getUserService().createRole(cm_createRole.getAccountId(), cm_createRole.getJob(), cm_createRole.getSex(), session);
+        GetBean.getUserService().createRole(cm_createRole.getAccountId(), cm_createRole.getName(), cm_createRole.getJob(), cm_createRole.getSex(), session);
     }
 
 

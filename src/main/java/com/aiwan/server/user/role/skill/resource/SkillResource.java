@@ -20,22 +20,12 @@ public class SkillResource {
     @CellMapping(name = "skillName")
     private String skillName;
 
-    /**
-     * 技能等级
-     */
-    @CellMapping(name = "skillLevel")
-    private int skillLevel;
 
     /**
      * 是否为buff技能
      */
     @CellMapping(name = "isBuffSkill")
     private int isBuffSkill;
-    /**
-     * 技能最高等级
-     */
-    @CellMapping(name = "maxLevel")
-    private int maxLevel;
 
     public int getSkillId() {
         return skillId;
@@ -51,22 +41,6 @@ public class SkillResource {
 
     public void setSkillName(String skillName) {
         this.skillName = skillName;
-    }
-
-    public int getSkillLevel() {
-        return skillLevel;
-    }
-
-    public void setSkillLevel(int skillLevel) {
-        this.skillLevel = skillLevel;
-    }
-
-    public int getMaxLevel() {
-        return maxLevel;
-    }
-
-    public void setMaxLevel(int maxLevel) {
-        this.maxLevel = maxLevel;
     }
 
     public int getIsBuffSkill() {

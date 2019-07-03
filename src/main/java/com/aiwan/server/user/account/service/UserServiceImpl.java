@@ -71,15 +71,13 @@ public class UserServiceImpl implements UserService {
             session.setUser(user);
             SessionManager.putSessionByUsername(accountId, session);
 
-            //把用户添加到地图资源中
-            GetBean.getMapManager().putUser(user);
-
-
             //~~~~~~~~~~~第四步~~~~~~~~~~~~~
             if (user.getRoleNum() == 0){
                 sm_userMessage.setCreated(false);
                 sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
             }else {
+                //把用户添加到地图资源中
+                GetBean.getMapManager().putUser(user);
                 GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
             }
             sm_userMessage.setAccountId(user.getAcountId());
@@ -164,8 +162,6 @@ public class UserServiceImpl implements UserService {
         //更改缓存
         session.setUser(user);
         SessionManager.putSessionByUsername(accountId, session);
-        //把用户添加到地图资源中
-        GetBean.getMapManager().putUser(user);
 
 
         //是否创建新角色
@@ -173,6 +169,8 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setCreated(false);
             sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
         }else{
+            //把用户添加到地图资源中
+            GetBean.getMapManager().putUser(user);
             //给其余玩家发送地图信息
             GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
         }
@@ -195,7 +193,7 @@ public class UserServiceImpl implements UserService {
      * 创建角色
      * */
     @Override
-    public void createRole(String accountId, int job, int sex, final Session session) {
+    public void createRole(String accountId, String name, int job, int sex, final Session session) {
         logger.info(accountId + "创建角色");
         User user = session.getUser();
         if(user.getUserBaseInfo().getRoles().size() >= user.getMaxRole()){
@@ -205,7 +203,7 @@ public class UserServiceImpl implements UserService {
         }
         else {
             //转交给角色业务
-            GetBean.getRoleService().create(session, accountId, job, sex);
+            GetBean.getRoleService().create(session, accountId, name, job, sex);
         }
     }
 

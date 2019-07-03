@@ -19,13 +19,15 @@ import java.util.Map;
  * */
 @Manager
 public class RoleManager {
+
+
     private EntityCaheServiceImpl<Long, RoleEnt> cache;
 
 
     /**
      * 创建角色
      * */
-    public Long createRole(String accountId,int sex,int job){
+    public Long createRole(String accountId, String name, int sex, int job, int map, int x, int y) {
         RoleEnt roleEnt = new RoleEnt();
         Long id = IDUtil.getId();
         roleEnt.setId(id);
@@ -33,6 +35,10 @@ public class RoleManager {
         roleEnt.setLevel(1);
         roleEnt.setJob(job);
         roleEnt.setSex(sex);
+        roleEnt.setName(name);
+        roleEnt.setMap(map);
+        roleEnt.setX(x);
+        roleEnt.setY(y);
         Long time = Calendar.getInstance().getTimeInMillis();
         roleEnt.setUpdateTime(time);
         roleEnt.setCreatTime(time);

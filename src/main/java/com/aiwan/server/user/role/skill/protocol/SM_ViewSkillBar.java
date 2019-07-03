@@ -1,6 +1,5 @@
 package com.aiwan.server.user.role.skill.protocol;
 
-import com.aiwan.server.user.role.skill.model.Skill;
 import com.aiwan.server.user.role.skill.protocol.element.SkillElement;
 
 import java.io.Serializable;

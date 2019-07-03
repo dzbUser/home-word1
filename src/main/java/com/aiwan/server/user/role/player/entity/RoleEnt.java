@@ -40,8 +40,23 @@ public class RoleEnt implements IEntity<Long> {
     @Column(nullable = false)
     private int level;
 
+    @Column(nullable = false)
+    private int x;
+
+    @Column(nullable = false)
+    private int y;
+
+    @Column(nullable = false)
+    private int map;
+
     @Column(nullable = false,length = 50)
     private String accountId;
+
+    /**
+     * 角色名字
+     */
+    @Column(nullable = false, columnDefinition = "varchar(20) character set utf8 collate utf8_bin comment '角色名字'")
+    private String name;
 
     /** 经验值 */
     @Column(nullable = false)
@@ -151,5 +166,37 @@ public class RoleEnt implements IEntity<Long> {
     public RoleEnt setAttribute(RoleAttribute attribute) {
         this.roleAttribute = attribute;
         return this;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getMap() {
+        return map;
+    }
+
+    public void setMap(int map) {
+        this.map = map;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

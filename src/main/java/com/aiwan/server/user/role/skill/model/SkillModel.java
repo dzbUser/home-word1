@@ -1,9 +1,8 @@
 package com.aiwan.server.user.role.skill.model;
 
 import com.aiwan.server.user.role.skill.entity.SkillEntity;
-import com.aiwan.server.util.GetBean;
+import com.aiwan.server.user.role.skill.entity.SkillMessage;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -36,8 +35,8 @@ public class SkillModel {
     /**
      * 根据技能id获取技能
      */
-    public Skill getSkillBySkillId(int skillId) {
-        return skillEntity.getSkillInfo().getSkillMap().get(skillId);
+    public SkillMessage getSkillBySkillId(int skillId) {
+        return skillEntity.getSkillInfo().getSkillMessageMap().get(skillId);
     }
 
 
@@ -46,25 +45,22 @@ public class SkillModel {
      */
     public void putSkillBySkillId(int skillId, int skillTypeId) {
         //创建普通技能
-        Skill skill = SkillType.getSkillById(skillTypeId);
-        skill.setSkillId(skillId);
-        skill.setSkillLevel(1);
-        skillEntity.getSkillInfo().getSkillMap().put(skillId, skill);
+        skillEntity.getSkillInfo().getSkillMessageMap().put(skillId, SkillMessage.valueOf(skillId, 1));
     }
 
     /**
      * 返回所学技能
      */
-    public Map<Integer, Skill> getLearnedSkill() {
-        return skillEntity.getSkillInfo().getSkillMap();
+    public Map<Integer, SkillMessage> getLearnedSkill() {
+        return skillEntity.getSkillInfo().getSkillMessageMap();
     }
 
     /**
      * 技能升级
      */
     public void upgrade(int skillId) {
-        Skill skill = skillEntity.getSkillInfo().getSkillMap().get(skillId);
-        skill.setSkillLevel(skill.getSkillLevel() + 1);
+        SkillMessage skillMessage = skillEntity.getSkillInfo().getSkillMessageMap().get(skillId);
+        skillMessage.setSkillLevel(skillMessage.getSkillLevel() + 1);
     }
 
     /**

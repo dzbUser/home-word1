@@ -3,10 +3,8 @@ package com.aiwan.server.user.role.skill.service;
 import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
-import com.aiwan.server.user.backpack.entity.BackpackEnt;
 import com.aiwan.server.user.role.skill.entity.SkillEntity;
-import com.aiwan.server.user.role.skill.model.Skill;
-import com.aiwan.server.user.role.skill.model.SkillInfo;
+import com.aiwan.server.user.role.skill.entity.SkillInfo;
 import com.aiwan.server.user.role.skill.model.SkillModel;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
@@ -39,7 +37,12 @@ public class SkillManager {
      * 等级技能静态资源
      */
     @Static(initializeMethodName = "initSkillLevelResource")
-    private Map<String, SkillLevelResource> skillLevelResourceMap = new HashMap<String, SkillLevelResource>();
+    private Map<Integer, Map<Integer, SkillLevelResource>> skillLevelResourceMap = new HashMap<Integer, Map<Integer, SkillLevelResource>>();
+
+    /**
+     * 技能最高等级
+     */
+    private Map<Integer, Integer> maxSkillLevelMap = new HashMap<>(16);
 
     /**
      * 缓存
@@ -108,9 +111,22 @@ public class SkillManager {
         } catch (Exception e) {
             throw new IllegalArgumentException("加载地图错误{" + SkillLevelResource.class.getName() + "}");
         }
-        for (int i = 0; i < list.size(); i++) {
-            skillLevelResourceMap.put(list.get(i).getId(), list.get(i));
+        for (SkillLevelResource skillLevelResource : list) {
+            //存储技能资源
+            Map<Integer, SkillLevelResource> levelMap = skillLevelResourceMap.get(skillLevelResource.getSkillId());
+            if (levelMap == null) {
+                levelMap = new HashMap<>(16);
+                skillLevelResourceMap.put(skillLevelResource.getSkillId(), levelMap);
+            }
+            levelMap.put(skillLevelResource.getSkillLevel(), skillLevelResource);
+
+            //存储最高等级
+            Integer maxLevel = maxSkillLevelMap.get(skillLevelResource.getSkillId());
+            if (maxLevel == null || skillLevelResource.getSkillLevel() > maxLevel) {
+                maxSkillLevelMap.put(skillLevelResource.getSkillId(), skillLevelResource.getSkillLevel());
+            }
         }
+        logger.debug("加载技能等级静态资源完毕");
     }
 
     /**
@@ -125,9 +141,22 @@ public class SkillManager {
     /**
      * 获取等级资源
      *
-     * @param id 技能id_等级
+     * @param skillId 技能id
+     * @param level 技能等级
      */
-    public SkillLevelResource getSkillLevelReById(String id) {
-        return skillLevelResourceMap.get(id);
+    public SkillLevelResource getSkillLevelReById(int skillId, int level) {
+        return skillLevelResourceMap.get(skillId).get(level);
     }
+
+    /**
+     * 获取技能最高等级
+     */
+    public int getMaxLevel(int skillId) {
+        return maxSkillLevelMap.get(skillId);
+    }
+
+    public Map<Integer, SkillResource> getSkillResourceMap() {
+        return skillResourceMap;
+    }
+
 }

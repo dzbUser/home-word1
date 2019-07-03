@@ -83,6 +83,39 @@ public class Role {
         roleEnt.setExperience(experience);
     }
 
+    public int getX() {
+        return roleEnt.getX();
+    }
+
+    public void setX(int x) {
+        roleEnt.setX(x);
+    }
+
+    public int getY() {
+        return roleEnt.getY();
+    }
+
+    public void setY(int y) {
+        roleEnt.setY(y);
+    }
+
+    public int getMap() {
+        return roleEnt.getMap();
+    }
+
+    public void setMap(int map) {
+        roleEnt.setMap(map);
+    }
+
+    public String getName() {
+        return roleEnt.getName();
+    }
+
+    public void setName(String name) {
+        roleEnt.setName(name);
+    }
+
+
 
 
     /** 升级所需经验 */

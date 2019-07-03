@@ -18,6 +18,11 @@ public class MoveCommand extends AbstractSceneCommand {
 
     }
 
+    @Override
+    public void action() {
+
+    }
+
     public MoveCommand(int targetX, int targetY) {
         this.targetX = targetX;
         this.targetY = targetY;

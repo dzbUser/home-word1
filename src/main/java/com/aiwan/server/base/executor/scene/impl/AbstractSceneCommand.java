@@ -29,6 +29,10 @@ public abstract class AbstractSceneCommand extends AbstractCommand {
         return Math.abs(getKey() % poolSize);
     }
 
+    @Override
+    public void active() {
+        action();
+    }
     public String getAccountId() {
         return accountId;
     }
@@ -52,4 +56,6 @@ public abstract class AbstractSceneCommand extends AbstractCommand {
     public void setMapId(int mapId) {
         this.mapId = mapId;
     }
+
+    public abstract void action();
 }

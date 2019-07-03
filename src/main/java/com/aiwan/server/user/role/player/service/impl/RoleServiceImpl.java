@@ -7,14 +7,12 @@ import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
+import com.aiwan.server.user.role.player.resource.RoleResource;
 import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.service.UserManager;
-import com.aiwan.server.util.AttributeUtil;
-import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.StatusCode;
-import com.aiwan.server.util.SMToDecodeData;
+import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +27,22 @@ import java.util.Map;
  * */
 @Service("roleService")
 public class RoleServiceImpl implements RoleService {
+    /**
+     * 新用户初始地址
+     */
+    private final static int ORINGINMAP = 1;
+    /**
+     * 新用户初始坐标
+     */
+    private final static int ORINGINX = 1;
+    private final static int ORINGINY = 3;
 
     Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
+
+    /**
+     * 名字最长长度
+     */
+    private final static int NAME_LENGTH = 10;
 
     @Autowired
     private RoleManager roleManager;
@@ -40,9 +52,14 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public void create(Session session, String accountId, int job, int sex) {
+    public void create(Session session, String accountId, String name, int job, int sex) {
+        if ("".equals(name) || name.length() > NAME_LENGTH) {
+            session.sendPromptMessage(PromptCode.NAME_EXCEED_MAXLENGTH, "");
+            return;
+        }
+        final RoleResource roleResource = GetBean.getRoleResourceManager().getRoleResource();
         //创建角色
-        Long id = roleManager.createRole(accountId, sex, job);
+        Long id = roleManager.createRole(accountId, name, sex, job, roleResource.getOriginMap(), roleResource.getOriginX(),roleResource.getOriginY());
         //把角色id存到用户数据库中
         User user = userManager.getUserByAccountId(accountId);
         user.addRole(id);
@@ -75,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
         if (role == null){
             logger.error("角色id：" + rId + "为空");
         }
-        SM_RoleMessage sm_roleMessage = SM_RoleMessage.valueOf(role.getJob(),role.getSex(),role.getLevel(),role.getExperience(),getUpgradeRequest(role.getLevel()),role.getAttribute().getFinalAttribute());
+        SM_RoleMessage sm_roleMessage = SM_RoleMessage.valueOf(role.getJob(), role.getSex(), role.getLevel(), role.getExperience(), getUpgradeRequest(role.getLevel()), role.getAttribute().getFinalAttribute(),role.getName());
 
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.VIEWROLEMESSAGE,sm_roleMessage);
         session.messageSend(decodeData);

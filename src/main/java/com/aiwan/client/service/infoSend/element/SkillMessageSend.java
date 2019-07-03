@@ -6,8 +6,15 @@ import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
 import com.aiwan.server.user.role.skill.protocol.*;
+import com.aiwan.server.user.role.skill.protocol.element.SkillElement;
+import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
+import com.aiwan.server.user.role.skill.resource.SkillResource;
+import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -15,7 +22,31 @@ import com.aiwan.server.util.SMToDecodeData;
  * 技能发生协议
  */
 public enum SkillMessageSend {
-
+    /**
+     * 查看所有技能
+     */
+    VIEWALLSKILL(0) {
+        @Override
+        public void messageSend(String message) {
+            Map<Integer, SkillResource> map = Collections.unmodifiableMap(GetBean.getSkillManager().getSkillResourceMap());
+            StringBuffer stringBuffer = new StringBuffer();
+            //输出道具
+            for (SkillResource skillElement : map.values()) {
+                SkillResource skillResource = GetBean.getSkillManager().getSkillResourceBySkillId(skillElement.getSkillId());
+                stringBuffer.append("名字:" + skillResource.getSkillName() + " 等级:" + 1);
+                SkillLevelResource skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), 1);
+                stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%\n");
+                if (1 < GetBean.getSkillManager().getMaxLevel(skillElement.getSkillId())) {
+                    skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), (2));
+                    stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " 经验消耗:" + skillLevelResource.getExperienceDemand() + "\n\n");
+                } else {
+                    stringBuffer.append("技能达到最高等级\n\n");
+                }
+            }
+            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+            gameInterface.printOtherMessage(stringBuffer.toString());
+        }
+    },
     /**
      * 学习技能
      */

@@ -31,6 +31,24 @@ public class RoleResource {
     @CellMapping(name = "maxSkillNum")
     private int maxSkillNum;
 
+    /**
+     * 初始地图
+     */
+    @CellMapping(name = "originMap")
+    private int originMap;
+
+    /**
+     * 初始x坐标
+     */
+    @CellMapping(name = "originX")
+    private int originX;
+
+    /**
+     * 初始y坐标
+     */
+    @CellMapping(name = "originY")
+    private int originY;
+
 
 
     /** 属性类型初始化列表 */
@@ -75,5 +93,29 @@ public class RoleResource {
 
     public void setMaxSkillNum(int maxSkillNum) {
         this.maxSkillNum = maxSkillNum;
+    }
+
+    public int getOriginMap() {
+        return originMap;
+    }
+
+    public void setOriginMap(int originMap) {
+        this.originMap = originMap;
+    }
+
+    public int getOriginX() {
+        return originX;
+    }
+
+    public void setOriginX(int originX) {
+        this.originX = originX;
+    }
+
+    public int getOriginY() {
+        return originY;
+    }
+
+    public void setOriginY(int originY) {
+        this.originY = originY;
     }
 }

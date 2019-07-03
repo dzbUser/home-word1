@@ -146,4 +146,9 @@ public class PromptCode {
      * 技能移动成功
      */
     public final static int MOVESKILLSUCCESS = 33;
+
+    /**
+     * 角色姓名长度过长
+     */
+    public final static int NAME_EXCEED_MAXLENGTH = 34;
 }

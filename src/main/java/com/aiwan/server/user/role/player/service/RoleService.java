@@ -16,7 +16,7 @@ public interface RoleService {
     /**
      * 创建角色
      * */
-    void create(Session session, String accountId, int job, int sex);
+    void create(Session session, String accountId, String name, int job, int sex);
 
     /**
      * 获取角色信息

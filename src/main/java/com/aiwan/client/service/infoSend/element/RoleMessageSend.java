@@ -39,13 +39,14 @@ public enum  RoleMessageSend {
             cm_createRole.setAccountId(LoginUser.getUsername());
             cm_createRole.setJob(job);
             cm_createRole.setSex(sex);
+            cm_createRole.setName(messages[2]);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.CREATEROLE,cm_createRole));
         }
 
         @Override
         public boolean verify(String message){
             String[] messages = message.split(" ");
-            if (messages.length != 2|| !Verification.canParseInt(messages[0])||!Verification.canParseInt(messages[1])){
+            if (messages.length != 3 || !Verification.canParseInt(messages[0]) || !Verification.canParseInt(messages[1])) {
                 return false;
             }
             int job = Integer.parseInt(messages[0]);

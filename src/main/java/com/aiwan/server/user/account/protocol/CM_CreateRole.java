@@ -15,6 +15,19 @@ public class CM_CreateRole implements Serializable {
     private int job;
     private String accountId;
 
+    /**
+     * 角色名字
+     */
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getSex() {
         return sex;
     }

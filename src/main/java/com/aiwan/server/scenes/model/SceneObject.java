@@ -9,26 +9,18 @@ import java.util.Map;
  * @author dengzebiao
  * 场景对象
  */
-public abstract class SceneObject {
+public class SceneObject {
 
     /**
      * 地图id
      */
-    private int mapId = 0;
+    private int mapId;
 
-    /**
-     * 场景id
-     */
-    private int sceneId = 0;
 
     /**
      * 存储角色
      */
-    Map<Long, Role> map = new HashMap<>();
-
-    public int getKey() {
-        return mapId | sceneId;
-    }
+    Map<Long, Role> roleMap = new HashMap<>();
 
     public int getMapId() {
         return mapId;
@@ -38,26 +30,40 @@ public abstract class SceneObject {
         this.mapId = mapId;
     }
 
-    public int getSceneId() {
-        return sceneId;
-    }
-
-    public void setSceneId(int sceneId) {
-        this.sceneId = sceneId;
-    }
 
     /**
      * 存角色
      */
     public void putRole(Role role) {
-        map.put(role.getId(), role);
+        roleMap.put(role.getId(), role);
     }
 
     /**
      * 移除角色
      */
     public void removeRole(Long rId) {
-        map.remove(rId);
+        roleMap.remove(rId);
+    }
+
+    /**
+     * 获取角色
+     */
+    public Role getRole(Long rId) {
+        return roleMap.get(rId);
+    }
+
+    public static SceneObject valueOf(int mapId) {
+        SceneObject sceneObject = new SceneObject();
+        sceneObject.setMapId(mapId);
+        return sceneObject;
+    }
+
+    public Map<Long, Role> getRoleMap() {
+        return roleMap;
+    }
+
+    public void setRoleMap(Map<Long, Role> roleMap) {
+        this.roleMap = roleMap;
     }
 }
 

@@ -13,10 +13,6 @@ public class MoveCommand extends AbstractSceneCommand {
 
     private int targetY;
 
-    @Override
-    public void active() {
-
-    }
 
     @Override
     public void action() {

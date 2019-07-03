@@ -6,6 +6,7 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
+import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.scenes.protocol.RoleMessage;
 import com.aiwan.server.scenes.protocol.SM_RolesInMap;
 import com.aiwan.server.user.role.player.model.Role;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,21 +33,23 @@ public class MapManager {
     @Static(initializeMethodName = "initMapResource")
     private Map<Integer, MapResource> mapResourceMap = new ConcurrentHashMap<Integer, MapResource>();
 
-    /** 获取地图 */
-    public MapResource getMapResource(Integer mapType){
-        return mapResourceMap.get(mapType);
-    }
-
     /**存储在本地图中的用户*/
-    private Map<Integer, Map<Long, Role>> roleMap = new ConcurrentHashMap<Integer, Map<Long, Role>>();
+    private Map<Integer, SceneObject> sceneMap = new HashMap<>();
 
     /**
      * 初始化资源
      * */
     public void init(){
         for (Map.Entry<Integer,MapResource> entry:mapResourceMap.entrySet()){
-            roleMap.put(entry.getKey(), new ConcurrentHashMap<Long, Role>(36));
+            sceneMap.put(entry.getKey(), SceneObject.valueOf(entry.getKey()));
         }
+    }
+
+    /**
+     * 获取地图
+     */
+    public MapResource getMapResource(Integer mapType) {
+        return mapResourceMap.get(mapType);
     }
 
     /**  存入地图资源*/
@@ -56,56 +60,19 @@ public class MapManager {
 
     /** 添加用户 */
     public void putRole(Role role) {
-        roleMap.get(role.getMap()).put(role.getId(), role);
+        sceneMap.get(role.getMap()).putRole(role);
     }
 
     /** 获取用户 */
     public Role getUser(Integer mapType, Long rId) {
-        return roleMap.get(mapType).get(rId);
+        return sceneMap.get(mapType).getRole(rId);
     }
 
     /** 删除用户 */
     public void removeRole(Integer mapType, Long rId) {
-        roleMap.get(mapType).remove(rId);
+        sceneMap.get(mapType).removeRole(rId);
     }
 
-    /** 获取地图信息 */
-    public String getMapContent(int x,int y,int mapType){
-        //获取地图静态资源
-        MapResource mapResource = mapResourceMap.get(mapType);
-        StringBuilder stringBuilder = new StringBuilder();
-        //添加地图资源
-        stringBuilder.append("您所在位子为"+mapResource.getName()+"的("+x+","+y+")\n");
-
-        //创建用户标志
-        byte[][] userFlag = new byte[mapResource.getHeight()][mapResource.getWidth()];
-        //初始化用户标志
-        for (int i = 0;i < mapResource.getHeight();i++) {
-            for (int j = 0; j < mapResource.getWidth(); j++) {
-                userFlag[i][j] = 0;
-            }
-        }
-
-        /** 添加用户标志 */
-        for (Map.Entry<Long, Role> entry : roleMap.get(mapType).entrySet()) {
-            Role role = entry.getValue();
-            userFlag[role.getX() - 1][role.getY() - 1] = 1;
-        }
-
-        for (int i = 0;i < mapResource.getHeight();i++){
-            for (int j = 0;j < mapResource.getWidth();j++){
-                if (userFlag[i][j] == 1) {
-                    stringBuilder.append("用户 ");
-                }
-
-                else{
-                    stringBuilder.append(mapResource.getMapMessage()[i][j]+" ");
-                }
-            }
-            stringBuilder.append("\n");
-        }
-        return stringBuilder.toString();
-    }
 
     /** 是否可行走 */
     public boolean allowMove(int x,int y,int mapType){
@@ -124,7 +91,7 @@ public class MapManager {
     /** 地图内所有用户发送地图消息 */
     public void sendMessageToUsers(int id) {
         //获取地图中的所有用户
-        Map<Long, Role> map = roleMap.get(id);
+        Map<Long, Role> map = sceneMap.get(id).getRoleMap();
         List<RoleMessage> roleMessages = new ArrayList<>();
         //遍历所有用户，添加到角色列表中
         for (Role role : map.values()) {

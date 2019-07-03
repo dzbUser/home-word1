@@ -5,7 +5,6 @@ import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.model.User;
-import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.user.account.service.UserManager;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
@@ -38,8 +37,6 @@ public class ScenesServiceImpl implements ScenesService{
     @Override
     public void move(String accountId, int x, int y, final Session session) {
         logger.info("{}请求移动到({}.{})", accountId, x, y);
-        Object data;
-        int type ;
         User user = session.getUser();
         Role role = GetBean.getRoleManager().load(user.getRoleId());
         if (GetBean.getMapManager().allowMove(x, y, user.getMap())) {
@@ -48,12 +45,8 @@ public class ScenesServiceImpl implements ScenesService{
             GetBean.getRoleManager().save(role);
             //加入地图资源
             GetBean.getMapManager().putRole(role);
-            SM_Move sm_move = SM_Move.valueOf(x, y, 1);
-            data = sm_move;
-            type = StatusCode.MOVESUCCESS;
             //对所有在线用户发送地图信息
             GetBean.getMapManager().sendMessageToUsers(role.getMap());
-            session.messageSend(SMToDecodeData.shift(type, data));
             logger.info("{}请求移动到({}.{})成功", accountId, x, y);
         } else {
             session.sendPromptMessage(PromptCode.MOVEFAIL, "");
@@ -91,11 +84,6 @@ public class ScenesServiceImpl implements ScenesService{
         GetBean.getMapManager().putRole(role);
         //写回
         GetBean.getRoleManager().save(role);
-        SM_Shift sm_shift = SM_Shift.valueOf(mapResource.getOriginX(), mapResource.getOriginY(), map);
-        Object data = sm_shift;
-        int type = StatusCode.SHIFTSUCCESS;
-        DecodeData decodeData = SMToDecodeData.shift((short) type,data);
-        session.messageSend(decodeData);
         //给所有玩家发送消息
         GetBean.getMapManager().sendMessageToUsers(role.getMap());
         //如果与换到新的地图，需要给旧的地图发送改变消息

@@ -9,19 +9,15 @@ import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.protocol.RoleMessage;
-import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.scenes.protocol.SM_RolesInMap;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
-import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
-import org.omg.PortableInterceptor.LOCATION_FORWARD;
 
 import javax.swing.*;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -84,30 +80,6 @@ public class UserInfoReceive {
         LoginUser.setAccountId("");
         LoginUser.setRoles(null);
     }
-
-    /** 用户移动接收信息 */
-    @InfoReceiveMethod(status = StatusCode.MOVESUCCESS)
-    public void move(SM_Move sm_move){
-        LoginUser.setCurrentY(sm_move.getTargetY());
-        LoginUser.setCurrentX(sm_move.getTargetX());
-        if (sm_move.getStatus() == 1){
-            //输出到客户端
-            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-            gameInterface.printOtherMessage("移动成功");
-        }
-
-    }
-
-    /** 地图跳转 */
-    @InfoReceiveMethod(status = StatusCode.SHIFTSUCCESS)
-    public void shift(SM_Shift sm_shift){
-        LoginUser.setCurrentY(sm_shift.getTargetY());
-        LoginUser.setCurrentX(sm_shift.getTargetX());
-        LoginUser.setMap(sm_shift.getMap());
-        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-        gameInterface.printOtherMessage("跳转成功");
-    }
-
     /** 被顶号 */
     @InfoReceiveMethod(status = StatusCode.INSIST)
     public void insit(String message){

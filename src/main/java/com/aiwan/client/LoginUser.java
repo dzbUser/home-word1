@@ -1,7 +1,6 @@
 package com.aiwan.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.aiwan.server.scenes.protocol.RoleMessage;
 
 import java.util.List;
 
@@ -12,19 +11,20 @@ import java.util.List;
 public class LoginUser {
 
 
-    private static String username = "";
+    private static String accountId = "";
     private static int map;
     private static String mapMessage;
     private static int currentX = -1;
     private static int currentY = -1;
     private static List<Long> roles;
+    private static List<RoleMessage> roleMessages;
 
-    public static String getUsername() {
-        return username;
+    public static String getAccountId() {
+        return accountId;
     }
 
-    public static void setUsername(String username) {
-        LoginUser.username = username;
+    public static void setAccountId(String accountId) {
+        LoginUser.accountId = accountId;
     }
 
     public static int getCurrentX() {
@@ -65,5 +65,13 @@ public class LoginUser {
 
     public static void setRoles(List<Long> roles) {
         LoginUser.roles = roles;
+    }
+
+    public static List<RoleMessage> getRoleMessages() {
+        return roleMessages;
+    }
+
+    public static void setRoleMessages(List<RoleMessage> roleMessages) {
+        LoginUser.roleMessages = roleMessages;
     }
 }

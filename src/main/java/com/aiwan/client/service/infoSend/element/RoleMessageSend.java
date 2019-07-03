@@ -36,7 +36,7 @@ public enum  RoleMessageSend {
             int sex = Integer.parseInt(messages[1]);
             //获取性别和职业
             CM_CreateRole cm_createRole = new CM_CreateRole();
-            cm_createRole.setAccountId(LoginUser.getUsername());
+            cm_createRole.setAccountId(LoginUser.getAccountId());
             cm_createRole.setJob(job);
             cm_createRole.setSex(sex);
             cm_createRole.setName(messages[2]);
@@ -78,7 +78,7 @@ public enum  RoleMessageSend {
             move.setCurrentY(LoginUser.getCurrentY());
             move.setTargetX(x);
             move.setTargetY(y);
-            move.setUsername(LoginUser.getUsername());
+            move.setUsername(LoginUser.getAccountId());
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.MOVE,move));
         }
 
@@ -106,7 +106,7 @@ public enum  RoleMessageSend {
             int map = Integer.parseInt(message);
             CM_Shift cm_shift = new CM_Shift();
             cm_shift.setMap(map);
-            cm_shift.setUsername(LoginUser.getUsername());
+            cm_shift.setrId(LoginUser.getRoles().get(0));
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.SHIFT,cm_shift));
         }
 
@@ -130,7 +130,7 @@ public enum  RoleMessageSend {
             }
 
             CM_RoleMessage cm_roleMessage = new CM_RoleMessage();
-            cm_roleMessage.setAccountId(LoginUser.getUsername());
+            cm_roleMessage.setAccountId(LoginUser.getAccountId());
             cm_roleMessage.setrId(LoginUser.getRoles().get(0));
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.GETROLEMESSAGE,cm_roleMessage));
         }
@@ -147,7 +147,7 @@ public enum  RoleMessageSend {
                 return;
             }
             CM_ViewEquipBar cm_viewEquipBar = new CM_ViewEquipBar();
-            cm_viewEquipBar.setAccountId(LoginUser.getUsername());
+            cm_viewEquipBar.setAccountId(LoginUser.getAccountId());
             cm_viewEquipBar.setrId(LoginUser.getRoles().get(0));
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEWQEUIP,cm_viewEquipBar));
         }
@@ -168,7 +168,7 @@ public enum  RoleMessageSend {
             }
             //解析字符串含义
             int position = Integer.parseInt(message);
-            CM_UnloadingEquipment cm_unloadingEquipment = CM_UnloadingEquipment.valueOf(LoginUser.getUsername(), LoginUser.getRoles().get(0), position);
+            CM_UnloadingEquipment cm_unloadingEquipment = CM_UnloadingEquipment.valueOf(LoginUser.getAccountId(), LoginUser.getRoles().get(0), position);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.UNLOADEQUIP, cm_unloadingEquipment));
         }
 

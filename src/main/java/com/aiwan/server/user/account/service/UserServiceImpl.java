@@ -5,6 +5,7 @@ import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.*;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
         DecodeData decodeData;
         SM_UserMessage sm_userMessage = new SM_UserMessage();
         //~~~~~~~~~~第一步~``````
-        Session session1 = SessionManager.getSessionByUsername(accountId);
+        Session session1 = SessionManager.getSessionByAccountId(accountId);
         if (session1 !=null){
             logger.info(accountId + "用户在线");
             sm_userMessage.setStatus(false);
@@ -70,23 +71,21 @@ public class UserServiceImpl implements UserService {
             //加入缓存
             session.setUser(user);
             SessionManager.putSessionByUsername(accountId, session);
-
+            sm_userMessage.setStatus(true);
+            sm_userMessage.setAccountId(user.getAcountId());
             //~~~~~~~~~~~第四步~~~~~~~~~~~~~
             if (user.getRoleNum() == 0){
+                sm_userMessage.setAccountId(user.getAcountId());
                 sm_userMessage.setCreated(false);
                 sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
             }else {
                 //把用户添加到地图资源中
-                GetBean.getMapManager().putUser(user);
-                GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+                Role role = GetBean.getRoleManager().load(user.getRoleId());
+                GetBean.getMapManager().putRole(role);
+                GetBean.getMapManager().sendMessageToUsers(role.getMap());
+                sm_userMessage.setCreated(true);
+                sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
             }
-            sm_userMessage.setAccountId(user.getAcountId());
-            sm_userMessage.setMap(user.getMap());
-            sm_userMessage.setCurrentX(user.getCurrentX());
-            sm_userMessage.setCurrentY(user.getCurrentY());
-            sm_userMessage.setStatus(true);
-            sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
-            sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
             decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
             logger.info(user.getAcountId()+"登录成功！");
         }
@@ -117,20 +116,26 @@ public class UserServiceImpl implements UserService {
         * 1.删除缓存
         * 2.从地图资源中删除
         * */
-        SessionManager.removeSessionByUsername(accountId);
+        SessionManager.removeSessionByAccountId(accountId);
         logger.info(accountId + "注销成功！");
         String content = "注销用户成功！";
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.LOGOUTSUCCESS,content);
         User user = userManager.getUserByAccountId(accountId);
         //保存用户数据
         userManager.save(user);
-        //把用户从地图资源中移除
-        GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
+        //角色不会空
+        if (user.getRoleId() != null) {
+            //获取角色
+            Role role = GetBean.getRoleManager().load(user.getRoleId());
+            //把用户从地图资源中移除
+            GetBean.getMapManager().removeRole(role.getMap(), role.getId());
+            GetBean.getMapManager().sendMessageToUsers(role.getMap());
+        }
         //session移除用户信息
         session.setUser(null);
         session.messageSend(decodeData);
         //给其余玩家发送信息
-        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+
     }
 
     /**
@@ -153,7 +158,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //发送顶替下线信息
-        Session session1 = SessionManager.getSessionByUsername(accountId);
+        Session session1 = SessionManager.getSessionByAccountId(accountId);
         if (session1!= null){
             session1.messageSend(SMToDecodeData.shift((short) StatusCode.INSIST,"您已被顶替下线！"));
         }
@@ -170,19 +175,15 @@ public class UserServiceImpl implements UserService {
             sm_userMessage.setOtherMessage("您还未创建角色，请创建您的角色");
         }else{
             //把用户添加到地图资源中
-            GetBean.getMapManager().putUser(user);
+            Role role = GetBean.getRoleManager().load(user.getRoleId());
+            GetBean.getMapManager().putRole(role);
             //给其余玩家发送地图信息
-            GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+            GetBean.getMapManager().sendMessageToUsers(role.getMap());
+            sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
         }
 
         sm_userMessage.setAccountId(user.getAcountId());
-        sm_userMessage.setMap(user.getMap());
-        sm_userMessage.setCurrentX(user.getCurrentX());
-        sm_userMessage.setCurrentY(user.getCurrentY());
-        sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
-        sm_userMessage.setMapMessage(GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
         sm_userMessage.setStatus(true);
-
         logger.info(accountId + "高级登录成功");
         decodeData = SMToDecodeData.shift(StatusCode.LOGIN,sm_userMessage);
         session.messageSend(decodeData);
@@ -211,15 +212,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteSave(String accountId) {
         //删除人物session缓存
-        SessionManager.removeSessionByUsername(accountId);
+        SessionManager.removeSessionByAccountId(accountId);
         logger.info(accountId+":删除人物缓存与保存信息");
         User user = userManager.getUserByAccountId(accountId);
         //保存用户数据
         userManager.save(user);
-        //把用户从地图资源中移除
-        GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
-        //给他玩家发送信息
-        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+        //角色不会空
+        if (user.getRoleId() != null) {
+            //获取角色
+            Role role = GetBean.getRoleManager().load(user.getRoleId());
+            //把用户从地图资源中移除
+            GetBean.getMapManager().removeRole(role.getMap(), role.getId());
+            GetBean.getMapManager().sendMessageToUsers(role.getMap());
+        }
     }
 
 }

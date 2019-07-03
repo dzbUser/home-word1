@@ -34,7 +34,7 @@ public enum BackMessageSend {
             int id = Integer.parseInt(messages[0]);
             int num = Integer.parseInt(messages[1]);
             CM_ObtainProp cm_obtainProp = new CM_ObtainProp();
-            cm_obtainProp.setAccountId(LoginUser.getUsername());
+            cm_obtainProp.setAccountId(LoginUser.getAccountId());
             cm_obtainProp.setId(id);
             cm_obtainProp.setNum(num);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.OBTAINPROP,cm_obtainProp));
@@ -55,7 +55,7 @@ public enum BackMessageSend {
         @Override
         public void messageSend(String message){
             CM_ViewBackpack cm_viewBackpack = new CM_ViewBackpack();
-            cm_viewBackpack.setAccountId(LoginUser.getUsername());
+            cm_viewBackpack.setAccountId(LoginUser.getAccountId());
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEWBACKPACK,cm_viewBackpack));
         }
     },
@@ -74,7 +74,7 @@ public enum BackMessageSend {
             int position = Integer.parseInt(messages[0]);
             int num = Integer.parseInt(messages[1]);
             CM_PropUse cm_propUse = new CM_PropUse();
-            cm_propUse.setAccountId(LoginUser.getUsername());
+            cm_propUse.setAccountId(LoginUser.getAccountId());
             cm_propUse.setrId(LoginUser.getRoles().get(0));
             cm_propUse.setPosition(position);
             cm_propUse.setNum(num);
@@ -107,7 +107,7 @@ public enum BackMessageSend {
             int position = Integer.parseInt(messages[0]);
             int num = Integer.parseInt(messages[1]);
 
-            CM_DropProps cm_dropProps = CM_DropProps.valueOf(LoginUser.getUsername(), position, num);
+            CM_DropProps cm_dropProps = CM_DropProps.valueOf(LoginUser.getAccountId(), position, num);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.DROPPROP, cm_dropProps));
         }
 
@@ -135,7 +135,7 @@ public enum BackMessageSend {
             }
             //解析字符串含义
             int position = Integer.parseInt(message);
-            CM_Equip cm_equip = CM_Equip.valueOf(LoginUser.getUsername(), LoginUser.getRoles().get(0), position);
+            CM_Equip cm_equip = CM_Equip.valueOf(LoginUser.getAccountId(), LoginUser.getRoles().get(0), position);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.EQUIP, cm_equip));
         }
 

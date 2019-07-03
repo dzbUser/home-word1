@@ -20,7 +20,7 @@ public enum  MountMessageSend {
         @Override
         public void messageSend(String message){
             CM_ViewMount cm_viewMount = new CM_ViewMount();
-            cm_viewMount.setAccountId(LoginUser.getUsername());
+            cm_viewMount.setAccountId(LoginUser.getAccountId());
             cm_viewMount.setrId(LoginUser.getRoles().get(0));
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEWMOUNT,cm_viewMount));
         }
@@ -32,7 +32,7 @@ public enum  MountMessageSend {
         @Override
         public void messageSend(String message){
             CM_MountUpgrade cm_mountUpgrade = new CM_MountUpgrade();
-            cm_mountUpgrade.setAccountId(LoginUser.getUsername());
+            cm_mountUpgrade.setAccountId(LoginUser.getAccountId());
             cm_mountUpgrade.setrId(LoginUser.getRoles().get(0));
             cm_mountUpgrade.setResourceId(2);
             cm_mountUpgrade.setNum(1);

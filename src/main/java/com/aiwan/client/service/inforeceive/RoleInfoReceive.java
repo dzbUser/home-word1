@@ -33,7 +33,6 @@ public class RoleInfoReceive {
         LoginUser.setRoles(createRole.getRoles());
         GameInterface gameInterface = (GameInterface)InterfaceManager.getFrame("game");
         gameInterface.printOtherMessage(createRole.getMessage());
-        gameInterface.printMapMessage(createRole.getMapMessage());
     }
 
     /** 查看角色属性 */

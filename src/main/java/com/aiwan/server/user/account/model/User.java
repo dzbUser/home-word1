@@ -103,4 +103,15 @@ public class User {
     public void addRole(Long id){
         userEnt.getUserBaseInfo().getRoles().add(id);
     }
+
+    /**
+     * 获取角色id
+     */
+    public Long getRoleId() {
+        if (userEnt.getUserBaseInfo().getRoles().size() > 0) {
+            return userEnt.getUserBaseInfo().getRoles().get(0);
+        }
+        return null;
+    }
+
 }

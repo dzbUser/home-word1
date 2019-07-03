@@ -20,6 +20,6 @@ public class ScenesFacade {
 
     /** 角色地图跳转 */
     public void shift(final CM_Shift cm_shift, final Session session){
-        GetBean.getScenesService().shift(cm_shift.getUsername(), cm_shift.getMap(), session);
+        GetBean.getScenesService().shift(cm_shift.getrId(), cm_shift.getMap(), session);
     }
 }

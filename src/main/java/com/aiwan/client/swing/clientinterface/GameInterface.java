@@ -81,7 +81,7 @@ public class GameInterface extends JFrame{
                 }
                 int num  = Integer.parseInt(func.getText());
                 //角色是否有
-                if (LoginUser.getUsername().equals("")||LoginUser.getRoles() ==null || LoginUser.getRoles().size() == 0){
+                if (LoginUser.getAccountId().equals("") || LoginUser.getRoles() == null || LoginUser.getRoles().size() == 0) {
                     //验证是否为创建角色
                     if (navigationBar.getNum() != 1 || num != 1){
                         printOtherMessage("您还未创建角色，请创建角色！");
@@ -165,7 +165,7 @@ public class GameInterface extends JFrame{
         gameInterface.getOtherMessage().setText("");
         //发送注销协议
         CM_Logout cm_logout = new CM_Logout();
-        cm_logout.setUsername(LoginUser.getUsername());
+        cm_logout.setUsername(LoginUser.getAccountId());
         ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.LOGOUT,cm_logout));
         InterfaceManager.getFrame("game").setVisible(false);
         InterfaceManager.getFrame("login").setVisible(true);

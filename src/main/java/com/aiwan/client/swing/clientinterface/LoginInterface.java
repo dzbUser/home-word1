@@ -1,12 +1,9 @@
 package com.aiwan.client.swing.clientinterface;
 
-import com.aiwan.client.LoginUser;
-import com.aiwan.client.anno.InfoReceiveMethod;
 import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.server.user.account.protocol.CM_Login;
-import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
 import com.aiwan.server.util.StatusCode;

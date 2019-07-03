@@ -59,31 +59,32 @@ public class RoleServiceImpl implements RoleService {
         }
         final RoleResource roleResource = GetBean.getRoleResourceManager().getRoleResource();
         //创建角色
-        Long id = roleManager.createRole(accountId, name, sex, job, roleResource.getOriginMap(), roleResource.getOriginX(),roleResource.getOriginY());
+        Role role = roleManager.createRole(accountId, name, sex, job, roleResource.getOriginMap(), roleResource.getOriginX(), roleResource.getOriginY());
         //把角色id存到用户数据库中
         User user = userManager.getUserByAccountId(accountId);
-        user.addRole(id);
+        user.addRole(role.getId());
         //写回
         userManager.save(user);
         //创建装备栏
-        GetBean.getEquipmentService().createEquipmentBar(id);
+        GetBean.getEquipmentService().createEquipmentBar(role.getId());
         //创建坐骑
-        GetBean.getMountService().createMount(id);
+        GetBean.getMountService().createMount(role.getId());
         //创建技能模块
-        GetBean.getSkillManager().create(id);
+        GetBean.getSkillManager().create(role.getId());
+        //把角色添加到地图中
+        GetBean.getMapManager().putRole(role);
         //保存用户状态到session
         session.setUser(user);
         //创建返回信息
         SM_CreateRole sm_createRole = new SM_CreateRole();
         sm_createRole.setRoles(user.getUserBaseInfo().getRoles());
         sm_createRole.setMessage("角色创建成功");
-        sm_createRole.setMapMessage( GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap()));
         //发送协议
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLESUCESS,sm_createRole);
-        logger.info(user.getAcountId()+"创建角色"+id+"成功");
+        logger.info(user.getAcountId() + "创建角色" + role.getId() + "成功");
         //返回信息到客户端
         session.messageSend(decodeData);
-        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+        GetBean.getMapManager().sendMessageToUsers(user.getMap());
     }
 
     @Override

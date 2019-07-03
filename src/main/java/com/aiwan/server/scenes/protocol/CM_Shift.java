@@ -11,16 +11,16 @@ import java.io.Serializable;
  * */
 @ProtocolAnnotation(protocol = Protocol.SHIFT)
 public class CM_Shift implements Serializable {
-    private String username;
+    private Long rId;
     private int map;
 
 
-    public String getUsername() {
-        return username;
+    public Long getrId() {
+        return rId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setrId(Long rId) {
+        this.rId = rId;
     }
 
     public int getMap() {

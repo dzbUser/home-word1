@@ -7,13 +7,21 @@ import com.aiwan.client.service.ClientResourceManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
+import com.aiwan.server.scenes.mapresource.MapResource;
+import com.aiwan.server.scenes.protocol.RoleMessage;
 import com.aiwan.server.scenes.protocol.SM_Move;
+import com.aiwan.server.scenes.protocol.SM_RolesInMap;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
+import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
 
 import javax.swing.*;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -32,11 +40,8 @@ public class UserInfoReceive {
             return;
         }
         //设置登录缓存
-        LoginUser.setUsername(userMessage.getAccountId());
-        LoginUser.setCurrentX(userMessage.getCurrentX());
-        LoginUser.setCurrentY(userMessage.getCurrentY());
-        LoginUser.setMap(userMessage.getMap());
-        LoginUser.setMapMessage(userMessage.getMapMessage());
+        LoginUser.setAccountId(userMessage.getAccountId());
+
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
 
         if (!userMessage.isCreated()){
@@ -45,7 +50,6 @@ public class UserInfoReceive {
         }else {
             LoginUser.setRoles(userMessage.getRoles());
             gameInterface.printOtherMessage("登录成功");
-            gameInterface.printMapMessage(userMessage.getMapMessage());
         }
 
         InterfaceManager.getFrame("game").setVisible(true);
@@ -77,7 +81,7 @@ public class UserInfoReceive {
     /** 注销 */
     @InfoReceiveMethod(status = StatusCode.LOGOUTSUCCESS)
     public void logout(String message){
-        LoginUser.setUsername("");
+        LoginUser.setAccountId("");
         LoginUser.setRoles(null);
     }
 
@@ -89,7 +93,6 @@ public class UserInfoReceive {
         if (sm_move.getStatus() == 1){
             //输出到客户端
             GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-            gameInterface.printMapMessage(sm_move.getMapMessage());
             gameInterface.printOtherMessage("移动成功");
         }
 
@@ -101,9 +104,7 @@ public class UserInfoReceive {
         LoginUser.setCurrentY(sm_shift.getTargetY());
         LoginUser.setCurrentX(sm_shift.getTargetX());
         LoginUser.setMap(sm_shift.getMap());
-        LoginUser.setMapMessage(sm_shift.getMapMessage());
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-        gameInterface.printMapMessage(sm_shift.getMapMessage());
         gameInterface.printOtherMessage("跳转成功");
     }
 
@@ -119,8 +120,45 @@ public class UserInfoReceive {
 
     /** 接收地图信息 */
     @InfoReceiveMethod(status = StatusCode.MAPMESSAGE)
-    public void getMapMessage(String message){
+    public void getMapMessage(SM_RolesInMap sm_rolesInMap) {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-        gameInterface.printMapMessage(message);
+
+        //加入备注
+        LoginUser.setRoleMessages(sm_rolesInMap.getList());
+        LoginUser.setMap(sm_rolesInMap.getMap());
+        LoginUser.setCurrentX(sm_rolesInMap.getX());
+        LoginUser.setCurrentY(sm_rolesInMap.getY());
+
+        gameInterface.printMapMessage(getMapContent(sm_rolesInMap.getMap(), sm_rolesInMap.getX(), sm_rolesInMap.getY(), sm_rolesInMap.getList()));
+    }
+
+    /**
+     * 获取地图信息
+     */
+    public String getMapContent(int mapType, int x, int y, List<RoleMessage> list) {
+        //获取地图静态资源
+        MapResource mapResource = GetBean.getMapManager().getMapResource(mapType);
+        StringBuilder stringBuilder = new StringBuilder();
+        //添加地图资源
+        stringBuilder.append("您所在位子为" + mapResource.getName() + "的(" + x + "," + y + ")\n");
+
+        String[][] mapMessages = new String[mapResource.getWidth()][mapResource.getHeight()];
+        for (int i = 0; i < mapResource.getWidth(); i++) {
+            for (int j = 0; j < mapResource.getHeight(); j++) {
+                mapMessages[i][j] = mapResource.getMapMessage()[i][j];
+            }
+        }
+
+        for (RoleMessage roleMessage : list) {
+            mapMessages[roleMessage.getX() - 1][roleMessage.getY() - 1] = roleMessage.getName();
+        }
+
+        for (int i = 0; i < mapResource.getWidth(); i++) {
+            for (int j = 0; j < mapResource.getHeight(); j++) {
+                stringBuilder.append(mapMessages[i][j] + " ");
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 }

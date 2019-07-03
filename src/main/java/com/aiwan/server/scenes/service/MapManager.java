@@ -6,12 +6,14 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
-import com.aiwan.server.user.account.model.User;
+import com.aiwan.server.scenes.protocol.RoleMessage;
+import com.aiwan.server.scenes.protocol.SM_RolesInMap;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,14 +37,14 @@ public class MapManager {
     }
 
     /**存储在本地图中的用户*/
-    private Map<Integer,Map<String, User>> userMap = new ConcurrentHashMap<Integer,Map<String, User>>();
+    private Map<Integer, Map<Long, Role>> roleMap = new ConcurrentHashMap<Integer, Map<Long, Role>>();
 
     /**
      * 初始化资源
      * */
     public void init(){
         for (Map.Entry<Integer,MapResource> entry:mapResourceMap.entrySet()){
-            userMap.put(entry.getKey(),new ConcurrentHashMap<String, User>(36));
+            roleMap.put(entry.getKey(), new ConcurrentHashMap<Long, Role>(36));
         }
     }
 
@@ -53,18 +55,18 @@ public class MapManager {
     }
 
     /** 添加用户 */
-    public void putUser(User user){
-        userMap.get(user.getMap()).put(user.getAcountId(),user);
+    public void putRole(Role role) {
+        roleMap.get(role.getMap()).put(role.getId(), role);
     }
 
     /** 获取用户 */
-    public User getUser(Integer mapType,String username){
-        return userMap.get(mapType).get(username);
+    public Role getUser(Integer mapType, Long rId) {
+        return roleMap.get(mapType).get(rId);
     }
 
     /** 删除用户 */
-    public void removeUser(Integer mapType,String username){
-        userMap.get(mapType).remove(username);
+    public void removeRole(Integer mapType, Long rId) {
+        roleMap.get(mapType).remove(rId);
     }
 
     /** 获取地图信息 */
@@ -85,9 +87,9 @@ public class MapManager {
         }
 
         /** 添加用户标志 */
-        for (Map.Entry<String, User> entry : userMap.get(mapType).entrySet()) {
-            User  user  = entry.getValue();
-            userFlag[user.getCurrentX() - 1][user.getCurrentY() - 1] = 1;
+        for (Map.Entry<Long, Role> entry : roleMap.get(mapType).entrySet()) {
+            Role role = entry.getValue();
+            userFlag[role.getX() - 1][role.getY() - 1] = 1;
         }
 
         for (int i = 0;i < mapResource.getHeight();i++){
@@ -120,19 +122,21 @@ public class MapManager {
     }
 
     /** 地图内所有用户发送地图消息 */
-    public void sendMessageToUsers(int id,String accountId){
+    public void sendMessageToUsers(int id) {
         //获取地图中的所有用户
-        Map<String,User> map = userMap.get(id);
-        //遍历所有用户，发送消息
-        for (Map.Entry<String,User> entry:map.entrySet()){
+        Map<Long, Role> map = roleMap.get(id);
+        List<RoleMessage> roleMessages = new ArrayList<>();
+        //遍历所有用户，添加到角色列表中
+        for (Role role : map.values()) {
             //获取session
-            Session session = SessionManager.getSessionByUsername(entry.getValue().getAcountId());
-            //用户角色数大于0,排除本用户
-            if (session != null && entry.getValue().getUserBaseInfo().getRoles().size() > 0 && !entry.getValue().getAcountId().equals(accountId)) {
-                //发送信息
-                session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE,getMapContent(entry.getValue().getCurrentX(),entry.getValue().getCurrentY(),id)));
-            }
+            roleMessages.add(RoleMessage.valueOf(role.getId(), role.getName(), role.getX(), role.getY()));
         }
+        //遍历所有用户，发送消息
+        for (Role role : map.values()) {
+            Session session = SessionManager.getSessionByAccountId(role.getAccountId());
+            session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, SM_RolesInMap.valueOf(id, role.getX(), role.getY(), roleMessages)));
+        }
+
     }
 
     /**

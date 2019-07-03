@@ -27,7 +27,7 @@ public class RoleManager {
     /**
      * 创建角色
      * */
-    public Long createRole(String accountId, String name, int sex, int job, int map, int x, int y) {
+    public Role createRole(String accountId, String name, int sex, int job, int map, int x, int y) {
         RoleEnt roleEnt = new RoleEnt();
         Long id = IDUtil.getId();
         roleEnt.setId(id);
@@ -43,7 +43,9 @@ public class RoleManager {
         roleEnt.setUpdateTime(time);
         roleEnt.setCreatTime(time);
         cache.writeBack(id,roleEnt);
-        return id;
+        Role role = new Role();
+        role.setRoleEnt(roleEnt);
+        return role;
     }
 
     /**

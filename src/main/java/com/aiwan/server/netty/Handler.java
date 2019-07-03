@@ -83,8 +83,6 @@ public class Handler extends SimpleChannelInboundHandler<DecodeData> {
             User user = session.getUser();
             if (user!=null&&user.getAcountId()!=null){
                 //检查是否有用户缓存
-//                GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
-//                SessionManager.removeSessionByUsername(user.getAcountId());
                 GetBean.getUserService().deleteSave(user.getAcountId());
             }
             SessionManager.removeSessionByHashCode(ctx.channel().hashCode());

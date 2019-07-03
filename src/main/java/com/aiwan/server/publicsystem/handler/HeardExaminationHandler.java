@@ -30,7 +30,7 @@ public class HeardExaminationHandler extends ChannelInboundHandlerAdapter {
                 User user = session.getUser();
                 if (user!=null&&user.getAcountId()!=null){
                     //检查是否有用户缓存
-                    SessionManager.removeSessionByUsername(user.getAcountId());
+                    SessionManager.removeSessionByAccountId(user.getAcountId());
                 }
                 SessionManager.removeSessionByHashCode(ctx.channel().hashCode());
                 //断开连接

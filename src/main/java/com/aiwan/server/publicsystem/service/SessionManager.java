@@ -32,11 +32,11 @@ public class SessionManager {
         userMap.put(username,session);
     }
 
-    public static void removeSessionByUsername(String username){
-        userMap.remove(username);
+    public static void removeSessionByAccountId(String accountId) {
+        userMap.remove(accountId);
     }
 
-    public static Session getSessionByUsername(String username){
-        return userMap.get(username);
+    public static Session getSessionByAccountId(String AccountId) {
+        return userMap.get(AccountId);
     }
 }

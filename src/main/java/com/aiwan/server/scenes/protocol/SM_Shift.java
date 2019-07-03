@@ -10,16 +10,14 @@ public class SM_Shift implements Serializable {
     private int targetX;
     private int targetY;
     private int map;
-    private String mapMessage;
 
 
     /** 获取对象 */
-    public static SM_Shift valueOf(int targetX, int targetY, int map, String mapMessage){
+    public static SM_Shift valueOf(int targetX, int targetY, int map) {
         SM_Shift sm_shift = new SM_Shift();
         sm_shift.setMap(map);
         sm_shift.setTargetX(targetX);
         sm_shift.setTargetY(targetY);
-        sm_shift.setMapMessage(mapMessage);
         return sm_shift;
     }
 
@@ -47,11 +45,4 @@ public class SM_Shift implements Serializable {
         this.map = map;
     }
 
-    public String getMapMessage() {
-        return mapMessage;
-    }
-
-    public void setMapMessage(String mapMessage) {
-        this.mapMessage = mapMessage;
-    }
 }

@@ -12,38 +12,13 @@ public class SM_UserMessage implements Serializable {
     private boolean status;
     /** 用户账号 */
     private String accountId;
-    private int map;
-    private int currentX;
-    private int currentY;
     //是否创建角色
     private boolean created = true;
     //其他信息
     private String otherMessage;
-    private String mapMessage;
+
     List<Long> roles;
 
-    public int getMap() {
-        return map;
-    }
-    public void setMap(int map) {
-        this.map = map;
-    }
-
-    public int getCurrentX() {
-        return currentX;
-    }
-
-    public void setCurrentX(int currentX) {
-        this.currentX = currentX;
-    }
-
-    public int getCurrentY() {
-        return currentY;
-    }
-
-    public void setCurrentY(int currentY) {
-        this.currentY = currentY;
-    }
 
     public String getAccountId() {
         return accountId;
@@ -53,13 +28,6 @@ public class SM_UserMessage implements Serializable {
         this.accountId = accountId;
     }
 
-    public String getMapMessage() {
-        return mapMessage;
-    }
-
-    public void setMapMessage(String mapMessage) {
-        this.mapMessage = mapMessage;
-    }
 
     public boolean isCreated() {
         return created;

@@ -10,7 +10,6 @@ import java.util.List;
 public class SM_CreateRole implements Serializable {
     private List<Long> roles;
     private String message;
-    private String mapMessage;
 
     public List<Long> getRoles() {
         return roles;
@@ -27,15 +26,6 @@ public class SM_CreateRole implements Serializable {
 
     public SM_CreateRole setMessage(String message) {
         this.message = message;
-        return this;
-    }
-
-    public String getMapMessage() {
-        return mapMessage;
-    }
-
-    public SM_CreateRole setMapMessage(String mapMessage) {
-        this.mapMessage = mapMessage;
         return this;
     }
 }

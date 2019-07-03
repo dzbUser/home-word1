@@ -2,14 +2,12 @@ package com.aiwan.server.scenes.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.scenes.mapresource.MapResource;
-import com.aiwan.server.user.account.model.User;
-import com.aiwan.server.scenes.protocol.CM_Move;
-import com.aiwan.server.scenes.protocol.CM_Shift;
-import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.scenes.protocol.SM_Shift;
+import com.aiwan.server.user.account.model.User;
+import com.aiwan.server.scenes.protocol.SM_Move;
 import com.aiwan.server.user.account.service.UserManager;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,15 +41,18 @@ public class ScenesServiceImpl implements ScenesService{
         Object data;
         int type ;
         User user = session.getUser();
+        Role role = GetBean.getRoleManager().load(user.getRoleId());
         if (GetBean.getMapManager().allowMove(x, y, user.getMap())) {
-            user.setCurrentX(x);
-            user.setCurrentY(y);
-            userManager.save(user);
-            SM_Move sm_move = SM_Move.valueOf(x, y, 1, GetBean.getMapManager().getMapContent(x, y, user.getMap()));
+            role.setX(x);
+            role.setY(y);
+            GetBean.getRoleManager().save(role);
+            //加入地图资源
+            GetBean.getMapManager().putRole(role);
+            SM_Move sm_move = SM_Move.valueOf(x, y, 1);
             data = sm_move;
             type = StatusCode.MOVESUCCESS;
             //对所有在线用户发送地图信息
-            GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+            GetBean.getMapManager().sendMessageToUsers(role.getMap());
             session.messageSend(SMToDecodeData.shift(type, data));
             logger.info("{}请求移动到({}.{})成功", accountId, x, y);
         } else {
@@ -64,38 +65,42 @@ public class ScenesServiceImpl implements ScenesService{
      * 地图跳转
      * */
     @Override
-    public void shift(String accountId, int map, final Session session) {
-        logger.info("{}请求地图跳转到{}", accountId, map);
-        User user = session.getUser();
+    public void shift(Long rId, int map, final Session session) {
+        logger.info("角色{}请求地图跳转到{}", rId, map);
         //是否有该地图，若无则放回无该地图
         if (GetBean.getMapManager().getMapResource(map) == null) {
             session.sendPromptMessage(PromptCode.MAPNOEXIST, "");
-            logger.info("{}请求失败，原因：没有该地图", accountId);
+            logger.info("{}请求失败，原因：没有该地图", rId);
             return;
         }
-        //获取就地图位置
-        int oldMap = user.getMap();
+
+        //获取角色
+        Role role = GetBean.getRoleManager().load(rId);
+        //获取就地图
+        int oldMap = role.getMap();
+
         //从旧地图中去除
-        GetBean.getMapManager().removeUser(user.getMap(),user.getAcountId());
+        GetBean.getMapManager().removeRole(role.getMap(), rId);
         MapResource mapResource = GetBean.getMapManager().getMapResource(map);
-        user.setMap(map);
-        user.setCurrentY(mapResource.getOriginY());
-        user.setCurrentX(mapResource.getOriginX());
+
+        //初始化化角色坐标
+        role.setMap(map);
+        role.setX(mapResource.getOriginX());
+        role.setY(mapResource.getOriginY());
         //添加到地图资源中
-        GetBean.getMapManager().putUser(user);
-        //加入缓存
-        userManager.save(user);
-        String content = GetBean.getMapManager().getMapContent(user.getCurrentX(),user.getCurrentY(),user.getMap());
-        SM_Shift sm_shift = SM_Shift.valueOf(mapResource.getOriginX(), mapResource.getOriginY(), map, content);
+        GetBean.getMapManager().putRole(role);
+        //写回
+        GetBean.getRoleManager().save(role);
+        SM_Shift sm_shift = SM_Shift.valueOf(mapResource.getOriginX(), mapResource.getOriginY(), map);
         Object data = sm_shift;
         int type = StatusCode.SHIFTSUCCESS;
         DecodeData decodeData = SMToDecodeData.shift((short) type,data);
         session.messageSend(decodeData);
         //给所有玩家发送消息
-        GetBean.getMapManager().sendMessageToUsers(user.getMap(),user.getAcountId());
+        GetBean.getMapManager().sendMessageToUsers(role.getMap());
         //如果与换到新的地图，需要给旧的地图发送改变消息
-        if (user.getMap()!=oldMap){
-            GetBean.getMapManager().sendMessageToUsers(oldMap,user.getAcountId());
+        if (map != oldMap) {
+            GetBean.getMapManager().sendMessageToUsers(oldMap);
         }
         logger.info("请求成功");
     }
@@ -103,15 +108,15 @@ public class ScenesServiceImpl implements ScenesService{
     @Override
     public void moveUserPosition(String accountId, int x, int y) {
 
-        //改缓存
-        User user = userManager.getUserByAccountId(accountId);
-        user.setCurrentX(x);
-        user.setCurrentY(y);
-        userManager.save(user);
-
-        //改地图内的用户
-        GetBean.getMapManager().putUser(user);
-        GetBean.getMapManager().sendMessageToUsers(user.getMap(), user.getAcountId());
-        logger.info("{}请求移动到({}.{})成功", accountId, x, y);
+//        //改缓存
+//        User user = userManager.getUserByAccountId(accountId);
+//        user.setCurrentX(x);
+//        user.setCurrentY(y);
+//        userManager.save(user);
+//
+//        //改地图内的用户
+//        GetBean.getMapManager().putRole(user);
+//        GetBean.getMapManager().sendMessageToUsers(user.getMap(), user.getAcountId());
+//        logger.info("{}请求移动到({}.{})成功", accountId, x, y);
     }
 }

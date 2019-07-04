@@ -6,11 +6,12 @@ import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourceManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
+import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
 import com.aiwan.server.scenes.mapresource.MapResource;
+import com.aiwan.server.scenes.protocol.MonsterMessage;
 import com.aiwan.server.scenes.protocol.RoleMessage;
-import com.aiwan.server.scenes.protocol.SM_RolesInMap;
-import com.aiwan.server.scenes.protocol.SM_Shift;
+import com.aiwan.server.scenes.protocol.SM_MapMessage;
 import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.GetBean;
@@ -79,6 +80,7 @@ public class UserInfoReceive {
     public void logout(String message){
         LoginUser.setAccountId("");
         LoginUser.setRoles(null);
+        LoginUser.setMapMessage(null);
     }
     /** 被顶号 */
     @InfoReceiveMethod(status = StatusCode.INSIST)
@@ -92,22 +94,22 @@ public class UserInfoReceive {
 
     /** 接收地图信息 */
     @InfoReceiveMethod(status = StatusCode.MAPMESSAGE)
-    public void getMapMessage(SM_RolesInMap sm_rolesInMap) {
+    public void getMapMessage(SM_MapMessage sm_MapMessage) {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
 
         //加入备注
-        LoginUser.setRoleMessages(sm_rolesInMap.getList());
-        LoginUser.setMap(sm_rolesInMap.getMap());
-        LoginUser.setCurrentX(sm_rolesInMap.getX());
-        LoginUser.setCurrentY(sm_rolesInMap.getY());
+        LoginUser.setMapMessage(sm_MapMessage);
+        LoginUser.setMap(sm_MapMessage.getMap());
+        LoginUser.setCurrentX(sm_MapMessage.getX());
+        LoginUser.setCurrentY(sm_MapMessage.getY());
 
-        gameInterface.printMapMessage(getMapContent(sm_rolesInMap.getMap(), sm_rolesInMap.getX(), sm_rolesInMap.getY(), sm_rolesInMap.getList()));
+        gameInterface.printMapMessage(getMapContent(sm_MapMessage.getMap(), sm_MapMessage.getX(), sm_MapMessage.getY(), sm_MapMessage.getRoleList(), sm_MapMessage.getMonsterList()));
     }
 
     /**
      * 获取地图信息
      */
-    public String getMapContent(int mapType, int x, int y, List<RoleMessage> list) {
+    public String getMapContent(int mapType, int x, int y, List<RoleMessage> roleList, List<MonsterMessage> monsterMessageList) {
         //获取地图静态资源
         MapResource mapResource = GetBean.getMapManager().getMapResource(mapType);
         StringBuilder stringBuilder = new StringBuilder();
@@ -121,8 +123,13 @@ public class UserInfoReceive {
             }
         }
 
-        for (RoleMessage roleMessage : list) {
+        for (RoleMessage roleMessage : roleList) {
             mapMessages[roleMessage.getX() - 1][roleMessage.getY() - 1] = roleMessage.getName();
+        }
+
+        for (MonsterMessage monsterMessage : monsterMessageList) {
+            MonsterResource monsterResource = GetBean.getMonsterManager().getResourceById(monsterMessage.getResourceId());
+            mapMessages[monsterMessage.getPosition().getX() - 1][monsterMessage.getPosition().getY() - 1] = monsterResource.getName();
         }
 
         for (int i = 0; i < mapResource.getWidth(); i++) {

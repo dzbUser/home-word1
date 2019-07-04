@@ -13,7 +13,8 @@ import java.util.Map;
  *
  * @author dengzebiao
  */
-public class FighterRole {
+public class
+FighterRole {
 
     /**
      * 角色基础信息
@@ -23,7 +24,7 @@ public class FighterRole {
     /**
      * 角色纯净属性
      */
-    private Map<AttributeType, AttributeElement> pureAttributeMap;
+    private Map<AttributeType, AttributeElement> roleAttribute;
 
     /**
      * 创建对象
@@ -37,38 +38,17 @@ public class FighterRole {
         for (Map.Entry<AttributeType, AttributeElement> entry : role.getAttribute().getFinalAttribute().entrySet()) {
             pureAttributeMap.put(entry.getKey(), AttributeElement.valueOf(entry.getValue().getAttributeType(), entry.getValue().getValue()));
         }
-        fighterRole.setPureAttributeMap(pureAttributeMap);
+        fighterRole.setRoleAttribute(pureAttributeMap);
         return fighterRole;
     }
 
-    /**
-     * 角色最终属性(目前没用)
-     */
-    // TODO: 2019/7/4  
-    private Map<AttributeType, AttributeElement> finalAttributeMap = new HashMap<>();
 
-    /**
-     * 计算最终属性(目前没用)
-     */
-    // TODO: 2019/7/4
-    public void comqute() {
-
+    public Map<AttributeType, AttributeElement> getRoleAttribute() {
+        return roleAttribute;
     }
 
-    public Map<AttributeType, AttributeElement> getPureAttributeMap() {
-        return pureAttributeMap;
-    }
-
-    public void setPureAttributeMap(Map<AttributeType, AttributeElement> pureAttributeMap) {
-        this.pureAttributeMap = pureAttributeMap;
-    }
-
-    public Map<AttributeType, AttributeElement> getFinalAttributeMap() {
-        return finalAttributeMap;
-    }
-
-    public void setFinalAttributeMap(Map<AttributeType, AttributeElement> finalAttributeMap) {
-        this.finalAttributeMap = finalAttributeMap;
+    public void setRoleAttribute(Map<AttributeType, AttributeElement> roleAttribute) {
+        this.roleAttribute = roleAttribute;
     }
 
     public RoleBaseMessage getRoleBaseMessage() {

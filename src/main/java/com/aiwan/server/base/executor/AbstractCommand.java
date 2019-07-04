@@ -33,4 +33,12 @@ public abstract class AbstractCommand implements ICommand {
     public void refreshState() {
         isCanceled = false;
     }
+
+    public ScheduledFuture getFuture() {
+        return future;
+    }
+
+    public void setFuture(ScheduledFuture future) {
+        this.future = future;
+    }
 }

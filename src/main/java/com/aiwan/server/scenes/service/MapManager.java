@@ -1,5 +1,6 @@
 package com.aiwan.server.scenes.service;
 
+import com.aiwan.server.monster.model.Monster;
 import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.publicsystem.common.Session;
@@ -9,8 +10,9 @@ import com.aiwan.server.scenes.fight.model.pvpunit.RoleBaseMessage;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.scenes.model.SceneObject;
+import com.aiwan.server.scenes.protocol.MonsterMessage;
 import com.aiwan.server.scenes.protocol.RoleMessage;
-import com.aiwan.server.scenes.protocol.SM_RolesInMap;
+import com.aiwan.server.scenes.protocol.SM_MapMessage;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
@@ -43,7 +45,9 @@ public class MapManager {
      * */
     public void init(){
         for (Map.Entry<Integer,MapResource> entry:mapResourceMap.entrySet()){
-            sceneMap.put(entry.getKey(), SceneObject.valueOf(entry.getKey()));
+            SceneObject sceneObject = SceneObject.valueOf(entry.getKey());
+            sceneObject.init();
+            sceneMap.put(entry.getKey(), sceneObject);
         }
     }
 
@@ -97,11 +101,19 @@ public class MapManager {
             final RoleBaseMessage roleBaseMessage = fighterRole.getRoleBaseMessage();
             roleMessages.add(RoleMessage.valueOf(roleBaseMessage.getrId(), roleBaseMessage.getName(), roleBaseMessage.getPosition().getX(), roleBaseMessage.getPosition().getY()));
         }
+
+        //遍历所有怪物，获取怪物信息
+        Map<Long, Monster> monsterMap = sceneMap.get(id).getMonsterMap();
+        List<MonsterMessage> monsterMessages = new ArrayList<>();
+        for (Monster monster : monsterMap.values()) {
+            monsterMessages.add(MonsterMessage.valueOf(monster.getObjectId(), monster.getResourceId(), monster.getPosition(), monster.getBlood()));
+        }
+
         //遍历所有用户，发送消息
         for (FighterRole fighterRole : map.values()) {
             final RoleBaseMessage roleBaseMessage = fighterRole.getRoleBaseMessage();
             Session session = SessionManager.getSessionByAccountId(roleBaseMessage.getAccountId());
-            session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, SM_RolesInMap.valueOf(id, roleBaseMessage.getPosition().getX(), roleBaseMessage.getPosition().getY(), roleMessages)));
+            session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, SM_MapMessage.valueOf(id, roleBaseMessage.getPosition().getX(), roleBaseMessage.getPosition().getY(), roleMessages, monsterMessages)));
         }
 
     }

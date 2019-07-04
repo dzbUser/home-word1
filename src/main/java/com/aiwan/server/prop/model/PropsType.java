@@ -1,5 +1,6 @@
 package com.aiwan.server.prop.model;
 
+import com.aiwan.server.prop.model.impl.BuffProps;
 import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.prop.model.impl.Experience;
 import com.aiwan.server.prop.model.impl.MountDan;
@@ -24,7 +25,12 @@ public enum PropsType {
     /**
      * 装备类型
      */
-    EQUIPMENT(3, Equipment.class);
+    EQUIPMENT(3, Equipment.class),
+
+    /**
+     * buff道具
+     */
+    BUFFPROPS(3, BuffProps.class);
 
     /**
      * 空位置id

@@ -1,6 +1,7 @@
 package com.aiwan.client;
 
 import com.aiwan.server.scenes.protocol.RoleMessage;
+import com.aiwan.server.scenes.protocol.SM_MapMessage;
 
 import java.util.List;
 
@@ -13,11 +14,14 @@ public class LoginUser {
 
     private static String accountId = "";
     private static int map;
-    private static String mapMessage;
     private static int currentX = -1;
     private static int currentY = -1;
     private static List<Long> roles;
-    private static List<RoleMessage> roleMessages;
+
+    /**
+     * 地图信息
+     */
+    private static SM_MapMessage mapMessage;
 
     public static String getAccountId() {
         return accountId;
@@ -51,14 +55,6 @@ public class LoginUser {
         LoginUser.map = map;
     }
 
-    public static String getMapMessage() {
-        return mapMessage;
-    }
-
-    public static void setMapMessage(String mapMessage) {
-        LoginUser.mapMessage = mapMessage;
-    }
-
     public static List<Long> getRoles() {
         return roles;
     }
@@ -67,11 +63,11 @@ public class LoginUser {
         LoginUser.roles = roles;
     }
 
-    public static List<RoleMessage> getRoleMessages() {
-        return roleMessages;
+    public static SM_MapMessage getMapMessage() {
+        return mapMessage;
     }
 
-    public static void setRoleMessages(List<RoleMessage> roleMessages) {
-        LoginUser.roleMessages = roleMessages;
+    public static void setMapMessage(SM_MapMessage mapMessage) {
+        LoginUser.mapMessage = mapMessage;
     }
 }

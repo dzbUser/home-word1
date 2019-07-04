@@ -3,6 +3,7 @@ package com.aiwan.server.user.role.attributes.model;
 import com.aiwan.server.util.GetBean;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,10 +28,22 @@ public enum  AttributesModule implements Serializable {
         }
     },
 
+    /**
+     * 装备模块
+     */
     EQUIP("equip"){
         @Override
         public Map<AttributeType,AttributeElement> getAttributes(Long rId){
             return GetBean.getEquipmentService().getEquipAttributes(rId);
+        }
+    },
+    /**
+     * buff模块
+     */
+    BUFF("buff") {
+        @Override
+        public Map<AttributeType, AttributeElement> getAttributes(Long rId) {
+            return new HashMap<>();
         }
     }
     ;

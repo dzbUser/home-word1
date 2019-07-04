@@ -1,9 +1,6 @@
 package com.aiwan.client.service.infoSend;
 
-import com.aiwan.client.service.infoSend.element.MountMessageSend;
-import com.aiwan.client.service.infoSend.element.BackMessageSend;
-import com.aiwan.client.service.infoSend.element.RoleMessageSend;
-import com.aiwan.client.service.infoSend.element.SkillMessageSend;
+import com.aiwan.client.service.infoSend.element.*;
 
 /**
  * 信息发送模块枚举类
@@ -56,6 +53,19 @@ public enum  MessageSendModule {
                 return;
             }
             skillMessageSend.messageSend(message);
+        }
+    },
+    /**
+     * 怪物模块
+     */
+    MONSTER_MODULE(5) {
+        @Override
+        public void sendMessage(String message, int num) {
+            MonsterMessageSend monsterMessageSend = MonsterMessageSend.getMonsterMessageSend(num);
+            if (monsterMessageSend == null) {
+                return;
+            }
+            monsterMessageSend.messageSend(message);
         }
     }
     ;

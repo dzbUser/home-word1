@@ -3,6 +3,7 @@ package com.aiwan.server.util;
 import com.aiwan.server.base.executor.account.IAccountExecutorService;
 import com.aiwan.server.base.executor.scene.ISceneExecutorService;
 import com.aiwan.server.base.executor.scene.SceneExecutorService;
+import com.aiwan.server.monster.service.MonsterManager;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
@@ -65,6 +66,20 @@ public class GetBean {
      * 场景线程业务分配类
      */
     private static ISceneExecutorService sceneExecutorService;
+
+    /**
+     * 怪物管理类
+     */
+    private static MonsterManager monsterManager;
+
+    public static MonsterManager getMonsterManager() {
+        return monsterManager;
+    }
+
+    @Autowired
+    public void setMonsterManager(MonsterManager monsterManager) {
+        GetBean.monsterManager = monsterManager;
+    }
 
     public static ISceneExecutorService getSceneExecutorService() {
         return sceneExecutorService;

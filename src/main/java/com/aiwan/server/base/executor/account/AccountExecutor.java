@@ -1,6 +1,7 @@
 package com.aiwan.server.base.executor.account;
 
 import com.aiwan.server.base.executor.account.impl.AbstractAccountCommand;
+import com.aiwan.server.base.executor.account.impl.AbstractAccountDelayCommand;
 import com.aiwan.server.publicsystem.service.ThreadPoolManager;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
@@ -28,6 +29,11 @@ public class AccountExecutor {
      * 用户线程池
      */
     private final static ThreadPoolExecutor[] ACCOUNT_SERVICE = new ThreadPoolExecutor[ACCOUNT_POOL_SIZE];
+
+    /**
+     * 定时线程
+     */
+    private final static ScheduledExecutorService SCHEDULE_THREAD = Executors.newScheduledThreadPool(1);
 
 
     /**
@@ -60,6 +66,13 @@ public class AccountExecutor {
                 accountCommand.active();
             }
         });
+    }
+
+    /**
+     * 延时指令
+     */
+    public final void schedule(AbstractAccountDelayCommand command, long delay) {
+        command.setFuture(SCHEDULE_THREAD.schedule(() -> addTask(command), delay, TimeUnit.MILLISECONDS));
     }
 
     public void addTask(String account, Runnable runnable) {

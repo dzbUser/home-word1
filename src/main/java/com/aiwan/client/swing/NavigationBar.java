@@ -32,6 +32,11 @@ public class NavigationBar extends JPanel {
      */
     public static final int SKILL = 4;
 
+    /**
+     * 怪物模块
+     */
+    public static final int MONSTER = 5;
+
     /** 只是当前所属模块 */
     public int num;
 
@@ -70,6 +75,9 @@ public class NavigationBar extends JPanel {
                     "4.移动技能位置 （指令：技能id 位置）\n" +
                     "5.查看技能栏";
 
+    private static final String MONSTERMESSAGE =
+            "0.查看所有怪物\n";
+
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);
 
     public NavigationBar(){
@@ -77,7 +85,8 @@ public class NavigationBar extends JPanel {
         add(createItem("角色系统",ROLEMESSAGE,50,0,ROLE));
         add(createItem("背包系统",PACKMESSAGE,100,0,PACK));
         add(createItem("坐骑系统",MOUNTMESSAGE,150, 0, MOUNT));
-        add(createItem("技能系统", SKILLMESSAGE, 150,0,SKILL));
+        add(createItem("技能系统", SKILLMESSAGE, 200, 0, SKILL));
+        add(createItem("怪物系统", MONSTERMESSAGE, 250, 0, MONSTER));
         num = ROLE;
     }
 

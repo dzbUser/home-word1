@@ -78,7 +78,7 @@ public enum  RoleMessageSend {
             move.setCurrentY(LoginUser.getCurrentY());
             move.setTargetX(x);
             move.setTargetY(y);
-            move.setUsername(LoginUser.getAccountId());
+            move.setrId(LoginUser.getRoles().get(0));
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.MOVE,move));
         }
 

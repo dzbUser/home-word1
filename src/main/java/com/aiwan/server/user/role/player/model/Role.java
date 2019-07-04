@@ -131,4 +131,16 @@ public class Role {
         roleEnt.setAttribute(attribute);
     }
 
+    /**
+     * 初始化各个模块
+     */
+    public void initModule() {
+        //创建装备栏
+        GetBean.getEquipmentService().createEquipmentBar(getId());
+        //创建坐骑
+        GetBean.getMountService().createMount(getId());
+        //创建技能模块
+        GetBean.getSkillManager().create(getId());
+    }
+
 }

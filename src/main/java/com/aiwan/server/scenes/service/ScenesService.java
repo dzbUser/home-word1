@@ -8,13 +8,9 @@ import com.aiwan.server.publicsystem.common.Session;
  * */
 public interface ScenesService {
     /** 角色移动 */
-    void move(String accountId, int x, int y, final Session session);
+    void move(Long rId, int x, int y, final Session session);
 
     /** 角色地图跳转 */
     void shift(Long rId, int map, final Session session);
 
-    /**
-     * 移动角色位置
-     */
-    void moveUserPosition(String accountId, int x, int y);
 }

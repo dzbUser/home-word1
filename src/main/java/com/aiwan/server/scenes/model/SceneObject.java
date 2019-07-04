@@ -1,5 +1,6 @@
 package com.aiwan.server.scenes.model;
 
+import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.user.role.player.model.Role;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class SceneObject {
     /**
      * 存储角色
      */
-    Map<Long, Role> roleMap = new HashMap<>();
+    Map<Long, FighterRole> fighterRoleMap = new HashMap<>();
 
     public int getMapId() {
         return mapId;
@@ -34,36 +35,39 @@ public class SceneObject {
     /**
      * 存角色
      */
-    public void putRole(Role role) {
-        roleMap.put(role.getId(), role);
+    public void putFighterRole(Role role) {
+        fighterRoleMap.put(role.getId(), FighterRole.valueOf(role));
     }
 
     /**
      * 移除角色
      */
-    public void removeRole(Long rId) {
-        roleMap.remove(rId);
+    public void removeFighterRole(Long rId) {
+        fighterRoleMap.remove(rId);
     }
 
     /**
      * 获取角色
      */
-    public Role getRole(Long rId) {
-        return roleMap.get(rId);
+    public FighterRole getFighterRole(Long rId) {
+        return fighterRoleMap.get(rId);
     }
 
+    /**
+     * 创建场景
+     */
     public static SceneObject valueOf(int mapId) {
         SceneObject sceneObject = new SceneObject();
         sceneObject.setMapId(mapId);
         return sceneObject;
     }
 
-    public Map<Long, Role> getRoleMap() {
-        return roleMap;
+    public Map<Long, FighterRole> getFighterRoleMap() {
+        return fighterRoleMap;
     }
 
-    public void setRoleMap(Map<Long, Role> roleMap) {
-        this.roleMap = roleMap;
+    public void setFighterRoleMap(Map<Long, FighterRole> fighterRoleMap) {
+        this.fighterRoleMap = fighterRoleMap;
     }
 }
 

@@ -4,6 +4,8 @@ import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
+import com.aiwan.server.scenes.fight.model.pvpunit.RoleBaseMessage;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.scenes.model.SceneObject;
@@ -59,18 +61,14 @@ public class MapManager {
     }
 
     /** 添加用户 */
-    public void putRole(Role role) {
-        sceneMap.get(role.getMap()).putRole(role);
+    public void putFighterRole(Role role) {
+        sceneMap.get(role.getMap()).putFighterRole(role);
     }
 
-    /** 获取用户 */
-    public Role getUser(Integer mapType, Long rId) {
-        return sceneMap.get(mapType).getRole(rId);
-    }
 
     /** 删除用户 */
-    public void removeRole(Integer mapType, Long rId) {
-        sceneMap.get(mapType).removeRole(rId);
+    public void removeFighterRole(Integer mapType, Long rId) {
+        sceneMap.get(mapType).removeFighterRole(rId);
     }
 
 
@@ -91,17 +89,19 @@ public class MapManager {
     /** 地图内所有用户发送地图消息 */
     public void sendMessageToUsers(int id) {
         //获取地图中的所有用户
-        Map<Long, Role> map = sceneMap.get(id).getRoleMap();
+        Map<Long, FighterRole> map = sceneMap.get(id).getFighterRoleMap();
         List<RoleMessage> roleMessages = new ArrayList<>();
         //遍历所有用户，添加到角色列表中
-        for (Role role : map.values()) {
-            //获取session
-            roleMessages.add(RoleMessage.valueOf(role.getId(), role.getName(), role.getX(), role.getY()));
+        for (FighterRole fighterRole : map.values()) {
+            //获取基础信息
+            final RoleBaseMessage roleBaseMessage = fighterRole.getRoleBaseMessage();
+            roleMessages.add(RoleMessage.valueOf(roleBaseMessage.getrId(), roleBaseMessage.getName(), roleBaseMessage.getPosition().getX(), roleBaseMessage.getPosition().getY()));
         }
         //遍历所有用户，发送消息
-        for (Role role : map.values()) {
-            Session session = SessionManager.getSessionByAccountId(role.getAccountId());
-            session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, SM_RolesInMap.valueOf(id, role.getX(), role.getY(), roleMessages)));
+        for (FighterRole fighterRole : map.values()) {
+            final RoleBaseMessage roleBaseMessage = fighterRole.getRoleBaseMessage();
+            Session session = SessionManager.getSessionByAccountId(roleBaseMessage.getAccountId());
+            session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, SM_RolesInMap.valueOf(id, roleBaseMessage.getPosition().getX(), roleBaseMessage.getPosition().getY(), roleMessages)));
         }
 
     }

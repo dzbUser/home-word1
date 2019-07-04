@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 public class ScenesFacade {
     /** 角色移动 */
     public void move(final CM_Move cm_move, final Session session){
-        GetBean.getScenesService().move(cm_move.getUsername(), cm_move.getTargetX(), cm_move.getTargetY(), session);
+        GetBean.getScenesService().move(cm_move.getrId(), cm_move.getTargetX(), cm_move.getTargetY(), session);
     }
 
     /** 角色地图跳转 */

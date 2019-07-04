@@ -16,15 +16,15 @@ public class CM_Move implements Serializable {
     private int currentY;
     private int targetX;
     private int targetY;
-    private String username;
+    private Long rId;
 
-    public static CM_Move valueOf(int currentX,int currentY,int targetX,int targetY,String username){
+    public static CM_Move valueOf(int currentX, int currentY, int targetX, int targetY, Long rId) {
         CM_Move cm_move = new CM_Move();
         cm_move.setCurrentX(currentX);
         cm_move.setCurrentY(currentY);
         cm_move.setTargetX(targetX);
         cm_move.setTargetY(targetY);
-        cm_move.setUsername(username);
+        cm_move.setrId(rId);
         return cm_move;
     }
 
@@ -61,11 +61,11 @@ public class CM_Move implements Serializable {
         this.targetY = targetY;
     }
 
-    public String getUsername() {
-        return username;
+    public Long getrId() {
+        return rId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setrId(Long rId) {
+        this.rId = rId;
     }
 }

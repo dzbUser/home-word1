@@ -3,6 +3,8 @@ package com.aiwan.server.user.account.service;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.scenes.command.LeaveMapCommand;
+import com.aiwan.server.scenes.command.SignInMapCommand;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.*;
 import com.aiwan.server.user.role.player.model.Role;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
     //新用户初始坐标
     private final static int ORINGINX = 1;
     private final static int ORINGINY = 3;
+
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private UserManager userManager;
 
@@ -81,8 +84,7 @@ public class UserServiceImpl implements UserService {
             }else {
                 //把用户添加到地图资源中
                 Role role = GetBean.getRoleManager().load(user.getRoleId());
-                GetBean.getMapManager().putRole(role);
-                GetBean.getMapManager().sendMessageToUsers(role.getMap());
+                GetBean.getSceneExecutorService().submit(new SignInMapCommand(role));
                 sm_userMessage.setCreated(true);
                 sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
             }
@@ -128,8 +130,7 @@ public class UserServiceImpl implements UserService {
             //获取角色
             Role role = GetBean.getRoleManager().load(user.getRoleId());
             //把用户从地图资源中移除
-            GetBean.getMapManager().removeRole(role.getMap(), role.getId());
-            GetBean.getMapManager().sendMessageToUsers(role.getMap());
+            GetBean.getSceneExecutorService().submit(new LeaveMapCommand(role));
         }
         //session移除用户信息
         session.setUser(null);
@@ -176,9 +177,7 @@ public class UserServiceImpl implements UserService {
         }else{
             //把用户添加到地图资源中
             Role role = GetBean.getRoleManager().load(user.getRoleId());
-            GetBean.getMapManager().putRole(role);
-            //给其余玩家发送地图信息
-            GetBean.getMapManager().sendMessageToUsers(role.getMap());
+            GetBean.getSceneExecutorService().submit(new SignInMapCommand(role));
             sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
         }
 
@@ -222,8 +221,7 @@ public class UserServiceImpl implements UserService {
             //获取角色
             Role role = GetBean.getRoleManager().load(user.getRoleId());
             //把用户从地图资源中移除
-            GetBean.getMapManager().removeRole(role.getMap(), role.getId());
-            GetBean.getMapManager().sendMessageToUsers(role.getMap());
+            GetBean.getSceneExecutorService().submit(new LeaveMapCommand(role));
         }
     }
 

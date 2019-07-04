@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.player.service.impl;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.scenes.command.SignInMapCommand;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
@@ -65,14 +66,13 @@ public class RoleServiceImpl implements RoleService {
         user.addRole(role.getId());
         //写回
         userManager.save(user);
-        //创建装备栏
-        GetBean.getEquipmentService().createEquipmentBar(role.getId());
-        //创建坐骑
-        GetBean.getMountService().createMount(role.getId());
-        //创建技能模块
-        GetBean.getSkillManager().create(role.getId());
-        //把角色添加到地图中
-        GetBean.getMapManager().putRole(role);
+
+        //初始化角色各个模块
+        role.initModule();
+
+        //进入地图
+        GetBean.getSceneExecutorService().submit(new SignInMapCommand(role));
+
         //保存用户状态到session
         session.setUser(user);
         //创建返回信息
@@ -81,10 +81,11 @@ public class RoleServiceImpl implements RoleService {
         sm_createRole.setMessage("角色创建成功");
         //发送协议
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.CREATEROLESUCESS,sm_createRole);
-        logger.info(user.getAcountId() + "创建角色" + role.getId() + "成功");
+        logger.info("{}创建角色{}成功", user.getAcountId(), role.getId());
         //返回信息到客户端
         session.messageSend(decodeData);
-        GetBean.getMapManager().sendMessageToUsers(user.getMap());
+        //把角色添加到地图中
+
     }
 
     @Override

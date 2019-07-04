@@ -1,6 +1,8 @@
 package com.aiwan.server.util;
 
 import com.aiwan.server.base.executor.account.IAccountExecutorService;
+import com.aiwan.server.base.executor.scene.ISceneExecutorService;
+import com.aiwan.server.base.executor.scene.SceneExecutorService;
 import com.aiwan.server.prop.service.PropsManager;
 import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
@@ -58,6 +60,20 @@ public class GetBean {
      * 用户线程业务分配类
      */
     private static IAccountExecutorService accountExecutorService;
+
+    /**
+     * 场景线程业务分配类
+     */
+    private static ISceneExecutorService sceneExecutorService;
+
+    public static ISceneExecutorService getSceneExecutorService() {
+        return sceneExecutorService;
+    }
+
+    @Autowired
+    public void setSceneExecutorService(ISceneExecutorService sceneExecutorService) {
+        GetBean.sceneExecutorService = sceneExecutorService;
+    }
 
     public static IAccountExecutorService getAccountExecutorService() {
         return accountExecutorService;

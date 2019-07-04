@@ -2,7 +2,11 @@ package com.aiwan.server.scenes.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.scenes.command.EnterMapCommand;
+import com.aiwan.server.scenes.command.LeaveMapCommand;
+import com.aiwan.server.scenes.command.MoveCommand;
 import com.aiwan.server.scenes.mapresource.MapResource;
+import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.service.UserManager;
@@ -35,23 +39,10 @@ public class ScenesServiceImpl implements ScenesService{
      * 角色的移动
      * */
     @Override
-    public void move(String accountId, int x, int y, final Session session) {
-        logger.info("{}请求移动到({}.{})", accountId, x, y);
-        User user = session.getUser();
-        Role role = GetBean.getRoleManager().load(user.getRoleId());
-        if (GetBean.getMapManager().allowMove(x, y, user.getMap())) {
-            role.setX(x);
-            role.setY(y);
-            GetBean.getRoleManager().save(role);
-            //加入地图资源
-            GetBean.getMapManager().putRole(role);
-            //对所有在线用户发送地图信息
-            GetBean.getMapManager().sendMessageToUsers(role.getMap());
-            logger.info("{}请求移动到({}.{})成功", accountId, x, y);
-        } else {
-            session.sendPromptMessage(PromptCode.MOVEFAIL, "");
-            logger.info("{}请求移动到({}.{})失败", accountId, x, y);
-        }
+    public void move(Long rId, int x, int y, final Session session) {
+        logger.info("角色{}请求移动到({}.{})", rId, x, y);
+        Role role = GetBean.getRoleManager().load(rId);
+        GetBean.getSceneExecutorService().submit(new MoveCommand(Position.valueOf(x, y), role));
     }
 
     /**
@@ -69,42 +60,11 @@ public class ScenesServiceImpl implements ScenesService{
 
         //获取角色
         Role role = GetBean.getRoleManager().load(rId);
-        //获取就地图
-        int oldMap = role.getMap();
-
-        //从旧地图中去除
-        GetBean.getMapManager().removeRole(role.getMap(), rId);
-        MapResource mapResource = GetBean.getMapManager().getMapResource(map);
-
-        //初始化化角色坐标
-        role.setMap(map);
-        role.setX(mapResource.getOriginX());
-        role.setY(mapResource.getOriginY());
-        //添加到地图资源中
-        GetBean.getMapManager().putRole(role);
-        //写回
-        GetBean.getRoleManager().save(role);
-        //给所有玩家发送消息
-        GetBean.getMapManager().sendMessageToUsers(role.getMap());
-        //如果与换到新的地图，需要给旧的地图发送改变消息
-        if (map != oldMap) {
-            GetBean.getMapManager().sendMessageToUsers(oldMap);
-        }
+        //脱离地图
+        GetBean.getSceneExecutorService().submit(new LeaveMapCommand(role));
+        //进入map地图
+        GetBean.getSceneExecutorService().submit(new EnterMapCommand(map, role));
         logger.info("请求成功");
     }
 
-    @Override
-    public void moveUserPosition(String accountId, int x, int y) {
-
-//        //改缓存
-//        User user = userManager.getUserByAccountId(accountId);
-//        user.setCurrentX(x);
-//        user.setCurrentY(y);
-//        userManager.save(user);
-//
-//        //改地图内的用户
-//        GetBean.getMapManager().putRole(user);
-//        GetBean.getMapManager().sendMessageToUsers(user.getMap(), user.getAcountId());
-//        logger.info("{}请求移动到({}.{})成功", accountId, x, y);
-    }
 }

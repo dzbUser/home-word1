@@ -68,6 +68,7 @@ public class BuffServiceImpl implements BuffService {
             buffManager.save(buffModel);
             //通知属性修改
             GetBean.getRoleService().updateAttributeModule("buff", getAttributeModule(rId), rId);
+            logger.info("buffId:{},添加角色：{},新添加成功", buffId, rId);
             return;
         } else {
             //获取当前时间
@@ -77,10 +78,12 @@ public class BuffServiceImpl implements BuffService {
             //最终延迟时间
             Long finalDelay = delay;
             if (buffResource.getBuffType() == 1) {
+                logger.info("buffId:{},添加角色：{},重置添加", buffId, rId);
                 //重置buff
                 buffModel.resetTime(buffId, currentTime + delay);
             } else {
                 //获取旧的结束时间
+                logger.info("buffId:{},添加角色：{},叠加添加", buffId, rId);
                 Long oldOverTime = buffModel.getOverTime(buffId);
                 finalDelay = oldOverTime - currentTime + delay;
                 buffModel.resetTime(buffId, currentTime + finalDelay);
@@ -94,13 +97,15 @@ public class BuffServiceImpl implements BuffService {
             buffManager.save(buffModel);
             //通知属性修改
             GetBean.getRoleService().updateAttributeModule("buff", getAttributeModule(rId), rId);
+            logger.info("buffId:{},添加角色：{},添加成功", buffId, rId);
         }
     }
 
     @Override
     public void removeBuff(Long rId, int buffId) {
         BuffModel buffModel = buffManager.load(rId);
-        if (buffModel != null) {
+        if (buffModel.getBuff(buffId) != null) {
+            logger.info("buffId:{},移除buff所属角色:{},没有该buff", buffId, rId);
             buffModel.removeBuff(buffId);
         }
         //移除对应的command
@@ -109,6 +114,7 @@ public class BuffServiceImpl implements BuffService {
         buffManager.save(buffModel);
         //通知属性变化
         GetBean.getRoleService().updateAttributeModule("buff", getAttributeModule(rId), rId);
+        logger.info("buffId:{},移除buff所属角色:{},移除成功", buffId, rId);
     }
 
     @Override

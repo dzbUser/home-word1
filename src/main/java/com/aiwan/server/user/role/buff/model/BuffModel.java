@@ -27,6 +27,13 @@ public class BuffModel {
     }
 
     /**
+     * 获取buff
+     */
+    public BuffElement getBuff(int buffId) {
+        return getBuffEntity().getBuff(buffId);
+    }
+
+    /**
      * 是否存在该buff
      */
     public boolean isExistBuff(int buffId) {

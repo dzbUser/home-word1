@@ -2,7 +2,7 @@ package com.aiwan.server;
 
 import com.aiwan.server.netty.NettyServer;
 import com.aiwan.server.publicsystem.Initialization.*;
-import com.aiwan.server.publicsystem.service.ThreadPoolManager;
+import com.aiwan.server.publicsystem.service.ThreadPoolInit;
 import com.aiwan.server.util.ResourceUtil;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class ServerStart {
         //缓存初始化
         CacheInitialzation.init(applicationContext);
         //线程池初始化
-        ThreadPoolManager.initialize();
+        ThreadPoolInit.initialize();
         logger.debug("启动Netty服务器");
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
                 .setNameFormat("server-pool-start-%d").build();

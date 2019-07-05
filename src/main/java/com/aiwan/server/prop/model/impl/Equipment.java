@@ -28,16 +28,16 @@ public class Equipment extends AbstractProps {
     @Override
     public int propUse(String accountId, Long rId, int num) {
 
-        //获取背包
-        Backpack backpack = GetBean.getBackPackManager().load(accountId);
+
         //获取道具类
         PropsResource propsResource = getPropsResource();
-        //判断是否达到要求
         Role role = GetBean.getRoleManager().load(rId);
         if (role.getLevel() < propsResource.getLevel()) {
             //等级达不到要求等级
             return PromptCode.NOREQUIREMENTINLEVEL;
         }
+        //获取背包
+        Backpack backpack = GetBean.getBackPackManager().load(accountId);
         //扣除道具
         backpack.deductionPropByObjectId(getObjectId(), 1);
         //装备使用

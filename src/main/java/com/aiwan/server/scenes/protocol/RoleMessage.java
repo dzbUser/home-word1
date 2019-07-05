@@ -1,6 +1,5 @@
 package com.aiwan.server.scenes.protocol;
 
-import com.aiwan.server.user.role.player.model.Role;
 
 import java.io.Serializable;
 

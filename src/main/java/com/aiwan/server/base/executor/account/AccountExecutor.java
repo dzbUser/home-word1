@@ -1,8 +1,7 @@
 package com.aiwan.server.base.executor.account;
 
 import com.aiwan.server.base.executor.account.impl.AbstractAccountCommand;
-import com.aiwan.server.base.executor.account.impl.AbstractAccountDelayCommand;
-import com.aiwan.server.publicsystem.service.ThreadPoolManager;
+import com.aiwan.server.publicsystem.service.ThreadPoolInit;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,7 @@ import java.util.concurrent.*;
 @Component
 public class AccountExecutor {
 
-    private static final Logger logger = LoggerFactory.getLogger(ThreadPoolManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(ThreadPoolInit.class);
 
     /**
      * 用户线程池大小

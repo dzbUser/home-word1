@@ -29,7 +29,7 @@ public class MonsterManager {
     /**
      * 地图id与怪物的映射
      */
-    @Static(initializeMethodName = "initeMapMonsterMap")
+    @Static(initializeMethodName = "initMapMonsterMap")
     private Map<Integer, List<MonsterResource>> mapMonsterMap = new HashMap<>();
 
     /**
@@ -40,7 +40,7 @@ public class MonsterManager {
     /**
      * 初始化静态资源映射
      */
-    private void initeMapMonsterMap() {
+    private void initMapMonsterMap() {
         //获取地图资源静态路径
         String path = ResourceUtil.getResourcePath(MonsterResource.class);
         //加载资源

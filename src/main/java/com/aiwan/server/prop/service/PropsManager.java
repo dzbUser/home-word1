@@ -21,9 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Manager
 public class PropsManager {
     static Logger logger = LoggerFactory.getLogger(PropsManager.class);
-    public final static int EQUIP  = 3;
-    public final static int Prop = 1;
-    public final static int DEVELOP = 2;
+
 
     /** 道具静态资源映射 */
     @Static(initializeMethodName = "initializeProp")

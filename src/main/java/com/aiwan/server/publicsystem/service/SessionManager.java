@@ -28,8 +28,8 @@ public class SessionManager {
         return sessionMap.get(hashcode);
     }
 
-    public static void putSessionByUsername(String username,Session session){
-        userMap.put(username,session);
+    public static void putSessionByUsername(String accountId, Session session) {
+        userMap.put(accountId, session);
     }
 
     public static void removeSessionByAccountId(String accountId) {

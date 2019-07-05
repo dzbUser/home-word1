@@ -6,8 +6,6 @@ import com.aiwan.server.scenes.command.SignInMapCommand;
 import com.aiwan.server.scenes.command.UpdateSceneAttribute;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.attributes.model.AttributesModule;
-import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
@@ -69,10 +67,6 @@ public class RoleServiceImpl implements RoleService {
         user.addRole(role.getId());
         //写回
         userManager.save(user);
-
-        //初始化角色各个模块
-        role.initModule();
-
         //进入地图
         GetBean.getSceneExecutorService().submit(new SignInMapCommand(role));
 

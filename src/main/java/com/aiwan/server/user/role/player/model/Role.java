@@ -15,6 +15,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 业务逻辑角色操作类
  * */
 public class Role {
+    /**
+     * 实体
+     */
     private RoleEnt roleEnt;
 
     private AtomicBoolean changingMap = new AtomicBoolean(false);
@@ -128,11 +131,6 @@ public class Role {
 
 
 
-    /** 升级所需经验 */
-    public int getUpgradeRequest(){
-        return (getLevel()+1)*50;
-    }
-
     public RoleAttribute getAttribute() {
         return roleEnt.getAttribute();
     }
@@ -141,10 +139,11 @@ public class Role {
         roleEnt.setAttribute(attribute);
     }
 
+
     /**
-     * 初始化各个模块
+     * 创建角色时初始化各个模块
      */
-    public void initModule() {
+    public void createModule() {
         //创建装备栏
         GetBean.getEquipmentService().createEquipmentBar(getId());
         //创建坐骑

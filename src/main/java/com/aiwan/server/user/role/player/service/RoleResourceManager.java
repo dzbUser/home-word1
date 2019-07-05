@@ -1,4 +1,4 @@
-package com.aiwan.server.user.role.player.service.impl;
+package com.aiwan.server.user.role.player.service;
 
 import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.user.role.player.resource.RoleResource;

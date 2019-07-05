@@ -5,9 +5,9 @@ import com.aiwan.server.base.executor.scene.SceneExecutor;
 
 /**
  * @author dengzebiao
- * 线程池管理
+ * 线程池初始化类
  * */
-public class ThreadPoolManager {
+public class ThreadPoolInit {
 
 
     /** 线程池初始化 */

@@ -20,10 +20,10 @@ import java.util.Map;
 public class CacheInitialzation {
     private static final Logger logger = LoggerFactory.getLogger(CacheInitialzation.class);
     public static void init(ClassPathXmlApplicationContext applicationContext) throws NoSuchFieldException, IllegalAccessException {
-        /**
+        /*
          * 1.获取所有Service，bean
          * 2.查看ServiceBean的属性
-         * 3.若有EntityCacheService属性，若以创建则冲业务管理类中取出，注入
+         * 3.若有EntityCacheService属性，若已创建则从业务管理类中取出，注入
          * 4.若未创建，则创建缓存
          * */
         logger.debug("开始加载缓存");

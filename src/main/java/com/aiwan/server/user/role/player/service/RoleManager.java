@@ -45,6 +45,7 @@ public class RoleManager {
         cache.writeBack(id,roleEnt);
         Role role = new Role();
         role.setRoleEnt(roleEnt);
+        role.createModule();
         return role;
     }
 

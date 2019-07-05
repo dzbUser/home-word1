@@ -25,6 +25,5 @@ public interface EntityCacheService<PK extends Comparable<PK> & Serializable,T e
     * */
     T remove(PK id);
 
-//    PK create(T entity);
 
 }

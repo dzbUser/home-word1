@@ -80,6 +80,8 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
 
     @Override
     public void writeBack(PK id, T entity) {
+        //检查是否为新建数据，若为新建数据吧数据存到缓存中
+        // TODO: 2019/7/6 新数据加入缓存
         //序列化
         entity.serialize();
         Element element = new Element(EventType.SAVE,id,entity,entityClz);

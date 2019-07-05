@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
             //~~~~~~~~~~~~第三步~~~~~~~~~~~~
             logger.debug(accountId + "用户登录成功");
 
-            //加入缓存
+            //加入session管理
             session.setUser(user);
             SessionManager.putSessionByUsername(accountId, session);
             sm_userMessage.setStatus(true);

@@ -23,4 +23,14 @@ public interface ScenesService {
      */
     void updateSceneAttribute(Role role);
 
+    /**
+     * 地图改变
+     */
+    void changeMap(Role role, int targetMapId);
+
+    /**
+     * 离开滴入
+     */
+    void leaveMap(Role role);
+
 }

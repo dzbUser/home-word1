@@ -1,18 +1,11 @@
 package com.aiwan.server.scenes.service;
 
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.scenes.command.EnterMapCommand;
-import com.aiwan.server.scenes.command.LeaveMapCommand;
+import com.aiwan.server.scenes.command.ChangeMapCommand;
 import com.aiwan.server.scenes.command.MoveCommand;
-import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
-import com.aiwan.server.scenes.protocol.SM_Shift;
-import com.aiwan.server.user.account.model.User;
-import com.aiwan.server.user.account.service.UserManager;
-import com.aiwan.server.user.role.attributes.model.AttributeElement;
-import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
@@ -20,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 
 /**
@@ -63,9 +54,7 @@ public class ScenesServiceImpl implements ScenesService{
         //获取角色
         Role role = GetBean.getRoleManager().load(rId);
         //脱离地图
-        GetBean.getSceneExecutorService().submit(new LeaveMapCommand(role));
-        //进入map地图
-        GetBean.getSceneExecutorService().submit(new EnterMapCommand(map, role));
+        GetBean.getSceneExecutorService().submit(new ChangeMapCommand(role, map));
         logger.info("请求成功");
     }
 
@@ -78,6 +67,27 @@ public class ScenesServiceImpl implements ScenesService{
             return;
         }
         sceneObject.setFighterAttribute(role);
+    }
+
+    @Override
+    public void changeMap(Role role, int targetMapId) {
+        if (role.isChangingMap()) {
+            logger.info("角色:{},正在进行地图跳转", role.getId());
+            return;
+        }
+        //设置正在地图跳转
+        role.setChangingMap(true);
+        leaveMap(role);
+        //进入map地图
+        GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role));
+    }
+
+    @Override
+    public void leaveMap(Role role) {
+        //脱离地图
+        GetBean.getMapManager().removeFighterRole(role.getMap(), role.getId());
+        //给地图所有玩家发送最新地图信息
+        GetBean.getMapManager().sendMessageToUsers(role.getMap());
     }
 
 }

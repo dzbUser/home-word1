@@ -31,6 +31,8 @@ public class EnterMapCommand extends AbstractSceneCommand {
         GetBean.getMapManager().putFighterRole(role);
         //写回
         GetBean.getRoleManager().save(role);
+        //设置跳转结束
+        role.setChangingMap(false);
         //给所有玩家发送消息
         GetBean.getMapManager().sendMessageToUsers(getKey());
     }

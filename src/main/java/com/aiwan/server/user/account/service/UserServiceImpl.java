@@ -3,8 +3,9 @@ package com.aiwan.server.user.account.service;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.scenes.command.LeaveMapCommand;
+import com.aiwan.server.scenes.command.ChangeMapCommand;
 import com.aiwan.server.scenes.command.SignInMapCommand;
+import com.aiwan.server.scenes.command.SignOutMapCommand;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.protocol.*;
 import com.aiwan.server.user.role.player.model.Role;
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService {
             //获取角色
             Role role = GetBean.getRoleManager().load(user.getRoleId());
             //把用户从地图资源中移除
-            GetBean.getSceneExecutorService().submit(new LeaveMapCommand(role));
+            GetBean.getSceneExecutorService().submit(new SignOutMapCommand(role));
             //移除buff管理中command映射
         }
         //session移除用户信息
@@ -222,7 +223,7 @@ public class UserServiceImpl implements UserService {
             //获取角色
             Role role = GetBean.getRoleManager().load(user.getRoleId());
             //把用户从地图资源中移除
-            GetBean.getSceneExecutorService().submit(new LeaveMapCommand(role));
+            GetBean.getSceneExecutorService().submit(new SignOutMapCommand(role));
         }
     }
 

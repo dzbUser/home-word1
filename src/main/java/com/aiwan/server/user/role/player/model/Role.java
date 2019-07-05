@@ -8,6 +8,7 @@ import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.util.GetBean;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author dengzebiao
@@ -15,6 +16,8 @@ import java.util.Map;
  * */
 public class Role {
     private RoleEnt roleEnt;
+
+    private AtomicBoolean changingMap = new AtomicBoolean(false);
 
     public RoleEnt getRoleEnt() {
         return roleEnt;
@@ -116,6 +119,12 @@ public class Role {
         roleEnt.setName(name);
     }
 
+    public static Role valueOf(RoleEnt roleEnt) {
+        Role role = new Role();
+        role.setRoleEnt(roleEnt);
+        return role;
+    }
+
 
 
 
@@ -153,4 +162,11 @@ public class Role {
         getAttribute().updateModule(AttributesModule.getType(name), map);
     }
 
+    public boolean isChangingMap() {
+        return changingMap.get();
+    }
+
+    public void setChangingMap(boolean changingMap) {
+        this.changingMap.getAndSet(changingMap);
+    }
 }

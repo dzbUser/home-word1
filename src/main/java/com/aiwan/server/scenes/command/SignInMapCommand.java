@@ -16,10 +16,12 @@ public class SignInMapCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
+        role.setChangingMap(true);
         //把角色存到地图资源
         GetBean.getMapManager().putFighterRole(role);
         //给所有玩家发送消息
         GetBean.getMapManager().sendMessageToUsers(getKey());
+        role.setChangingMap(false);
     }
 
     public SignInMapCommand(Role role) {

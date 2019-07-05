@@ -53,8 +53,11 @@ public class RoleManager {
      * */
     public Role load(Long id){
         RoleEnt roleEnt = cache.load(id);
-        Role role = new Role();
-        role.setRoleEnt(roleEnt);
+        Role role = roleEnt.getRole();
+        if (role == null) {
+            role = Role.valueOf(roleEnt);
+            roleEnt.setRole(role);
+        }
         return role;
     }
 

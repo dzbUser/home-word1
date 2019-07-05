@@ -52,7 +52,6 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
         T current = cacheMap.get(id);
         if (current != null){
             //序列化
-            current.unserialize();
             return current;
         }
         //若缓存中无

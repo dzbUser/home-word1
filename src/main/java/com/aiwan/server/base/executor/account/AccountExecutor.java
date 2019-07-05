@@ -59,7 +59,6 @@ public class AccountExecutor {
     }
 
     public void addTask(AbstractAccountCommand accountCommand) {
-        final Object key = accountCommand.getKey();
         int modIndex = accountCommand.modIndex(ACCOUNT_POOL_SIZE);
         ACCOUNT_SERVICE[modIndex].submit(() -> {
             if (!accountCommand.isCanceled()) {
@@ -71,7 +70,7 @@ public class AccountExecutor {
     /**
      * 延时指令
      */
-    public final void schedule(AbstractAccountDelayCommand command, long delay) {
+    public final void schedule(AbstractAccountCommand command, long delay) {
         command.setFuture(SCHEDULE_THREAD.schedule(() -> addTask(command), delay, TimeUnit.MILLISECONDS));
     }
 

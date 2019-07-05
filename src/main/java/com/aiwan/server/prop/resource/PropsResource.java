@@ -40,6 +40,9 @@ public class PropsResource{
     @CellMapping(name = "use")
     private int use;
 
+    @CellMapping(name = "buffId")
+    private int buffId;
+
     /**
      * 装备位置
      */
@@ -69,6 +72,12 @@ public class PropsResource{
      */
     @CellMapping(name = "attribute")
     private String attribute;
+
+    /**
+     * 延迟时间
+     */
+    @CellMapping(name = "delay")
+    private Long delay;
 
 
     /**
@@ -216,5 +225,21 @@ public class PropsResource{
 
     public void setEffect(int effect) {
         this.effect = effect;
+    }
+
+    public int getBuffId() {
+        return buffId;
+    }
+
+    public void setBuffId(int buffId) {
+        this.buffId = buffId;
+    }
+
+    public Long getDelay() {
+        return delay;
+    }
+
+    public void setDelay(Long delay) {
+        this.delay = delay;
     }
 }

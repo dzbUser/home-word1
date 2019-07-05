@@ -9,6 +9,10 @@ import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
+import com.aiwan.server.user.role.buff.protocol.BuffMessage;
+import com.aiwan.server.user.role.buff.protocol.SM_ViewBuff;
+import com.aiwan.server.user.role.buff.resource.BuffResource;
 import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
 import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
@@ -16,6 +20,9 @@ import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -76,5 +83,33 @@ public class RoleInfoReceive {
             i++;
         }
         gameInterface.printOtherMessage(stringBuffer.toString()+"\n");
+    }
+
+    /**
+     * 接受buff查看返回
+     */
+    @InfoReceiveMethod(status = StatusCode.VIEW_BUFF)
+    public void viewBuff(SM_ViewBuff sm_viewBuff) {
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        StringBuffer stringBuffer = new StringBuffer();
+        // 格式化时间
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd hh:mm:ss");
+        //获取buff列表
+        List<BuffMessage> list = sm_viewBuff.getList();
+        for (int i = 0; i < list.size(); i++) {
+            //获取buff信息
+            BuffMessage buffMessage = list.get(i);
+            //获取buff资源
+            BuffResource buffResource = GetBean.getBuffManager().getBuffResourceByBuffId(buffMessage.getBuffId());
+            stringBuffer.append("[" + i + "] buffId:" + list.get(i).getBuffId());
+            stringBuffer.append(" 结束时间:" + formatter.format(new Date(buffMessage.getOverTime())) + "\n");
+            stringBuffer.append("属性: ");
+            Map<AttributeType, AttributeElement> map = ImmutableAttributeElement.wrapper(buffResource.getAttributeMap());
+            for (AttributeElement attributeElement : map.values()) {
+                //输出属性加成
+                stringBuffer.append(attributeElement.toString() + " ");
+            }
+        }
+        gameInterface.printOtherMessage(stringBuffer.toString() + "\n\n");
     }
 }

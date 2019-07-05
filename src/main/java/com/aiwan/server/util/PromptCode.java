@@ -151,4 +151,9 @@ public class PromptCode {
      * 角色姓名长度过长
      */
     public final static int NAME_EXCEED_MAXLENGTH = 34;
+
+    /**
+     * Buff丹药一次只能使用一个
+     */
+    public final static int USER_ONLY_ONE = 35;
 }

@@ -7,9 +7,12 @@ import com.aiwan.server.scenes.command.LeaveMapCommand;
 import com.aiwan.server.scenes.command.MoveCommand;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.scenes.protocol.SM_Shift;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.service.UserManager;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
@@ -17,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 
 /**
@@ -29,12 +34,9 @@ public class ScenesServiceImpl implements ScenesService{
 
     private Logger logger = LoggerFactory.getLogger(ScenesServiceImpl.class);
 
-    private UserManager userManager;
-
     @Autowired
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
+    private MapManager mapManager;
+
     /**
      * 角色的移动
      * */
@@ -65,6 +67,17 @@ public class ScenesServiceImpl implements ScenesService{
         //进入map地图
         GetBean.getSceneExecutorService().submit(new EnterMapCommand(map, role));
         logger.info("请求成功");
+    }
+
+    @Override
+    public void updateSceneAttribute(final Role role) {
+        //获取场景
+        SceneObject sceneObject = mapManager.getSceneObject(role.getMap());
+        if (sceneObject == null) {
+            logger.error("mapId:{}没有该地图对象", role.getMap());
+            return;
+        }
+        sceneObject.setFighterAttribute(role);
     }
 
 }

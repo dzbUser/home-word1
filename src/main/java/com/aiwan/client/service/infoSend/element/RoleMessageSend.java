@@ -8,6 +8,7 @@ import com.aiwan.client.util.Verification;
 import com.aiwan.server.scenes.protocol.CM_Move;
 import com.aiwan.server.scenes.protocol.CM_Shift;
 import com.aiwan.server.user.account.protocol.CM_CreateRole;
+import com.aiwan.server.user.role.buff.protocol.CM_ViewBuff;
 import com.aiwan.server.user.role.equipment.protocol.CM_UnloadingEquipment;
 import com.aiwan.server.user.role.equipment.protocol.CM_ViewEquipBar;
 import com.aiwan.server.user.role.player.protocol.CM_RoleMessage;
@@ -179,7 +180,25 @@ public enum  RoleMessageSend {
             }
             return true;
         }
-    }
+    },
+    /**
+     * 查看用户buff
+     */
+    VIEW_BUFF(7) {
+        @Override
+        public void messageSend(String message) {
+            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+            if (!verify(message)) {
+                //校验指令正确性
+                gameInterface.printOtherMessage("您的输入不规范");
+                return;
+            }
+
+            CM_ViewBuff cm_viewBuff = CM_ViewBuff.valueOf(LoginUser.getRoles().get(0));
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEW_BUFF, cm_viewBuff));
+        }
+
+    },
     ;
 
     RoleMessageSend(int num){

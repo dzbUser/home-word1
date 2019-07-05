@@ -332,6 +332,9 @@ public class ExcelUtil
                             if (value instanceof Double && (modelType == int.class || modelType == Integer.class)) {
                                 value = Integer.valueOf(df.format(value));
                             }
+                            if (value instanceof Double && (modelType == Long.class || modelType == long.class)) {
+                                value = ((Double) value).longValue();
+                            }
                             if ((cellType == double.class || cellType == String.class) && (modelType == int.class || modelType == Integer.class)) {
                                 value = Integer.valueOf(value.toString());
                             }

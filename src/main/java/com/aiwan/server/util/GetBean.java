@@ -9,6 +9,8 @@ import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.netty.TaskDispatcher;
 import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackResourceManager;
+import com.aiwan.server.user.role.buff.service.BuffManager;
+import com.aiwan.server.user.role.buff.service.BuffService;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
@@ -71,6 +73,34 @@ public class GetBean {
      * 怪物管理类
      */
     private static MonsterManager monsterManager;
+
+    /**
+     * buff业务类
+     */
+    private static BuffService buffService;
+
+    /**
+     * 获取buff管理
+     */
+    private static BuffManager buffManager;
+
+    public static BuffManager getBuffManager() {
+        return buffManager;
+    }
+
+    @Autowired
+    public void setBuffManager(BuffManager buffManager) {
+        GetBean.buffManager = buffManager;
+    }
+
+    public static BuffService getBuffService() {
+        return buffService;
+    }
+
+    @Autowired
+    public void setBuffService(BuffService buffService) {
+        GetBean.buffService = buffService;
+    }
 
     public static MonsterManager getMonsterManager() {
         return monsterManager;

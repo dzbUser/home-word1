@@ -134,5 +134,11 @@ public class MapManager {
         init();
     }
 
+    /**
+     * 获取场景对象
+     */
+    public SceneObject getSceneObject(int map) {
+        return sceneMap.get(map);
+    }
 
 }

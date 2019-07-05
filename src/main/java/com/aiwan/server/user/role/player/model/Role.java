@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.player.model;
 
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.AttributesModule;
 import com.aiwan.server.user.role.attributes.model.RoleAttribute;
 import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.util.GetBean;
@@ -141,6 +142,15 @@ public class Role {
         GetBean.getMountService().createMount(getId());
         //创建技能模块
         GetBean.getSkillManager().create(getId());
+        //创建buff模块
+        GetBean.getBuffManager().create(getId());
+    }
+
+    /**
+     * 更新属性
+     */
+    public void updateAttribute(String name, Map<AttributeType, AttributeElement> map) {
+        getAttribute().updateModule(AttributesModule.getType(name), map);
     }
 
 }

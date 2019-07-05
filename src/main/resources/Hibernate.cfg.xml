@@ -18,5 +18,6 @@
         <mapping class="com.aiwan.server.user.account.entity.UserEnt"/>
         <mapping class="com.aiwan.server.user.role.player.entity.RoleEnt"/>
         <mapping class="com.aiwan.server.user.role.skill.entity.SkillEntity"/>
+        <mapping class="com.aiwan.server.user.role.buff.entity.BuffEntity"/>
     </session-factory>
 </hibernate-configuration>

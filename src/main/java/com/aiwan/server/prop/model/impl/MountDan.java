@@ -1,6 +1,7 @@
 package com.aiwan.server.prop.model.impl;
 
 import com.aiwan.server.prop.model.AbstractProps;
+import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
 
 

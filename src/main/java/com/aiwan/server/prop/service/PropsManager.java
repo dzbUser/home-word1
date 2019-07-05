@@ -33,6 +33,7 @@ public class PropsManager {
      * 获取某种道具
      * */
     public PropsResource getPropsResource(Integer id) {
+
         return propsMap.get(id);
     }
 
@@ -58,10 +59,11 @@ public class PropsManager {
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-        logger.debug("道具静态资源初始化debug：" + list.size());
+
         for (int i = 0; i < list.size(); i++) {
             list.get(i).init();
             this.putProps(list.get(i));
         }
+        logger.debug("道具静态资源初始化debug：" + list.size());
     }
 }

@@ -48,6 +48,7 @@ public class RoleAttribute {
             long value = entry.getKey().calculate(entry.getValue(),pureAttribute);
             finalAttribute.put(entry.getKey(),AttributeElement.valueOf(entry.getKey(),value));
         }
+
     }
 
     /** 重新计算*/
@@ -65,34 +66,6 @@ public class RoleAttribute {
         return finalAttribute;
     }
 
-    /**
-     * 增加模块中的某个属性
-     */
-    public void addAttributeToModule(AttributesModule attributesModule, AttributeElement attributeElement) {
-        //获取模块属性
-        Map<AttributeType, AttributeElement> map = moduleMap.get(attributesModule);
-        //获取模块中的属性
-        AttributeElement moduleElement = map.get(attributeElement.getAttributeType());
-        if (moduleElement == null) {
-            //模块中还没有改属性
-            map.put(attributeElement.getAttributeType(), attributeElement);
-        } else {
-            //叠加
-            moduleElement.setValue(moduleElement.getValue() + attributeElement.getValue());
-        }
-        reCalculate();
-    }
 
-    /**
-     * 减少模块中的某个属性
-     */
-    public void reduceAttributeFromModule(AttributesModule attributesModule, AttributeElement attributeElement) {
-        //获取模块属性
-        Map<AttributeType, AttributeElement> map = moduleMap.get(attributesModule);
-        //获取模块中的属性
-        AttributeElement moduleElement = map.get(attributeElement.getAttributeType());
-        moduleElement.setValue(moduleElement.getValue() - attributeElement.getValue());
-        reCalculate();
-    }
 
 }

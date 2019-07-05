@@ -30,7 +30,7 @@ public enum PropsType {
     /**
      * buff道具
      */
-    BUFFPROPS(3, BuffProps.class);
+    BUFFPROPS(4, BuffProps.class);
 
     /**
      * 空位置id

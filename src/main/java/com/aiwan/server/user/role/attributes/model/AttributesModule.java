@@ -43,9 +43,9 @@ public enum  AttributesModule implements Serializable {
     BUFF("buff") {
         @Override
         public Map<AttributeType, AttributeElement> getAttributes(Long rId) {
-            return new HashMap<>();
+            return GetBean.getBuffService().getAttributeModule(rId);
         }
-    }
+    },
     ;
     /** 获取属性模块 */
     public Map<AttributeType,AttributeElement> getAttributes(Long rId){

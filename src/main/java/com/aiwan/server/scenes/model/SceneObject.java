@@ -4,6 +4,8 @@ import com.aiwan.server.monster.model.Monster;
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.mapresource.MapResource;
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
@@ -135,6 +137,16 @@ public class SceneObject {
 
     public void setMonsterMap(Map<Long, Monster> monsterMap) {
         this.monsterMap = monsterMap;
+    }
+
+    /**
+     * 设置战斗对象属性
+     */
+    public void setFighterAttribute(Role role) {
+        FighterRole fighterRole = fighterRoleMap.get(role.getId());
+        if (fighterRole != null) {
+            fighterRole.setRoleAttribute(role.getAttribute().getFinalAttribute());
+        }
     }
 }
 

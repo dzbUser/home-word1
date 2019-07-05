@@ -44,4 +44,9 @@ public class StatusCode {
      * 查看技能栏
      */
     public final static int VIEWSKILLBAR = 17;
+
+    /**
+     * 返回buff列表
+     */
+    public final static int VIEW_BUFF = 18;
 }

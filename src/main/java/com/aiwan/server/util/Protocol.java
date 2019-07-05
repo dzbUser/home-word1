@@ -102,4 +102,9 @@ public class Protocol {
      * 查看技能栏
      */
     public static final int VIEWSKILLBAR = 37;
+
+    /**
+     * 查看buff
+     */
+    public static final int VIEW_BUFF = 38;
 }

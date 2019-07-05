@@ -60,7 +60,7 @@
     <inspection_tool class="AlibabaUseRightCaseForDateFormat" enabled="false" level="CRITICAL" enabled_by_default="false" />
     <inspection_tool class="Duplicates" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <Java>
-        <minSize>61</minSize>
+        <minSize>71</minSize>
         <isEnabled>true</isEnabled>
       </Java>
     </inspection_tool>

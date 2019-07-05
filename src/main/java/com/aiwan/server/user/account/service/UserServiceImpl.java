@@ -131,6 +131,7 @@ public class UserServiceImpl implements UserService {
             Role role = GetBean.getRoleManager().load(user.getRoleId());
             //把用户从地图资源中移除
             GetBean.getSceneExecutorService().submit(new LeaveMapCommand(role));
+            //移除buff管理中command映射
         }
         //session移除用户信息
         session.setUser(null);

@@ -67,11 +67,4 @@ public class RoleManager {
         cache.writeBack(roleEnt.getId(),roleEnt);
     }
 
-    /**
-     * 修改人物属性
-     * */
-    public void updateAttributeModule(String name, Map<AttributeType, AttributeElement> map, Long rId) {
-        RoleEnt roleEnt = cache.load(rId);
-        roleEnt.getAttribute().updateModule(AttributesModule.getType(name),map);
-    }
 }

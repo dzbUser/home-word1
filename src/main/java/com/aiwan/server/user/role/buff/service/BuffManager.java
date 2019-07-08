@@ -84,11 +84,10 @@ public class BuffManager {
         List<BuffResource> list = new ArrayList<BuffResource>();
         try {
             list.addAll(ExcelUtil.analysisWithRelativePath(path, BuffResource.class));
-            logger.debug("道具静态资源初始化debug：");
+            logger.debug("buf静态资源初始化debug：");
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-        logger.debug("道具静态资源初始化debug：" + list.size());
         for (BuffResource buffResource : list) {
             buffResource.init();
             buffResourceMap.put(buffResource.getId(), buffResource);

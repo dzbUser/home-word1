@@ -58,4 +58,10 @@ public abstract class AbstractSceneCommand extends AbstractCommand {
     }
 
     public abstract void action();
+
+    public AbstractSceneCommand(String accountId, int mapId) {
+        this.accountId = accountId;
+        this.sceneId = sceneId;
+        this.mapId = mapId;
+    }
 }

@@ -1,8 +1,11 @@
 package com.aiwan.server.scenes.fight.model.pvpunit;
 
+import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.buff.effect.AbstractBuffEffect;
+import com.aiwan.server.user.role.buff.effect.BuffType;
 import com.aiwan.server.user.role.player.model.Role;
 
 import java.util.HashMap;
@@ -13,8 +16,7 @@ import java.util.Map;
  *
  * @author dengzebiao
  */
-public class
-FighterRole {
+public class FighterRole {
 
     /**
      * 角色基础信息
@@ -25,6 +27,22 @@ FighterRole {
      * 角色纯净属性
      */
     private Map<AttributeType, AttributeElement> roleAttribute;
+
+    /**
+     * 管理buff定时器
+     */
+    private Map<Integer, AbstractSceneCommand> buffCommandMap = new HashMap<>();
+
+    /**
+     * buff列表
+     */
+    private Map<BuffType, AbstractBuffEffect> buff = new HashMap<>();
+
+
+    /**
+     * cd列表
+     */
+    private Map<Integer, Long> CDMap = new HashMap<>();
 
     /**
      * 创建对象
@@ -57,5 +75,29 @@ FighterRole {
 
     public void setRoleBaseMessage(RoleBaseMessage roleBaseMessage) {
         this.roleBaseMessage = roleBaseMessage;
+    }
+
+    public Map<BuffType, AbstractBuffEffect> getBuff() {
+        return buff;
+    }
+
+    public void setBuff(Map<BuffType, AbstractBuffEffect> buff) {
+        this.buff = buff;
+    }
+
+    public Map<Integer, Long> getCDMap() {
+        return CDMap;
+    }
+
+    public void setCDMap(Map<Integer, Long> CDMap) {
+        this.CDMap = CDMap;
+    }
+
+    public Map<Integer, AbstractSceneCommand> getBuffCommandMap() {
+        return buffCommandMap;
+    }
+
+    public void setBuffCommandMap(Map<Integer, AbstractSceneCommand> buffCommandMap) {
+        this.buffCommandMap = buffCommandMap;
     }
 }

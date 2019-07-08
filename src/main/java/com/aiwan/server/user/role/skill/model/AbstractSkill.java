@@ -1,5 +1,9 @@
 package com.aiwan.server.user.role.skill.model;
 
+import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
+import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
+import com.aiwan.server.user.role.skill.resource.SkillResource;
+import com.aiwan.server.util.GetBean;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
@@ -36,4 +40,32 @@ public abstract class AbstractSkill {
     public void setSkillLevel(int skillLevel) {
         this.skillLevel = skillLevel;
     }
+
+    /**
+     * 初始化
+     */
+    public void init(int skillId, int level) {
+        setSkillId(skillId);
+        setSkillLevel(level);
+    }
+
+    /**
+     * 获取技能静态资源
+     */
+    public SkillResource getResource() {
+        return GetBean.getSkillManager().getSkillResourceBySkillId(getSkillId());
+    }
+
+
+    /**
+     * 获取对应等级的静态资源
+     */
+    public SkillLevelResource getSkillLevelResouece() {
+        return GetBean.getSkillManager().getSkillLevelReById(skillId, skillLevel);
+    }
+
+//    /**
+//     * 使用技能
+//     * */
+//    protected abstract void doUserSkill(FighterRole attater);
 }

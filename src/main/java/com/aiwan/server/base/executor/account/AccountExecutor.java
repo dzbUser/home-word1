@@ -2,6 +2,7 @@ package com.aiwan.server.base.executor.account;
 
 import com.aiwan.server.base.executor.account.impl.AbstractAccountCommand;
 import com.aiwan.server.publicsystem.service.ThreadPoolInit;
+import com.aiwan.server.util.GetBean;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class AccountExecutor {
      * 延时指令
      */
     public final void schedule(AbstractAccountCommand command, long delay) {
-        command.setFuture(SCHEDULE_THREAD.schedule(() -> addTask(command), delay, TimeUnit.MILLISECONDS));
+        command.setFuture(GetBean.getScheduleService().schedule(() -> addTask(command), delay));
     }
 
     public void addTask(String account, Runnable runnable) {

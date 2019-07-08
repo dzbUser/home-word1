@@ -1,13 +1,13 @@
 package com.aiwan.server.user.role.skill.model;
 
-import com.aiwan.server.user.role.skill.model.impl.CommonAbstractSkill;
+import com.aiwan.server.user.role.skill.model.impl.CommonSkill;
 
 public enum SkillType {
 
     /**
      * 普通技能
      */
-    COMMON(0, CommonAbstractSkill.class);
+    COMMON(0, CommonSkill.class);
 
     /**
      * 技能id

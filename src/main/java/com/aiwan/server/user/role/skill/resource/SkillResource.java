@@ -27,6 +27,7 @@ public class SkillResource {
     @CellMapping(name = "isBuffSkill")
     private int isBuffSkill;
 
+
     public int getSkillId() {
         return skillId;
     }

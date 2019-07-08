@@ -1,5 +1,6 @@
 package com.aiwan.server.util;
 
+import com.aiwan.server.base.executor.ScheduleService;
 import com.aiwan.server.base.executor.account.IAccountExecutorService;
 import com.aiwan.server.base.executor.scene.ISceneExecutorService;
 import com.aiwan.server.monster.service.MonsterManager;
@@ -82,6 +83,20 @@ public class GetBean {
      * 获取buff管理
      */
     private static BuffManager buffManager;
+
+    /**
+     * 定时线程
+     */
+    private static ScheduleService scheduleService;
+
+    public static ScheduleService getScheduleService() {
+        return scheduleService;
+    }
+
+    @Autowired
+    public void setScheduleService(ScheduleService scheduleService) {
+        GetBean.scheduleService = scheduleService;
+    }
 
     public static BuffManager getBuffManager() {
         return buffManager;

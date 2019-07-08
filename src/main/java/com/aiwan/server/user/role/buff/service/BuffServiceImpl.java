@@ -77,7 +77,7 @@ public class BuffServiceImpl implements BuffService {
             buffManager.interruptCommand(rId, buffId);
             //最终延迟时间
             Long finalDelay = delay;
-            if (buffResource.getBuffType() == 1) {
+            if (buffResource.getOverlayType() == 1) {
                 logger.info("buffId:{},添加角色：{},重置添加", buffId, rId);
                 //重置buff
                 buffModel.resetTime(buffId, currentTime + delay);

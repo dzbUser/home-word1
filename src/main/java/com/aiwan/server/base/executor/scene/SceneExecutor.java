@@ -1,6 +1,8 @@
 package com.aiwan.server.base.executor.scene;
 
+import com.aiwan.server.base.executor.AbstractCommand;
 import com.aiwan.server.base.executor.ICommand;
+import com.aiwan.server.util.GetBean;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.stereotype.Component;
 
@@ -44,5 +46,29 @@ public class SceneExecutor {
 
     private int modIndex(String account) {
         return Math.abs(account.hashCode() % SCENE_POOL_SIZE);
+    }
+
+    /**
+     * 定时命令
+     *
+     * @param command
+     * @param delay
+     */
+    public final void schedule(AbstractCommand command, long delay) {
+
+        command.setFuture(GetBean.getScheduleService().schedule(() -> addTask(command), delay));
+
+    }
+
+    /**
+     * 周期命令
+     *
+     * @param command
+     * @param delay
+     * @param period
+     */
+    public final void schedule(AbstractCommand command, long delay, long period) {
+
+        command.setFuture(GetBean.getScheduleService().scheduleAtFixedRate(() -> addTask(command), delay, period));
     }
 }

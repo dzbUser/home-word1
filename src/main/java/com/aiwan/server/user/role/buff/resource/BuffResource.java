@@ -20,6 +20,9 @@ public class BuffResource {
     @CellMapping(name = "attribute")
     private String attribute;
 
+    @CellMapping(name = "overlayType")
+    private int overlayType;
+
     @CellMapping(name = "buffType")
     private int buffType;
 
@@ -67,6 +70,15 @@ public class BuffResource {
     public void setAttribute(String attribute) {
         this.attribute = attribute;
     }
+
+    public int getOverlayType() {
+        return overlayType;
+    }
+
+    public void setOverlayType(int overlayType) {
+        this.overlayType = overlayType;
+    }
+
 
     public int getBuffType() {
         return buffType;

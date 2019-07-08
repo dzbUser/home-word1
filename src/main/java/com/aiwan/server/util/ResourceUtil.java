@@ -1,11 +1,9 @@
 package com.aiwan.server.util;
 
-import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Resource;
 import com.aiwan.server.publicsystem.annotation.Static;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

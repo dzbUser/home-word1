@@ -42,10 +42,10 @@ public class RoleManager {
         Long time = Calendar.getInstance().getTimeInMillis();
         roleEnt.setUpdateTime(time);
         roleEnt.setCreatTime(time);
-        cache.writeBack(id,roleEnt);
         Role role = new Role();
         role.setRoleEnt(roleEnt);
         role.createModule();
+        cache.writeBack(id,roleEnt);
         return role;
     }
 

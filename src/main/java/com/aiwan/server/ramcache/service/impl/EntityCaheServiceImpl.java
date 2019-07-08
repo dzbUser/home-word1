@@ -70,8 +70,8 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
             return current;
         }
         //从队列中取出最后一个，写回
-        PK lasfId = linkedQueue.poll();
-        cacheMap.remove(lasfId);
+        PK lastId = linkedQueue.poll();
+        cacheMap.remove(lastId);
         linkedQueue.offer(id);
         cacheMap.put(id,current);
         current.init();
@@ -81,7 +81,9 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
     @Override
     public void writeBack(PK id, T entity) {
         //检查是否为新建数据，若为新建数据吧数据存到缓存中
-        // TODO: 2019/7/6 新数据加入缓存
+        if (load(id) == null) {
+            putEntityToCacheMap(entity);
+        }
         //序列化
         entity.serialize();
         Element element = new Element(EventType.SAVE,id,entity,entityClz);
@@ -102,6 +104,25 @@ public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T ex
 
         return current;
 
+    }
+
+    /**
+     * 更新到缓存
+     */
+    public void putEntityToCacheMap(T entity) {
+        //若缓存容量小于最大容量,存到缓存并插入队列
+        if (num < maxmum) {
+            cacheMap.put(entity.getId(), entity);
+            linkedQueue.offer(entity.getId());
+            num++;
+            entity.init();
+        }
+        //从队列中取出最后一个，写回
+        PK lastId = linkedQueue.poll();
+        cacheMap.remove(lastId);
+        linkedQueue.offer(entity.getId());
+        cacheMap.put(entity.getId(), entity);
+        entity.init();
     }
 
 

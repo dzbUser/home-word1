@@ -17,7 +17,7 @@ public class SkillInfo {
     /**
      * 角色学习技能容器
      */
-    private Map<Integer, SkillMessage> skillMessageMap = new HashMap<Integer, SkillMessage>();
+    private Map<Integer, SkillElement> skillMessageMap = new HashMap<Integer, SkillElement>();
 
     public SkillInfo(int num) {
         this.skills = new Integer[num];
@@ -34,11 +34,11 @@ public class SkillInfo {
         this.skills = skills;
     }
 
-    public Map<Integer, SkillMessage> getSkillMessageMap() {
+    public Map<Integer, SkillElement> getSkillMessageMap() {
         return skillMessageMap;
     }
 
-    public void setSkillMessageMap(Map<Integer, SkillMessage> skillMessageMap) {
+    public void setSkillMessageMap(Map<Integer, SkillElement> skillMessageMap) {
         this.skillMessageMap = skillMessageMap;
     }
 }

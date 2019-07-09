@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.skill.model;
 
+import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
@@ -64,8 +65,8 @@ public abstract class AbstractSkill {
         return GetBean.getSkillManager().getSkillLevelReById(skillId, skillLevel);
     }
 
-//    /**
-//     * 使用技能
-//     * */
-//    protected abstract void doUserSkill(FighterRole attater);
+    /**
+     * 使用技能
+     */
+    public abstract void doUserSkill(BaseUnit active, BaseUnit passive);
 }

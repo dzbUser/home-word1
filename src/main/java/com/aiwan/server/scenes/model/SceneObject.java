@@ -2,7 +2,9 @@ package com.aiwan.server.scenes.model;
 
 import com.aiwan.server.monster.model.Monster;
 import com.aiwan.server.monster.resource.MonsterResource;
+import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
+import com.aiwan.server.scenes.fight.model.pvpunit.MonsterUnit;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
@@ -29,6 +31,10 @@ public class SceneObject {
     private int mapId;
 
 
+//    /**
+//     * 地图动态单位
+//     * */
+//    Map<Long, BaseUnit> baseUnitMap = new HashMap<>();
     /**
      * 存储角色
      */
@@ -37,7 +43,8 @@ public class SceneObject {
     /**
      * 怪物映射
      */
-    Map<Long, Monster> monsterMap = new HashMap<>();
+    Map<Long, MonsterUnit> monsterMap = new HashMap<>();
+
 
     public int getMapId() {
         return mapId;
@@ -51,8 +58,8 @@ public class SceneObject {
     /**
      * 存角色
      */
-    public void putFighterRole(Role role) {
-        fighterRoleMap.put(role.getId(), FighterRole.valueOf(role));
+    public void putFighterRole(FighterRole fighterRole) {
+        fighterRoleMap.put(fighterRole.getId(), fighterRole);
     }
 
     /**
@@ -67,6 +74,13 @@ public class SceneObject {
      */
     public FighterRole getFighterRole(Long rId) {
         return fighterRoleMap.get(rId);
+    }
+
+    /**
+     * 获取怪物
+     */
+    public MonsterUnit getMonster(Long id) {
+        return monsterMap.get(id);
     }
 
     /**
@@ -120,8 +134,8 @@ public class SceneObject {
                 while (true) {
                     Position position = MonsterGenerateUtil.generaterRandomPosition(getResource().getWidth(), getResource().getHeight());
                     if (GetBean.getMapManager().allowMove(position.getX(), position.getY(), getMapId())) {
-                        Monster monster = new Monster(monsterResource.getResourceId(), position);
-                        monsterMap.put(monster.getObjectId(), monster);
+                        MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position);
+                        monsterMap.put(monster.getId(), monster);
                         break;
                     }
                 }
@@ -131,11 +145,11 @@ public class SceneObject {
         logger.debug("场景{},怪物加载完毕", mapId);
     }
 
-    public Map<Long, Monster> getMonsterMap() {
+    public Map<Long, MonsterUnit> getMonsterMap() {
         return monsterMap;
     }
 
-    public void setMonsterMap(Map<Long, Monster> monsterMap) {
+    public void setMonsterMap(Map<Long, MonsterUnit> monsterMap) {
         this.monsterMap = monsterMap;
     }
 
@@ -145,7 +159,7 @@ public class SceneObject {
     public void setFighterAttribute(Role role) {
         FighterRole fighterRole = fighterRoleMap.get(role.getId());
         if (fighterRole != null) {
-            fighterRole.setRoleAttribute(role.getAttribute().getFinalAttribute());
+            fighterRole.setRoleAttribute(role.getAttribute().getPureAttribute());
         }
     }
 }

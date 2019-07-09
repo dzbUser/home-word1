@@ -66,6 +66,7 @@ public class RoleAttribute {
         return finalAttribute;
     }
 
-
-
+    public Map<AttributeType, AttributeElement> getPureAttribute() {
+        return pureAttribute;
+    }
 }

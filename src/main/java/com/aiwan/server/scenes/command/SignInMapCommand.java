@@ -1,6 +1,7 @@
 package com.aiwan.server.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
+import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 
@@ -18,14 +19,15 @@ public class SignInMapCommand extends AbstractSceneCommand {
     public void action() {
         role.setChangingMap(true);
         //把角色存到地图资源
-        GetBean.getMapManager().putFighterRole(role);
+        FighterRole fighterRole = FighterRole.valueOf(role);
+        GetBean.getMapManager().putFighterRole(fighterRole);
         //给所有玩家发送消息
         GetBean.getMapManager().sendMessageToUsers(getKey());
         role.setChangingMap(false);
     }
 
     public SignInMapCommand(Role role) {
+        super(role.getAccountId(), role.getMap());
         this.role = role;
-        setMapId(role.getMap());
     }
 }

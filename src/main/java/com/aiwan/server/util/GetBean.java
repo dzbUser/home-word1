@@ -12,6 +12,7 @@ import com.aiwan.server.user.backpack.service.BackResourceManager;
 import com.aiwan.server.user.role.buff.service.BuffManager;
 import com.aiwan.server.user.role.buff.service.BuffService;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
+import com.aiwan.server.user.role.fight.service.IFightService;
 import com.aiwan.server.user.role.mount.service.MountManager;
 import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.user.role.player.service.RoleManager;
@@ -88,6 +89,21 @@ public class GetBean {
      * 定时线程
      */
     private static ScheduleService scheduleService;
+
+    /**
+     * 获取战斗业务类
+     */
+    private static IFightService fightService;
+
+
+    public static IFightService getFightService() {
+        return fightService;
+    }
+
+    @Autowired
+    public void setFightService(IFightService fightService) {
+        GetBean.fightService = fightService;
+    }
 
     public static ScheduleService getScheduleService() {
         return scheduleService;

@@ -107,4 +107,9 @@ public class Protocol {
      * 查看buff
      */
     public static final int VIEW_BUFF = 38;
+
+    /**
+     * 使用技能
+     */
+    public static final int USESKILL = 39;
 }

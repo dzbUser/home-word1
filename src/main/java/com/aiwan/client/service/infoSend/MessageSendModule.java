@@ -58,14 +58,14 @@ public enum  MessageSendModule {
     /**
      * 怪物模块
      */
-    MONSTER_MODULE(5) {
+    FIGHT_MODULE(5) {
         @Override
         public void sendMessage(String message, int num) {
-            MonsterMessageSend monsterMessageSend = MonsterMessageSend.getMonsterMessageSend(num);
-            if (monsterMessageSend == null) {
+            FightMessageSend fightMessageSend = FightMessageSend.getMonsterMessageSend(num);
+            if (fightMessageSend == null) {
                 return;
             }
-            monsterMessageSend.messageSend(message);
+            fightMessageSend.messageSend(message);
         }
     }
     ;

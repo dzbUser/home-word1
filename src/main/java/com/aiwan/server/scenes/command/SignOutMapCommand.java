@@ -33,7 +33,7 @@ public class SignOutMapCommand extends AbstractSceneCommand {
     }
 
     public SignOutMapCommand(Role role) {
+        super(role.getAccountId(), role.getMap());
         this.role = role;
-        setMapId(role.getMap());
     }
 }

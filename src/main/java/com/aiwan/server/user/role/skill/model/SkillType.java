@@ -1,13 +1,25 @@
 package com.aiwan.server.user.role.skill.model;
 
 import com.aiwan.server.user.role.skill.model.impl.CommonSkill;
+import com.aiwan.server.user.role.skill.model.impl.CuretSkill;
+import com.aiwan.server.user.role.skill.model.impl.GroupAttackSkill;
 
 public enum SkillType {
 
     /**
      * 普通技能
      */
-    COMMON(0, CommonSkill.class);
+    COMMON(0, CommonSkill.class),
+
+    /**
+     * 治疗技能
+     */
+    CURE(1, CuretSkill.class),
+
+    /**
+     * 群体攻击
+     */
+    GROUP_ATTACK(2, GroupAttackSkill.class);
 
     /**
      * 技能id

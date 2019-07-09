@@ -3,7 +3,7 @@ package com.aiwan.server.user.role.player.service.impl;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.scenes.command.SignInMapCommand;
-import com.aiwan.server.scenes.command.UpdateSceneAttribute;
+import com.aiwan.server.scenes.command.UpdateSceneAttributeCommand;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
@@ -152,7 +152,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleManager.load(rId);
         role.updateAttribute(name, map);
         //更新场景属性
-        GetBean.getSceneExecutorService().submit(new UpdateSceneAttribute(role));
+        GetBean.getSceneExecutorService().submit(new UpdateSceneAttributeCommand(role));
     }
 
     /**获取升级要求(暂用)*/

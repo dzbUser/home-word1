@@ -1,6 +1,7 @@
 package com.aiwan.server.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
+import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
@@ -18,6 +19,11 @@ public class EnterMapCommand extends AbstractSceneCommand {
      */
     private Role role;
 
+    /**
+     * 原先战斗单元
+     */
+    private FighterRole fighterRole;
+
     @Override
     public void action() {
         //获取地图资源
@@ -28,7 +34,9 @@ public class EnterMapCommand extends AbstractSceneCommand {
         role.setX(mapResource.getOriginX());
         role.setY(mapResource.getOriginY());
         //添加到地图资源中
-        GetBean.getMapManager().putFighterRole(role);
+        FighterRole fighterRole = FighterRole.valueOf(role);
+        fighterRole.reset(fighterRole);
+        GetBean.getMapManager().putFighterRole(fighterRole);
         //写回
         GetBean.getRoleManager().save(role);
         //设置跳转结束
@@ -37,9 +45,10 @@ public class EnterMapCommand extends AbstractSceneCommand {
         GetBean.getMapManager().sendMessageToUsers(getKey());
     }
 
-    public EnterMapCommand(int mapId, Role role) {
+    public EnterMapCommand(int mapId, Role role, FighterRole fighterRole) {
+        super(role.getAccountId(), mapId);
         this.role = role;
-        setMapId(mapId);
+        this.fighterRole = fighterRole;
     }
 
 }

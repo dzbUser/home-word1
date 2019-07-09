@@ -1,7 +1,10 @@
 package com.aiwan.server.user.role.skill.model;
 
 import com.aiwan.server.user.role.skill.entity.SkillEntity;
-import com.aiwan.server.user.role.skill.entity.SkillMessage;
+import com.aiwan.server.user.role.skill.entity.SkillInfo;
+import com.aiwan.server.user.role.skill.entity.SkillElement;
+import com.aiwan.server.user.role.skill.resource.SkillResource;
+import com.aiwan.server.util.GetBean;
 
 import java.util.Map;
 
@@ -35,7 +38,7 @@ public class SkillModel {
     /**
      * 根据技能id获取技能
      */
-    public SkillMessage getSkillBySkillId(int skillId) {
+    public SkillElement getSkillBySkillId(int skillId) {
         return skillEntity.getSkillInfo().getSkillMessageMap().get(skillId);
     }
 
@@ -45,13 +48,13 @@ public class SkillModel {
      */
     public void putSkillBySkillId(int skillId, int skillTypeId) {
         //创建普通技能
-        skillEntity.getSkillInfo().getSkillMessageMap().put(skillId, SkillMessage.valueOf(skillId, 1));
+        skillEntity.getSkillInfo().getSkillMessageMap().put(skillId, SkillElement.valueOf(skillId, 1));
     }
 
     /**
      * 返回所学技能
      */
-    public Map<Integer, SkillMessage> getLearnedSkill() {
+    public Map<Integer, SkillElement> getLearnedSkill() {
         return skillEntity.getSkillInfo().getSkillMessageMap();
     }
 
@@ -59,8 +62,8 @@ public class SkillModel {
      * 技能升级
      */
     public void upgrade(int skillId) {
-        SkillMessage skillMessage = skillEntity.getSkillInfo().getSkillMessageMap().get(skillId);
-        skillMessage.setSkillLevel(skillMessage.getSkillLevel() + 1);
+        SkillElement skillElement = skillEntity.getSkillInfo().getSkillMessageMap().get(skillId);
+        skillElement.setSkillLevel(skillElement.getSkillLevel() + 1);
     }
 
     /**
@@ -81,5 +84,23 @@ public class SkillModel {
      */
     public Integer[] getSkillBar() {
         return skillEntity.getSkillInfo().getSkills();
+    }
+
+    /**
+     * 获取技能栏里的id
+     */
+    public Integer getSkillIdInPosition(int position) {
+        return getSkillBar()[position];
+    }
+
+    /**
+     * 获取对应skill调用实体
+     */
+    public AbstractSkill getSkill(int skillId) {
+        SkillElement skillElement = getSkillBySkillId(skillId);
+        SkillResource skillResource = GetBean.getSkillManager().getSkillResourceBySkillId(skillId);
+        AbstractSkill skill = SkillType.getSkillById(skillResource.getType());
+        skill.init(skillElement.getSkillId(), skillElement.getSkillLevel());
+        return skill;
     }
 }

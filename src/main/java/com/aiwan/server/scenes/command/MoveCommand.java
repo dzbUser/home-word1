@@ -3,6 +3,7 @@ package com.aiwan.server.scenes.command;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
@@ -38,8 +39,9 @@ public class MoveCommand extends AbstractSceneCommand {
             role.setY(target.getY());
             role.setMap(getKey());
             GetBean.getRoleManager().save(role);
-            //加入地图资源
-            GetBean.getMapManager().putFighterRole(role);
+            //获取角色战斗单位
+            FighterRole fighterRole = GetBean.getMapManager().getSceneObject(role.getMap()).getFighterRole(role.getId());
+            fighterRole.setPosition(Position.valueOf(target.getX(), target.getY()));
             //对所有在线用户发送地图信息
             GetBean.getMapManager().sendMessageToUsers(role.getMap());
             logger.info("角色{}请求移动到({}.{})成功", role.getId(), target.getX(), target.getY());
@@ -50,8 +52,8 @@ public class MoveCommand extends AbstractSceneCommand {
     }
 
     public MoveCommand(Position target, Role role) {
+        super(role.getAccountId(), role.getMap());
         this.target = target;
         this.role = role;
-        setMapId(role.getMap());
     }
 }

@@ -30,6 +30,18 @@ public class RoleMessage implements Serializable {
      */
     private int y;
 
+
+    /**
+     * 血量
+     */
+    private long HP;
+
+    /**
+     * 魔法值
+     */
+    private long MP;
+
+
     public Long getrId() {
         return rId;
     }
@@ -62,12 +74,30 @@ public class RoleMessage implements Serializable {
         this.y = y;
     }
 
-    public static RoleMessage valueOf(Long rId, String name, int x, int y) {
+    public static RoleMessage valueOf(Long rId, String name, int x, int y, long HP, long MP) {
         RoleMessage roleMessage = new RoleMessage();
         roleMessage.setrId(rId);
         roleMessage.setName(name);
         roleMessage.setX(x);
         roleMessage.setY(y);
+        roleMessage.setHP(HP);
+        roleMessage.setMP(MP);
         return roleMessage;
+    }
+
+    public long getHP() {
+        return HP;
+    }
+
+    public void setHP(long HP) {
+        this.HP = HP;
+    }
+
+    public long getMP() {
+        return MP;
+    }
+
+    public void setMP(long MP) {
+        this.MP = MP;
     }
 }

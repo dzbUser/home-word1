@@ -4,6 +4,7 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.scenes.command.EnterMapCommand;
 import com.aiwan.server.scenes.command.ChangeMapCommand;
 import com.aiwan.server.scenes.command.MoveCommand;
+import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.user.role.player.model.Role;
@@ -78,8 +79,9 @@ public class ScenesServiceImpl implements ScenesService{
         //设置正在地图跳转
         role.setChangingMap(true);
         leaveMap(role);
+        FighterRole fighterRole = GetBean.getMapManager().getSceneObject(role.getMap()).getFighterRole(role.getId());
         //进入map地图
-        GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role));
+        GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, fighterRole));
     }
 
     @Override

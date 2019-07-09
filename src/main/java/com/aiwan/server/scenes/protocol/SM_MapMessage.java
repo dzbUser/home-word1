@@ -21,6 +21,10 @@ public class SM_MapMessage implements Serializable {
 
     private int y;
 
+    private long HP;
+
+    private long MP;
+
     /**
      *角色列表
      */
@@ -31,12 +35,14 @@ public class SM_MapMessage implements Serializable {
      */
     private List<MonsterMessage> monsterList;
 
-    public static SM_MapMessage valueOf(int map, int x, int y, List<RoleMessage> roleList, List<MonsterMessage> monsterList) {
+    public static SM_MapMessage valueOf(int map, int x, int y, List<RoleMessage> roleList, List<MonsterMessage> monsterList, long HP, long MP) {
         SM_MapMessage sm_MapMessage = new SM_MapMessage();
         sm_MapMessage.setRoleList(roleList);
         sm_MapMessage.setMap(map);
         sm_MapMessage.setX(x);
         sm_MapMessage.setY(y);
+        sm_MapMessage.setHP(HP);
+        sm_MapMessage.setMP(MP);
         sm_MapMessage.setMonsterList(monsterList);
         return sm_MapMessage;
     }
@@ -79,5 +85,21 @@ public class SM_MapMessage implements Serializable {
 
     public void setMonsterList(List<MonsterMessage> monsterList) {
         this.monsterList = monsterList;
+    }
+
+    public long getHP() {
+        return HP;
+    }
+
+    public void setHP(long HP) {
+        this.HP = HP;
+    }
+
+    public long getMP() {
+        return MP;
+    }
+
+    public void setMP(long MP) {
+        this.MP = MP;
     }
 }

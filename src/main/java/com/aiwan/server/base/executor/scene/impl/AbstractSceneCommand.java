@@ -21,7 +21,8 @@ public abstract class AbstractSceneCommand extends AbstractCommand {
 
     @Override
     public Integer getKey() {
-        return (mapId | sceneId);
+//        return (mapId | sceneId);
+        return mapId;
     }
 
     @Override

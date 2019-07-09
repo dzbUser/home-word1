@@ -27,6 +27,24 @@ public class SkillResource {
     @CellMapping(name = "isBuffSkill")
     private int isBuffSkill;
 
+    /**
+     * 技能类型
+     */
+    @CellMapping(name = "type")
+    private int type;
+
+    /**
+     * 技能描述
+     */
+    @CellMapping(name = "dec")
+    private String dec;
+
+    /**
+     * 是否为群体攻击
+     */
+    @CellMapping(name = "isGroup")
+    private int isGroup;
+
 
     public int getSkillId() {
         return skillId;
@@ -50,5 +68,29 @@ public class SkillResource {
 
     public void setIsBuffSkill(int isBuffSkill) {
         this.isBuffSkill = isBuffSkill;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getDec() {
+        return dec;
+    }
+
+    public void setDec(String dec) {
+        this.dec = dec;
+    }
+
+    public int getIsGroup() {
+        return isGroup;
+    }
+
+    public void setIsGroup(int isGroup) {
+        this.isGroup = isGroup;
     }
 }

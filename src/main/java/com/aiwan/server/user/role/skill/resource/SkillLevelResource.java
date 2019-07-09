@@ -55,6 +55,18 @@ public class SkillLevelResource {
     @CellMapping(name = "cd")
     private int cd;
 
+    /**
+     * 攻击目标
+     */
+    @CellMapping(name = "num")
+    private int num;
+
+    /**
+     * 释放距离
+     */
+    @CellMapping(name = "distance")
+    private int distance;
+
     public String getId() {
         return id;
     }
@@ -117,5 +129,21 @@ public class SkillLevelResource {
 
     public void setCd(int cd) {
         this.cd = cd;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 }

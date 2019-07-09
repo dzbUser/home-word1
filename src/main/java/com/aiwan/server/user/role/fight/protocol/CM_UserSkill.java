@@ -24,24 +24,17 @@ public class CM_UserSkill implements Serializable {
      */
     private int barPosition;
 
-    /**
-     * 施法选择
-     * 1.怪物
-     * 2.角色
-     */
-    private int aimType;
 
     /**
      * 目标id
      */
     private Long targetId;
 
-    public static CM_UserSkill valueOf(Long rId, Long targetId, int usePosition, int castingType) {
+    public static CM_UserSkill valueOf(Long rId, Long targetId, int usePosition) {
         CM_UserSkill cm_userSkill = new CM_UserSkill();
         cm_userSkill.setrId(rId);
         cm_userSkill.setBarPosition(usePosition);
         cm_userSkill.setTargetId(targetId);
-        cm_userSkill.setAimType(castingType);
         return cm_userSkill;
     }
 
@@ -69,11 +62,4 @@ public class CM_UserSkill implements Serializable {
         this.targetId = targetId;
     }
 
-    public int getAimType() {
-        return aimType;
-    }
-
-    public void setAimType(int aimType) {
-        this.aimType = aimType;
-    }
 }

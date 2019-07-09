@@ -54,6 +54,10 @@ public class ScenesServiceImpl implements ScenesService{
 
         //获取角色
         Role role = GetBean.getRoleManager().load(rId);
+        if (role == null) {
+            logger.info("角色{}请求地图跳转到{}失败,没有该角色", rId, map);
+            return;
+        }
         //脱离地图
         GetBean.getSceneExecutorService().submit(new ChangeMapCommand(role, map));
         logger.info("请求成功");
@@ -78,8 +82,8 @@ public class ScenesServiceImpl implements ScenesService{
         }
         //设置正在地图跳转
         role.setChangingMap(true);
+        FighterRole fighterRole = (FighterRole) GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
         leaveMap(role);
-        FighterRole fighterRole = GetBean.getMapManager().getSceneObject(role.getMap()).getFighterRole(role.getId());
         //进入map地图
         GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, fighterRole));
     }

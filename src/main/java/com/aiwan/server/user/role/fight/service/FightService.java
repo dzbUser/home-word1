@@ -34,8 +34,7 @@ public class FightService implements IFightService {
     Logger logger = LoggerFactory.getLogger(FightService.class);
 
     @Override
-    public void doUserSkill(Long activeRid, Long passiveId, AbstractSkill skill, int mapId, int castingType) {
-
+    public void doUserSkill(Long activeRid, Long passiveId, AbstractSkill skill, int mapId) {
         /*
          * 获取战斗角色，
          * 判断是否可以施法技能
@@ -45,7 +44,7 @@ public class FightService implements IFightService {
         //获取场景对象
         SceneObject sceneObject = GetBean.getMapManager().getSceneObject(mapId);
         //获取施法单位
-        FighterRole activeRole = sceneObject.getFighterRole(activeRid);
+        FighterRole activeRole = (FighterRole) sceneObject.getBaseUnit(activeRid);
         if (activeRole == null) {
             //没有改施法单位
             logger.error("角色{}施法错误，找不到施法单位", activeRid);
@@ -53,12 +52,7 @@ public class FightService implements IFightService {
         }
 
         //获取目标施法单位
-        BaseUnit passiveUnit;
-        if (castingType == ATTACKROLE) {
-            passiveUnit = sceneObject.getFighterRole(passiveId);
-        } else {
-            passiveUnit = sceneObject.getMonster(passiveId);
-        }
+        BaseUnit passiveUnit = sceneObject.getBaseUnit(passiveId);
         if (passiveUnit == null) {
             //没有目标施法单位
             logger.error("角色{}施法错误，找不到施法单位", activeRid);
@@ -81,8 +75,12 @@ public class FightService implements IFightService {
     }
 
     @Override
-    public void userSkill(Long activeRid, Long passiveId, int position, int aimType) {
+    public void userSkill(Long activeRid, Long passiveId, int position) {
         Role role = GetBean.getRoleManager().load(activeRid);
+        if (role == null) {
+            logger.error("角色id{}发送错误报", activeRid);
+            return;
+        }
         // TODO: 2019/7/9 判断role
         //获取技能
         SkillModel skillModel = GetBean.getSkillManager().load(activeRid);
@@ -95,14 +93,14 @@ public class FightService implements IFightService {
         //获取技能
         AbstractSkill skill = skillModel.getSkill(skillId);
         //移交场景command
-        GetBean.getSceneExecutorService().submit(new DoUserSkillCommand(null, role.getMap(), activeRid, passiveId, skill, aimType));
+        GetBean.getSceneExecutorService().submit(new DoUserSkillCommand(null, role.getMap(), activeRid, passiveId, skill));
     }
 
     private boolean isDistanceSatisfy(BaseUnit activeRole, BaseUnit passiveRole, int distance) {
         Position activePosition = activeRole.getPosition();
         Position passivePosition = passiveRole.getPosition();
         double juli = Math.sqrt(Math.abs((activePosition.getX() - passivePosition.getX()) * (activePosition.getX() - passivePosition.getX()) + (activePosition.getY() - passivePosition.getY()) * (activePosition.getY() - passivePosition.getY())));
-        if (distance > juli) {
+        if (distance < juli) {
             return false;
         }
         return true;

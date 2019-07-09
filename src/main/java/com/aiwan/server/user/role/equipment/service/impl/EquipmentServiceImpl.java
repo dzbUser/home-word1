@@ -69,6 +69,9 @@ public class EquipmentServiceImpl implements EquipmentService {
 
         logger.info("{}：查看装备信息", rId);
         EquipmentModel equipmentModel = equipmentManager.load(rId);
+        if (equipmentModel == null) {
+            logger.error("角色id{}发送错误报", rId);
+        }
         PropsResource prop;
         //获取装备栏数组
         Equipment[] equipments = equipmentModel.getEquipmentBar();
@@ -133,6 +136,9 @@ public class EquipmentServiceImpl implements EquipmentService {
         logger.info(rid + ":卸装备");
         //获取装备
         EquipmentModel equipmentModel = equipmentManager.load(rid);
+        if (equipmentModel == null) {
+            logger.error("角色id{}发送错误报", rid);
+        }
         Equipment equipment = equipmentModel.getEquipmentByPosition(position);
         if (equipment == null) {
             //装备位置为空

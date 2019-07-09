@@ -17,9 +17,8 @@ public interface IFightService {
      * @param passiveId 目标id
      * @param skill     技能
      * @param mapId     场景
-     * @param aimType   目标类型
      */
-    void doUserSkill(Long activeRid, Long passiveId, AbstractSkill skill, int mapId, int aimType);
+    void doUserSkill(Long activeRid, Long passiveId, AbstractSkill skill, int mapId);
 
 
     /**
@@ -28,7 +27,6 @@ public interface IFightService {
      * @param activeRid 角色id
      * @param passiveId 目标id
      * @param position  技能位置
-     * @param aimType   目标类型
      */
-    void userSkill(Long activeRid, Long passiveId, int position, int aimType);
+    void userSkill(Long activeRid, Long passiveId, int position);
 }

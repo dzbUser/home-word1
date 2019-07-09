@@ -5,6 +5,7 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.equipment.model.EquipmentModel;
 import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.protocol.SM_ViewMount;
 import com.aiwan.server.user.role.mount.service.MountManager;
@@ -58,10 +59,12 @@ public class MountServiceImpl implements MountService {
 
     @Override
     public void viewMount(String accountId, Long rId, Session session) {
-
         logger.info("{}:查看坐骑信息", rId);
         //获取坐骑模型
         MountModel mountModel = mountManager.load(rId);
+        if (mountModel == null) {
+            logger.error("角色id{}发送错误报", rId);
+        }
         //创建坐骑返回数据
         SM_ViewMount sm_viewMount = SM_ViewMount.valueOf(mountModel.getLevel(), mountModel.getExperience(), getUpgradeRequest(mountModel.getLevel()), getAttributes(rId));
         session.messageSend(SMToDecodeData.shift(StatusCode.VIEWMOUNT, sm_viewMount));
@@ -71,6 +74,9 @@ public class MountServiceImpl implements MountService {
     public void mountUpgrade(String accountId, Long rId, int resourceId, int num, Session session) {
         //获取坐骑模型
         MountModel mountModel = mountManager.load(rId);
+        if (mountModel == null) {
+            logger.error("角色id{}发送错误报", rId);
+        }
         //判断是否达到做高级
         int level = mountModel.getLevel();
         if (level >= mountManager.getMountResource().getMaxLevel()) {

@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
             }else {
                 //把用户添加到地图资源中
                 Role role = GetBean.getRoleManager().load(user.getRoleId());
+                session.setrId(role.getId());
                 GetBean.getSceneExecutorService().submit(new SignInMapCommand(role));
                 sm_userMessage.setCreated(true);
                 sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
@@ -136,9 +137,6 @@ public class UserServiceImpl implements UserService {
         }
         //session移除用户信息
         session.setUser(null);
-        session.messageSend(decodeData);
-        //给其余玩家发送信息
-
     }
 
     /**
@@ -181,6 +179,7 @@ public class UserServiceImpl implements UserService {
             Role role = GetBean.getRoleManager().load(user.getRoleId());
             GetBean.getSceneExecutorService().submit(new SignInMapCommand(role));
             sm_userMessage.setRoles(user.getUserBaseInfo().getRoles());
+            session.setrId(role.getId());
         }
 
         sm_userMessage.setAccountId(user.getAcountId());

@@ -57,6 +57,9 @@ public class SkillServiceImpl implements SkillService {
         SkillLevelResource skillLevelResource = skillManager.getSkillLevelReById(skillId, 1);
         //获取人物
         Role role = GetBean.getRoleManager().load(rId);
+        if (role == null) {
+            logger.error("角色id{}发送错误包", rId);
+        }
         if (skillLevelResource.getRoleLevelDemand() > role.getLevel()) {
             logger.error("角色{}学习技能[{}]失败，未达到学习条件", rId, skillId);
             //角色等级未达到要求
@@ -92,6 +95,9 @@ public class SkillServiceImpl implements SkillService {
          * */
 
         SkillModel skillModel = skillManager.load(rId);
+        if (skillModel == null) {
+            logger.error("角色id{}发送错误包", rId);
+        }
         //获取不可修改的map
         Map<Integer, SkillElement> map = Collections.unmodifiableMap(skillModel.getLearnedSkill());
         List<com.aiwan.server.user.role.skill.protocol.element.SkillElement> list = new ArrayList<com.aiwan.server.user.role.skill.protocol.element.SkillElement>();
@@ -114,6 +120,9 @@ public class SkillServiceImpl implements SkillService {
          * 4.升级技能
          * */
         SkillModel skillModel = skillManager.load(rId);
+        if (skillModel == null) {
+            logger.error("角色id{}发送错误包", rId);
+        }
         final SkillElement skillElement = skillModel.getSkillBySkillId(skillId);
         if (skillElement == null) {
             logger.error("角色{}升级技能[{}]失败,还未学过该技能", rId, skillId);
@@ -158,6 +167,9 @@ public class SkillServiceImpl implements SkillService {
          * 3.移动位置
          * */
         SkillModel skillModel = skillManager.load(rId);
+        if (skillModel == null) {
+            logger.error("角色id{}发送错误包", rId);
+        }
         if (position < 0 || position >= skillModel.getMaxSkillBarNum()) {
             //位置越界
             logger.info("角色{}移动技能到{}越界", rId, position);
@@ -181,6 +193,9 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public void viewSkillBar(Long rid, Session session) {
         SkillModel skillModel = skillManager.load(rid);
+        if (skillModel == null) {
+            logger.error("角色id{}发送错误包", rid);
+        }
         com.aiwan.server.user.role.skill.protocol.element.SkillElement[] skills = new com.aiwan.server.user.role.skill.protocol.element.SkillElement[skillModel.getMaxSkillBarNum()];
         Integer[] skillBar = skillModel.getSkillBar();
         //遍历技能栏

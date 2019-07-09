@@ -1,20 +1,14 @@
 package com.aiwan.server.scenes.fight.model.pvpunit;
 
-import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
-import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.buff.effect.AbstractBuffEffect;
-import com.aiwan.server.user.role.buff.effect.BuffType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.skill.model.AbstractSkill;
 import com.aiwan.server.util.GetBean;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 战斗成员
@@ -26,7 +20,7 @@ public class FighterRole extends BaseUnit {
     /**
      * 角色基础信息
      */
-    private RoleBase roleBase;
+    private String accountId;
 
 
     /**
@@ -47,7 +41,10 @@ public class FighterRole extends BaseUnit {
         //初始化角色基础信息
         fighterRole.setId(role.getId());
         //设置基础信息
-        fighterRole.setRoleBase(RoleBase.valueOf(role.getAccountId(), role.getName()));
+        fighterRole.setAccountId(role.getAccountId());
+        fighterRole.setLevel(role.getLevel());
+        fighterRole.setName(role.getName());
+        fighterRole.setMonster(false);
         //设置位置信息
         fighterRole.setPosition(Position.valueOf(role.getX(), role.getY()));
         fighterRole.setMapId(role.getMap());
@@ -122,6 +119,7 @@ public class FighterRole extends BaseUnit {
      * 重置技能状态
      */
     public void reset(FighterRole fighterRole) {
+        // TODO: 2019/7/9  空指针不报错
         setSkillCD(fighterRole.getSkillCD());
     }
 
@@ -135,13 +133,6 @@ public class FighterRole extends BaseUnit {
         calculateFinalAttribute();
     }
 
-    public RoleBase getRoleBase() {
-        return roleBase;
-    }
-
-    public void setRoleBase(RoleBase roleBase) {
-        this.roleBase = roleBase;
-    }
 
     public Map<Integer, Long> getSkillCD() {
         return skillCD;
@@ -149,6 +140,14 @@ public class FighterRole extends BaseUnit {
 
     public void setSkillCD(Map<Integer, Long> skillCD) {
         this.skillCD = skillCD;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
 }

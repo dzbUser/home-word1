@@ -1,16 +1,10 @@
 package com.aiwan.server.scenes.fight.model.pvpunit;
 
-import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
-import com.aiwan.server.scenes.fight.model.pvpunit.RoleBase;
-import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.buff.effect.AbstractBuffEffect;
 import com.aiwan.server.user.role.buff.effect.BuffType;
-import com.aiwan.server.user.role.player.model.Role;
-import com.aiwan.server.user.role.skill.model.AbstractSkill;
-import com.aiwan.server.util.GetBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +43,24 @@ public abstract class BaseUnit {
     private boolean isDeath = false;
 
     /**
+     * 是否是怪物
+     */
+    private boolean isMonster;
+
+    /**
      * 角色所属地图
      */
     private int mapId;
 
+    /**
+     * 名字
+     */
+    private String name;
+
+    /**
+     * 等级
+     */
+    private int level;
 
     /**
      * 最终属性
@@ -71,6 +79,7 @@ public abstract class BaseUnit {
      */
     public void deduceHP(Long attackId, long hurt) {
         long finalHP = hp - hurt;
+        setHp(finalHP);
         if (finalHP <= 0) {
             //战斗单位死亡，出发死亡机制
             death(attackId);
@@ -155,5 +164,29 @@ public abstract class BaseUnit {
 
     public void setMapId(int mapId) {
         this.mapId = mapId;
+    }
+
+    public boolean isMonster() {
+        return isMonster;
+    }
+
+    public void setMonster(boolean monster) {
+        isMonster = monster;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

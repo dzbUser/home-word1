@@ -130,6 +130,10 @@ public class BuffServiceImpl implements BuffService {
     public void viewBuff(Long rId, Session session) {
         //获取buff模型
         BuffModel buffModel = buffManager.load(rId);
+        if (buffModel == null) {
+            logger.error("角色id{}发送错误报", rId);
+            return;
+        }
         //获取buff映射
         Map<Integer, BuffElement> map = Collections.unmodifiableMap(buffModel.getBuffEntity().getBuffInfo().getMap());
         //创建存放列表

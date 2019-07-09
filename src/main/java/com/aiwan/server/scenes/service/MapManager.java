@@ -1,20 +1,19 @@
 package com.aiwan.server.scenes.service;
 
-import com.aiwan.server.monster.model.Monster;
 import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.scenes.command.SceneRateCommand;
+import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.fight.model.pvpunit.MonsterUnit;
-import com.aiwan.server.scenes.fight.model.pvpunit.RoleBase;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.scenes.protocol.MonsterMessage;
 import com.aiwan.server.scenes.protocol.RoleMessage;
 import com.aiwan.server.scenes.protocol.SM_MapMessage;
-import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +48,9 @@ public class MapManager {
             SceneObject sceneObject = SceneObject.valueOf(entry.getKey());
             sceneObject.init();
             sceneMap.put(entry.getKey(), sceneObject);
+            SceneRateCommand sceneRateCommand = new SceneRateCommand(null, entry.getKey(), 0, 1000);
+            GetBean.getSceneExecutorService().submit(sceneRateCommand);
+            sceneObject.setAbstractSceneRateCommand(sceneRateCommand);
         }
     }
 
@@ -67,13 +69,13 @@ public class MapManager {
 
     /** 添加用户 */
     public void putFighterRole(FighterRole fighterRole) {
-        sceneMap.get(fighterRole.getMapId()).putFighterRole(fighterRole);
+        sceneMap.get(fighterRole.getMapId()).putBaseUnit(fighterRole);
     }
 
 
     /** 删除用户 */
     public void removeFighterRole(Integer mapType, Long rId) {
-        sceneMap.get(mapType).removeFighterRole(rId);
+        sceneMap.get(mapType).removeBaseUnit(rId);
     }
 
 
@@ -94,28 +96,28 @@ public class MapManager {
     /** 地图内所有用户发送地图消息 */
     public void sendMessageToUsers(int id) {
         //获取地图中的所有用户
-        Map<Long, FighterRole> map = sceneMap.get(id).getFighterRoleMap();
+        Map<Long, BaseUnit> map = sceneMap.get(id).getBaseUnitMap();
         List<RoleMessage> roleMessages = new ArrayList<>();
-        //遍历所有用户，添加到角色列表中
-        for (FighterRole fighterRole : map.values()) {
-            //获取基础信息
-            final RoleBase roleBase = fighterRole.getRoleBase();
-            roleMessages.add(RoleMessage.valueOf(fighterRole.getId(), roleBase.getName(), fighterRole.getPosition().getX(), fighterRole.getPosition().getY(), fighterRole.getHp(), fighterRole.getMp()));
-        }
-
-        //遍历所有怪物，获取怪物信息
-        Map<Long, MonsterUnit> monsterMap = sceneMap.get(id).getMonsterMap();
         List<MonsterMessage> monsterMessages = new ArrayList<>();
-        for (MonsterUnit monster : monsterMap.values()) {
-            monsterMessages.add(MonsterMessage.valueOf(monster.getId(), monster.getResourceId(), monster.getPosition(), monster.getHp()));
+        //遍历所有用户，添加到角色列表中
+        for (BaseUnit baseUnit : map.values()) {
+            //获取基础信息
+            if (baseUnit.isMonster()) {
+                MonsterUnit monsterUnit = (MonsterUnit) baseUnit;
+                monsterMessages.add(MonsterMessage.valueOf(monsterUnit.getId(), monsterUnit.getResourceId(), monsterUnit.getPosition(), monsterUnit.getHp()));
+            } else {
+                FighterRole fighterRole = (FighterRole) baseUnit;
+                roleMessages.add(RoleMessage.valueOf(fighterRole.getId(), fighterRole.getName(), fighterRole.getPosition().getX(), fighterRole.getPosition().getY(), fighterRole.getHp(), fighterRole.getMp(), fighterRole.getLevel()));
+            }
         }
-
         //遍历所有用户，发送消息
-        for (FighterRole fighterRole : map.values()) {
-            final RoleBase roleBase = fighterRole.getRoleBase();
-            Session session = SessionManager.getSessionByAccountId(roleBase.getAccountId());
-            SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(id, fighterRole.getPosition().getX(), fighterRole.getPosition().getY(), roleMessages, monsterMessages, fighterRole.getHp(), fighterRole.getMp());
-            session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, sm_mapMessage));
+        for (BaseUnit baseUnit : map.values()) {
+            if (!baseUnit.isMonster()) {
+                FighterRole fighterRole = (FighterRole) baseUnit;
+                Session session = SessionManager.getSessionByAccountId(fighterRole.getAccountId());
+                SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(id, fighterRole.getPosition().getX(), fighterRole.getPosition().getY(), roleMessages, monsterMessages, fighterRole.getHp(), fighterRole.getMp());
+                session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, sm_mapMessage));
+            }
         }
 
     }

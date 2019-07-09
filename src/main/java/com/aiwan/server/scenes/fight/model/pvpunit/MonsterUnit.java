@@ -25,6 +25,9 @@ public class MonsterUnit extends BaseUnit {
         monsterUnit.setPosition(position);
         monsterUnit.setId(IDUtil.getId());
         monsterUnit.setHp(monsterUnit.getMaxHp());
+        monsterUnit.setLevel(monsterResource.getLevel());
+        monsterUnit.setName(monsterResource.getName());
+        monsterUnit.setMonster(true);
         monsterUnit.setResourceId(monsterResource.getResourceId());
         return monsterUnit;
     }

@@ -21,6 +21,11 @@ public class RoleMessage implements Serializable {
     private String name;
 
     /**
+     * 等级
+     */
+    private int level;
+
+    /**
      * 角色位置x
      */
     private int x;
@@ -29,7 +34,6 @@ public class RoleMessage implements Serializable {
      * 角色位置y
      */
     private int y;
-
 
     /**
      * 血量
@@ -74,7 +78,7 @@ public class RoleMessage implements Serializable {
         this.y = y;
     }
 
-    public static RoleMessage valueOf(Long rId, String name, int x, int y, long HP, long MP) {
+    public static RoleMessage valueOf(Long rId, String name, int x, int y, long HP, long MP, int level) {
         RoleMessage roleMessage = new RoleMessage();
         roleMessage.setrId(rId);
         roleMessage.setName(name);
@@ -82,6 +86,7 @@ public class RoleMessage implements Serializable {
         roleMessage.setY(y);
         roleMessage.setHP(HP);
         roleMessage.setMP(MP);
+        roleMessage.setLevel(level);
         return roleMessage;
     }
 
@@ -99,5 +104,13 @@ public class RoleMessage implements Serializable {
 
     public void setMP(long MP) {
         this.MP = MP;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

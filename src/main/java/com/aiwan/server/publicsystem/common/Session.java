@@ -15,6 +15,10 @@ import io.netty.channel.Channel;
 public class Session {
     private Channel channel;
     private User user;
+    /**
+     * 角色id
+     */
+    private long rId;
 
     public Channel getChannel() {
         return channel;
@@ -41,5 +45,13 @@ public class Session {
      */
     public void sendPromptMessage(int code, String message) {
         messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(code, message)));
+    }
+
+    public long getrId() {
+        return rId;
+    }
+
+    public void setrId(long rId) {
+        this.rId = rId;
     }
 }

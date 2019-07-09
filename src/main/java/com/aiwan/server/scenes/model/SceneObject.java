@@ -1,13 +1,11 @@
 package com.aiwan.server.scenes.model;
 
-import com.aiwan.server.monster.model.Monster;
+import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.fight.model.pvpunit.MonsterUnit;
 import com.aiwan.server.scenes.mapresource.MapResource;
-import com.aiwan.server.user.role.attributes.model.AttributeElement;
-import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
@@ -30,58 +28,32 @@ public class SceneObject {
      */
     private int mapId;
 
+    private Map<Long, BaseUnit> baseUnitMap = new HashMap<>();
 
-//    /**
-//     * 地图动态单位
-//     * */
-//    Map<Long, BaseUnit> baseUnitMap = new HashMap<>();
-    /**
-     * 存储角色
-     */
-    Map<Long, FighterRole> fighterRoleMap = new HashMap<>();
+    private AbstractSceneRateCommand abstractSceneRateCommand;
 
     /**
-     * 怪物映射
-     */
-    Map<Long, MonsterUnit> monsterMap = new HashMap<>();
-
-
-    public int getMapId() {
-        return mapId;
-    }
-
-    public void setMapId(int mapId) {
-        this.mapId = mapId;
-    }
-
-
-    /**
-     * 存角色
-     */
-    public void putFighterRole(FighterRole fighterRole) {
-        fighterRoleMap.put(fighterRole.getId(), fighterRole);
+     * 存入战斗单位
+     * */
+    public void putBaseUnit(BaseUnit baseUnit) {
+        baseUnitMap.put(baseUnit.getId(), baseUnit);
     }
 
     /**
-     * 移除角色
-     */
-    public void removeFighterRole(Long rId) {
-        fighterRoleMap.remove(rId);
+     * 移除战斗单位
+     * */
+    public void removeBaseUnit(Long id) {
+        baseUnitMap.remove(id);
     }
 
     /**
-     * 获取角色
-     */
-    public FighterRole getFighterRole(Long rId) {
-        return fighterRoleMap.get(rId);
+     * 获取战斗单位
+     * */
+    public BaseUnit getBaseUnit(Long id) {
+        return baseUnitMap.get(id);
     }
 
-    /**
-     * 获取怪物
-     */
-    public MonsterUnit getMonster(Long id) {
-        return monsterMap.get(id);
-    }
+
 
     /**
      * 创建场景
@@ -97,14 +69,6 @@ public class SceneObject {
      */
     public MapResource getResource() {
         return GetBean.getMapManager().getMapResource(mapId);
-    }
-
-    public Map<Long, FighterRole> getFighterRoleMap() {
-        return fighterRoleMap;
-    }
-
-    public void setFighterRoleMap(Map<Long, FighterRole> fighterRoleMap) {
-        this.fighterRoleMap = fighterRoleMap;
     }
 
     /**
@@ -135,7 +99,7 @@ public class SceneObject {
                     Position position = MonsterGenerateUtil.generaterRandomPosition(getResource().getWidth(), getResource().getHeight());
                     if (GetBean.getMapManager().allowMove(position.getX(), position.getY(), getMapId())) {
                         MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position);
-                        monsterMap.put(monster.getId(), monster);
+                        baseUnitMap.put(monster.getId(), monster);
                         break;
                     }
                 }
@@ -145,22 +109,47 @@ public class SceneObject {
         logger.debug("场景{},怪物加载完毕", mapId);
     }
 
-    public Map<Long, MonsterUnit> getMonsterMap() {
-        return monsterMap;
-    }
-
-    public void setMonsterMap(Map<Long, MonsterUnit> monsterMap) {
-        this.monsterMap = monsterMap;
-    }
 
     /**
      * 设置战斗对象属性
      */
     public void setFighterAttribute(Role role) {
-        FighterRole fighterRole = fighterRoleMap.get(role.getId());
+        FighterRole fighterRole = (FighterRole) baseUnitMap.get(role.getId());
         if (fighterRole != null) {
             fighterRole.setRoleAttribute(role.getAttribute().getPureAttribute());
         }
+    }
+
+    public int getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(int mapId) {
+        this.mapId = mapId;
+    }
+
+    public Map<Long, BaseUnit> getBaseUnitMap() {
+        return baseUnitMap;
+    }
+
+    public void setBaseUnitMap(Map<Long, BaseUnit> baseUnitMap) {
+        this.baseUnitMap = baseUnitMap;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public AbstractSceneRateCommand getAbstractSceneRateCommand() {
+        return abstractSceneRateCommand;
+    }
+
+    public void setAbstractSceneRateCommand(AbstractSceneRateCommand abstractSceneRateCommand) {
+        this.abstractSceneRateCommand = abstractSceneRateCommand;
     }
 }
 

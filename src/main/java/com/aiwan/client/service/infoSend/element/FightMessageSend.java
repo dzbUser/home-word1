@@ -68,6 +68,7 @@ public enum FightMessageSend {
             for (RoleMessage roleMessage : list) {
                 stringBuffer.append("唯一ID:" + roleMessage.getrId() + "\n");
                 stringBuffer.append("名字:" + roleMessage.getName());
+                stringBuffer.append(" 角色等级:" + roleMessage.getLevel());
                 stringBuffer.append(" 当前血量:" + roleMessage.getHP());
                 stringBuffer.append(" 位置:" + "(" + roleMessage.getX() + "," + roleMessage.getY() + ")");
                 stringBuffer.append("\n\n");
@@ -89,9 +90,8 @@ public enum FightMessageSend {
             String[] messages = message.split(" ");
             int barPostion = Integer.parseInt(messages[0]);
             long targetId = Long.parseLong(messages[1]);
-//            CM_UserSkill cm_userSkill = CM_UserSkill.valueOf(LoginUser.getRoles().get(0),targetId,barPostion);
-//            CM_DropProps cm_dropProps = CM_DropProps.valueOf(LoginUser.getAccountId(), position, num);
-//            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.DROPPROP, cm_dropProps));
+            CM_UserSkill cm_userSkill = CM_UserSkill.valueOf(LoginUser.getRoles().get(0), targetId, barPostion);
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.USESKILL, cm_userSkill));
         }
 
         @Override

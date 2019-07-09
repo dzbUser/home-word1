@@ -18,6 +18,6 @@ public class FightFacade {
      * 接收技能使用协议
      */
     public void useSkill(CM_UserSkill cm_userSkill, Session session) {
-        GetBean.getFightService().userSkill(cm_userSkill.getrId(), cm_userSkill.getTargetId(), cm_userSkill.getBarPosition(), cm_userSkill.getAimType());
+        GetBean.getFightService().userSkill(cm_userSkill.getrId(), cm_userSkill.getTargetId(), cm_userSkill.getBarPosition());
     }
 }

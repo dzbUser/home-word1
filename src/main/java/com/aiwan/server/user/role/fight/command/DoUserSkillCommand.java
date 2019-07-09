@@ -27,21 +27,16 @@ public class DoUserSkillCommand extends AbstractSceneCommand {
      */
     private AbstractSkill skill;
 
-    /**
-     * 施法目标类型
-     */
-    private int aimType;
 
-    public DoUserSkillCommand(String accountId, int mapId, long activeId, long targetId, AbstractSkill skill, int aimType) {
+    public DoUserSkillCommand(String accountId, int mapId, long activeId, long targetId, AbstractSkill skill) {
         super(accountId, mapId);
         this.activeId = activeId;
         this.targetId = targetId;
         this.skill = skill;
-        this.aimType = aimType;
     }
 
     @Override
     public void action() {
-        GetBean.getFightService().doUserSkill(activeId, targetId, skill, getMapId(), aimType);
+        GetBean.getFightService().doUserSkill(activeId, targetId, skill, getMapId());
     }
 }

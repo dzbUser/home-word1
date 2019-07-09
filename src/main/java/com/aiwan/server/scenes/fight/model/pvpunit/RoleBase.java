@@ -1,7 +1,5 @@
 package com.aiwan.server.scenes.fight.model.pvpunit;
 
-import com.aiwan.server.scenes.model.Position;
-import com.aiwan.server.user.role.skill.entity.SkillInfo;
 
 public class RoleBase {
 

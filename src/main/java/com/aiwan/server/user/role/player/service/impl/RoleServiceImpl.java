@@ -67,6 +67,7 @@ public class RoleServiceImpl implements RoleService {
         user.addRole(role.getId());
         //写回
         userManager.save(user);
+        session.setrId(role.getId());
         //进入地图
         GetBean.getSceneExecutorService().submit(new SignInMapCommand(role));
 
@@ -88,6 +89,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void getRoleMessage(String accountId, Long rId, final Session session) {
         Role role = roleManager.load(rId);
+        if (role == null) {
+            logger.error("角色id{}发送错误包", rId);
+        }
         if (role == null){
             logger.error("角色id：" + rId + "为空");
         }

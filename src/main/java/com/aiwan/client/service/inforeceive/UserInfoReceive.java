@@ -12,6 +12,7 @@ import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.protocol.MonsterMessage;
 import com.aiwan.server.scenes.protocol.RoleMessage;
 import com.aiwan.server.scenes.protocol.SM_MapMessage;
+import com.aiwan.server.scenes.protocol.UnitMessage;
 import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.GetBean;
@@ -99,22 +100,23 @@ public class UserInfoReceive {
 
         //加入备注
         LoginUser.setMapMessage(sm_MapMessage);
-        LoginUser.setMap(sm_MapMessage.getMap());
+        LoginUser.setMap(sm_MapMessage.getMapId());
         LoginUser.setCurrentX(sm_MapMessage.getX());
         LoginUser.setCurrentY(sm_MapMessage.getY());
 
-        gameInterface.printMapMessage(getMapContent(sm_MapMessage.getMap(), sm_MapMessage.getX(), sm_MapMessage.getY(), sm_MapMessage.getRoleList(), sm_MapMessage.getMonsterList()));
+        gameInterface.printMapMessage(getMapContent());
     }
 
     /**
      * 获取地图信息
      */
-    public String getMapContent(int mapType, int x, int y, List<RoleMessage> roleList, List<MonsterMessage> monsterMessageList) {
+    public String getMapContent() {
+        SM_MapMessage sm_mapMessage = LoginUser.getMapMessage();
         //获取地图静态资源
-        MapResource mapResource = GetBean.getMapManager().getMapResource(mapType);
+        MapResource mapResource = GetBean.getMapManager().getMapResource(sm_mapMessage.getMapId());
         StringBuilder stringBuilder = new StringBuilder();
         //添加地图资源
-        stringBuilder.append("您所在位子为" + mapResource.getName() + "的(" + x + "," + y + ")\n");
+        stringBuilder.append("您所在位子为" + mapResource.getName() + "的(" + sm_mapMessage.getX() + "," + sm_mapMessage.getY() + ")\n");
 
         String[][] mapMessages = new String[mapResource.getWidth()][mapResource.getHeight()];
         for (int i = 0; i < mapResource.getWidth(); i++) {
@@ -123,13 +125,8 @@ public class UserInfoReceive {
             }
         }
 
-        for (RoleMessage roleMessage : roleList) {
-            mapMessages[roleMessage.getX() - 1][roleMessage.getY() - 1] = roleMessage.getName();
-        }
-
-        for (MonsterMessage monsterMessage : monsterMessageList) {
-            MonsterResource monsterResource = GetBean.getMonsterManager().getResourceById(monsterMessage.getResourceId());
-            mapMessages[monsterMessage.getPosition().getX() - 1][monsterMessage.getPosition().getY() - 1] = monsterResource.getName();
+        for (UnitMessage unitMessage : sm_mapMessage.getList()) {
+            mapMessages[unitMessage.getX() - 1][unitMessage.getY() - 1] = unitMessage.getName();
         }
 
         for (int i = 0; i < mapResource.getWidth(); i++) {

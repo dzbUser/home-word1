@@ -33,4 +33,9 @@ public interface ScenesService {
      */
     void leaveMap(Role role);
 
+    /**
+     * 查看地图所有单位
+     */
+    void viewUnitInMap(int mapId, Session session);
+
 }

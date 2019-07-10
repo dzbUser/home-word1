@@ -112,4 +112,9 @@ public class Protocol {
      * 使用技能
      */
     public static final int USESKILL = 39;
+
+    /**
+     * 查看地图上所有角色信息
+     */
+    public static final int VIEW_ALLUNIT_INMAP = 40;
 }

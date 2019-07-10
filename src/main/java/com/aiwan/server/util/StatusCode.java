@@ -49,4 +49,9 @@ public class StatusCode {
      * 返回buff列表
      */
     public final static int VIEW_BUFF = 18;
+
+    /**
+     * 返回所有战斗单位
+     */
+    public final static int VIEW_ALLUNIT_INMAP = 19;
 }

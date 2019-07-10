@@ -4,9 +4,12 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.scenes.command.EnterMapCommand;
 import com.aiwan.server.scenes.command.ChangeMapCommand;
 import com.aiwan.server.scenes.command.MoveCommand;
+import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
+import com.aiwan.server.scenes.protocol.SM_ViewAllUnitInMap;
+import com.aiwan.server.scenes.protocol.UnitDetailMessage;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
@@ -14,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -94,6 +100,23 @@ public class ScenesServiceImpl implements ScenesService{
         GetBean.getMapManager().removeFighterRole(role.getMap(), role.getId());
         //给地图所有玩家发送最新地图信息
         GetBean.getMapManager().sendMessageToUsers(role.getMap());
+    }
+
+    @Override
+    public void viewUnitInMap(int mapId, Session session) {
+        SceneObject sceneObject = GetBean.getMapManager().getSceneObject(mapId);
+        if (sceneObject == null) {
+            logger.error("没有改地图资源");
+            return;
+        }
+
+        List<UnitDetailMessage> unitDetailMessages = new ArrayList<>();
+        for (BaseUnit baseUnit : sceneObject.getBaseUnitMap().values()) {
+            unitDetailMessages.add(UnitDetailMessage.valueOf(baseUnit.getId(), baseUnit.getName(), baseUnit.getPosition().getX(), baseUnit.getPosition().getY(), baseUnit.getHp(), baseUnit.getMp(), baseUnit.getLevel(), baseUnit.getFinalAttribute(), baseUnit.isMonster()));
+        }
+
+        SM_ViewAllUnitInMap sm_viewAllUnitInMap = SM_ViewAllUnitInMap.valueOf(unitDetailMessages);
+        session.messageSend(SMToDecodeData.shift(StatusCode.VIEW_ALLUNIT_INMAP, sm_viewAllUnitInMap));
     }
 
 }

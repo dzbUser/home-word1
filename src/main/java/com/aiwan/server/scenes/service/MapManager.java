@@ -14,6 +14,7 @@ import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.scenes.protocol.MonsterMessage;
 import com.aiwan.server.scenes.protocol.RoleMessage;
 import com.aiwan.server.scenes.protocol.SM_MapMessage;
+import com.aiwan.server.scenes.protocol.UnitMessage;
 import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,25 +98,18 @@ public class MapManager {
     public void sendMessageToUsers(int id) {
         //获取地图中的所有用户
         Map<Long, BaseUnit> map = sceneMap.get(id).getBaseUnitMap();
-        List<RoleMessage> roleMessages = new ArrayList<>();
-        List<MonsterMessage> monsterMessages = new ArrayList<>();
+        List<UnitMessage> list = new ArrayList<>();
         //遍历所有用户，添加到角色列表中
         for (BaseUnit baseUnit : map.values()) {
             //获取基础信息
-            if (baseUnit.isMonster()) {
-                MonsterUnit monsterUnit = (MonsterUnit) baseUnit;
-                monsterMessages.add(MonsterMessage.valueOf(monsterUnit.getId(), monsterUnit.getResourceId(), monsterUnit.getPosition(), monsterUnit.getHp()));
-            } else {
-                FighterRole fighterRole = (FighterRole) baseUnit;
-                roleMessages.add(RoleMessage.valueOf(fighterRole.getId(), fighterRole.getName(), fighterRole.getPosition().getX(), fighterRole.getPosition().getY(), fighterRole.getHp(), fighterRole.getMp(), fighterRole.getLevel()));
-            }
+            list.add(UnitMessage.valueOf(baseUnit.getId(), baseUnit.getPosition().getX(), baseUnit.getPosition().getY(), baseUnit.getName()));
         }
         //遍历所有用户，发送消息
         for (BaseUnit baseUnit : map.values()) {
             if (!baseUnit.isMonster()) {
                 FighterRole fighterRole = (FighterRole) baseUnit;
                 Session session = SessionManager.getSessionByAccountId(fighterRole.getAccountId());
-                SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(id, fighterRole.getPosition().getX(), fighterRole.getPosition().getY(), roleMessages, monsterMessages, fighterRole.getHp(), fighterRole.getMp());
+                SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(id, list, fighterRole.getPosition().getX(), fighterRole.getPosition().getY());
                 session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, sm_mapMessage));
             }
         }

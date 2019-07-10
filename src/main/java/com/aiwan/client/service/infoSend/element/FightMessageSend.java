@@ -6,6 +6,7 @@ import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
 import com.aiwan.server.monster.resource.MonsterResource;
+import com.aiwan.server.scenes.protocol.CM_ViewAllUnitInMap;
 import com.aiwan.server.scenes.protocol.MonsterMessage;
 import com.aiwan.server.scenes.protocol.RoleMessage;
 import com.aiwan.server.user.backpack.protocol.CM_DropProps;
@@ -23,62 +24,16 @@ import java.util.Map;
 
 public enum FightMessageSend {
     /**
-     * 查看地图中所有怪物
+     * 查看地图中所有战斗单位
      */
-    VIEWALLMONSTER(0) {
+    VIEWALLUNIT(0) {
         @Override
         public void messageSend(String message) {
-            StringBuffer stringBuffer = new StringBuffer();
-            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-            //获取地图资源
-            List<MonsterMessage> list = LoginUser.getMapMessage().getMonsterList();
-            if (list == null) {
-                gameInterface.printOtherMessage("该地图没有怪物");
-            }
-            for (MonsterMessage monsterMessage : list) {
-                MonsterResource monsterResource = GetBean.getMonsterManager().getResourceById(monsterMessage.getResourceId());
-                stringBuffer.append("唯一ID:" + monsterMessage.getObjectId() + "\n");
-                stringBuffer.append("名字:" + monsterResource.getName());
-                stringBuffer.append(" 当前血量:" + monsterMessage.getBlood());
-                stringBuffer.append(" 位置:" + "(" + monsterMessage.getPosition().getX() + "," + monsterMessage.getPosition().getY() + ")");
-                stringBuffer.append(" 等级:" + monsterResource.getLevel() + "\n");
-                stringBuffer.append("属性:");
-                //输出属性
-                for (Map.Entry<AttributeType, AttributeElement> elementEntry : monsterResource.getAttributeMap().entrySet()) {
-                    stringBuffer.append(elementEntry.getValue().toString() + " ");
-                }
-                stringBuffer.append("\n\n");
-            }
-            gameInterface.printOtherMessage(stringBuffer.toString());
+            CM_ViewAllUnitInMap cm_viewAllUnitInMap = CM_ViewAllUnitInMap.valueOf(LoginUser.getMap());
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEW_ALLUNIT_INMAP, cm_viewAllUnitInMap));
         }
     },
-    /**
-     * 查看地图中所有角色
-     */
-    VIEWALLROLE(1) {
-        @Override
-        public void messageSend(String message) {
-            StringBuffer stringBuffer = new StringBuffer();
-            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-            //获取地图资源
-            List<RoleMessage> list = LoginUser.getMapMessage().getRoleList();
-            if (list == null) {
-                gameInterface.printOtherMessage("该地图没有怪物");
-            }
-            for (RoleMessage roleMessage : list) {
-                stringBuffer.append("唯一ID:" + roleMessage.getrId() + "\n");
-                stringBuffer.append("名字:" + roleMessage.getName());
-                stringBuffer.append(" 角色等级:" + roleMessage.getLevel());
-                stringBuffer.append(" 当前HP:" + roleMessage.getHP());
-                stringBuffer.append(" 当前MP:" + roleMessage.getMP());
-                stringBuffer.append(" 位置:" + "(" + roleMessage.getX() + "," + roleMessage.getY() + ")");
-                stringBuffer.append("\n\n");
-            }
-            gameInterface.printOtherMessage(stringBuffer.toString());
-        }
-    },
-
-    USER_SKILL(2) {
+    USER_SKILL(1) {
         @Override
         public void messageSend(String message) {
             GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");

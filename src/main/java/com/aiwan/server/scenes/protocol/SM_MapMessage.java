@@ -2,6 +2,7 @@ package com.aiwan.server.scenes.protocol;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -12,55 +13,41 @@ public class SM_MapMessage implements Serializable {
     /**
      * 地图id
      */
-    private int map;
+    private int mapId;
 
-    /**
-     * 用户本身位置
-     */
     private int x;
 
     private int y;
 
-    private long HP;
-
-    private long MP;
-
     /**
      *角色列表
      */
-    private List<RoleMessage> roleList;
+    private List<UnitMessage> list;
 
-    /**
-     * 怪物列表
-     */
-    private List<MonsterMessage> monsterList;
 
-    public static SM_MapMessage valueOf(int map, int x, int y, List<RoleMessage> roleList, List<MonsterMessage> monsterList, long HP, long MP) {
+    public static SM_MapMessage valueOf(int mapId, List<UnitMessage> list, int x, int y) {
         SM_MapMessage sm_MapMessage = new SM_MapMessage();
-        sm_MapMessage.setRoleList(roleList);
-        sm_MapMessage.setMap(map);
+        sm_MapMessage.setMapId(mapId);
+        sm_MapMessage.setList(list);
         sm_MapMessage.setX(x);
         sm_MapMessage.setY(y);
-        sm_MapMessage.setHP(HP);
-        sm_MapMessage.setMP(MP);
-        sm_MapMessage.setMonsterList(monsterList);
         return sm_MapMessage;
     }
 
-    public int getMap() {
-        return map;
+    public int getMapId() {
+        return mapId;
     }
 
-    public void setMap(int map) {
-        this.map = map;
+    public void setMapId(int mapId) {
+        this.mapId = mapId;
     }
 
-    public List<RoleMessage> getRoleList() {
-        return roleList;
+    public List<UnitMessage> getList() {
+        return list;
     }
 
-    public void setRoleList(List<RoleMessage> roleList) {
-        this.roleList = roleList;
+    public void setList(List<UnitMessage> list) {
+        this.list = list;
     }
 
     public int getX() {
@@ -77,29 +64,5 @@ public class SM_MapMessage implements Serializable {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public List<MonsterMessage> getMonsterList() {
-        return monsterList;
-    }
-
-    public void setMonsterList(List<MonsterMessage> monsterList) {
-        this.monsterList = monsterList;
-    }
-
-    public long getHP() {
-        return HP;
-    }
-
-    public void setHP(long HP) {
-        this.HP = HP;
-    }
-
-    public long getMP() {
-        return MP;
-    }
-
-    public void setMP(long MP) {
-        this.MP = MP;
     }
 }

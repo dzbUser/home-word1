@@ -6,6 +6,7 @@ import com.aiwan.server.scenes.command.SignInMapCommand;
 import com.aiwan.server.scenes.command.UpdateSceneAttributeCommand;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.command.ResetStatusCommand;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
@@ -109,6 +110,7 @@ public class RoleServiceImpl implements RoleService {
         //获取经验，循环解决升级
         Role role = roleManager.load(rId);
         int level = role.getLevel();
+        int oldLevel = level;
         int totalExperience = role.getExperience()+experienceNum;
         while (level < GetBean.getRoleResourceManager().getMaxLevel() && totalExperience >= getUpgradeRequest(level)) {
             //循环增加经验
@@ -118,22 +120,25 @@ public class RoleServiceImpl implements RoleService {
 
         if (level < GetBean.getRoleResourceManager().getMaxLevel()) {
             //叠加后等级人小于最高等级
-            if (role.getLevel() != level) {
+            if (oldLevel != level) {
                 //等级发生改变
                 role.setLevel(level);
             }
             role.setExperience(totalExperience);
             roleManager.save(role);
-            updateAttributeModule("role", getAttributes(rId), rId);
-            return 0;
+            totalExperience = 0;
         } else if (level == GetBean.getRoleResourceManager().getMaxLevel() && role.getLevel() != level) {
             //达到最高级，且等级改变
             role.setLevel(level);
             role.setExperience(0);
             roleManager.save(role);
         }
-        //等级发生改变更新人物属性
-        updateAttributeModule("role", getAttributes(rId), rId);
+        if (oldLevel != level) {
+            //等级发生改变更新人物属性
+            updateAttributeModule("role", getAttributes(rId), rId);
+            GetBean.getSceneExecutorService().submit(new ResetStatusCommand(null, role.getMap(), role));
+        }
+
         //返回剩余经验
         return totalExperience;
     }

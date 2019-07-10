@@ -42,7 +42,7 @@ public class MonsterUnit extends BaseUnit {
 
     @Override
     protected void death(Long attackId) {
-
+        setDeath(true);
     }
 
     public int getResourceId() {

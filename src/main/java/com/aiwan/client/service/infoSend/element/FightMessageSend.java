@@ -69,7 +69,8 @@ public enum FightMessageSend {
                 stringBuffer.append("唯一ID:" + roleMessage.getrId() + "\n");
                 stringBuffer.append("名字:" + roleMessage.getName());
                 stringBuffer.append(" 角色等级:" + roleMessage.getLevel());
-                stringBuffer.append(" 当前血量:" + roleMessage.getHP());
+                stringBuffer.append(" 当前HP:" + roleMessage.getHP());
+                stringBuffer.append(" 当前MP:" + roleMessage.getMP());
                 stringBuffer.append(" 位置:" + "(" + roleMessage.getX() + "," + roleMessage.getY() + ")");
                 stringBuffer.append("\n\n");
             }

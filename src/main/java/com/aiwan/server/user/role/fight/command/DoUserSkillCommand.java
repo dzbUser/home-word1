@@ -1,7 +1,7 @@
 package com.aiwan.server.user.role.fight.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
-import com.aiwan.server.user.role.skill.model.AbstractSkill;
+import com.aiwan.server.user.role.skill.model.Skill;
 import com.aiwan.server.util.GetBean;
 
 /**
@@ -25,10 +25,10 @@ public class DoUserSkillCommand extends AbstractSceneCommand {
     /**
      * 技能
      */
-    private AbstractSkill skill;
+    private Skill skill;
 
 
-    public DoUserSkillCommand(String accountId, int mapId, long activeId, long targetId, AbstractSkill skill) {
+    public DoUserSkillCommand(String accountId, int mapId, long activeId, long targetId, Skill skill) {
         super(accountId, mapId);
         this.activeId = activeId;
         this.targetId = targetId;

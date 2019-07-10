@@ -59,6 +59,9 @@ public class MonsterResource {
     @CellMapping(name = "drop")
     private String dropPropString;
 
+    @CellMapping(name = "experience")
+    private int experience;
+
     /**
      * 真实属性
      */
@@ -164,5 +167,13 @@ public class MonsterResource {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
     }
 }

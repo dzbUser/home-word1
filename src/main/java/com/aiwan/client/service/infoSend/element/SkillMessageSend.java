@@ -36,6 +36,7 @@ public enum SkillMessageSend {
                 stringBuffer.append("名字:" + skillResource.getSkillName() + " 等级:" + 1);
                 SkillLevelResource skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), 1);
                 stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%\n");
+                stringBuffer.append("学习等级要求:" + GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), 1).getRoleLevelDemand() + " ");
                 if (1 < GetBean.getSkillManager().getMaxLevel(skillElement.getSkillId())) {
                     skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), (2));
                     stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " 经验消耗:" + skillLevelResource.getExperienceDemand() + "\n\n");

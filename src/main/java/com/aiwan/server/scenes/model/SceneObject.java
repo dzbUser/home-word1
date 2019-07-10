@@ -120,6 +120,32 @@ public class SceneObject {
         }
     }
 
+    /**
+     * 寻找周围玩家
+     *
+     * @param list   加入list
+     * @param target 目标单位
+     * @param range  范围
+     * @param num    数目 target
+     * @param active 施法单位
+     */
+    public void findAroundUnit(BaseUnit active, List<BaseUnit> list, BaseUnit target, int range, int num) {
+        for (BaseUnit baseUnit : baseUnitMap.values()) {
+            if (baseUnit.getId() == active.getId() || baseUnit.getId() == target.getId()) {
+                //施法单位
+                continue;
+            }
+            if (num > 0) {
+                if (GetBean.getFightService().isDistanceSatisfy(target, baseUnit, range)) {
+                    list.add(baseUnit);
+                    num--;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
     public int getMapId() {
         return mapId;
     }

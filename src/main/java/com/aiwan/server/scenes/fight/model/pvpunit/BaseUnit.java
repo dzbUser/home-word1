@@ -3,8 +3,7 @@ package com.aiwan.server.scenes.fight.model.pvpunit;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.buff.effect.AbstractBuffEffect;
-import com.aiwan.server.user.role.buff.effect.BuffType;
+import com.aiwan.server.user.role.buff.model.BuffEffect;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +70,7 @@ public abstract class BaseUnit {
     /**
      * buff列表
      */
-    private Map<BuffType, AbstractBuffEffect> buff = new HashMap<>();
+    private Map<Integer, BuffEffect> buff = new HashMap<>();
 
 
     /**
@@ -83,6 +82,45 @@ public abstract class BaseUnit {
         if (finalHP <= 0) {
             //战斗单位死亡，出发死亡机制
             death(attackId);
+        }
+    }
+
+    /**
+     * 回复单位血量
+     *
+     * @param cure 回复血量
+     */
+    public void cureHp(long cure) {
+        long finalHp = getHp() + cure;
+        if (finalHp > getMaxHp()) {
+            finalHp = getMaxHp();
+        }
+        setHp(finalHp);
+    }
+
+    public void putBuff(BuffEffect buffEffect) {
+        //添加buff
+        buff.put(buffEffect.getEffectResource().getType(), buffEffect);
+    }
+
+    /**
+     * buff处理器
+     *
+     * @param now 当前时间
+     */
+    public void buffProcessor(Long now) {
+        for (BuffEffect buffEffect : buff.values()) {
+            if (buffEffect.getWorkTime() <= now) {
+                //生效
+                buffEffect.doActive(this);
+                //重新计算生效时间
+                buffEffect.setWorkTime(buffEffect.getWorkTime() + buffEffect.getPeriod());
+            }
+
+            if (buffEffect.getEndTime() <= now) {
+                //结束，去除buff
+                buff.remove(buffEffect.getEffectResource().getType());
+            }
         }
     }
 
@@ -142,11 +180,11 @@ public abstract class BaseUnit {
         this.finalAttribute = finalAttribute;
     }
 
-    public Map<BuffType, AbstractBuffEffect> getBuff() {
+    public Map<Integer, BuffEffect> getBuff() {
         return buff;
     }
 
-    public void setBuff(Map<BuffType, AbstractBuffEffect> buff) {
+    public void setBuff(Map<Integer, BuffEffect> buff) {
         this.buff = buff;
     }
 

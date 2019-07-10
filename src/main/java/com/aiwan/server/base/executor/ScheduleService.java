@@ -1,11 +1,9 @@
 package com.aiwan.server.base.executor;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 定时业务类
@@ -19,12 +17,9 @@ public class ScheduleService {
     /**
      * 定时线程
      */
-    private final ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(1);
+    private ScheduledThreadPoolExecutor scheduledThreadPool;
 
-    public ScheduledExecutorService getScheduledThreadPool() {
-        return scheduledThreadPool;
-    }
-
+    private int poolSize = 1;
 
     /**
      * 定时任务
@@ -33,13 +28,21 @@ public class ScheduleService {
         return scheduledThreadPool.schedule(task, delay, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * 初始化
+     */
+    public void init() {
+        ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("定时器").build();
+        scheduledThreadPool = new ScheduledThreadPoolExecutor(poolSize, nameThreadFactory, new ThreadPoolExecutor.DiscardPolicy());
+        scheduledThreadPool.prestartAllCoreThreads();
+    }
 
     /**
      * 指定周期执行任务
      *
-     * @param task
-     * @param delay
-     * @param period
+     * @param task 任务
+     * @param delay 延迟
+     * @param period 周期
      * @return
      */
     public final ScheduledFuture<?> scheduleAtFixedRate(Runnable task, long delay, long period) {

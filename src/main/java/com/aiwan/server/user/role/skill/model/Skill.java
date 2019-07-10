@@ -1,11 +1,12 @@
 package com.aiwan.server.user.role.skill.model;
 
 import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
-import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
+import com.aiwan.server.util.FightUtil;
 import com.aiwan.server.util.GetBean;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import java.util.List;
 
 /**
  * 技能抽象类
@@ -13,8 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * @author dengzebiao
  * @since 2019.7.1
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
-public abstract class AbstractSkill {
+public class Skill {
 
     /**
      * 技能id
@@ -42,6 +42,12 @@ public abstract class AbstractSkill {
         this.skillLevel = skillLevel;
     }
 
+    public static Skill valueOf(int skillId, int skillLevel) {
+        Skill skill = new Skill();
+        skill.setSkillId(skillId);
+        skill.setSkillLevel(skillLevel);
+        return skill;
+    }
     /**
      * 初始化
      */
@@ -68,5 +74,12 @@ public abstract class AbstractSkill {
     /**
      * 使用技能
      */
-    public abstract void doUserSkill(BaseUnit active, BaseUnit passive);
+    public void doUserSkill(BaseUnit active, List<BaseUnit> passiveList) {
+        for (BaseUnit passive : passiveList) {
+            //计算最终伤害
+            long hurt = FightUtil.calculateFinalHurt(active.getFinalAttribute(), passive.getFinalAttribute(), getSkillLevelResouece().getSkillAttack());
+            //扣除目标血量
+            passive.deduceHP(active.getId(), hurt);
+        }
+    }
 }

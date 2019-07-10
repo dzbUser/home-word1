@@ -1,6 +1,7 @@
 package com.aiwan.server.user.role.fight.service;
 
-import com.aiwan.server.user.role.skill.model.AbstractSkill;
+import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.skill.model.Skill;
 
 /**
  * 战斗业务接口
@@ -18,7 +19,7 @@ public interface IFightService {
      * @param skill     技能
      * @param mapId     场景
      */
-    void doUserSkill(Long activeRid, Long passiveId, AbstractSkill skill, int mapId);
+    void doUserSkill(Long activeRid, Long passiveId, Skill skill, int mapId);
 
 
     /**
@@ -29,4 +30,14 @@ public interface IFightService {
      * @param position  技能位置
      */
     void userSkill(Long activeRid, Long passiveId, int position);
+
+    /**
+     * 是否在范围内
+     *
+     * @param activeRole  目标1
+     * @param passiveRole 目标2
+     * @param distance    巨鹿
+     * @return
+     */
+    boolean isDistanceSatisfy(BaseUnit activeRole, BaseUnit passiveRole, int distance);
 }

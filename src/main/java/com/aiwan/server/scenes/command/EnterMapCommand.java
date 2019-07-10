@@ -35,7 +35,7 @@ public class EnterMapCommand extends AbstractSceneCommand {
         role.setY(mapResource.getOriginY());
         //添加到地图资源中
         FighterRole newFightRole = FighterRole.valueOf(role);
-        newFightRole.reset(fighterRole);
+        newFightRole.transferStatus(fighterRole);
         GetBean.getMapManager().putFighterRole(newFightRole);
         //写回
         GetBean.getRoleManager().save(role);

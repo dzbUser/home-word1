@@ -13,7 +13,9 @@ import java.util.Map;
  * @since 2019.7.1
  * 技能模型
  */
-public class SkillModel {
+public class
+
+SkillModel {
 
     /**
      * 实体类
@@ -96,11 +98,10 @@ public class SkillModel {
     /**
      * 获取对应skill调用实体
      */
-    public AbstractSkill getSkill(int skillId) {
+    public Skill getSkill(int skillId) {
         SkillElement skillElement = getSkillBySkillId(skillId);
         SkillResource skillResource = GetBean.getSkillManager().getSkillResourceBySkillId(skillId);
-        AbstractSkill skill = SkillType.getSkillById(skillResource.getType());
-        skill.init(skillElement.getSkillId(), skillElement.getSkillLevel());
+        Skill skill = Skill.valueOf(skillElement.getSkillId(), skillElement.getSkillLevel());
         return skill;
     }
 }

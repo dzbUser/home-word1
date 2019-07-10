@@ -76,10 +76,10 @@ public class SkillServiceImpl implements SkillService {
             return;
         }
 
-        if (SkillType.getSkillById(skillTypeId) == null) {
-            logger.error("角色id{}，学习技能id为{}时，输入的技能类型错误", rId, skillId);
-            return;
-        }
+//        if (SkillType.getSkillById(skillTypeId) == null) {
+//            logger.error("角色id{}，学习技能id为{}时，输入的技能类型错误", rId, skillId);
+//            return;
+//        }
 
         //学习该技能
         skillModel.putSkillBySkillId(skillId, skillTypeId);

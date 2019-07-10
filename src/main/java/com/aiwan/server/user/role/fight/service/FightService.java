@@ -4,14 +4,19 @@ import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
+import com.aiwan.server.user.role.buff.model.BuffEffect;
+import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.user.role.fight.command.DoUserSkillCommand;
 import com.aiwan.server.user.role.player.model.Role;
-import com.aiwan.server.user.role.skill.model.AbstractSkill;
+import com.aiwan.server.user.role.skill.model.Skill;
 import com.aiwan.server.user.role.skill.model.SkillModel;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 战斗业务实现类
@@ -34,7 +39,7 @@ public class FightService implements IFightService {
     Logger logger = LoggerFactory.getLogger(FightService.class);
 
     @Override
-    public void doUserSkill(Long activeRid, Long passiveId, AbstractSkill skill, int mapId) {
+    public void doUserSkill(Long activeRid, Long passiveId, Skill skill, int mapId) {
         /*
          * 获取战斗角色，
          * 判断是否可以施法技能
@@ -52,26 +57,39 @@ public class FightService implements IFightService {
         }
 
         //获取目标施法单位
+        List<BaseUnit> passiveList = new ArrayList<>();
         BaseUnit passiveUnit = sceneObject.getBaseUnit(passiveId);
         if (passiveUnit == null) {
             //没有目标施法单位
             logger.error("角色{}施法错误，找不到施法单位", activeRid);
             return;
         }
-
         //是否在攻击范围内
         if (!isDistanceSatisfy(activeRole, passiveUnit, skill.getSkillLevelResouece().getDistance())) {
             logger.error("角色{}施法错误，施法距离不够", activeRid);
             return;
         }
-
         //玩家是否具有释放该技能的条件
         if (!activeRole.isCanUseSkill(skill)) {
             logger.error("角色{}施法错误，不具备施法添加", activeRid);
             return;
         }
+        passiveList.add(passiveUnit);
+        if (skill.getResource().getIsGroup() == 1) {
+            int num = skill.getSkillLevelResouece().getNum() - 1;
+            sceneObject.findAroundUnit(activeRole, passiveList, passiveUnit, skill.getSkillLevelResouece().getDistance(), num);
+        }
         //释放技能
-        skill.doUserSkill(activeRole, passiveUnit);
+        skill.doUserSkill(activeRole, passiveList);
+        if (skill.getResource().getIsBuffSkill() == 1) {
+            //添加buff
+            Long now = System.currentTimeMillis();
+            EffectResource effectResource = GetBean.getBuffManager().getEffectResource(skill.getSkillLevelResouece().getBuffId());
+            BuffEffect buffEffect = BuffEffect.valueOf(effectResource.getId(), now, effectResource.getPeriod(), effectResource.getDuration(), activeRole);
+            for (BaseUnit baseUnit : passiveList) {
+                baseUnit.putBuff(buffEffect);
+            }
+        }
     }
 
     @Override
@@ -81,9 +99,14 @@ public class FightService implements IFightService {
             logger.error("角色id{}发送错误报", activeRid);
             return;
         }
-        // TODO: 2019/7/9 判断role
+
         //获取技能
         SkillModel skillModel = GetBean.getSkillManager().load(activeRid);
+        //超出技能
+        if (position < 0 || position >= skillModel.getSkillBar().length) {
+            logger.error("角色{}施法错误，位置{}超出技能槽范围", activeRid, position);
+            return;
+        }
         //获取对应的技能id
         Integer skillId = skillModel.getSkillIdInPosition(position);
         if (skillId == null) {
@@ -91,12 +114,12 @@ public class FightService implements IFightService {
             return;
         }
         //获取技能
-        AbstractSkill skill = skillModel.getSkill(skillId);
+        Skill skill = skillModel.getSkill(skillId);
         //移交场景command
         GetBean.getSceneExecutorService().submit(new DoUserSkillCommand(null, role.getMap(), activeRid, passiveId, skill));
     }
 
-    private boolean isDistanceSatisfy(BaseUnit activeRole, BaseUnit passiveRole, int distance) {
+    public boolean isDistanceSatisfy(BaseUnit activeRole, BaseUnit passiveRole, int distance) {
         Position activePosition = activeRole.getPosition();
         Position passivePosition = passiveRole.getPosition();
         double juli = Math.sqrt(Math.abs((activePosition.getX() - passivePosition.getX()) * (activePosition.getX() - passivePosition.getX()) + (activePosition.getY() - passivePosition.getY()) * (activePosition.getY() - passivePosition.getY())));

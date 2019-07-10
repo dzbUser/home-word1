@@ -19,4 +19,11 @@ public class FightUtil {
     public static long calculateFinalHurt(Map<AttributeType, AttributeElement> active, Map<AttributeType, AttributeElement> passive, int value) {
         return (active.get(AttributeType.ATTACK).getValue() * value - 2500 * passive.get(AttributeType.DEFENSE).getValue()) / 10000;
     }
+
+    /**
+     * 计算最终回复血量
+     */
+    public static long caculateCureBlood(Map<AttributeType, AttributeElement> active, int value) {
+        return active.get(AttributeType.ATTACK).getValue() * value / 20000;
+    }
 }

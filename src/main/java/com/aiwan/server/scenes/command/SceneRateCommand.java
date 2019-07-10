@@ -40,6 +40,10 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
             }
         }
 
-
+        //buff处理
+        long now = System.currentTimeMillis();
+        for (BaseUnit baseUnit : sceneObject.getBaseUnitMap().values()) {
+            baseUnit.buffProcessor(now);
+        }
     }
 }

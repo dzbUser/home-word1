@@ -67,6 +67,9 @@ public class SkillLevelResource {
     @CellMapping(name = "distance")
     private int distance;
 
+    @CellMapping(name = "buffId")
+    private int buffId;
+
     public String getId() {
         return id;
     }
@@ -145,5 +148,13 @@ public class SkillLevelResource {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getBuffId() {
+        return buffId;
+    }
+
+    public void setBuffId(int buffId) {
+        this.buffId = buffId;
     }
 }

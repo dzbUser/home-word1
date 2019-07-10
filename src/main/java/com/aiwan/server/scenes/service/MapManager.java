@@ -135,7 +135,6 @@ public class MapManager {
             list.get(i).init();
             putMapResource(list.get(i));
         }
-        init();
     }
 
     /**

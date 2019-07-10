@@ -26,10 +26,9 @@ public class SceneExecutor {
     public static void initialize() {
         for (int i = 0; i < SCENE_POOL_SIZE; i++) {
             //线程命名
-            ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("userThread-pool-" + i).build();
+            ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("sceneThread-pool-" + i).build();
             RejectedExecutionHandler policy = new ThreadPoolExecutor.DiscardPolicy();
-            BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(512);
-            SCENE_SERVICE[i] = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, queue, nameThreadFactory, policy);
+            SCENE_SERVICE[i] = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), nameThreadFactory, policy);
         }
 
     }

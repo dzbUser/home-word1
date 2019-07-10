@@ -7,6 +7,7 @@ import com.aiwan.server.user.role.buff.common.BuffOverCommand;
 import com.aiwan.server.user.role.buff.entity.BuffEntity;
 import com.aiwan.server.user.role.buff.model.BuffModel;
 import com.aiwan.server.user.role.buff.resource.BuffResource;
+import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.util.ExcelUtil;
 import com.aiwan.server.util.ResourceUtil;
 import org.slf4j.Logger;
@@ -31,6 +32,12 @@ public class BuffManager {
      */
     @Static(initializeMethodName = "initBuffResource")
     private Map<Integer, BuffResource> buffResourceMap = new HashMap<>();
+
+    /**
+     * 效果buff资源id与效果buff资源
+     */
+    @Static(initializeMethodName = "initEffectResource")
+    private Map<Integer, EffectResource> effectResourceMap = new HashMap<>();
 
     /**
      * 维护角色的buff command
@@ -95,6 +102,24 @@ public class BuffManager {
         logger.debug("buf静态资源初始化后");
     }
 
+    private void initEffectResource() {
+        //获取资源路径
+        String path = ResourceUtil.getResourcePath(EffectResource.class);
+        logger.debug("FILEPATH：{}", path);
+        logger.debug("EffectResource静态资源初始化前");
+        List<EffectResource> list = new ArrayList<EffectResource>();
+        try {
+            list.addAll(ExcelUtil.analysisWithRelativePath(path, EffectResource.class));
+            logger.debug("EffectResource静态资源初始化debug：{}", list.size());
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        for (EffectResource effectResource : list) {
+            effectResourceMap.put(effectResource.getId(), effectResource);
+        }
+        logger.debug("EffectResource静态资源初始化后");
+    }
+
     /**
      * 获取buffcommand
      */
@@ -138,6 +163,14 @@ public class BuffManager {
         }
     }
 
-
+    /**
+     * 获取buff效果资源
+     *
+     * @param id 效果资源id
+     * @return buff效果资源
+     */
+    public EffectResource getEffectResource(int id) {
+        return effectResourceMap.get(id);
+    }
 
 }

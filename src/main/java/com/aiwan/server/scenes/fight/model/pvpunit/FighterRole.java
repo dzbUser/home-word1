@@ -5,8 +5,11 @@ import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.player.model.Role;
-import com.aiwan.server.user.role.skill.model.AbstractSkill;
+import com.aiwan.server.user.role.skill.model.Skill;
 import com.aiwan.server.util.GetBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +19,8 @@ import java.util.Map;
  * @author dengzebiao
  */
 public class FighterRole extends BaseUnit {
+
+    Logger logger = LoggerFactory.getLogger(FighterRole.class);
 
     /**
      * 角色基础信息
@@ -74,7 +79,7 @@ public class FighterRole extends BaseUnit {
     /**
      * 是否可以释放技能
      */
-    public boolean isCanUseSkill(AbstractSkill skill) {
+    public boolean isCanUseSkill(Skill skill) {
 
         //获取cd时间
         Long cd = skillCD.get(skill.getSkillId());
@@ -82,10 +87,12 @@ public class FighterRole extends BaseUnit {
         Long now = System.currentTimeMillis();
         if (cd != null && now < cd) {
             //存入cd到的时间
+            logger.debug("角色{}施法技能{}失败，处于CD状态", getId(), skill.getSkillId());
             return false;
         }
         if (getMp() < skill.getSkillLevelResouece().getMagicDemand()) {
             //魔法值不够
+            logger.debug("角色{}施法技能{}失败，魔法值不够", getId(), skill.getSkillId());
             return false;
         }
         skillCD.put(skill.getSkillId(), now + skill.getSkillLevelResouece().getCd());
@@ -100,10 +107,7 @@ public class FighterRole extends BaseUnit {
     @Override
     protected void death(Long attackId) {
         setDeath(true);
-        //清除状态
-        skillCD = new HashMap<>();
-        setBuff(new HashMap<>());
-        //复活点复活,暂时为立即服务
+        //复活点复活,暂时为立即复活
         // TODO: 2019/7/9 修改为规定时间后复活
         MapResource mapResource = GetBean.getMapManager().getMapResource(getMapId());
         //修改角色位置
@@ -112,15 +116,40 @@ public class FighterRole extends BaseUnit {
         role.setY(mapResource.getOriginY());
         GetBean.getRoleManager().save(role);
         setPosition(Position.valueOf(mapResource.getOriginX(), mapResource.getOriginY()));
+        resetStatus();
         setDeath(false);
     }
 
     /**
-     * 重置技能状态
+     * 转移状态
      */
-    public void reset(FighterRole fighterRole) {
+    public void transferStatus(FighterRole fighterRole) {
         // TODO: 2019/7/9  空指针不报错
         setSkillCD(fighterRole.getSkillCD());
+        setHp(fighterRole.getHp());
+        setMp(fighterRole.getMp());
+    }
+
+    /**
+     * 根据角色重置状态（用于角色升级）
+     *
+     * @param role 角色
+     */
+    public void resetStatus(Role role) {
+        setLevel(role.getLevel());
+        setHp(getMaxHp());
+        setMp(getMaxMp());
+    }
+
+    /**
+     * 重置角色状态
+     */
+    public void resetStatus() {
+        //重置状态
+        skillCD = new HashMap<>();
+        setBuff(new HashMap<>());
+        setHp(getMaxHp());
+        setMp(getMaxMp());
     }
 
     public Map<AttributeType, AttributeElement> getRoleAttribute() {

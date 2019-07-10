@@ -1,5 +1,6 @@
 package com.aiwan.server.base.executor.account;
 
+import com.aiwan.server.base.executor.AbstractCommand;
 import com.aiwan.server.base.executor.account.impl.AbstractAccountCommand;
 import com.aiwan.server.publicsystem.service.ThreadPoolInit;
 import com.aiwan.server.util.GetBean;
@@ -52,8 +53,7 @@ public class AccountExecutor {
             //线程命名
             ThreadFactory nameThreadFactory = new ThreadFactoryBuilder().setNameFormat("userThread-pool-" + i).build();
             RejectedExecutionHandler policy = new ThreadPoolExecutor.DiscardPolicy();
-            BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(512);
-            ACCOUNT_SERVICE[i] = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, queue, nameThreadFactory, policy);
+            ACCOUNT_SERVICE[i] = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), nameThreadFactory, policy);
         }
 
     }
@@ -68,10 +68,27 @@ public class AccountExecutor {
     }
 
     /**
-     * 延时指令
+     * 定时命令
+     *
+     * @param command
+     * @param delay
      */
     public final void schedule(AbstractAccountCommand command, long delay) {
+
         command.setFuture(GetBean.getScheduleService().schedule(() -> addTask(command), delay));
+
+    }
+
+    /**
+     * 周期命令
+     *
+     * @param command
+     * @param delay
+     * @param period
+     */
+    public final void schedule(AbstractAccountCommand command, long delay, long period) {
+
+        command.setFuture(GetBean.getScheduleService().scheduleAtFixedRate(() -> addTask(command), delay, period));
     }
 
     public void addTask(String account, Runnable runnable) {

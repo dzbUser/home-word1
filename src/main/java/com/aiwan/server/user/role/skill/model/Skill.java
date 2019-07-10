@@ -1,6 +1,8 @@
 package com.aiwan.server.user.role.skill.model;
 
 import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.skill.impact.ImpactInterface;
+import com.aiwan.server.user.role.skill.impact.ImpactType;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
 import com.aiwan.server.util.FightUtil;
@@ -75,11 +77,9 @@ public class Skill {
      * 使用技能
      */
     public void doUserSkill(BaseUnit active, List<BaseUnit> passiveList) {
+        ImpactInterface impactInterface = ImpactType.getImpactType(getResource().getImpactId()).creator();
         for (BaseUnit passive : passiveList) {
-            //计算最终伤害
-            long hurt = FightUtil.calculateFinalHurt(active.getFinalAttribute(), passive.getFinalAttribute(), getSkillLevelResouece().getSkillAttack());
-            //扣除目标血量
-            passive.deduceHP(active.getId(), hurt);
+            impactInterface.takeImpact(active, passive, getSkillLevelResouece().getSkillAttack());
         }
     }
 }

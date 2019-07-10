@@ -45,6 +45,12 @@ public class SkillResource {
     @CellMapping(name = "isGroup")
     private int isGroup;
 
+    /**
+     * 效果类型id
+     */
+    @CellMapping(name = "impactId")
+    private int impactId;
+
 
     public int getSkillId() {
         return skillId;
@@ -92,5 +98,13 @@ public class SkillResource {
 
     public void setIsGroup(int isGroup) {
         this.isGroup = isGroup;
+    }
+
+    public int getImpactId() {
+        return impactId;
+    }
+
+    public void setImpactId(int impactId) {
+        this.impactId = impactId;
     }
 }

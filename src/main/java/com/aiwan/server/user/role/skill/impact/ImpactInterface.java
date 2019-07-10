@@ -11,4 +11,6 @@ import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
 public interface ImpactInterface {
 
     void takeImpact(BaseUnit active, BaseUnit passive, int value);
+
+
 }

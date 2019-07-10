@@ -12,7 +12,7 @@ import com.aiwan.server.util.GetBean;
 public class BuffEffect {
 
     /**
-     * 对应buffid
+     * 对应buff的id
      */
     private int effectId;
 
@@ -37,7 +37,7 @@ public class BuffEffect {
     private Long period;
 
     /**
-     * 施加buff单位
+     * 施法buff单位
      */
     private BaseUnit activeUnit;
 

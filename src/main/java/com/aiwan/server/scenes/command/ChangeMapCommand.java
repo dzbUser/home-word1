@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 离开地图命令
+ * 地图转移命令
  *
  * @author dengzebiao
  * @since 2019.7.4

@@ -17,6 +17,7 @@ public enum ImpactType {
      * 治疗类型效果
      */
     CURE_IMPACT(2, CureImpact.class);
+
     private int impactType;
 
     private Class<? extends ImpactInterface> clzz;

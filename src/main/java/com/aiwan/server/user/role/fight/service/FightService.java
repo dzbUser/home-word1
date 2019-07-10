@@ -81,6 +81,7 @@ public class FightService implements IFightService {
         }
         //释放技能
         skill.doUserSkill(activeRole, passiveList);
+
         if (skill.getResource().getIsBuffSkill() == 1) {
             //添加buff
             Long now = System.currentTimeMillis();

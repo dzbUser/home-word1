@@ -28,8 +28,14 @@ public class SceneObject {
      */
     private int mapId;
 
+    /**
+     * 地图内战斗单位
+     */
     private Map<Long, BaseUnit> baseUnitMap = new HashMap<>();
 
+    /**
+     * 循环检查command
+     */
     private AbstractSceneRateCommand abstractSceneRateCommand;
 
     /**

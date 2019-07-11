@@ -4,8 +4,8 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.scenes.command.EnterMapCommand;
 import com.aiwan.server.scenes.command.ChangeMapCommand;
 import com.aiwan.server.scenes.command.MoveCommand;
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
-import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.scenes.protocol.SM_ViewAllUnitInMap;
@@ -112,7 +112,9 @@ public class ScenesServiceImpl implements ScenesService{
 
         List<UnitDetailMessage> unitDetailMessages = new ArrayList<>();
         for (BaseUnit baseUnit : sceneObject.getBaseUnitMap().values()) {
-            unitDetailMessages.add(UnitDetailMessage.valueOf(baseUnit.getId(), baseUnit.getName(), baseUnit.getPosition().getX(), baseUnit.getPosition().getY(), baseUnit.getHp(), baseUnit.getMp(), baseUnit.getLevel(), baseUnit.getFinalAttribute(), baseUnit.isMonster()));
+            if (!baseUnit.isDeath()) {
+                unitDetailMessages.add(UnitDetailMessage.valueOf(baseUnit.getId(), baseUnit.getName(), baseUnit.getPosition().getX(), baseUnit.getPosition().getY(), baseUnit.getHp(), baseUnit.getMp(), baseUnit.getLevel(), baseUnit.getFinalAttribute(), baseUnit.isMonster()));
+            }
         }
 
         SM_ViewAllUnitInMap sm_viewAllUnitInMap = SM_ViewAllUnitInMap.valueOf(unitDetailMessages);

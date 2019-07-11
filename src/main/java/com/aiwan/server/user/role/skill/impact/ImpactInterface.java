@@ -1,6 +1,6 @@
 package com.aiwan.server.user.role.skill.impact;
 
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 
 /**
  * 效果接口
@@ -10,7 +10,13 @@ import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
  */
 public interface ImpactInterface {
 
+    /**
+     * 效果产生
+     *
+     * @param active
+     * @param passive
+     * @param value
+     */
     void takeImpact(BaseUnit active, BaseUnit passive, int value);
-
 
 }

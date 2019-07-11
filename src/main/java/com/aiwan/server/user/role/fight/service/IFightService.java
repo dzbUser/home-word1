@@ -1,6 +1,6 @@
 package com.aiwan.server.user.role.fight.service;
 
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.skill.model.Skill;
 
 /**

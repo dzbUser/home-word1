@@ -1,4 +1,4 @@
-package com.aiwan.server.scenes.fight.model.pvpunit;
+package com.aiwan.server.user.role.fight.pvpUnit;
 
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;

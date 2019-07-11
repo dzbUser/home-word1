@@ -1,7 +1,7 @@
 package com.aiwan.server.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
@@ -20,8 +20,21 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
 
     Logger logger = LoggerFactory.getLogger(SceneRateCommand.class);
 
-    public SceneRateCommand(String accountId, int mapId, long delay, long period) {
+
+    /**
+     * 刷怪间隔
+     */
+    private long brushPeriod;
+
+    /**
+     * 下次刷怪时间
+     */
+    private long nextBrushTime;
+
+    public SceneRateCommand(String accountId, int mapId, long delay, long period, long brushMonsterTime, long brushPeriod) {
         super(accountId, mapId, delay, period);
+        this.nextBrushTime = brushMonsterTime;
+        this.brushPeriod = brushPeriod;
     }
 
     @Override
@@ -31,17 +44,20 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
             logger.error("地图id：{}开启周期检查线程失败", getMapId());
             return;
         }
+        long now = System.currentTimeMillis();
         //复活死亡怪物
-        Map<Long, BaseUnit> baseUnitMap = sceneObject.getBaseUnitMap();
-        for (BaseUnit baseUnit : baseUnitMap.values()) {
-            if (baseUnit.isMonster() && baseUnit.isDeath()) {
-                baseUnit.setHp(baseUnit.getMaxHp());
-                baseUnit.setDeath(false);
+        if (now >= nextBrushTime) {
+            Map<Long, BaseUnit> baseUnitMap = sceneObject.getBaseUnitMap();
+            for (BaseUnit baseUnit : baseUnitMap.values()) {
+                if (baseUnit.isMonster() && baseUnit.isDeath()) {
+                    baseUnit.setHp(baseUnit.getMaxHp());
+                    baseUnit.setDeath(false);
+                }
             }
+            nextBrushTime = now + brushPeriod;
         }
 
         //buff处理
-        long now = System.currentTimeMillis();
         for (BaseUnit baseUnit : sceneObject.getBaseUnitMap().values()) {
             baseUnit.buffProcessor(now);
         }

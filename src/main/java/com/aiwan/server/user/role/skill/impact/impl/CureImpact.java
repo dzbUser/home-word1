@@ -1,10 +1,8 @@
 package com.aiwan.server.user.role.skill.impact.impl;
 
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.skill.impact.ImpactInterface;
 import com.aiwan.server.util.FightUtil;
-
-import java.util.List;
 
 /**
  * 治疗效果

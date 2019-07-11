@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.skill.impact;
 
 import com.aiwan.server.user.role.skill.impact.impl.CureImpact;
 import com.aiwan.server.user.role.skill.impact.impl.HurtImpact;
+import com.aiwan.server.user.role.skill.impact.impl.SuckImpact;
 
 /**
  * 效果类型
@@ -16,7 +17,12 @@ public enum ImpactType {
     /**
      * 治疗类型效果
      */
-    CURE_IMPACT(2, CureImpact.class);
+    CURE_IMPACT(2, CureImpact.class),
+
+    /**
+     * 吸血,在成伤害的百分比
+     */
+    SUCK_IMPACT(3, SuckImpact.class);
 
     private int impactType;
 
@@ -29,7 +35,7 @@ public enum ImpactType {
             }
         }
 
-        throw new IllegalArgumentException("找不到Buff类型,type:" + type);
+        throw new IllegalArgumentException("找不到效果类型,type:" + type);
     }
 
     /**
@@ -39,7 +45,7 @@ public enum ImpactType {
         try {
             return clzz.newInstance();
         } catch (Exception e) {
-            throw new IllegalArgumentException("生成Buff错误");
+            throw new IllegalArgumentException("生成效果错误");
         }
     }
 

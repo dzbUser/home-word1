@@ -1,9 +1,9 @@
-package com.aiwan.server.scenes.fight.model.pvpunit;
+package com.aiwan.server.user.role.fight.pvpUnit;
 
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.buff.model.BuffEffect;
+import com.aiwan.server.user.role.buff.effect.AbstractEffect;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +70,7 @@ public abstract class BaseUnit {
     /**
      * buff列表
      */
-    private Map<Integer, BuffEffect> buff = new HashMap<>();
+    private Map<Integer, AbstractEffect> buff = new HashMap<>();
 
 
     /**
@@ -98,9 +98,9 @@ public abstract class BaseUnit {
         setHp(finalHp);
     }
 
-    public void putBuff(BuffEffect buffEffect) {
+    public void putBuff(int uniqueId, AbstractEffect abstractEffect) {
         //添加buff
-        buff.put(buffEffect.getEffectResource().getType(), buffEffect);
+        buff.put(uniqueId, abstractEffect);
     }
 
     /**
@@ -109,17 +109,17 @@ public abstract class BaseUnit {
      * @param now 当前时间
      */
     public void buffProcessor(Long now) {
-        for (BuffEffect buffEffect : buff.values()) {
-            if (buffEffect.getWorkTime() <= now) {
+        for (AbstractEffect abstractEffect : buff.values()) {
+            if (abstractEffect.getWorkTime() <= now) {
                 //生效
-                buffEffect.doActive(this);
+                abstractEffect.doActive(this);
                 //重新计算生效时间
-                buffEffect.setWorkTime(buffEffect.getWorkTime() + buffEffect.getPeriod());
+                abstractEffect.setWorkTime(abstractEffect.getWorkTime() + abstractEffect.getPeriod());
             }
 
-            if (buffEffect.getEndTime() <= now) {
+            if (abstractEffect.getEndTime() <= now) {
                 //结束，去除buff
-                buff.remove(buffEffect.getEffectResource().getType());
+                buff.remove(abstractEffect.getEffectResource().getUniqueId());
             }
         }
     }
@@ -180,11 +180,11 @@ public abstract class BaseUnit {
         this.finalAttribute = finalAttribute;
     }
 
-    public Map<Integer, BuffEffect> getBuff() {
+    public Map<Integer, AbstractEffect> getBuff() {
         return buff;
     }
 
-    public void setBuff(Map<Integer, BuffEffect> buff) {
+    public void setBuff(Map<Integer, AbstractEffect> buff) {
         this.buff = buff;
     }
 

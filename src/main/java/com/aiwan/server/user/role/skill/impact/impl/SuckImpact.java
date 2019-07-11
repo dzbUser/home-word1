@@ -5,16 +5,16 @@ import com.aiwan.server.user.role.skill.impact.ImpactInterface;
 import com.aiwan.server.util.FightUtil;
 
 /**
- * 伤害效果
+ * 吸血效果
  *
  * @author dengzebiao
- * @since 2019.7.10
+ * @since 2019.7.11
  */
-public class HurtImpact implements ImpactInterface {
-
+public class SuckImpact implements ImpactInterface {
     @Override
     public void takeImpact(BaseUnit active, BaseUnit passive, int value) {
         long hurt = FightUtil.calculateFinalHurt(active.getFinalAttribute(), passive.getFinalAttribute(), value);
-        passive.deduceHP(active.getId(), hurt);
+        long cure = hurt * value / 10000;
+        active.cureHp(cure);
     }
 }

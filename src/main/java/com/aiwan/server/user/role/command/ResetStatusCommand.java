@@ -1,10 +1,8 @@
 package com.aiwan.server.user.role.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
-import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.scenes.model.SceneObject;
-import com.aiwan.server.scenes.service.MapManager;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 

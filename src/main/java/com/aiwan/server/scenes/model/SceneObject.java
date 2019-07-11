@@ -2,9 +2,10 @@ package com.aiwan.server.scenes.model;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
 import com.aiwan.server.monster.resource.MonsterResource;
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
-import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
-import com.aiwan.server.scenes.fight.model.pvpunit.MonsterUnit;
+import com.aiwan.server.scenes.command.SceneRateCommand;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.MonsterUnit;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
@@ -82,6 +83,11 @@ public class SceneObject {
      */
     public void init() {
         generateMonster();
+        //初始化buff
+        long now = System.currentTimeMillis();
+        SceneRateCommand sceneRateCommand = new SceneRateCommand(null, getMapId(), 0, 1000, now + 5000, 5000);
+        GetBean.getSceneExecutorService().submit(sceneRateCommand);
+        setAbstractSceneRateCommand(sceneRateCommand);
     }
 
     /**

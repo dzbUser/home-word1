@@ -1,15 +1,13 @@
-package com.aiwan.server.user.role.buff.model;
+package com.aiwan.server.user.role.buff.effect;
 
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.buff.resource.EffectResource;
-import com.aiwan.server.user.role.skill.impact.ImpactInterface;
-import com.aiwan.server.user.role.skill.impact.ImpactType;
 import com.aiwan.server.util.GetBean;
 
 /**
  * buff效果抽象类
  */
-public class BuffEffect {
+public abstract class AbstractEffect {
 
     /**
      * 对应buff的id
@@ -45,8 +43,24 @@ public class BuffEffect {
     /**
      * buff生效
      */
-    public void doActive(BaseUnit passive) {
-        getImpact().takeImpact(getActiveUnit(), passive, getEffectResource().getValue());
+    public abstract void doActive(BaseUnit passive);
+
+    /**
+     * 初始化
+     *
+     * @param effectId   buffid
+     * @param gainTime   获取时间
+     * @param period     周期
+     * @param duration   持续时间
+     * @param activeUnit 施法单位
+     */
+    public void init(int effectId, long gainTime, long period, long duration, BaseUnit activeUnit) {
+        setActiveUnit(activeUnit);
+        setEffectId(effectId);
+        setEndTime(gainTime + duration);
+        setPeriod(period);
+        setWorkTime(gainTime);
+        setGainTime(gainTime);
     }
 
     /**
@@ -56,23 +70,6 @@ public class BuffEffect {
         return GetBean.getBuffManager().getEffectResource(getEffectId());
     }
 
-    /**
-     * 获取对应技能效果
-     */
-    public ImpactInterface getImpact() {
-        return ImpactType.getImpactType(getEffectResource().getImpactId()).creator();
-    }
-
-    public static BuffEffect valueOf(int effectId, long gainTime, long period, long duration, BaseUnit activeUnit) {
-        BuffEffect buffEffect = new BuffEffect();
-        buffEffect.setActiveUnit(activeUnit);
-        buffEffect.setEffectId(effectId);
-        buffEffect.setEndTime(gainTime + duration);
-        buffEffect.setPeriod(period);
-        buffEffect.setWorkTime(gainTime);
-        buffEffect.setGainTime(gainTime);
-        return buffEffect;
-    }
 
     public int getEffectId() {
         return effectId;
@@ -121,6 +118,5 @@ public class BuffEffect {
     public void setActiveUnit(BaseUnit activeUnit) {
         this.activeUnit = activeUnit;
     }
-
 
 }

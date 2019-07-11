@@ -45,8 +45,8 @@ public class EffectResource {
     /**
      * 效果id
      */
-    @CellMapping(name = "impactId")
-    private int impactId;
+    @CellMapping(name = "uniqueId")
+    private int uniqueId;
 
     /**
      * 效果id
@@ -100,11 +100,11 @@ public class EffectResource {
         this.duration = duration;
     }
 
-    public int getImpactId() {
-        return impactId;
+    public int getUniqueId() {
+        return uniqueId;
     }
 
-    public void setImpactId(int impactId) {
-        this.impactId = impactId;
+    public void setUniqueId(int uniqueId) {
+        this.uniqueId = uniqueId;
     }
 }

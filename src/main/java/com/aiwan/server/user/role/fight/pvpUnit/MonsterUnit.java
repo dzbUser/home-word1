@@ -1,4 +1,4 @@
-package com.aiwan.server.scenes.fight.model.pvpunit;
+package com.aiwan.server.user.role.fight.pvpUnit;
 
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.model.Position;
@@ -43,6 +43,7 @@ public class MonsterUnit extends BaseUnit {
     @Override
     protected void death(Long attackId) {
         setDeath(true);
+
     }
 
     public int getResourceId() {

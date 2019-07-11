@@ -1,11 +1,10 @@
 package com.aiwan.server.user.role.skill.model;
 
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.skill.impact.ImpactInterface;
 import com.aiwan.server.user.role.skill.impact.ImpactType;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
-import com.aiwan.server.util.FightUtil;
 import com.aiwan.server.util.GetBean;
 
 import java.util.List;

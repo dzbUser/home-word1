@@ -5,14 +5,11 @@ import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.command.SceneRateCommand;
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
-import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
-import com.aiwan.server.scenes.fight.model.pvpunit.MonsterUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.scenes.model.SceneObject;
-import com.aiwan.server.scenes.protocol.MonsterMessage;
-import com.aiwan.server.scenes.protocol.RoleMessage;
 import com.aiwan.server.scenes.protocol.SM_MapMessage;
 import com.aiwan.server.scenes.protocol.UnitMessage;
 import com.aiwan.server.util.*;
@@ -49,9 +46,7 @@ public class MapManager {
             SceneObject sceneObject = SceneObject.valueOf(entry.getKey());
             sceneObject.init();
             sceneMap.put(entry.getKey(), sceneObject);
-            SceneRateCommand sceneRateCommand = new SceneRateCommand(null, entry.getKey(), 0, 1000);
-            GetBean.getSceneExecutorService().submit(sceneRateCommand);
-            sceneObject.setAbstractSceneRateCommand(sceneRateCommand);
+
         }
     }
 

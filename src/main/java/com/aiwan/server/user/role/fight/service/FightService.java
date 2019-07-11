@@ -1,10 +1,11 @@
 package com.aiwan.server.user.role.fight.service;
 
-import com.aiwan.server.scenes.fight.model.pvpunit.BaseUnit;
-import com.aiwan.server.scenes.fight.model.pvpunit.FighterRole;
+import com.aiwan.server.user.role.buff.effect.EffectType;
+import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
-import com.aiwan.server.user.role.buff.model.BuffEffect;
+import com.aiwan.server.user.role.buff.effect.AbstractEffect;
 import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.user.role.fight.command.DoUserSkillCommand;
 import com.aiwan.server.user.role.player.model.Role;
@@ -86,9 +87,10 @@ public class FightService implements IFightService {
             //添加buff
             Long now = System.currentTimeMillis();
             EffectResource effectResource = GetBean.getBuffManager().getEffectResource(skill.getSkillLevelResouece().getBuffId());
-            BuffEffect buffEffect = BuffEffect.valueOf(effectResource.getId(), now, effectResource.getPeriod(), effectResource.getDuration(), activeRole);
+            AbstractEffect abstractEffect = EffectType.getEffectType(effectResource.getType()).creator();
+            abstractEffect.init(effectResource.getId(), now, effectResource.getPeriod(), effectResource.getDuration(), activeRole);
             for (BaseUnit baseUnit : passiveList) {
-                baseUnit.putBuff(buffEffect);
+                baseUnit.putBuff(effectResource.getUniqueId(), abstractEffect);
             }
         }
     }

@@ -2,8 +2,11 @@ package com.aiwan.server.user.role.fight.pvpUnit;
 
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.IDUtil;
+
+import java.util.Map;
 
 /**
  * 怪物战斗单位
@@ -43,7 +46,11 @@ public class MonsterUnit extends BaseUnit {
     @Override
     protected void death(Long attackId) {
         setDeath(true);
+        //为攻击者添加道具
+        Role role = GetBean.getRoleManager().load(attackId);
+        for (Map.Entry<Integer, Integer> entry : getResource().getDropMap().entrySet()) {
 
+        }
     }
 
     public int getResourceId() {

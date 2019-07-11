@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.skill.impact;
 
+import com.aiwan.server.user.role.skill.impact.impl.BuffImpact;
 import com.aiwan.server.user.role.skill.impact.impl.CureImpact;
 import com.aiwan.server.user.role.skill.impact.impl.HurtImpact;
 import com.aiwan.server.user.role.skill.impact.impl.SuckImpact;
@@ -22,7 +23,12 @@ public enum ImpactType {
     /**
      * 吸血,在成伤害的百分比
      */
-    SUCK_IMPACT(3, SuckImpact.class);
+    SUCK_IMPACT(3, SuckImpact.class),
+
+    /**
+     * buff技能效果
+     */
+    BUFF_IMPACT(4, BuffImpact.class);
 
     private int impactType;
 

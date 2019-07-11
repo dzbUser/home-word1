@@ -22,7 +22,7 @@ public class Experience extends AbstractProps {
         //增加经验
         int experienceNum = getPropsResource().getEffect() * num;
         //角色经验添加
-        int surplusExperience = GetBean.getRoleService().addExperience(accountId, rId, experienceNum);
+        int surplusExperience = GetBean.getRoleService().addExperience(rId, experienceNum);
         if (surplusExperience > 0) {
             //获取剩余数量
             int surplusNum = surplusExperience / getPropsResource().getEffect();

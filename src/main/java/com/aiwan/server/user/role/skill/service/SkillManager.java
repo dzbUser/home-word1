@@ -25,6 +25,10 @@ import java.util.Map;
  */
 @Manager
 public class SkillManager {
+    /**
+     * 普通攻击技能id
+     */
+    public static final int ORDINARY_ATTACK_ID = 1;
     private static Logger logger = LoggerFactory.getLogger(SkillManager.class);
 
     /**
@@ -75,6 +79,7 @@ public class SkillManager {
         SkillInfo skillInfo = new SkillInfo(skillEntity.getMaxSkillBarNum());
         skillEntity.setSkillInfo(skillInfo);
         skillEntity.setRId(rId);
+        //初始化技能
         cache.writeBack(rId, skillEntity);
     }
 
@@ -113,6 +118,7 @@ public class SkillManager {
         }
         for (SkillLevelResource skillLevelResource : list) {
             //存储技能资源
+            skillLevelResource.init();
             Map<Integer, SkillLevelResource> levelMap = skillLevelResourceMap.get(skillLevelResource.getSkillId());
             if (levelMap == null) {
                 levelMap = new HashMap<>(16);

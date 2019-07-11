@@ -106,7 +106,7 @@ public class RoleServiceImpl implements RoleService {
      * 经验添加
      * */
     @Override
-    public int addExperience(String accountId, Long rId, int experienceNum) {
+    public int addExperience(Long rId, int experienceNum) {
         //获取经验，循环解决升级
         Role role = roleManager.load(rId);
         int level = role.getLevel();

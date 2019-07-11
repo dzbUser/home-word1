@@ -62,7 +62,7 @@ public enum SkillMessageSend {
             }
 
             int skillId = Integer.parseInt(message);
-            CM_LearnSkill cm_learnSkill = CM_LearnSkill.valueOf(LoginUser.getRoles().get(0), skillId, 0);
+            CM_LearnSkill cm_learnSkill = CM_LearnSkill.valueOf(LoginUser.getRoles().get(0), skillId);
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.LEAENSKILL, cm_learnSkill));
         }
 

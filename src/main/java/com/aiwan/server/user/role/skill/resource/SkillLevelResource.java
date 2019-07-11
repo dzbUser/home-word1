@@ -2,6 +2,10 @@ package com.aiwan.server.user.role.skill.resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
 import com.aiwan.server.publicsystem.annotation.Resource;
+import com.aiwan.server.user.role.skill.impact.ImpactType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Resource("staticresource/skillLevel.xls")
 public class SkillLevelResource {
@@ -67,8 +71,43 @@ public class SkillLevelResource {
     @CellMapping(name = "distance")
     private int distance;
 
+    /**
+     * buffid
+     */
     @CellMapping(name = "buffId")
     private int buffId;
+
+    /**
+     * 技能效果
+     */
+    @CellMapping(name = "impact")
+    private String impact;
+
+    /**
+     * 技能效果列表,对应效果类型id，效果的值
+     */
+    private Map<ImpactType, Integer> impactMap = new HashMap<>();
+
+    /**
+     * 技能效果列表,对应效果类型id，效果的类型注入
+     */
+    private Map<Integer, ImpactType> impactTypeMap = new HashMap<>();
+
+    /**
+     * 初始化
+     */
+    public void init() {
+        if (impact.equals("empty") || impact.equals("")) {
+            return;
+        }
+        String[] impactField = impact.split(" ");
+        for (int i = 0; i < impactField.length; i++) {
+            String[] impactValue = impactField[i].split(":");
+            ImpactType impactType = ImpactType.getImpactType(Integer.parseInt(impactValue[0]));
+            impactMap.put(impactType, Integer.parseInt(impactValue[1]));
+            impactTypeMap.put(Integer.parseInt(impactValue[0]), impactType);
+        }
+    }
 
     public String getId() {
         return id;
@@ -156,5 +195,29 @@ public class SkillLevelResource {
 
     public void setBuffId(int buffId) {
         this.buffId = buffId;
+    }
+
+    public String getImpact() {
+        return impact;
+    }
+
+    public void setImpact(String impact) {
+        this.impact = impact;
+    }
+
+    public Map<ImpactType, Integer> getImpactMap() {
+        return impactMap;
+    }
+
+    public void setImpactMap(Map<ImpactType, Integer> impactMap) {
+        this.impactMap = impactMap;
+    }
+
+    public Map<Integer, ImpactType> getImpactTypeMap() {
+        return impactTypeMap;
+    }
+
+    public void setImpactTypeMap(Map<Integer, ImpactType> impactTypeMap) {
+        this.impactTypeMap = impactTypeMap;
     }
 }

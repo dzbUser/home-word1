@@ -24,7 +24,7 @@ public interface RoleService {
     void getRoleMessage(String accountId, Long rId, final Session session);
 
     /** 角色经验增加 */
-    int addExperience(String accountId,Long rId,int experienceNum);
+    int addExperience(Long rId, int experienceNum);
 
 
     /**

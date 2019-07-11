@@ -4,7 +4,6 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.skill.entity.SkillElement;
 import com.aiwan.server.user.role.skill.model.SkillModel;
-import com.aiwan.server.user.role.skill.model.SkillType;
 import com.aiwan.server.user.role.skill.protocol.SM_ViewLearnedSkill;
 import com.aiwan.server.user.role.skill.protocol.SM_ViewSkillBar;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
@@ -38,7 +37,7 @@ public class SkillServiceImpl implements SkillService {
     private SkillManager skillManager;
 
     @Override
-    public void learnSkill(Long rId, int skillId, int skillTypeId, Session session) {
+    public void learnSkill(Long rId, int skillId, Session session) {
         /*
          * 1.是否有该技能
          * 2.角色等级是否达到要求
@@ -82,7 +81,7 @@ public class SkillServiceImpl implements SkillService {
 //        }
 
         //学习该技能
-        skillModel.putSkillBySkillId(skillId, skillTypeId);
+        skillModel.putSkillBySkillId(skillId);
         skillManager.save(skillModel);
         session.sendPromptMessage(PromptCode.LEARNSKILLSUCCESS, skillResource.getSkillName());
     }

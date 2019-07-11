@@ -1,5 +1,7 @@
 package com.aiwan.server.user.role.skill.entity;
 
+import com.aiwan.server.user.role.skill.service.SkillManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,8 @@ public class SkillInfo {
 
     public SkillInfo(int num) {
         this.skills = new Integer[num];
+        //学习普通攻击
+        skillMessageMap.put(SkillManager.ORDINARY_ATTACK_ID, SkillElement.valueOf(SkillManager.ORDINARY_ATTACK_ID, 1));
     }
 
     public SkillInfo() {

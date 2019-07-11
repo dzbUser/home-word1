@@ -16,9 +16,8 @@ public interface SkillService {
      * @param rId     角色id
      * @param skillId 技能id
      * @param session 会话
-     * @param skillTypeId 技能类型id
      */
-    void learnSkill(Long rId, int skillId, int skillTypeId, Session session);
+    void learnSkill(Long rId, int skillId, Session session);
 
     /**
      * 查看所学技能

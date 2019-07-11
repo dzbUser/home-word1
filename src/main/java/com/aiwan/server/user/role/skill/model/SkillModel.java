@@ -48,7 +48,7 @@ SkillModel {
     /**
      * 学习技能
      */
-    public void putSkillBySkillId(int skillId, int skillTypeId) {
+    public void putSkillBySkillId(int skillId) {
         //创建普通技能
         skillEntity.getSkillInfo().getSkillMessageMap().put(skillId, SkillElement.valueOf(skillId, 1));
     }

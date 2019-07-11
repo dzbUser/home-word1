@@ -27,11 +27,6 @@ public class SkillResource {
     @CellMapping(name = "isBuffSkill")
     private int isBuffSkill;
 
-    /**
-     * 技能类型
-     */
-    @CellMapping(name = "type")
-    private int type;
 
     /**
      * 技能描述
@@ -44,12 +39,6 @@ public class SkillResource {
      */
     @CellMapping(name = "isGroup")
     private int isGroup;
-
-    /**
-     * 效果类型id
-     */
-    @CellMapping(name = "impactId")
-    private int impactId;
 
 
     public int getSkillId() {
@@ -76,14 +65,6 @@ public class SkillResource {
         this.isBuffSkill = isBuffSkill;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getDec() {
         return dec;
     }
@@ -98,13 +79,5 @@ public class SkillResource {
 
     public void setIsGroup(int isGroup) {
         this.isGroup = isGroup;
-    }
-
-    public int getImpactId() {
-        return impactId;
-    }
-
-    public void setImpactId(int impactId) {
-        this.impactId = impactId;
     }
 }

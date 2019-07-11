@@ -23,16 +23,11 @@ public class CM_LearnSkill implements Serializable {
      */
     private int skillId;
 
-    /**
-     * 技能类型id
-     */
-    private int skillTypeId;
 
-    public static CM_LearnSkill valueOf(Long rId, int skillId, int skillTypeId) {
+    public static CM_LearnSkill valueOf(Long rId, int skillId) {
         CM_LearnSkill cm_learnSkill = new CM_LearnSkill();
         cm_learnSkill.setRId(rId);
         cm_learnSkill.setSkillId(skillId);
-        cm_learnSkill.setSkillTypeId(skillTypeId);
         return cm_learnSkill;
     }
 
@@ -50,13 +45,5 @@ public class CM_LearnSkill implements Serializable {
 
     public void setSkillId(int skillId) {
         this.skillId = skillId;
-    }
-
-    public int getSkillTypeId() {
-        return skillTypeId;
-    }
-
-    public void setSkillTypeId(int skillTypeId) {
-        this.skillTypeId = skillTypeId;
     }
 }

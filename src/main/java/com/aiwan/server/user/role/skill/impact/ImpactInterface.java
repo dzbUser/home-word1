@@ -1,6 +1,8 @@
 package com.aiwan.server.user.role.skill.impact;
 
+import com.aiwan.server.user.role.fight.context.SkillUseContext;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 
 /**
  * 效果接口
@@ -15,8 +17,8 @@ public interface ImpactInterface {
      *
      * @param active
      * @param passive
-     * @param value
+     * @param skillLevelResource 节能资源
      */
-    void takeImpact(BaseUnit active, BaseUnit passive, int value);
+    void takeImpact(BaseUnit active, BaseUnit passive, SkillLevelResource skillLevelResource, SkillUseContext skillUseContext);
 
 }

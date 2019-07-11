@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class SkillFacade {
     public void learnSkill(CM_LearnSkill cm_learnSkill, Session session) {
-        GetBean.getSkillService().learnSkill(cm_learnSkill.getRId(), cm_learnSkill.getSkillId(), cm_learnSkill.getSkillTypeId(), session);
+        GetBean.getSkillService().learnSkill(cm_learnSkill.getRId(), cm_learnSkill.getSkillId(), session);
     }
 
     public void viewLearnedSkill(CM_ViewLearnSkill cm_viewLearnSkill, Session session) {

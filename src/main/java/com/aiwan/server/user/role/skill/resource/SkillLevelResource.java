@@ -4,7 +4,9 @@ import com.aiwan.server.publicsystem.annotation.CellMapping;
 import com.aiwan.server.publicsystem.annotation.Resource;
 import com.aiwan.server.user.role.skill.impact.ImpactType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Resource("staticresource/skillLevel.xls")
@@ -47,11 +49,6 @@ public class SkillLevelResource {
     @CellMapping(name = "magicDemand")
     private int magicDemand;
 
-    /**
-     * 升级所需经验
-     */
-    @CellMapping(name = "experienceDemand")
-    private int experienceDemand;
 
     /**
      * 技能cd
@@ -94,16 +91,24 @@ public class SkillLevelResource {
     private Map<Integer, ImpactType> impactTypeMap = new HashMap<>();
 
     /**
+     * 技能效果执行顺序表
+     */
+    private List<Integer> impactList = new ArrayList<>();
+
+    /**
      * 初始化
      */
     public void init() {
         if (impact.equals("empty") || impact.equals("")) {
             return;
         }
+        //初始化技能效果
         String[] impactField = impact.split(" ");
         for (int i = 0; i < impactField.length; i++) {
             String[] impactValue = impactField[i].split(":");
-            ImpactType impactType = ImpactType.getImpactType(Integer.parseInt(impactValue[0]));
+            int type = Integer.parseInt(impactValue[0]);
+            ImpactType impactType = ImpactType.getImpactType(type);
+            impactList.add(type);
             impactMap.put(impactType, Integer.parseInt(impactValue[1]));
             impactTypeMap.put(Integer.parseInt(impactValue[0]), impactType);
         }
@@ -155,14 +160,6 @@ public class SkillLevelResource {
 
     public void setMagicDemand(int magicDemand) {
         this.magicDemand = magicDemand;
-    }
-
-    public int getExperienceDemand() {
-        return experienceDemand;
-    }
-
-    public void setExperienceDemand(int experienceDemand) {
-        this.experienceDemand = experienceDemand;
     }
 
     public int getCd() {
@@ -219,5 +216,13 @@ public class SkillLevelResource {
 
     public void setImpactTypeMap(Map<Integer, ImpactType> impactTypeMap) {
         this.impactTypeMap = impactTypeMap;
+    }
+
+    public List<Integer> getImpactList() {
+        return impactList;
+    }
+
+    public void setImpactList(List<Integer> impactList) {
+        this.impactList = impactList;
     }
 }

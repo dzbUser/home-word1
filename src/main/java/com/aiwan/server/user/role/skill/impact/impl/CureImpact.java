@@ -18,7 +18,7 @@ public class CureImpact implements ImpactInterface {
     public void takeImpact(BaseUnit active, BaseUnit passive, SkillLevelResource skillLevelResource, SkillUseContext skillUseContext) {
         Integer value = skillLevelResource.getImpactMap().get(ImpactType.CURE_IMPACT);
         if (value != null) {
-            long cure = FightUtil.caculateCureBlood(active.getFinalAttribute(), skillLevelResource.getSkillAttack());
+            long cure = FightUtil.calculateCureBlood(active.getFinalAttribute(), skillLevelResource.getSkillAttack());
             passive.cureHp(cure);
         }
     }

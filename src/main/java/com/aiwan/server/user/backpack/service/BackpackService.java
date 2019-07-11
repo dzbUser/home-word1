@@ -7,6 +7,8 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.backpack.protocol.CM_ObtainProp;
 import com.aiwan.server.user.backpack.protocol.CM_ViewBackpack;
 
+import java.util.Map;
+
 /**
  * @author dengzebiao
  * @since 2019.6.4
@@ -62,5 +64,13 @@ public interface BackpackService {
      */
     boolean isRegularPosition(int position);
 
+
+    /**
+     * 批量获取道具
+     *
+     * @param accountId 用户id
+     * @param map       道具列表
+     */
+    void obtainProp(String accountId, Map<Integer, Integer> map);
 
 }

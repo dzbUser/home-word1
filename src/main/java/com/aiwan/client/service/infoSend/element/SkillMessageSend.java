@@ -6,7 +6,7 @@ import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
 import com.aiwan.server.user.role.skill.protocol.*;
-import com.aiwan.server.user.role.skill.protocol.element.SkillElement;
+
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
 import com.aiwan.server.util.GetBean;
@@ -39,7 +39,7 @@ public enum SkillMessageSend {
                 stringBuffer.append("学习等级要求:" + GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), 1).getRoleLevelDemand() + " ");
                 if (1 < GetBean.getSkillManager().getMaxLevel(skillElement.getSkillId())) {
                     skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), (2));
-                    stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " 经验消耗:" + skillLevelResource.getExperienceDemand() + "\n\n");
+                    stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");
                 } else {
                     stringBuffer.append("技能达到最高等级\n\n");
                 }

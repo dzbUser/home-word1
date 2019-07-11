@@ -18,27 +18,25 @@ public class MonsterKillingAward extends AbstractAccountCommand {
     /**
      * 角色id
      */
-    private long rId;
+    private Role role;
 
     /**
      * 怪物id
      */
     private int monsterResourceId;
 
-    public MonsterKillingAward(String accountId, long rId, int monsterResourceId) {
+    public MonsterKillingAward(String accountId, Role role, int monsterResourceId) {
         super(accountId);
         this.monsterResourceId = monsterResourceId;
-        this.rId = rId;
+        this.role = role;
     }
 
     @Override
     public void active() {
-        Role role = GetBean.getRoleManager().load(rId);
         MonsterResource monsterResource = GetBean.getMonsterManager().getResourceById(monsterResourceId);
         //添加经验
-        GetBean.getRoleService().addExperience(rId, monsterResource.getExperience());
-        for (Map.Entry<Integer, Integer> entry : monsterResource.getDropMap().entrySet()) {
-
-        }
+        GetBean.getRoleService().addExperience(role.getId(), monsterResource.getExperience());
+        //添加物品
+        GetBean.getBackpackService().obtainProp(getAccountId(), monsterResource.getDropMap());
     }
 }

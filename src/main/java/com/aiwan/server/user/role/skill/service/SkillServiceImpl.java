@@ -144,14 +144,11 @@ public class SkillServiceImpl implements SkillService {
         Role role = GetBean.getRoleManager().load(rId);
         //获取技能等级静态资源
         SkillLevelResource skillLevelResource = skillManager.getSkillLevelReById(skillId, skillElement.getSkillLevel() + 1);
-        if (role.getLevel() < skillLevelResource.getRoleLevelDemand() || role.getExperience() < skillLevelResource.getExperienceDemand()) {
+        if (role.getLevel() < skillLevelResource.getRoleLevelDemand()) {
             logger.error("角色{}升级技能[{}]失败,未达到升级要求", rId, skillId);
             session.sendPromptMessage(PromptCode.NOTREARCHDEMAND, "");
             return;
         }
-        //去除经验
-        role.setExperience(role.getExperience() - skillLevelResource.getExperienceDemand());
-        GetBean.getRoleManager().save(role);
         //技能升级
         skillModel.upgrade(skillId);
         skillManager.save(skillModel);

@@ -9,6 +9,8 @@
         <module name="homeword1" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="8" />
+    <bytecodeTargetLevel>
+      <module name="homeword1" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

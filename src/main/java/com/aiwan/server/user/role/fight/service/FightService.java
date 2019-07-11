@@ -57,13 +57,13 @@ public class FightService implements IFightService {
         //获取目标施法单位
         List<BaseUnit> passiveList = new ArrayList<>();
         BaseUnit passiveUnit = sceneObject.getBaseUnit(passiveId);
-        if (passiveUnit == null) {
+        if (passiveUnit == null || passiveUnit.isDeath()) {
             //没有目标施法单位
-            logger.error("角色{}施法错误，找不到施法单位", activeRid);
+            logger.error("角色{}施法错误，找不到施法目标或者施法目标已死亡", activeRid);
             return;
         }
         //是否在攻击范围内
-        if (!isDistanceSatisfy(activeRole, passiveUnit, skill.getSkillLevelResouece().getDistance())) {
+        if (!isDistanceSatisfy(activeRole, passiveUnit, skill.getSkillLevelResource().getDistance())) {
             logger.error("角色{}施法错误，施法距离不够", activeRid);
             return;
         }
@@ -74,8 +74,8 @@ public class FightService implements IFightService {
         }
         passiveList.add(passiveUnit);
         if (skill.getResource().getIsGroup() == 1) {
-            int num = skill.getSkillLevelResouece().getNum() - 1;
-            sceneObject.findAroundUnit(activeRole, passiveList, passiveUnit, skill.getSkillLevelResouece().getDistance(), num);
+            int num = skill.getSkillLevelResource().getNum() - 1;
+            sceneObject.findAroundUnit(activeRole, passiveList, passiveUnit, skill.getSkillLevelResource().getDistance(), num);
         }
         //释放技能
         skill.doUserSkill(activeRole, passiveList);

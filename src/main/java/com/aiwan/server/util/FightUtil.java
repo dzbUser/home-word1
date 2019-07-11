@@ -23,7 +23,7 @@ public class FightUtil {
     /**
      * 计算最终回复血量
      */
-    public static long caculateCureBlood(Map<AttributeType, AttributeElement> active, int value) {
+    public static long calculateCureBlood(Map<AttributeType, AttributeElement> active, int value) {
         return active.get(AttributeType.ATTACK).getValue() * value / 20000;
     }
 }

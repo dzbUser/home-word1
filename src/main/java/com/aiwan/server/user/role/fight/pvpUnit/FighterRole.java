@@ -90,13 +90,13 @@ public class FighterRole extends BaseUnit {
             logger.debug("角色{}施法技能{}失败，处于CD状态", getId(), skill.getSkillId());
             return false;
         }
-        if (getMp() < skill.getSkillLevelResouece().getMagicDemand()) {
+        if (getMp() < skill.getSkillLevelResource().getMagicDemand()) {
             //魔法值不够
             logger.debug("角色{}施法技能{}失败，魔法值不够", getId(), skill.getSkillId());
             return false;
         }
-        skillCD.put(skill.getSkillId(), now + skill.getSkillLevelResouece().getCd());
-        setMp(getMp() - skill.getSkillLevelResouece().getMagicDemand());
+        skillCD.put(skill.getSkillId(), now + skill.getSkillLevelResource().getCd());
+        setMp(getMp() - skill.getSkillLevelResource().getMagicDemand());
         return true;
     }
 

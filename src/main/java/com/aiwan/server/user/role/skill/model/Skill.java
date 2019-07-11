@@ -1,18 +1,13 @@
 package com.aiwan.server.user.role.skill.model;
 
-import com.aiwan.server.user.role.buff.effect.AbstractEffect;
-import com.aiwan.server.user.role.buff.effect.EffectType;
-import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.user.role.fight.context.SkillUseContext;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.skill.impact.ImpactInterface;
-import com.aiwan.server.user.role.skill.impact.ImpactType;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
 import com.aiwan.server.util.GetBean;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 技能抽象类
@@ -73,7 +68,7 @@ public class Skill {
     /**
      * 获取对应等级的静态资源
      */
-    public SkillLevelResource getSkillLevelResouece() {
+    public SkillLevelResource getSkillLevelResource() {
         return GetBean.getSkillManager().getSkillLevelReById(skillId, skillLevel);
     }
 
@@ -83,24 +78,24 @@ public class Skill {
     public void doUserSkill(BaseUnit active, List<BaseUnit> passiveList) {
         SkillUseContext skillUseContext = new SkillUseContext();
         //循环调用技能效果
-        for (Map.Entry<Integer, ImpactType> entry : getSkillLevelResouece().getImpactTypeMap().entrySet()) {
-            ImpactInterface impactInterface = entry.getValue().creator();
+        for (Integer type : getSkillLevelResource().getImpactList()) {
+            ImpactInterface impactInterface = getSkillLevelResource().getImpactTypeMap().get(type).creator();
             for (BaseUnit passive : passiveList) {
-                impactInterface.takeImpact(active, passive, getSkillLevelResouece(), skillUseContext);
+                impactInterface.takeImpact(active, passive, getSkillLevelResource(), skillUseContext);
             }
         }
 
         //是否是buff技能
-        if (getResource().getIsBuffSkill() == 1) {
-            //添加buff
-            Long now = System.currentTimeMillis();
-            EffectResource effectResource = GetBean.getBuffManager().getEffectResource(getSkillLevelResouece().getBuffId());
-            AbstractEffect abstractEffect = EffectType.getEffectType(effectResource.getType()).creator();
-            //buff初始化
-            abstractEffect.init(effectResource.getId(), now, effectResource.getPeriod(), effectResource.getDuration(), active);
-            for (BaseUnit baseUnit : passiveList) {
-                baseUnit.putBuff(effectResource.getUniqueId(), abstractEffect);
-            }
-        }
+//        if (getResource().getIsBuffSkill() == 1) {
+//            //添加buff
+//            Long now = System.currentTimeMillis();
+//            EffectResource effectResource = GetBean.getBuffManager().getEffectResource(getSkillLevelResource().getBuffId());
+//            AbstractEffect abstractEffect = EffectType.getEffectType(effectResource.getType()).creator();
+//            //buff初始化
+//            abstractEffect.init(effectResource.getId(), now, effectResource.getPeriod(), effectResource.getDuration(), active);
+//            for (BaseUnit baseUnit : passiveList) {
+//                baseUnit.putBuff(effectResource.getUniqueId(), abstractEffect);
+//            }
+//        }
     }
 }

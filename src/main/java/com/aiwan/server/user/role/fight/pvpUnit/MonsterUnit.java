@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.fight.pvpUnit;
 
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.user.role.fight.command.MonsterKillingAward;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.IDUtil;
@@ -48,9 +49,8 @@ public class MonsterUnit extends BaseUnit {
         setDeath(true);
         //为攻击者添加道具
         Role role = GetBean.getRoleManager().load(attackId);
-        for (Map.Entry<Integer, Integer> entry : getResource().getDropMap().entrySet()) {
-
-        }
+        //为角色添加击杀奖励
+        GetBean.getAccountExecutorService().submit(new MonsterKillingAward(role.getAccountId(), role, getResourceId()));
     }
 
     public int getResourceId() {

@@ -143,7 +143,7 @@ public class SceneObject {
      */
     public void findAroundUnit(BaseUnit active, List<BaseUnit> list, BaseUnit target, int range, int num) {
         for (BaseUnit baseUnit : baseUnitMap.values()) {
-            if (baseUnit.getId() == active.getId() || baseUnit.getId() == target.getId()) {
+            if (baseUnit.getId() == active.getId() || baseUnit.getId() == target.getId() || baseUnit.isDeath()) {
                 //施法单位
                 continue;
             }

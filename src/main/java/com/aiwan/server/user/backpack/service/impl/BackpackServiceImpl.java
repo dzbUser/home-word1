@@ -4,6 +4,7 @@ import com.aiwan.server.prop.model.AbstractProps;
 import com.aiwan.server.prop.model.PropsType;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.protocol.Item.PropInfo;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.protocol.SM_PropList;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -129,6 +131,18 @@ public class BackpackServiceImpl implements BackpackService {
         return true;
     }
 
+    @Override
+    public void obtainProp(String accountId, Map<Integer, Integer> map) {
+        Session session = SessionManager.getSessionByAccountId(accountId);
+        if (session == null) {
+            return;
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            addPropToBack(accountId, entry.getKey(), entry.getValue(), session);
+        }
+    }
+
+
     /** 查看背包 */
     @Override
     public void viewBackpack(String accountId, Session session) {
@@ -226,8 +240,7 @@ public class BackpackServiceImpl implements BackpackService {
             AbstractProps abstractProps = PropsType.getType(propsResource.getType()).createProp();
             abstractProps.init(propsResource);
             abstractProps.setNum(num);
-            backpack.putOverlayProps(abstractProps);
-            backPackManager.writeBack(backpack);
+            obtainProp(accountId, abstractProps);
             session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
             return;
         }
@@ -241,7 +254,6 @@ public class BackpackServiceImpl implements BackpackService {
         logger.info("用户：" + accountId + "添加" + propsResource.getName() + "成功");
         session.sendPromptMessage(PromptCode.ADDSUCCESS, propsResource.getName());
     }
-
 
 
 }

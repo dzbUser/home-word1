@@ -38,7 +38,7 @@ public class SkillInfoReceive {
             stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%\n");
             skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), (skillElement.getLevel() + 1));
             if (skillElement.getLevel() < GetBean.getSkillManager().getMaxLevel(skillElement.getSkillId())) {
-                stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " 经验消耗:" + skillLevelResource.getExperienceDemand() + "\n\n");
+                stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");
             } else {
                 stringBuffer.append("技能达到最高等级\n\n");
             }
@@ -65,7 +65,7 @@ public class SkillInfoReceive {
                 stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%\n");
                 skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElements[i].getSkillId(), (skillElements[i].getLevel() + 1));
                 if (skillElements[i].getLevel() < GetBean.getSkillManager().getMaxLevel(skillElements[i].getSkillId())) {
-                    stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " 经验消耗:" + skillLevelResource.getExperienceDemand() + "\n\n");
+                    stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");
                 } else {
                     stringBuffer.append("技能达到最高等级\n\n");
                 }

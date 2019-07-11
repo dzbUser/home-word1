@@ -6,6 +6,8 @@ import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
 import com.aiwan.server.util.GetBean;
 
+import java.util.Map;
+
 /**
  * @author dengzebiao
  * @since 2019.6.4
@@ -251,5 +253,16 @@ public class Backpack {
         return true;
     }
 
+//    /**
+//     * 是否可以存入一批道具
+//     * @param map 道具映射
+//     * @return
+//     */
+//    public boolean isCanSaveBatchProp(Map<Integer,Integer> map){
+//        //复制map
+//        Map<Integer,Integer> map
+//        //获取背包栏
+//        AbstractProps[] array = backpackEnt.getBackpackInfo().getAbstractProps();
+//    }
 
 }

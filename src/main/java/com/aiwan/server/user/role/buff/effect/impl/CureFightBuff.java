@@ -1,10 +1,16 @@
 package com.aiwan.server.user.role.buff.effect.impl;
 
-import com.aiwan.server.user.role.buff.effect.AbstractEffect;
+import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.util.FightUtil;
 
-public class CureEffect extends AbstractEffect {
+/**
+ * 治疗buff
+ *
+ * @author dengzebiao
+ * @since 2019.7.11
+ */
+public class CureFightBuff extends AbstractFightBuff {
     @Override
     public void doActive(BaseUnit passive) {
         long cure = FightUtil.calculateCureBlood(getActiveUnit().getFinalAttribute(), getEffectResource().getValue());

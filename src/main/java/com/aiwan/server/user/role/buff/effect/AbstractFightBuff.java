@@ -6,8 +6,11 @@ import com.aiwan.server.util.GetBean;
 
 /**
  * buff效果抽象类
+ *
+ * @author dengzebiao
+ * @since 2019.7.11
  */
-public abstract class AbstractEffect {
+public abstract class AbstractFightBuff {
 
     /**
      * 对应buff的id

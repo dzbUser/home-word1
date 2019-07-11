@@ -85,17 +85,5 @@ public class Skill {
             }
         }
 
-        //是否是buff技能
-//        if (getResource().getIsBuffSkill() == 1) {
-//            //添加buff
-//            Long now = System.currentTimeMillis();
-//            EffectResource effectResource = GetBean.getBuffManager().getEffectResource(getSkillLevelResource().getBuffId());
-//            AbstractEffect abstractEffect = EffectType.getEffectType(effectResource.getType()).creator();
-//            //buff初始化
-//            abstractEffect.init(effectResource.getId(), now, effectResource.getPeriod(), effectResource.getDuration(), active);
-//            for (BaseUnit baseUnit : passiveList) {
-//                baseUnit.putBuff(effectResource.getUniqueId(), abstractEffect);
-//            }
-//        }
     }
 }

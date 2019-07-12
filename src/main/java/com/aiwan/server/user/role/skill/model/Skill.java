@@ -3,6 +3,7 @@ package com.aiwan.server.user.role.skill.model;
 import com.aiwan.server.user.role.fight.context.SkillUseContext;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.skill.impact.ImpactInterface;
+import com.aiwan.server.user.role.skill.resource.ImpactAnalysis;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
 import com.aiwan.server.util.GetBean;
@@ -78,10 +79,10 @@ public class Skill {
     public void doUserSkill(BaseUnit active, List<BaseUnit> passiveList) {
         SkillUseContext skillUseContext = new SkillUseContext();
         //循环调用技能效果
-        for (Integer type : getSkillLevelResource().getImpactList()) {
-            ImpactInterface impactInterface = getSkillLevelResource().getImpactTypeMap().get(type).creator();
+        for (ImpactAnalysis impactAnalysis : getSkillLevelResource().getImpactList()) {
+            ImpactInterface impactInterface = impactAnalysis.getImpactType().creator();
             for (BaseUnit passive : passiveList) {
-                impactInterface.takeImpact(active, passive, getSkillLevelResource(), skillUseContext);
+                impactInterface.takeImpact(active, passive, impactAnalysis, skillUseContext);
             }
         }
 

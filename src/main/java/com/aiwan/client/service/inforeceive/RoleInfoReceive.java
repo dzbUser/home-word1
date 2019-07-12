@@ -39,7 +39,7 @@ public class RoleInfoReceive {
         //角色创建成功
         LoginUser.setRoles(createRole.getRoles());
         GameInterface gameInterface = (GameInterface)InterfaceManager.getFrame("game");
-        gameInterface.printOtherMessage(createRole.getMessage());
+        gameInterface.printOtherMessage(createRole.getMessage() + "\n");
     }
 
     /** 查看角色属性 */
@@ -59,7 +59,7 @@ public class RoleInfoReceive {
         }
         //输出到游戏界面
         GameInterface GameInterface = (GameInterface)InterfaceManager.getFrame("game");
-        GameInterface.printOtherMessage(stringBuffer.toString());
+        GameInterface.printOtherMessage(stringBuffer.toString() + "\n");
     }
 
     /** 查看用户装备返回 */
@@ -110,6 +110,6 @@ public class RoleInfoReceive {
                 stringBuffer.append(attributeElement.toString() + " ");
             }
         }
-        gameInterface.printOtherMessage(stringBuffer.toString() + "\n\n");
+        gameInterface.printOtherMessage(stringBuffer.toString() + "\n");
     }
 }

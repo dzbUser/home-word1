@@ -57,12 +57,12 @@ public abstract class AbstractFightBuff {
      * @param duration   持续时间
      * @param activeUnit 施法单位
      */
-    public void init(int effectId, long gainTime, long period, long duration, BaseUnit activeUnit) {
+    public void init(int effectId, long gainTime, long period, long duration, long workTime, BaseUnit activeUnit) {
         setActiveUnit(activeUnit);
         setEffectId(effectId);
         setEndTime(gainTime + duration);
         setPeriod(period);
-        setWorkTime(gainTime);
+        setWorkTime(workTime);
         setGainTime(gainTime);
     }
 

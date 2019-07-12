@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 游戏界面
@@ -38,12 +40,17 @@ public class GameInterface extends JFrame{
     /** 其他信息 */
     private JTextArea otherMessage;
 
+    /**
+     * 时间字段
+     */
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     /** 初始化 */
     public GameInterface(){
         //接入界面管理
         InterfaceManager.putFrame("game",this);
         //设置长宽
-        setSize(1000, 600);
+        setSize(1000, 650);
         //添加导航栏
         this.add(navigationBar);
         //消除格式
@@ -107,7 +114,17 @@ public class GameInterface extends JFrame{
         mapMessage = newJTextArea(500,220,500,300,15,50);
         //可见
         this.setVisible(false);
-
+        //加入清空按钮
+        JButton clear = new JButton("清空");
+        //添加监听器
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                otherMessage.setText("");
+            }
+        });
+        clear.setBounds(40, 530, 80, 40);
+        this.add(clear);
         //添加关闭框
         addWindowListener (new WindowAdapter()
         {
@@ -143,8 +160,8 @@ public class GameInterface extends JFrame{
     }
 
     /** 输出提示信息 */
-    public void printPromptMessage(String message){
-        promptMessage.setText(message+"\n");
+    public void printPromptMessage(String message) {
+        promptMessage.setText(message);
     }
 
     /** 输出地图提示信息 */
@@ -153,8 +170,10 @@ public class GameInterface extends JFrame{
     }
 
     /** 输出其他提示信息 */
-    public void printOtherMessage(String message){
-        otherMessage.setText(message+"\n");
+    public void printOtherMessage(String message) {
+
+        otherMessage.append("\n~~~~~~~~~[" + df.format(new Date()) + "]~~~~~~~~~~\n\n");
+        otherMessage.append(message);
     }
 
     /** 用户注销 */

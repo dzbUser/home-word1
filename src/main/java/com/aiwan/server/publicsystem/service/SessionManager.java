@@ -1,6 +1,8 @@
 package com.aiwan.server.publicsystem.service;
 
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.util.GetBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,5 +40,16 @@ public class SessionManager {
 
     public static Session getSessionByAccountId(String AccountId) {
         return userMap.get(AccountId);
+    }
+
+    public static void sendPromptMessage(long rId, int promptCode, String message) {
+        Role role = GetBean.getRoleManager().load(rId);
+        if (role != null) {
+            getSessionByAccountId(role.getAccountId()).sendPromptMessage(promptCode, message);
+        }
+    }
+
+    public static void sendPromptMessage(String accountId, int promptCode, String message) {
+        getSessionByAccountId(accountId).sendPromptMessage(promptCode, message);
     }
 }

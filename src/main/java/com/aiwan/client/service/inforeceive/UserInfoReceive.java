@@ -73,7 +73,7 @@ public class UserInfoReceive {
     @InfoReceiveMethod(status = StatusCode.MESSAGE)
     public void sendMessage(SM_PromptMessage sm_promptMessage) {
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
-        gameInterface.printOtherMessage(sm_promptMessage.getOtherMessage() + ClientResourceManager.getContent("prompt", sm_promptMessage.getPromptCode()));
+        gameInterface.printOtherMessage(sm_promptMessage.getOtherMessage() + ClientResourceManager.getContent("prompt", sm_promptMessage.getPromptCode()) + "\n");
     }
 
     /** 注销 */

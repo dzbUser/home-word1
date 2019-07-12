@@ -1,12 +1,15 @@
 package com.aiwan.server.user.role.fight.pvpUnit;
 
+import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.fight.command.RoleReviveCommand;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.skill.model.Skill;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.PromptCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +22,11 @@ import java.util.Map;
  * @author dengzebiao
  */
 public class FighterRole extends BaseUnit {
+
+    /**
+     * 复活时间
+     */
+    private final static long REVIVE_TIME = 5000L;
 
     Logger logger = LoggerFactory.getLogger(FighterRole.class);
 
@@ -107,17 +115,10 @@ public class FighterRole extends BaseUnit {
     @Override
     protected void death(Long attackId) {
         setDeath(true);
-        //复活点复活,暂时为立即复活
+        //复活点复活,暂时为立即复活，发送提示
+        SessionManager.sendPromptMessage(this.getAccountId(), PromptCode.ROLE_DEATH,"");
         // TODO: 2019/7/9 修改为规定时间后复活
-        MapResource mapResource = GetBean.getMapManager().getMapResource(getMapId());
-        //修改角色位置
-        Role role = GetBean.getRoleManager().load(getId());
-        role.setX(mapResource.getOriginX());
-        role.setY(mapResource.getOriginY());
-        GetBean.getRoleManager().save(role);
-        setPosition(Position.valueOf(mapResource.getOriginX(), mapResource.getOriginY()));
-        resetStatus();
-        setDeath(false);
+        GetBean.getSceneExecutorService().submit(new RoleReviveCommand(REVIVE_TIME, getAccountId(), this.getMapId(),this));
     }
 
     /**

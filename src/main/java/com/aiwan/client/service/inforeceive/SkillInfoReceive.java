@@ -35,7 +35,8 @@ public class SkillInfoReceive {
             SkillResource skillResource = GetBean.getSkillManager().getSkillResourceBySkillId(skillElement.getSkillId());
             stringBuffer.append("名字:" + skillResource.getSkillName() + " 等级:" + skillElement.getLevel());
             SkillLevelResource skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), skillElement.getLevel());
-            stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%\n");
+            stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%");
+            stringBuffer.append(" 目标数:" + skillLevelResource.getNum() + "\n");
             skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), (skillElement.getLevel() + 1));
             if (skillElement.getLevel() < GetBean.getSkillManager().getMaxLevel(skillElement.getSkillId())) {
                 stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");
@@ -62,7 +63,8 @@ public class SkillInfoReceive {
                 SkillResource skillResource = GetBean.getSkillManager().getSkillResourceBySkillId(skillElements[i].getSkillId());
                 stringBuffer.append("[" + i + "] " + "名字:" + skillResource.getSkillName() + " 等级:" + skillElements[i].getLevel());
                 SkillLevelResource skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElements[i].getSkillId(), skillElements[i].getLevel());
-                stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%\n");
+                stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%");
+                stringBuffer.append(" 目标数:" + skillLevelResource.getNum() + "\n");
                 skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElements[i].getSkillId(), (skillElements[i].getLevel() + 1));
                 if (skillElements[i].getLevel() < GetBean.getSkillManager().getMaxLevel(skillElements[i].getSkillId())) {
                     stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");

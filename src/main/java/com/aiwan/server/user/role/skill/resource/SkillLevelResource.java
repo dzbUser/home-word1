@@ -32,7 +32,7 @@ public class SkillLevelResource {
     private int skillLevel;
 
     /**
-     * 技能攻击万分比
+     * 技能攻击
      */
     @CellMapping(name = "skillAttack")
     private int skillAttack;
@@ -68,11 +68,6 @@ public class SkillLevelResource {
     @CellMapping(name = "distance")
     private int distance;
 
-    /**
-     * buffid
-     */
-    @CellMapping(name = "buffId")
-    private int buffId;
 
     /**
      * 技能效果
@@ -80,37 +75,23 @@ public class SkillLevelResource {
     @CellMapping(name = "impact")
     private String impact;
 
-    /**
-     * 技能效果列表,对应效果类型id，效果的值
-     */
-    private Map<ImpactType, Integer> impactMap = new HashMap<>();
-
-    /**
-     * 技能效果列表,对应效果类型id，效果的类型注入
-     */
-    private Map<Integer, ImpactType> impactTypeMap = new HashMap<>();
 
     /**
      * 技能效果执行顺序表
      */
-    private List<Integer> impactList = new ArrayList<>();
+    private List<ImpactAnalysis> impactList = new ArrayList<>();
 
     /**
      * 初始化
      */
     public void init() {
-        if (impact.equals("empty") || impact.equals("")) {
+        if (impact.equals("")) {
             return;
         }
         //初始化技能效果
         String[] impactField = impact.split(" ");
         for (int i = 0; i < impactField.length; i++) {
-            String[] impactValue = impactField[i].split(":");
-            int type = Integer.parseInt(impactValue[0]);
-            ImpactType impactType = ImpactType.getImpactType(type);
-            impactList.add(type);
-            impactMap.put(impactType, Integer.parseInt(impactValue[1]));
-            impactTypeMap.put(Integer.parseInt(impactValue[0]), impactType);
+            impactList.add(ImpactAnalysis.valueOf(impactField[i].split(":")));
         }
     }
 
@@ -186,13 +167,6 @@ public class SkillLevelResource {
         this.distance = distance;
     }
 
-    public int getBuffId() {
-        return buffId;
-    }
-
-    public void setBuffId(int buffId) {
-        this.buffId = buffId;
-    }
 
     public String getImpact() {
         return impact;
@@ -202,27 +176,12 @@ public class SkillLevelResource {
         this.impact = impact;
     }
 
-    public Map<ImpactType, Integer> getImpactMap() {
-        return impactMap;
-    }
 
-    public void setImpactMap(Map<ImpactType, Integer> impactMap) {
-        this.impactMap = impactMap;
-    }
-
-    public Map<Integer, ImpactType> getImpactTypeMap() {
-        return impactTypeMap;
-    }
-
-    public void setImpactTypeMap(Map<Integer, ImpactType> impactTypeMap) {
-        this.impactTypeMap = impactTypeMap;
-    }
-
-    public List<Integer> getImpactList() {
+    public List<ImpactAnalysis> getImpactList() {
         return impactList;
     }
 
-    public void setImpactList(List<Integer> impactList) {
+    public void setImpactList(List<ImpactAnalysis> impactList) {
         this.impactList = impactList;
     }
 }

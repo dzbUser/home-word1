@@ -5,6 +5,7 @@ import com.aiwan.server.user.role.fight.context.SkillUseContextEnum;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.skill.impact.ImpactInterface;
 import com.aiwan.server.user.role.skill.impact.ImpactType;
+import com.aiwan.server.user.role.skill.resource.ImpactAnalysis;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.util.FightUtil;
 
@@ -17,9 +18,9 @@ import com.aiwan.server.util.FightUtil;
 public class HurtImpact implements ImpactInterface {
 
     @Override
-    public void takeImpact(BaseUnit active, BaseUnit passive, SkillLevelResource skillLevelResource, SkillUseContext skillUseContext) {
-        Integer value = skillLevelResource.getImpactMap().get(ImpactType.HURT_IMPACT);
-        if (value != null) {
+    public void takeImpact(BaseUnit active, BaseUnit passive, ImpactAnalysis impactAnalysis, SkillUseContext skillUseContext) {
+        int value = impactAnalysis.getValue();
+        if (value != 0) {
             Long hurt = FightUtil.calculateFinalHurt(active.getFinalAttribute(), passive.getFinalAttribute(), value);
             passive.deduceHP(active.getId(), hurt);
             //存入最终伤害

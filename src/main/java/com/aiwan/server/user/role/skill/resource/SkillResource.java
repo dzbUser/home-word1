@@ -22,13 +22,6 @@ public class SkillResource {
 
 
     /**
-     * 是否为buff技能
-     */
-    @CellMapping(name = "isBuffSkill")
-    private int isBuffSkill;
-
-
-    /**
      * 技能描述
      */
     @CellMapping(name = "dec")
@@ -55,14 +48,6 @@ public class SkillResource {
 
     public void setSkillName(String skillName) {
         this.skillName = skillName;
-    }
-
-    public int getIsBuffSkill() {
-        return isBuffSkill;
-    }
-
-    public void setIsBuffSkill(int isBuffSkill) {
-        this.isBuffSkill = isBuffSkill;
     }
 
     public String getDec() {

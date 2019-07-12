@@ -156,4 +156,45 @@ public class PromptCode {
      * Buff丹药一次只能使用一个
      */
     public final static int USER_ONLY_ONE = 35;
+
+    /**
+     * 施法错误，位置超出技能槽范围
+     */
+    public final static int EXCEED_SKILLBAR = 36;
+
+    /**
+     * 施法错误，该位置没有技能
+     */
+    public final static int NOSKILL_INSKILLBAR = 37;
+
+    /**
+     * prompt	38	施法错误，找不到施法单位
+     */
+    public final static int NOFIND_MAGICUNIT = 38;
+
+    /**
+     * prompt	39	施法错误，找不到施法目标或者施法目标已死亡
+     */
+    public final static int NOFIND_MAGICAIM = 39;
+
+    /**
+     * prompt	40	施法错误，超出施法范围
+     */
+    public final static int EXCEED_MAGICRANGE = 40;
+
+    /**
+     * prompt	41	施法错误，不具备施法条件
+     */
+    public final static int BAN_USE_SKILL = 41;
+
+    /**
+     * prompt	42	施法成功
+     */
+    public final static int USE_SKILL_SUCCESS = 42;
+
+    /**
+     * prompt	43	您已死亡，将在复活点复活
+     */
+    public final static int ROLE_DEATH = 43;
+
 }

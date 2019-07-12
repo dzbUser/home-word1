@@ -49,6 +49,12 @@ public class EffectResource {
     private int uniqueId;
 
     /**
+     * effect描述
+     */
+    @CellMapping(name = "dec")
+    private String dec;
+
+    /**
      * 效果id
      */
 
@@ -106,5 +112,13 @@ public class EffectResource {
 
     public void setUniqueId(int uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public String getDec() {
+        return dec;
+    }
+
+    public void setDec(String dec) {
+        this.dec = dec;
     }
 }

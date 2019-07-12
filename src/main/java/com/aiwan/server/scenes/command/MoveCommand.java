@@ -5,6 +5,7 @@ import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
@@ -33,6 +34,12 @@ public class MoveCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
+        BaseUnit baseUnit = GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
+        if (baseUnit.isDeath()) {
+            //角色处于死亡状态
+            logger.info("角色{}请求移动到({}.{})失败，角色处于死亡状态", role.getId(), target.getX(), target.getY());
+            return;
+        }
         Session session = SessionManager.getSessionByAccountId(role.getAccountId());
         if (GetBean.getMapManager().allowMove(target.getX(), target.getY(), getKey())) {
             role.setX(target.getX());
@@ -40,7 +47,6 @@ public class MoveCommand extends AbstractSceneCommand {
             role.setMap(getKey());
             GetBean.getRoleManager().save(role);
             //获取角色战斗单位
-            BaseUnit baseUnit = GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
             baseUnit.setPosition(Position.valueOf(target.getX(), target.getY()));
             //对所有在线用户发送地图信息
             GetBean.getMapManager().sendMessageToUsers(role.getMap());

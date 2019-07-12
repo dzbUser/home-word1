@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.fight.service;
 
+import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.skill.model.Skill;
 
@@ -40,4 +41,12 @@ public interface IFightService {
      * @return
      */
     boolean isDistanceSatisfy(BaseUnit activeRole, BaseUnit passiveRole, int distance);
+
+    /**
+     * 查看战斗buff
+     *
+     * @param rId     角色id
+     * @param session 会话
+     */
+    void viewFightBuff(Long rId, Session session);
 }

@@ -11,10 +11,22 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class SkillFacade {
+
+    /**
+     * 学习技能
+     *
+     * @param cm_learnSkill 协议类
+     * @param session       会话
+     */
     public void learnSkill(CM_LearnSkill cm_learnSkill, Session session) {
         GetBean.getSkillService().learnSkill(cm_learnSkill.getRId(), cm_learnSkill.getSkillId(), session);
     }
 
+    /**
+     * 查看已学技能
+     * @param cm_viewLearnSkill 协议类
+     * @param session   会话
+     */
     public void viewLearnedSkill(CM_ViewLearnSkill cm_viewLearnSkill, Session session) {
         GetBean.getSkillService().viewLearnedSkill(cm_viewLearnSkill.getRId(), session);
     }

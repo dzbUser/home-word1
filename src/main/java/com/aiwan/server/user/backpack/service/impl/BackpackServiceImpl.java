@@ -137,6 +137,7 @@ public class BackpackServiceImpl implements BackpackService {
         if (session == null) {
             return;
         }
+        //循环添加道具
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             addPropToBack(accountId, entry.getKey(), entry.getValue(), session);
         }

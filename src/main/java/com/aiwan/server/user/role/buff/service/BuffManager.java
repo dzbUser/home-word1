@@ -154,6 +154,21 @@ public class BuffManager {
     }
 
     /**
+     * 中断角色rid的所有buff的command
+     *
+     * @param rId
+     */
+    public void interruptCommand(Long rId) {
+        Map<Integer, BuffOverCommand> map = this.buffCommandMap.get(rId);
+        if (map != null) {
+            for (BuffOverCommand buffOverCommand : map.values()) {
+                buffOverCommand.cancel();
+            }
+            this.buffCommandMap.remove(rId);
+        }
+    }
+
+    /**
      * 移除command
      */
     public void removerCommand(Long rId, int buffId) {

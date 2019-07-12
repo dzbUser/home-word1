@@ -8,8 +8,17 @@ import com.aiwan.server.scenes.protocol.SM_ViewAllUnitInMap;
 import com.aiwan.server.scenes.protocol.UnitDetailMessage;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
+import com.aiwan.server.user.role.buff.protocol.BuffMessage;
+import com.aiwan.server.user.role.buff.resource.BuffResource;
+import com.aiwan.server.user.role.buff.resource.EffectResource;
+import com.aiwan.server.user.role.fight.protocol.FightBuffMessage;
+import com.aiwan.server.user.role.fight.protocol.SM_ViewFightBuff;
+import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -56,4 +65,26 @@ public class FightInfoReceive {
         gameInterface.printOtherMessage(stringBuffer.toString());
     }
 
+    /**
+     * 查看所有buff
+     */
+    @InfoReceiveMethod(status = StatusCode.VIEW_FIGHT_BUFF)
+    public void viewFightBuff(SM_ViewFightBuff sm_viewFightBuff) {
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        StringBuffer stringBuffer = new StringBuffer();
+        // 格式化时间
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd hh:mm:ss");
+        //获取buff列表
+        List<FightBuffMessage> list = sm_viewFightBuff.getList();
+        for (int i = 0; i < list.size(); i++) {
+            //获取buff信息
+            FightBuffMessage buffMessage = list.get(i);
+            //获取buff资源
+            EffectResource effectResource = GetBean.getBuffManager().getEffectResource(buffMessage.getEffectId());
+            stringBuffer.append("[" + i + "] effectId:" + list.get(i).getEffectId());
+            stringBuffer.append(" 结束时间:" + formatter.format(new Date(buffMessage.getOverTime())));
+            stringBuffer.append("说明:" + effectResource.getDec());
+        }
+        gameInterface.printOtherMessage(stringBuffer.toString() + "\n");
+    }
 }

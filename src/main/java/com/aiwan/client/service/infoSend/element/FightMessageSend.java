@@ -13,6 +13,7 @@ import com.aiwan.server.user.backpack.protocol.CM_DropProps;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.fight.protocol.CM_UserSkill;
+import com.aiwan.server.user.role.fight.protocol.CM_ViewFightBuff;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.Protocol;
@@ -33,6 +34,9 @@ public enum FightMessageSend {
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEW_ALLUNIT_INMAP, cm_viewAllUnitInMap));
         }
     },
+    /**
+     * 使用技能
+     */
     USER_SKILL(1) {
         @Override
         public void messageSend(String message) {
@@ -57,6 +61,13 @@ public enum FightMessageSend {
                 return false;
             }
             return true;
+        }
+    },
+    VIEW_FIGHT_BUFF(2) {
+        @Override
+        public void messageSend(String message) {
+            CM_ViewFightBuff cm_viewFightBuff = new CM_ViewFightBuff();
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEW_FIGHTBUFF, cm_viewFightBuff));
         }
     }
     ;

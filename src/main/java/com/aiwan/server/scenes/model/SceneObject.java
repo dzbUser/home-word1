@@ -60,8 +60,6 @@ public class SceneObject {
         return baseUnitMap.get(id);
     }
 
-
-
     /**
      * 创建场景
      */
@@ -100,15 +98,18 @@ public class SceneObject {
          * 3.获取随机坐标
          * 4.生成怪物
          * */
+        //获取属于该地图的怪物
         List<MonsterResource> monsterResources = GetBean.getMonsterManager().getMonsterList(getMapId());
         if (monsterResources == null) {
             return;
         }
+        //循环创建怪物
         for (MonsterResource monsterResource : monsterResources) {
             for (int i = 0; i < monsterResource.getNum(); i++) {
                 //获取随机坐标
                 while (true) {
                     Position position = MonsterGenerateUtil.generaterRandomPosition(getResource().getWidth(), getResource().getHeight());
+                    //判断不是阻挡点
                     if (GetBean.getMapManager().allowMove(position.getX(), position.getY(), getMapId())) {
                         MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position);
                         baseUnitMap.put(monster.getId(), monster);
@@ -143,7 +144,8 @@ public class SceneObject {
      */
     public void findAroundUnit(BaseUnit active, List<BaseUnit> list, BaseUnit target, int range, int num) {
         for (BaseUnit baseUnit : baseUnitMap.values()) {
-            if (baseUnit.getId() == active.getId() || baseUnit.getId() == target.getId() || baseUnit.isDeath()) {
+            //除去施法单位与施法选择单位
+            if (baseUnit.getId().equals(active.getId()) || baseUnit.getId().equals(target.getId()) || baseUnit.isDeath()) {
                 //施法单位
                 continue;
             }

@@ -83,12 +83,17 @@ public class ScenesServiceImpl implements ScenesService{
     @Override
     public void changeMap(Role role, int targetMapId) {
         if (role.isChangingMap()) {
-            logger.info("角色:{},正在进行地图跳转", role.getId());
+            logger.info("角色:{}跳转到{}失败,正在进行地图跳转", role.getId(), targetMapId);
             return;
         }
         //设置正在地图跳转
-        role.setChangingMap(true);
         FighterRole fighterRole = (FighterRole) GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
+        if (fighterRole.isDeath()) {
+            //角色处于死亡状态
+            logger.info("角色:{}跳转到{}失败,角色处于死亡状态", role.getId(), targetMapId);
+            return;
+        }
+        role.setChangingMap(true);
         leaveMap(role);
         //进入map地图
         GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, fighterRole));

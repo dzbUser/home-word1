@@ -77,7 +77,8 @@ public class NavigationBar extends JPanel {
 
     private static final String FIGHTMESSAGE =
             "0.查看地图所有战斗单位\n" +
-                    "1.使用技能 （指令：技能位置 唯一id）";
+                    "1.使用技能 （指令：技能位置 唯一id）\n" +
+                    "2.查看身上buff";
 
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);
 

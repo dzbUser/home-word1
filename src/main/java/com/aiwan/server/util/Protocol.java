@@ -117,4 +117,9 @@ public class Protocol {
      * 查看地图上所有角色信息
      */
     public static final int VIEW_ALLUNIT_INMAP = 40;
+
+    /**
+     * 查看战斗buff
+     */
+    public static final int VIEW_FIGHTBUFF = 41;
 }

@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.fight.pvpUnit;
 
+import com.aiwan.server.base.executor.scene.impl.AbstractSceneDelayCommand;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
@@ -47,6 +48,11 @@ public class FighterRole extends BaseUnit {
     private Map<Integer, Long> skillCD = new HashMap<>();
 
     /**
+     * 复活命令
+     */
+    private AbstractSceneDelayCommand reviveCommand;
+
+    /**
      * 创建对象
      */
     public static FighterRole valueOf(Role role) {
@@ -63,10 +69,7 @@ public class FighterRole extends BaseUnit {
         fighterRole.setMapId(role.getMap());
         Map<AttributeType, AttributeElement> pureAttributeMap = new HashMap<>();
         //复制用户属性
-        for (Map.Entry<AttributeType, AttributeElement> entry : role.getAttribute().getFinalAttribute().entrySet()) {
-            pureAttributeMap.put(entry.getKey(), AttributeElement.valueOf(entry.getValue().getAttributeType(), entry.getValue().getValue()));
-        }
-        fighterRole.setRoleAttribute(pureAttributeMap);
+        fighterRole.setRoleAttribute(role.getAttribute().getFinalAttribute());
         fighterRole.setHp(fighterRole.getMaxHp());
         fighterRole.setMp(fighterRole.getMaxMp());
         return fighterRole;
@@ -117,7 +120,6 @@ public class FighterRole extends BaseUnit {
         setDeath(true);
         //复活点复活,暂时为立即复活，发送提示
         SessionManager.sendPromptMessage(this.getAccountId(), PromptCode.ROLE_DEATH,"");
-        // TODO: 2019/7/9 修改为规定时间后复活
         GetBean.getSceneExecutorService().submit(new RoleReviveCommand(REVIVE_TIME, getAccountId(), this.getMapId(),this));
     }
 
@@ -158,7 +160,8 @@ public class FighterRole extends BaseUnit {
     }
 
     public void setRoleAttribute(Map<AttributeType, AttributeElement> roleAttribute) {
-        this.rolePureAttribute = roleAttribute;
+        this.rolePureAttribute = new HashMap<>(16);
+        this.rolePureAttribute.putAll(roleAttribute);
         //重新计算最终属性
         calculateFinalAttribute();
     }
@@ -180,4 +183,31 @@ public class FighterRole extends BaseUnit {
         this.accountId = accountId;
     }
 
+    public static long getReviveTime() {
+        return REVIVE_TIME;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public Map<AttributeType, AttributeElement> getRolePureAttribute() {
+        return rolePureAttribute;
+    }
+
+    public void setRolePureAttribute(Map<AttributeType, AttributeElement> rolePureAttribute) {
+        this.rolePureAttribute = rolePureAttribute;
+    }
+
+    public AbstractSceneDelayCommand getReviveCommand() {
+        return reviveCommand;
+    }
+
+    public void setReviveCommand(AbstractSceneDelayCommand reviveCommand) {
+        this.reviveCommand = reviveCommand;
+    }
 }

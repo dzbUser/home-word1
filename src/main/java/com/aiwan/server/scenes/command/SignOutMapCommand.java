@@ -1,10 +1,13 @@
 package com.aiwan.server.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
+import com.aiwan.server.user.role.buff.common.BuffOverCommand;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * 离开地图指令
@@ -25,11 +28,10 @@ public class SignOutMapCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
-        if (role.isChangingMap()) {
-            logger.info("角色:{},正在进行地图跳转", role.getId());
-            return;
-        }
+        //去除地图缓存
         GetBean.getScenesService().leaveMap(role);
+        //删除buff定时器
+        GetBean.getBuffManager().interruptCommand(role.getId());
     }
 
     public SignOutMapCommand(Role role) {

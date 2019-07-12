@@ -6,6 +6,7 @@ import com.aiwan.server.user.role.skill.entity.SkillElement;
 import com.aiwan.server.user.role.skill.model.SkillModel;
 import com.aiwan.server.user.role.skill.protocol.SM_ViewLearnedSkill;
 import com.aiwan.server.user.role.skill.protocol.SM_ViewSkillBar;
+import com.aiwan.server.user.role.skill.protocol.element.SkillElementMessage;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 import com.aiwan.server.user.role.skill.resource.SkillResource;
 import com.aiwan.server.util.GetBean;
@@ -75,10 +76,6 @@ public class SkillServiceImpl implements SkillService {
             return;
         }
 
-//        if (SkillType.getSkillById(skillTypeId) == null) {
-//            logger.error("角色id{}，学习技能id为{}时，输入的技能类型错误", rId, skillId);
-//            return;
-//        }
 
         //学习该技能
         skillModel.putSkillBySkillId(skillId);
@@ -99,10 +96,10 @@ public class SkillServiceImpl implements SkillService {
         }
         //获取不可修改的map
         Map<Integer, SkillElement> map = Collections.unmodifiableMap(skillModel.getLearnedSkill());
-        List<com.aiwan.server.user.role.skill.protocol.element.SkillElement> list = new ArrayList<com.aiwan.server.user.role.skill.protocol.element.SkillElement>();
+        List<SkillElementMessage> list = new ArrayList<SkillElementMessage>();
         for (SkillElement skillMessage : map.values()) {
-            com.aiwan.server.user.role.skill.protocol.element.SkillElement skillElement = com.aiwan.server.user.role.skill.protocol.element.SkillElement.valueOf(skillMessage.getSkillId(), skillMessage.getSkillLevel());
-            list.add(skillElement);
+            SkillElementMessage skillElementMessage = SkillElementMessage.valueOf(skillMessage.getSkillId(), skillMessage.getSkillLevel());
+            list.add(skillElementMessage);
         }
         //创建返回协议类
         SM_ViewLearnedSkill sm_viewLearnedSkill = SM_ViewLearnedSkill.valueOf(list);
@@ -192,7 +189,7 @@ public class SkillServiceImpl implements SkillService {
         if (skillModel == null) {
             logger.error("角色id{}发送错误包", rid);
         }
-        com.aiwan.server.user.role.skill.protocol.element.SkillElement[] skills = new com.aiwan.server.user.role.skill.protocol.element.SkillElement[skillModel.getMaxSkillBarNum()];
+        SkillElementMessage[] skills = new SkillElementMessage[skillModel.getMaxSkillBarNum()];
         Integer[] skillBar = skillModel.getSkillBar();
         //遍历技能栏
         for (int i = 0; i < skillBar.length; i++) {
@@ -200,7 +197,7 @@ public class SkillServiceImpl implements SkillService {
                 skills[i] = null;
             } else {
                 final SkillElement skillElement = skillModel.getSkillBySkillId(skillBar[i]);
-                skills[i] = com.aiwan.server.user.role.skill.protocol.element.SkillElement.valueOf(skillElement.getSkillId(), skillElement.getSkillLevel());
+                skills[i] = SkillElementMessage.valueOf(skillElement.getSkillId(), skillElement.getSkillLevel());
             }
         }
 

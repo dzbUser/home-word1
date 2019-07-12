@@ -18,7 +18,7 @@ public class Session {
     /**
      * 角色id
      */
-    private long rId;
+    private Long rId;
 
     public Channel getChannel() {
         return channel;
@@ -40,6 +40,9 @@ public class Session {
         channel.writeAndFlush(decodeData);
     }
 
+    public void messageSend(int statusCode, Object obj) {
+        channel.writeAndFlush(SMToDecodeData.shift(statusCode, obj));
+    }
     /**
      * 发送提示信息
      */
@@ -47,11 +50,11 @@ public class Session {
         messageSend(SMToDecodeData.shift(StatusCode.MESSAGE, SM_PromptMessage.valueOf(code, message)));
     }
 
-    public long getrId() {
+    public Long getrId() {
         return rId;
     }
 
-    public void setrId(long rId) {
+    public void setrId(Long rId) {
         this.rId = rId;
     }
 }

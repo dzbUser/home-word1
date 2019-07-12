@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * @author dengzebiao
  */
-public class SkillElement implements Serializable {
+public class SkillElementMessage implements Serializable {
     /**
      * 技能id
      */
@@ -34,10 +34,10 @@ public class SkillElement implements Serializable {
         this.level = level;
     }
 
-    public static SkillElement valueOf(int skillId, int level) {
-        SkillElement skillElement = new SkillElement();
-        skillElement.setSkillId(skillId);
-        skillElement.setLevel(level);
-        return skillElement;
+    public static SkillElementMessage valueOf(int skillId, int level) {
+        SkillElementMessage skillElementMessage = new SkillElementMessage();
+        skillElementMessage.setSkillId(skillId);
+        skillElementMessage.setLevel(level);
+        return skillElementMessage;
     }
 }

@@ -2,6 +2,10 @@ package com.aiwan.server.user.role.fight.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
+import com.aiwan.server.user.role.buff.protocol.SM_ViewBuff;
+import com.aiwan.server.user.role.fight.protocol.FightBuffMessage;
+import com.aiwan.server.user.role.fight.protocol.SM_ViewFightBuff;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.scenes.model.Position;
@@ -10,9 +14,7 @@ import com.aiwan.server.user.role.fight.command.DoUserSkillCommand;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.skill.model.Skill;
 import com.aiwan.server.user.role.skill.model.SkillModel;
-import com.aiwan.server.util.FightUtil;
-import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.PromptCode;
+import com.aiwan.server.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,14 +31,6 @@ import java.util.List;
 @Service
 public class FightService implements IFightService {
 
-    /**
-     * 攻击角色
-     */
-    private static int ATTACKROLE = 1;
-    /**
-     * 攻击目标
-     */
-    private static int ATTACKMONSTER = 2;
 
     Logger logger = LoggerFactory.getLogger(FightService.class);
 
@@ -133,6 +127,22 @@ public class FightService implements IFightService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void viewFightBuff(Long rId, Session session) {
+        //获取角色
+        Role role = GetBean.getRoleManager().load(rId);
+        SceneObject sceneObject = GetBean.getMapManager().getSceneObject(role.getMap());
+        //获取战斗单位
+        BaseUnit fighterRole = sceneObject.getBaseUnit(rId);
+        //获取buff
+        List<FightBuffMessage> list = new ArrayList<>();
+        for (AbstractFightBuff abstractFightBuff : fighterRole.getBuff().values()) {
+            list.add(FightBuffMessage.valueOf(abstractFightBuff.getEffectId(), abstractFightBuff.getEndTime()));
+        }
+        SM_ViewFightBuff sm_viewFightBuff = SM_ViewFightBuff.valueOf(list);
+        session.messageSend(StatusCode.VIEW_FIGHT_BUFF, sm_viewFightBuff);
     }
 
     /**

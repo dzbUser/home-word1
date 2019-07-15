@@ -1,11 +1,10 @@
 package com.aiwan.server.user.account.service;
 
 import com.aiwan.server.publicsystem.annotation.Manager;
-import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
+import com.aiwan.server.ramcache.service.impl.EntityCacheServiceImpl;
 import com.aiwan.server.user.account.entity.UserEnt;
 import com.aiwan.server.user.account.model.User;
 import com.aiwan.server.user.account.model.UserBaseInfo;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
@@ -15,7 +14,7 @@ import java.util.ArrayList;
  * */
 @Manager
 public class UserManager {
-    private EntityCaheServiceImpl<String, UserEnt> cache;
+    private EntityCacheServiceImpl<String, UserEnt> cache;
 
     /**
      * 获取用户

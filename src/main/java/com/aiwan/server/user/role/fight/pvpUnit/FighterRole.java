@@ -37,10 +37,10 @@ public class FighterRole extends BaseUnit {
     private String accountId;
 
 
-    /**
-     * 角色纯净属性
-     */
-    private Map<AttributeType, AttributeElement> rolePureAttribute;
+//    /**
+//     * 角色纯净属性
+//     */
+//    private Map<AttributeType, AttributeElement> rolePureAttribute;
 
     /**
      * cd列表
@@ -67,7 +67,6 @@ public class FighterRole extends BaseUnit {
         //设置位置信息
         fighterRole.setPosition(Position.valueOf(role.getX(), role.getY()));
         fighterRole.setMapId(role.getMap());
-        Map<AttributeType, AttributeElement> pureAttributeMap = new HashMap<>();
         //复制用户属性
         fighterRole.setRoleAttribute(role.getAttribute().getFinalAttribute());
         fighterRole.setHp(fighterRole.getMaxHp());
@@ -75,17 +74,6 @@ public class FighterRole extends BaseUnit {
         return fighterRole;
     }
 
-    /**
-     * 计算战斗最终属性
-     */
-    private void calculateFinalAttribute() {
-        //计算最终属性
-        for (Map.Entry<AttributeType, AttributeElement> entry : rolePureAttribute.entrySet()) {
-            //获取最终属性值
-            long value = entry.getKey().calculate(entry.getValue(), rolePureAttribute);
-            getFinalAttribute().put(entry.getKey(), AttributeElement.valueOf(entry.getKey(), value));
-        }
-    }
 
     /**
      * 是否可以释放技能
@@ -149,19 +137,18 @@ public class FighterRole extends BaseUnit {
      */
     public void resetStatus() {
         //重置状态
-        skillCD = new HashMap<>();
-        setBuff(new HashMap<>());
+        skillCD = new HashMap<>(16);
+        setBuff(new HashMap<>(16));
         setHp(getMaxHp());
         setMp(getMaxMp());
     }
 
-    public Map<AttributeType, AttributeElement> getRoleAttribute() {
-        return rolePureAttribute;
-    }
-
     public void setRoleAttribute(Map<AttributeType, AttributeElement> roleAttribute) {
-        this.rolePureAttribute = new HashMap<>(16);
-        this.rolePureAttribute.putAll(roleAttribute);
+        Map<AttributeType, AttributeElement> attribute = new HashMap<>(16);
+        for (Map.Entry<AttributeType, AttributeElement> entry : roleAttribute.entrySet()) {
+            attribute.put(entry.getKey(), entry.getValue().cloneAttribute());
+        }
+        setUnitAttribute(attribute);
         //重新计算最终属性
         calculateFinalAttribute();
     }
@@ -195,13 +182,6 @@ public class FighterRole extends BaseUnit {
         this.logger = logger;
     }
 
-    public Map<AttributeType, AttributeElement> getRolePureAttribute() {
-        return rolePureAttribute;
-    }
-
-    public void setRolePureAttribute(Map<AttributeType, AttributeElement> rolePureAttribute) {
-        this.rolePureAttribute = rolePureAttribute;
-    }
 
     public AbstractSceneDelayCommand getReviveCommand() {
         return reviveCommand;

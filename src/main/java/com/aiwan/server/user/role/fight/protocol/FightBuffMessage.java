@@ -3,7 +3,10 @@ package com.aiwan.server.user.role.fight.protocol;
 import java.io.Serializable;
 
 /**
- * 战斗buff信息
+ * 战斗buff信
+ *
+ * @author dengzebiao
+ * @since 2019.7.15
  */
 public class FightBuffMessage implements Serializable {
 

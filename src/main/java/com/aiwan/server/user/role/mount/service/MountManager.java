@@ -2,8 +2,7 @@ package com.aiwan.server.user.role.mount.service;
 
 import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
-import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
-import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.ramcache.service.impl.EntityCacheServiceImpl;
 import com.aiwan.server.user.role.mount.entity.MountEntity;
 import com.aiwan.server.user.role.mount.model.MountModel;
 import com.aiwan.server.user.role.mount.resource.MountResource;
@@ -11,7 +10,6 @@ import com.aiwan.server.util.ExcelUtil;
 import com.aiwan.server.util.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -23,7 +21,7 @@ import java.util.List;
 @Manager
 public class MountManager {
     /** 坐骑缓存 */
-    private EntityCaheServiceImpl<Long, MountEntity> cache;
+    private EntityCacheServiceImpl<Long, MountEntity> cache;
 
     /** 坐骑静态资源 */
     @Static(initializeMethodName = "initMountResource")

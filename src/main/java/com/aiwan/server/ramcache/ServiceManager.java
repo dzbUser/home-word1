@@ -2,7 +2,7 @@ package com.aiwan.server.ramcache;
 
 import com.aiwan.server.ramcache.anno.Cache;
 import com.aiwan.server.ramcache.service.EntityCacheService;
-import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
+import com.aiwan.server.ramcache.service.impl.EntityCacheServiceImpl;
 import com.aiwan.server.util.GetBean;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
  * */
 public class ServiceManager {
     //存储所有创建的缓存
-    public static Map<Class,EntityCaheServiceImpl> cacheMaps = new HashMap<Class,EntityCaheServiceImpl>();
+    public static Map<Class, EntityCacheServiceImpl> cacheMaps = new HashMap<Class, EntityCacheServiceImpl>();
     /**
      * 创建缓存
      * */
@@ -23,7 +23,7 @@ public class ServiceManager {
             Cache cached = clz.getAnnotation(Cache.class);
             int maxmum = cached.maxmum();
             //初始化
-            EntityCaheServiceImpl entityCaheService = new EntityCaheServiceImpl();
+            EntityCacheServiceImpl entityCaheService = new EntityCacheServiceImpl();
             entityCaheService.initailize(clz.getName(),GetBean.getAccessor(),clz,maxmum);
             return entityCaheService;
         }

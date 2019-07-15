@@ -295,9 +295,6 @@ public class ExcelUtil
                 list.add(map);
             }
         }
-//        log.info("解析sheet完毕,数据共有 ：[{}]条合规记录", list.size());
-
-
         // 将对账文件信息存储于类中
         for (Map<String, Object> map : list) {
             T model = cls.newInstance();

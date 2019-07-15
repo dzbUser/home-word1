@@ -2,9 +2,16 @@ package com.aiwan.server.user.role.buff.resource;
 
 import com.aiwan.server.publicsystem.annotation.CellMapping;
 import com.aiwan.server.publicsystem.annotation.Resource;
+import com.aiwan.server.user.role.buff.effect.FightBuffType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * buff效果资源
+ *
+ * @author dengzebiao
+ * @since 2019.7.15
  */
 @Resource("staticresource/effectResource.xls")
 public class EffectResource {
@@ -16,7 +23,7 @@ public class EffectResource {
      * 效果值
      */
     @CellMapping(name = "value")
-    private int value;
+    private String value;
 
     /**
      * buff类型
@@ -55,8 +62,36 @@ public class EffectResource {
     private String dec;
 
     /**
-     * 效果id
+     * 值映射
+     * */
+    private Map<String, Object> valueMap = new HashMap<>();
+
+    /**
+     * 特殊参数解析值
      */
+    private IFightBuffAnalysis valueParameter;
+
+    /**
+     * 战斗buff类型
+     */
+    private FightBuffType fightBuffType;
+
+    public void init() {
+        //初始化效果参数
+        String[] parameters = value.split(" ");
+        for (String parameter : parameters) {
+            String[] parameterMap = parameter.split(":");
+            valueMap.put(parameterMap[0], parameterMap[1]);
+        }
+        this.fightBuffType = FightBuffType.getEffectType(getType());
+        Class<? extends IFightBuffAnalysis> fightBuffBeanClazz = this.fightBuffType.getAnaClazz();
+        try {
+            this.valueParameter = this.fightBuffType.getAnaClazz().newInstance();
+            this.valueParameter.doParse(this);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("生成Buff参数实力[" + fightBuffType.name() + "]错误");
+        }
+    }
 
     public int getId() {
         return id;
@@ -66,11 +101,11 @@ public class EffectResource {
         this.id = id;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -120,5 +155,17 @@ public class EffectResource {
 
     public void setDec(String dec) {
         this.dec = dec;
+    }
+
+    public Map<String, Object> getValueMap() {
+        return valueMap;
+    }
+
+    public IFightBuffAnalysis getValueParameter() {
+        return valueParameter;
+    }
+
+    public FightBuffType getFightBuffType() {
+        return fightBuffType;
     }
 }

@@ -1,17 +1,13 @@
 package com.aiwan.server.user.backpack.service;
 
-import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.annotation.Manager;
-import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
+import com.aiwan.server.ramcache.service.impl.EntityCacheServiceImpl;
 import com.aiwan.server.user.backpack.entity.BackpackEnt;
 import com.aiwan.server.user.backpack.model.Backpack;
 import com.aiwan.server.user.backpack.model.BackpackInfo;
-import com.aiwan.server.user.backpack.model.BackpackItem;
 import com.aiwan.server.util.GetBean;
-import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.Map;
 
 /**
  * @author dengzebiao
@@ -22,7 +18,7 @@ import java.util.Map;
 public class BackPackManager {
 
 
-    private EntityCaheServiceImpl<String, BackpackEnt> cache;
+    private EntityCacheServiceImpl<String, BackpackEnt> cache;
 
     /**
      * 获取背包业务对象

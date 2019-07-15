@@ -45,4 +45,11 @@ public class AttributeElement implements Serializable {
     public String toString(){
         return attributeType.getDesc()+":"+value;
     }
+
+    /**
+     * 克隆
+     */
+    public AttributeElement cloneAttribute() {
+        return AttributeElement.valueOf(this.getAttributeType(), this.getValue());
+    }
 }

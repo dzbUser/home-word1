@@ -26,7 +26,9 @@ public class MonsterUnit extends BaseUnit {
 
     public static MonsterUnit valueOf(MonsterResource monsterResource, Position position) {
         MonsterUnit monsterUnit = new MonsterUnit();
-        monsterUnit.getFinalAttribute().putAll(monsterResource.getAttributeMap());
+        monsterUnit.getUnitAttribute().putAll(monsterResource.getAttributeMap());
+        //计算最终属性
+        monsterUnit.calculateFinalAttribute();
         monsterUnit.setPosition(position);
         monsterUnit.setId(IDUtil.getId());
         monsterUnit.setHp(monsterUnit.getMaxHp());

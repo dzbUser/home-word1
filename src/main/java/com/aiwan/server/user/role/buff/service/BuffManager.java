@@ -2,7 +2,7 @@ package com.aiwan.server.user.role.buff.service;
 
 import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
-import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
+import com.aiwan.server.ramcache.service.impl.EntityCacheServiceImpl;
 import com.aiwan.server.user.role.buff.common.BuffOverCommand;
 import com.aiwan.server.user.role.buff.entity.BuffEntity;
 import com.aiwan.server.user.role.buff.model.BuffModel;
@@ -47,7 +47,7 @@ public class BuffManager {
     /**
      * 缓存
      */
-    private EntityCaheServiceImpl<Long, BuffEntity> cache;
+    private EntityCacheServiceImpl<Long, BuffEntity> cache;
 
     /**
      * 获取模型
@@ -115,6 +115,7 @@ public class BuffManager {
             logger.error(e.getLocalizedMessage());
         }
         for (EffectResource effectResource : list) {
+            effectResource.init();
             effectResourceMap.put(effectResource.getId(), effectResource);
         }
         logger.debug("EffectResource静态资源初始化后");

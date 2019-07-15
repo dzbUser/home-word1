@@ -1,6 +1,7 @@
 package com.aiwan.server.user.role.buff.effect.impl;
 
 import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
+import com.aiwan.server.user.role.buff.resource.bean.HurtFightBuffBean;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.util.FightUtil;
 import org.slf4j.Logger;
@@ -18,7 +19,8 @@ public class HurtFightBuff extends AbstractFightBuff {
 
     @Override
     public void doActive(BaseUnit passive) {
-        long hurt = FightUtil.calculateFinalHurt(getActiveUnit().getFinalAttribute(), passive.getFinalAttribute(), getEffectResource().getValue());
+        HurtFightBuffBean hurtFightBuffBean = (HurtFightBuffBean) getEffectResource().getValueParameter();
+        long hurt = FightUtil.calculateFinalHurt(getActiveUnit().getFinalAttribute(), passive.getFinalAttribute(), hurtFightBuffBean.getAttack());
         passive.deduceHP(getActiveUnit().getId(), hurt);
         logger.debug("伤害buff造成效果");
     }

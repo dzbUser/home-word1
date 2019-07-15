@@ -36,8 +36,7 @@ public class BuffResource {
      */
     public void init() {
         //初始化
-        String empty = "empty";
-        if (attribute.equals(empty)) {
+        if (attribute.equals("")) {
             //没有属性值
             attributeMap = null;
             return;

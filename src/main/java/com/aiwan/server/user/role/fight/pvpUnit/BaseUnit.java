@@ -4,6 +4,12 @@ import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
+import com.aiwan.server.user.role.buff.effect.impl.AttributeFightBuff;
+import com.aiwan.server.user.role.buff.resource.EffectResource;
+import com.aiwan.server.user.role.buff.resource.bean.AttributeFightBuffBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Attr;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +21,8 @@ import java.util.Map;
  * @since 2019.7.9
  */
 public abstract class BaseUnit {
+
+    Logger logger = LoggerFactory.getLogger(BaseUnit.class);
 
     /**
      * 唯一id
@@ -66,11 +74,89 @@ public abstract class BaseUnit {
      */
     private Map<AttributeType, AttributeElement> finalAttribute = new HashMap<>();
 
+    /**
+     * 战斗单位属性
+     */
+    private Map<AttributeType, AttributeElement> unitAttribute = new HashMap<>();
+
+
+    /**
+     * buff属性
+     */
+    private Map<AttributeType, AttributeElement> buffAttribute = new HashMap<>();
+
 
     /**
      * buff列表
      */
     private Map<Integer, AbstractFightBuff> buff = new HashMap<>();
+
+    /**
+     * 计算战斗最终属性
+     */
+    protected void calculateFinalAttribute() {
+        Map<AttributeType, AttributeElement> pureAttribute = new HashMap<>(16);
+
+        //深拷贝单位属性
+        for (Map.Entry<AttributeType, AttributeElement> entry : unitAttribute.entrySet()) {
+            pureAttribute.put(entry.getKey(), entry.getValue().cloneAttribute());
+        }
+        //计算buff属性
+        for (Map.Entry<AttributeType, AttributeElement> entry : buffAttribute.entrySet()) {
+            AttributeElement pureUnit = pureAttribute.get(entry.getKey());
+            if (pureUnit == null) {
+                pureAttribute.put(entry.getKey(), AttributeElement.valueOf(entry.getKey(), entry.getValue().getValue()));
+            } else {
+                pureUnit.setValue(entry.getValue().getValue() + pureUnit.getValue());
+            }
+        }
+        //计算最终属性
+        finalAttribute = new HashMap<>(16);
+        for (Map.Entry<AttributeType, AttributeElement> entry : pureAttribute.entrySet()) {
+            //获取最终属性值
+            long value = entry.getKey().calculate(entry.getValue(), pureAttribute);
+            getFinalAttribute().put(entry.getKey(), AttributeElement.valueOf(entry.getKey(), value));
+        }
+        logger.debug("计算成功");
+    }
+
+    /**
+     * 添加buff属性
+     *
+     * @param addAttribute 所添加的属性
+     */
+    public void putBuffAttribute(Map<AttributeType, AttributeElement> addAttribute) {
+        for (Map.Entry<AttributeType, AttributeElement> entry : addAttribute.entrySet()) {
+            AttributeElement unit = buffAttribute.get(entry.getKey());
+            if (unit == null) {
+                buffAttribute.put(entry.getKey(), AttributeElement.valueOf(entry.getKey(), entry.getValue().getValue()));
+            } else {
+                unit.setValue(entry.getValue().getValue() + unit.getValue());
+            }
+        }
+        calculateFinalAttribute();
+    }
+
+    /**
+     * 去除buff属性
+     *
+     * @param addAttribute 所去除的属性
+     */
+    public void removeBuffAttribute(Map<AttributeType, AttributeElement> addAttribute) {
+        for (Map.Entry<AttributeType, AttributeElement> entry : addAttribute.entrySet()) {
+            AttributeElement unit = buffAttribute.get(entry.getKey());
+            if (unit == null) {
+                logger.error("角色{}，去除属性：{}错误", getId(), entry.getKey().getDesc());
+            } else {
+                unit.setValue(unit.getValue() - entry.getValue().getValue());
+                if (unit.getValue() == 0) {
+                    buffAttribute.remove(entry.getKey());
+                }
+            }
+        }
+        calculateFinalAttribute();
+    }
+
 
 
     /**
@@ -101,6 +187,12 @@ public abstract class BaseUnit {
     public void putBuff(int uniqueId, AbstractFightBuff abstractFightBuff) {
         //添加buff
         buff.put(uniqueId, abstractFightBuff);
+        //是属性buff
+        if (abstractFightBuff.isAttributeBuff()) {
+            EffectResource effectResource = ((AttributeFightBuff) abstractFightBuff).getEffectResource();
+            AttributeFightBuffBean attributeFightBuffBean = (AttributeFightBuffBean) effectResource.getValueParameter();
+            putBuffAttribute(attributeFightBuffBean.getAttributes());
+        }
     }
 
     /**
@@ -226,5 +318,13 @@ public abstract class BaseUnit {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public Map<AttributeType, AttributeElement> getUnitAttribute() {
+        return unitAttribute;
+    }
+
+    public void setUnitAttribute(Map<AttributeType, AttributeElement> unitAttribute) {
+        this.unitAttribute = unitAttribute;
     }
 }

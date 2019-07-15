@@ -29,6 +29,7 @@ public class TimingConsumer implements Runnable{
                 Collection<Element> elements = ower.clearElements();
                 persist(elements);
                 try {
+                    // TODO: 2019/7/12  不可以用wait
                     me.wait(3000L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

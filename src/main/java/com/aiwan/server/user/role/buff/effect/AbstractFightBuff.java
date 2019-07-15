@@ -45,13 +45,22 @@ public abstract class AbstractFightBuff {
 
     /**
      * buff生效
+     * @param passive buff接收方
      */
     public abstract void doActive(BaseUnit passive);
+
+
+    /**
+     * buff失效后的操作
+     */
+    public boolean isAttributeBuff() {
+        return false;
+    }
 
     /**
      * 初始化
      *
-     * @param effectId   buffid
+     * @param effectId   id
      * @param gainTime   获取时间
      * @param period     周期
      * @param duration   持续时间

@@ -2,7 +2,7 @@ package com.aiwan.server.user.role.skill.service;
 
 import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
-import com.aiwan.server.ramcache.service.impl.EntityCaheServiceImpl;
+import com.aiwan.server.ramcache.service.impl.EntityCacheServiceImpl;
 import com.aiwan.server.user.role.skill.entity.SkillEntity;
 import com.aiwan.server.user.role.skill.entity.SkillInfo;
 import com.aiwan.server.user.role.skill.model.SkillModel;
@@ -51,7 +51,7 @@ public class SkillManager {
     /**
      * 缓存
      */
-    private EntityCaheServiceImpl<Long, SkillEntity> cache;
+    private EntityCacheServiceImpl<Long, SkillEntity> cache;
 
     /**
      * 获取技能模型

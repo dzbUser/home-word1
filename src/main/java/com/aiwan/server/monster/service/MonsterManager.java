@@ -42,7 +42,7 @@ public class MonsterManager {
         //获取地图资源静态路径
         String path = ResourceUtil.getResourcePath(MonsterResource.class);
         //加载资源
-        logger.debug("开始加载地图静态资源");
+        logger.debug("开始加载怪物静态资源");
         List<MonsterResource> list = null;
         try {
             list = ExcelUtil.analysisWithRelativePath(path, MonsterResource.class);

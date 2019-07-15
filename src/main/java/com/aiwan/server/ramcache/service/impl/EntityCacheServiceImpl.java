@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * 缓存业务类
  * @author dengzebiao
  * */
-public class EntityCaheServiceImpl<PK extends Serializable & Comparable<PK>,T extends IEntity<PK>> implements EntityCacheService<PK,T> {
-    private static final Logger logger = LoggerFactory.getLogger(EntityCaheServiceImpl.class);
+public class EntityCacheServiceImpl<PK extends Serializable & Comparable<PK>, T extends IEntity<PK>> implements EntityCacheService<PK, T> {
+    private static final Logger logger = LoggerFactory.getLogger(EntityCacheServiceImpl.class);
     /**  初始化标志*/
     private boolean initailzation;
     /**  实体类型*/

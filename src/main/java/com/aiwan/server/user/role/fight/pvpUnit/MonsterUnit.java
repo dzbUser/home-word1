@@ -2,8 +2,10 @@ package com.aiwan.server.user.role.fight.pvpUnit;
 
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
 import com.aiwan.server.user.role.fight.command.MonsterKillingAward;
 import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.IDUtil;
 
@@ -26,7 +28,8 @@ public class MonsterUnit extends BaseUnit {
 
     public static MonsterUnit valueOf(MonsterResource monsterResource, Position position) {
         MonsterUnit monsterUnit = new MonsterUnit();
-        monsterUnit.getUnitAttribute().putAll(monsterResource.getAttributeMap());
+        //设置战斗单位属性
+        monsterUnit.setUnitAttribute(ImmutableAttributeElement.wrapper(monsterResource.getAttributeMap()));
         //计算最终属性
         monsterUnit.calculateFinalAttribute();
         monsterUnit.setPosition(position);
@@ -36,6 +39,7 @@ public class MonsterUnit extends BaseUnit {
         monsterUnit.setName(monsterResource.getName());
         monsterUnit.setMonster(true);
         monsterUnit.setResourceId(monsterResource.getResourceId());
+        monsterUnit.setMapId(monsterResource.getMap());
         return monsterUnit;
     }
 
@@ -50,6 +54,8 @@ public class MonsterUnit extends BaseUnit {
     @Override
     protected void death(Long attackId) {
         setDeath(true);
+        //清除状态
+        resetStatus();
         //为攻击者添加道具
         Role role = GetBean.getRoleManager().load(attackId);
         //为角色添加击杀奖励

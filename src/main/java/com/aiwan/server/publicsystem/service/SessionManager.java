@@ -42,6 +42,9 @@ public class SessionManager {
         return userMap.get(AccountId);
     }
 
+    /**
+     * 发送提示信息
+     */
     public static void sendPromptMessage(long rId, int promptCode, String message) {
         Role role = GetBean.getRoleManager().load(rId);
         if (role != null) {
@@ -51,5 +54,12 @@ public class SessionManager {
 
     public static void sendPromptMessage(String accountId, int promptCode, String message) {
         getSessionByAccountId(accountId).sendPromptMessage(promptCode, message);
+    }
+
+    public static void sendMessageByRid(long rId, int statusCode, Object obj) {
+        Role role = GetBean.getRoleManager().load(rId);
+        if (role != null) {
+            getSessionByAccountId(role.getAccountId()).messageSend(statusCode, obj);
+        }
     }
 }

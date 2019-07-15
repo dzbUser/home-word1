@@ -4,6 +4,8 @@ import com.aiwan.server.base.executor.AbstractCommand;
 import com.aiwan.server.base.executor.ICommand;
 import com.aiwan.server.util.GetBean;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.*;
@@ -15,6 +17,8 @@ import java.util.concurrent.*;
  */
 @Component
 public class SceneExecutor {
+
+    Logger logger = LoggerFactory.getLogger(SceneExecutor.class);
 
     private static final int SCENE_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 4 / 10;
 
@@ -35,10 +39,16 @@ public class SceneExecutor {
 
     public void addTask(ICommand command) {
         int modIndex = command.modIndex(SCENE_POOL_SIZE);
+        final String taskName = command.getTaskName();
         SCENE_SERVICE[modIndex].submit(() -> {
-            if (!command.isCanceled()) {
-                command.active();
+            try {
+                if (!command.isCanceled()) {
+                    command.active();
+                }
+            } catch (Exception e) {
+                logger.error("SceneExecutor执行任务{}错误:{}", taskName, e.getLocalizedMessage());
             }
+
         });
     }
 

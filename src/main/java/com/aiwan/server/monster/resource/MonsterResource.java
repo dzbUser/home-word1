@@ -5,7 +5,9 @@ import com.aiwan.server.publicsystem.annotation.Resource;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,6 +75,11 @@ public class MonsterResource {
     private Map<Integer, Integer> dropMap = new HashMap<>();
 
     /**
+     * 掉落道具列表
+     */
+    private List<DropMessage> dropList = new ArrayList<>();
+
+    /**
      * 初始化
      */
     public void init() {
@@ -93,6 +100,7 @@ public class MonsterResource {
             int propId = Integer.parseInt(item[0]);
             int num = Integer.parseInt(item[1]);
             dropMap.put(propId, num);
+            dropList.add(DropMessage.valueOf(propId, num));
         }
 
     }
@@ -175,5 +183,13 @@ public class MonsterResource {
 
     public void setExperience(int experience) {
         this.experience = experience;
+    }
+
+    public List<DropMessage> getDropList() {
+        return dropList;
+    }
+
+    public void setDropList(List<DropMessage> dropList) {
+        this.dropList = dropList;
     }
 }

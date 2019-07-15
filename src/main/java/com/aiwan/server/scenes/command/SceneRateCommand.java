@@ -35,6 +35,7 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
         super(accountId, mapId, delay, period);
         this.nextBrushTime = brushMonsterTime;
         this.brushPeriod = brushPeriod;
+        setTaskName("场景循环命令");
     }
 
     @Override

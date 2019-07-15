@@ -7,11 +7,13 @@ import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
 import com.aiwan.server.user.role.buff.effect.impl.AttributeFightBuff;
 import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.user.role.buff.resource.bean.AttributeFightBuffBean;
+import com.aiwan.server.util.AttributeUtil;
+import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -92,15 +94,23 @@ public abstract class BaseUnit {
     private Map<Integer, AbstractFightBuff> buff = new HashMap<>();
 
     /**
+     * 清除状态
+     */
+    public void resetStatus() {
+        //重置状态
+        setBuff(new HashMap<>(16));
+        this.buffAttribute = new HashMap<>(16);
+        setHp(getMaxHp());
+        setMp(getMaxMp());
+        calculateFinalAttribute();
+    }
+
+    /**
      * 计算战斗最终属性
      */
     protected void calculateFinalAttribute() {
-        Map<AttributeType, AttributeElement> pureAttribute = new HashMap<>(16);
-
         //深拷贝单位属性
-        for (Map.Entry<AttributeType, AttributeElement> entry : unitAttribute.entrySet()) {
-            pureAttribute.put(entry.getKey(), entry.getValue().cloneAttribute());
-        }
+        Map<AttributeType, AttributeElement> pureAttribute = AttributeUtil.getCopyAttributeMap(unitAttribute);
         //计算buff属性
         for (Map.Entry<AttributeType, AttributeElement> entry : buffAttribute.entrySet()) {
             AttributeElement pureUnit = pureAttribute.get(entry.getKey());
@@ -163,11 +173,16 @@ public abstract class BaseUnit {
      * 扣除血量
      */
     public void deduceHP(Long attackId, long hurt) {
-        long finalHP = hp - hurt;
-        setHp(finalHP);
-        if (finalHP <= 0) {
-            //战斗单位死亡，出发死亡机制
-            death(attackId);
+        if (!isDeath()) {
+            long finalHP = hp - hurt;
+            finalHP = finalHP < 0 ? 0 : finalHP;
+            setHp(finalHP);
+            //状态发生改变，发送状态到客户端
+            GetBean.getMapManager().synUnitStatusMessage(this);
+            if (finalHP <= 0) {
+                //战斗单位死亡，出发死亡机制
+                death(attackId);
+            }
         }
     }
 
@@ -182,6 +197,8 @@ public abstract class BaseUnit {
             finalHp = getMaxHp();
         }
         setHp(finalHp);
+        //状态发生改变，发送状态到客户端
+        GetBean.getMapManager().synUnitStatusMessage(this);
     }
 
     public void putBuff(int uniqueId, AbstractFightBuff abstractFightBuff) {
@@ -201,17 +218,19 @@ public abstract class BaseUnit {
      * @param now 当前时间
      */
     public void buffProcessor(Long now) {
-        for (AbstractFightBuff abstractFightBuff : buff.values()) {
-            if (abstractFightBuff.getWorkTime() <= now) {
+        for (Iterator<Map.Entry<Integer, AbstractFightBuff>> it = buff.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Integer, AbstractFightBuff> entry = it.next();
+            if (entry.getValue().getWorkTime() <= now) {
                 //生效
-                abstractFightBuff.doActive(this);
-                //重新计算生效时间
-                abstractFightBuff.setWorkTime(abstractFightBuff.getWorkTime() + abstractFightBuff.getPeriod());
+                if (!isDeath()) {
+                    entry.getValue().doActive(this);
+                    //重新计算生效时间
+                    entry.getValue().setWorkTime(entry.getValue().getWorkTime() + entry.getValue().getPeriod());
+                }
             }
-
-            if (abstractFightBuff.getEndTime() <= now) {
+            if (entry.getValue().getEndTime() <= now) {
                 //结束，去除buff
-                buff.remove(abstractFightBuff.getEffectResource().getUniqueId());
+                it.remove();
             }
         }
     }

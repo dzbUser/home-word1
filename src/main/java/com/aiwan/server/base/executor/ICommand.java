@@ -39,4 +39,9 @@ public interface ICommand {
      */
     void refreshState();
 
+    /**
+     * 获取任务名
+     */
+    String getTaskName();
+
 }

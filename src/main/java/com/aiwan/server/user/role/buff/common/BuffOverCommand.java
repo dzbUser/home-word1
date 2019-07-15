@@ -28,6 +28,7 @@ public class BuffOverCommand extends AbstractAccountDelayCommand {
         super(delay, accountId);
         this.buffId = buffId;
         this.rId = rId;
+        setTaskName("buff时间到Command");
     }
 
     @Override
@@ -35,5 +36,6 @@ public class BuffOverCommand extends AbstractAccountDelayCommand {
         logger.info("buffId:{},移除buff所属角色:{},触发定时器，开始移除buff", buffId, rId);
         //移除buff
         GetBean.getBuffService().removeBuff(rId, buffId);
+
     }
 }

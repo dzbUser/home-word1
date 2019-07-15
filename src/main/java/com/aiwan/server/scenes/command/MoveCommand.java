@@ -61,5 +61,6 @@ public class MoveCommand extends AbstractSceneCommand {
         super(role.getAccountId(), role.getMap());
         this.target = target;
         this.role = role;
+        setTaskName("角色移动command");
     }
 }

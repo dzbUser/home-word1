@@ -20,6 +20,7 @@ public class RoleReviveCommand extends AbstractSceneDelayCommand {
     public RoleReviveCommand(long delay, String accountId, int mapId, FighterRole fighterRole) {
         super(delay, accountId, mapId);
         this.fighterRole = fighterRole;
+        setTaskName("角色复活命令");
     }
 
     @Override

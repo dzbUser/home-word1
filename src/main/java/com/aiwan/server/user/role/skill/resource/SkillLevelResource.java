@@ -32,7 +32,7 @@ public class SkillLevelResource {
     private int skillLevel;
 
     /**
-     * 技能攻击
+     * 技能攻击（暂时没用到）
      */
     @CellMapping(name = "skillAttack")
     private int skillAttack;

@@ -9,6 +9,7 @@ import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.fight.command.RoleReviveCommand;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.skill.model.Skill;
+import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
 import org.slf4j.Logger;
@@ -36,11 +37,6 @@ public class FighterRole extends BaseUnit {
      */
     private String accountId;
 
-
-//    /**
-//     * 角色纯净属性
-//     */
-//    private Map<AttributeType, AttributeElement> rolePureAttribute;
 
     /**
      * cd列表
@@ -115,7 +111,6 @@ public class FighterRole extends BaseUnit {
      * 转移状态
      */
     public void transferStatus(FighterRole fighterRole) {
-        // TODO: 2019/7/9  空指针不报错
         setSkillCD(fighterRole.getSkillCD());
         setHp(fighterRole.getHp());
         setMp(fighterRole.getMp());
@@ -135,20 +130,16 @@ public class FighterRole extends BaseUnit {
     /**
      * 重置角色状态
      */
+    @Override
     public void resetStatus() {
         //重置状态
+        super.resetStatus();
         skillCD = new HashMap<>(16);
-        setBuff(new HashMap<>(16));
-        setHp(getMaxHp());
-        setMp(getMaxMp());
     }
 
     public void setRoleAttribute(Map<AttributeType, AttributeElement> roleAttribute) {
-        Map<AttributeType, AttributeElement> attribute = new HashMap<>(16);
-        for (Map.Entry<AttributeType, AttributeElement> entry : roleAttribute.entrySet()) {
-            attribute.put(entry.getKey(), entry.getValue().cloneAttribute());
-        }
-        setUnitAttribute(attribute);
+        //设置属性
+        setUnitAttribute(AttributeUtil.getCopyAttributeMap(roleAttribute));
         //重新计算最终属性
         calculateFinalAttribute();
     }

@@ -38,5 +38,6 @@ public class UpdateSceneAttributeCommand extends AbstractSceneCommand {
     public UpdateSceneAttributeCommand(Role role) {
         super(role.getAccountId(), role.getMap());
         this.role = role;
+        setTaskName("更新场景中的角色属性命令");
     }
 }

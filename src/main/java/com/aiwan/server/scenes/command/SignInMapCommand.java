@@ -29,5 +29,6 @@ public class SignInMapCommand extends AbstractSceneCommand {
     public SignInMapCommand(Role role) {
         super(role.getAccountId(), role.getMap());
         this.role = role;
+        setTaskName("玩家登陆时进入地图指令");
     }
 }

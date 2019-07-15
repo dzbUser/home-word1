@@ -144,11 +144,12 @@ public class SceneObject {
      */
     public void findAroundUnit(BaseUnit active, List<BaseUnit> list, BaseUnit target, int range, int num) {
         for (BaseUnit baseUnit : baseUnitMap.values()) {
-            //除去施法单位与施法选择单位
+            //除去施法单位、施法选择单位、已死亡单位
             if (baseUnit.getId().equals(active.getId()) || baseUnit.getId().equals(target.getId()) || baseUnit.isDeath()) {
                 //施法单位
                 continue;
             }
+
             if (num > 0) {
                 if (GetBean.getFightService().isDistanceSatisfy(target, baseUnit, range)) {
                     list.add(baseUnit);

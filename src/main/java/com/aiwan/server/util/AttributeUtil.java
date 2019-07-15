@@ -73,4 +73,15 @@ public class AttributeUtil {
         }
         return map;
     }
+
+    /**
+     * copy属性到新的容器
+     */
+    public static Map<AttributeType, AttributeElement> getCopyAttributeMap(Map<AttributeType, AttributeElement> attributeElementMap) {
+        Map<AttributeType, AttributeElement> newMap = new HashMap<>();
+        for (AttributeElement attributeElement : attributeElementMap.values()) {
+            newMap.put(attributeElement.getAttributeType(), attributeElement.cloneAttribute());
+        }
+        return newMap;
+    }
 }

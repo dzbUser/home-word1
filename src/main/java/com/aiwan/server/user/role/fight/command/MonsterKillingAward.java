@@ -1,9 +1,13 @@
 package com.aiwan.server.user.role.fight.command;
 
 import com.aiwan.server.base.executor.account.impl.AbstractAccountCommand;
+import com.aiwan.server.monster.resource.DropMessage;
 import com.aiwan.server.monster.resource.MonsterResource;
+import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.MonsterGenerateUtil;
 
 import java.util.Map;
 
@@ -29,6 +33,7 @@ public class MonsterKillingAward extends AbstractAccountCommand {
         super(accountId);
         this.monsterResourceId = monsterResourceId;
         this.role = role;
+        setTaskName("怪物击杀奖励");
     }
 
     @Override
@@ -36,7 +41,10 @@ public class MonsterKillingAward extends AbstractAccountCommand {
         MonsterResource monsterResource = GetBean.getMonsterManager().getResourceById(monsterResourceId);
         //添加经验
         GetBean.getRoleService().addExperience(role.getId(), monsterResource.getExperience());
+        //获取drop随机
+        DropMessage dropMessage = monsterResource.getDropList().get(MonsterGenerateUtil.getRandomNum(monsterResource.getDropList().size()));
         //添加物品
-        GetBean.getBackpackService().obtainProp(getAccountId(), monsterResource.getDropMap());
+        Session session = SessionManager.getSessionByAccountId(getAccountId());
+        GetBean.getBackpackService().addPropToBack(getAccountId(), dropMessage.getPropId(), dropMessage.getNum(), session);
     }
 }

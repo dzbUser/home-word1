@@ -78,7 +78,7 @@ public class SkillServiceImpl implements SkillService {
 
 
         //学习该技能
-        skillModel.putSkillBySkillId(skillId);
+        skillModel.learnSkillBySkillId(skillId);
         skillManager.save(skillModel);
         session.sendPromptMessage(PromptCode.LEARNSKILLSUCCESS, skillResource.getSkillName());
     }
@@ -141,6 +141,9 @@ public class SkillServiceImpl implements SkillService {
         Role role = GetBean.getRoleManager().load(rId);
         //获取技能等级静态资源
         SkillLevelResource skillLevelResource = skillManager.getSkillLevelReById(skillId, skillElement.getSkillLevel() + 1);
+        if (skillLevelResource == null) {
+            logger.error("角色{}升级技能[{}]失败,找不到技能等级静态资源", rId, skillId);
+        }
         if (role.getLevel() < skillLevelResource.getRoleLevelDemand()) {
             logger.error("角色{}升级技能[{}]失败,未达到升级要求", rId, skillId);
             session.sendPromptMessage(PromptCode.NOTREARCHDEMAND, "");
@@ -155,7 +158,7 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public void moveSkillToPosition(Long rId, int skillId, int position, Session session) {
         /*
-         * 1.位置是否在越界
+         * 1.位置是否越界
          * 2.技能是否已学
          * 3.移动位置
          * */

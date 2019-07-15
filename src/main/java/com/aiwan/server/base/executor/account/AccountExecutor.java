@@ -60,9 +60,14 @@ public class AccountExecutor {
 
     public void addTask(AbstractAccountCommand accountCommand) {
         int modIndex = accountCommand.modIndex(ACCOUNT_POOL_SIZE);
+        final String taskName = accountCommand.getTaskName();
         ACCOUNT_SERVICE[modIndex].submit(() -> {
-            if (!accountCommand.isCanceled()) {
-                accountCommand.active();
+            try {
+                if (!accountCommand.isCanceled()) {
+                    accountCommand.active();
+                }
+            } catch (Exception e) {
+                logger.error("AccountExecutor执行任务{}错误:{}", taskName, e.getLocalizedMessage());
             }
         });
     }

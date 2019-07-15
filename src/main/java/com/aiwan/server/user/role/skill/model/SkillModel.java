@@ -9,13 +9,12 @@ import com.aiwan.server.util.GetBean;
 import java.util.Map;
 
 /**
+ * 技能模型
+ *
  * @author dengzebiao
  * @since 2019.7.1
- * 技能模型
  */
-public class
-
-SkillModel {
+public class SkillModel {
 
     /**
      * 实体类
@@ -48,7 +47,7 @@ SkillModel {
     /**
      * 学习技能
      */
-    public void putSkillBySkillId(int skillId) {
+    public void learnSkillBySkillId(int skillId) {
         //创建普通技能
         skillEntity.getSkillInfo().getSkillMessageMap().put(skillId, SkillElement.valueOf(skillId, 1));
     }

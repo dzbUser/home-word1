@@ -12,6 +12,11 @@ public abstract class AbstractCommand implements ICommand {
     private boolean isCanceled = false;
 
     /**
+     * 任务名字
+     */
+    private String taskName;
+
+    /**
      * 定时任务句柄
      */
     private ScheduledFuture future;
@@ -40,5 +45,17 @@ public abstract class AbstractCommand implements ICommand {
 
     public void setFuture(ScheduledFuture future) {
         this.future = future;
+    }
+
+    public void setCanceled(boolean canceled) {
+        isCanceled = canceled;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 }

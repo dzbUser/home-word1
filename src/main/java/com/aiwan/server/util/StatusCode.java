@@ -59,4 +59,9 @@ public class StatusCode {
      * 查看战斗buff
      */
     public final static int VIEW_FIGHT_BUFF = 20;
+
+    /**
+     * 返回战斗单位状态
+     */
+    public final static int UnitStatus = 21;
 }

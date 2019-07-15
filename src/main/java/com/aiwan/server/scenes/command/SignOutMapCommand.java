@@ -37,5 +37,6 @@ public class SignOutMapCommand extends AbstractSceneCommand {
     public SignOutMapCommand(Role role) {
         super(role.getAccountId(), role.getMap());
         this.role = role;
+        setTaskName("离开地图指令");
     }
 }

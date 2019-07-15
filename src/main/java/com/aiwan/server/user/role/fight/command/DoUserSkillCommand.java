@@ -33,6 +33,7 @@ public class DoUserSkillCommand extends AbstractSceneCommand {
         this.activeId = activeId;
         this.targetId = targetId;
         this.skill = skill;
+        setTaskName("技能真正施法命令");
     }
 
     @Override

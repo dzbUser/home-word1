@@ -28,7 +28,6 @@ public class EnterMapCommand extends AbstractSceneCommand {
     public void action() {
         //获取地图资源
         MapResource mapResource = GetBean.getMapManager().getMapResource(getKey());
-
         //初始化化角色坐标
         role.setMap(getKey());
         role.setX(mapResource.getOriginX());
@@ -47,6 +46,7 @@ public class EnterMapCommand extends AbstractSceneCommand {
 
     public EnterMapCommand(int mapId, Role role, FighterRole fighterRole) {
         super(role.getAccountId(), mapId);
+        setTaskName("进入地图命令");
         this.role = role;
         this.fighterRole = fighterRole;
     }

@@ -18,6 +18,7 @@ public class ResetStatusCommand extends AbstractSceneCommand {
     public ResetStatusCommand(String accountId, int mapId, Role role) {
         super(accountId, mapId);
         this.role = role;
+        setTaskName("重置场合内战斗单元状态命令");
     }
 
     @Override

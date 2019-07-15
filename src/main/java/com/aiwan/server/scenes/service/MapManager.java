@@ -5,6 +5,7 @@ import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.scenes.command.SceneRateCommand;
+import com.aiwan.server.user.role.fight.protocol.SM_UnitStatusMessage;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.scenes.mapresource.MapResource;
@@ -46,7 +47,6 @@ public class MapManager {
             SceneObject sceneObject = SceneObject.valueOf(entry.getKey());
             sceneObject.init();
             sceneMap.put(entry.getKey(), sceneObject);
-
         }
     }
 
@@ -131,6 +131,21 @@ public class MapManager {
      */
     public SceneObject getSceneObject(int map) {
         return sceneMap.get(map);
+    }
+
+    /**
+     * 发送战斗单位状态改变信息
+     *
+     * @param unit 战斗单位
+     */
+    public void synUnitStatusMessage(BaseUnit unit) {
+        SceneObject sceneObject = getSceneObject(unit.getMapId());
+        SM_UnitStatusMessage sm_unitStatusMessage = SM_UnitStatusMessage.valueOf(unit.getId(), unit.getName(), unit.getMaxHp(), unit.getHp());
+        for (BaseUnit baseUnit : sceneObject.getBaseUnitMap().values()) {
+            if (!baseUnit.isMonster()) {
+                SessionManager.sendMessageByRid(baseUnit.getId(), StatusCode.UnitStatus, sm_unitStatusMessage);
+            }
+        }
     }
 
 }

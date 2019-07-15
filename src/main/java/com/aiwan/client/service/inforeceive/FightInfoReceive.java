@@ -13,6 +13,7 @@ import com.aiwan.server.user.role.buff.protocol.BuffMessage;
 import com.aiwan.server.user.role.buff.resource.BuffResource;
 import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.user.role.fight.protocol.FightBuffMessage;
+import com.aiwan.server.user.role.fight.protocol.SM_UnitStatusMessage;
 import com.aiwan.server.user.role.fight.protocol.SM_ViewFightBuff;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
@@ -83,8 +84,21 @@ public class FightInfoReceive {
             EffectResource effectResource = GetBean.getBuffManager().getEffectResource(buffMessage.getEffectId());
             stringBuffer.append("[" + i + "] effectId:" + list.get(i).getEffectId());
             stringBuffer.append(" 结束时间:" + formatter.format(new Date(buffMessage.getOverTime())));
-            stringBuffer.append("说明:" + effectResource.getDec());
+            stringBuffer.append(" 说明:" + effectResource.getDec());
         }
+        gameInterface.printOtherMessage(stringBuffer.toString() + "\n");
+    }
+
+    /**
+     * 接收战斗单位状态改变
+     */
+    @InfoReceiveMethod(status = StatusCode.UnitStatus)
+    public void uniteStatusReceive(SM_UnitStatusMessage sm_unitStatusMessage) {
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("唯一ID:" + sm_unitStatusMessage.getId());
+        stringBuffer.append(" 名字:" + sm_unitStatusMessage.getName() + "\n");
+        stringBuffer.append(" 当前血量/血量:" + sm_unitStatusMessage.getCurrentHp() + "/" + sm_unitStatusMessage.getMaxHp());
         gameInterface.printOtherMessage(stringBuffer.toString() + "\n");
     }
 }

@@ -35,6 +35,7 @@ public class ChangeMapCommand extends AbstractSceneCommand {
         super(role.getAccountId(), role.getMap());
         this.role = role;
         setTargetMapId(targetMapId);
+        setTaskName("地图转移命令");
     }
 
     public int getTargetMapId() {

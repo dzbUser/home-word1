@@ -3,6 +3,8 @@ package com.aiwan.server.user.role.fight.pvpUnit;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.impl.FightAttributeModule;
+import com.aiwan.server.user.role.attributes.model.impl.FightUnitAttribute;
 import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
 import com.aiwan.server.user.role.buff.effect.impl.AttributeFightBuff;
 import com.aiwan.server.user.role.buff.resource.EffectResource;
@@ -71,21 +73,7 @@ public abstract class BaseUnit {
      */
     private int level;
 
-    /**
-     * 最终属性
-     */
-    private Map<AttributeType, AttributeElement> finalAttribute = new HashMap<>();
-
-    /**
-     * 战斗单位属性
-     */
-    private Map<AttributeType, AttributeElement> unitAttribute = new HashMap<>();
-
-
-    /**
-     * buff属性
-     */
-    private Map<AttributeType, AttributeElement> buffAttribute = new HashMap<>();
+    private FightUnitAttribute fightUnitAttribute = new FightUnitAttribute();
 
 
     /**
@@ -99,7 +87,7 @@ public abstract class BaseUnit {
     public void resetStatus() {
         //重置状态
         setBuff(new HashMap<>(16));
-        this.buffAttribute = new HashMap<>(16);
+        this.fightUnitAttribute.updateModule(FightAttributeModule.BUFF_MODULE, new HashMap<>(16));
         setHp(getMaxHp());
         setMp(getMaxMp());
         calculateFinalAttribute();
@@ -109,24 +97,7 @@ public abstract class BaseUnit {
      * 计算战斗最终属性
      */
     protected void calculateFinalAttribute() {
-        //深拷贝单位属性
-        Map<AttributeType, AttributeElement> pureAttribute = AttributeUtil.getCopyAttributeMap(unitAttribute);
-        //计算buff属性
-        for (Map.Entry<AttributeType, AttributeElement> entry : buffAttribute.entrySet()) {
-            AttributeElement pureUnit = pureAttribute.get(entry.getKey());
-            if (pureUnit == null) {
-                pureAttribute.put(entry.getKey(), AttributeElement.valueOf(entry.getKey(), entry.getValue().getValue()));
-            } else {
-                pureUnit.setValue(entry.getValue().getValue() + pureUnit.getValue());
-            }
-        }
-        //计算最终属性
-        finalAttribute = new HashMap<>(16);
-        for (Map.Entry<AttributeType, AttributeElement> entry : pureAttribute.entrySet()) {
-            //获取最终属性值
-            long value = entry.getKey().calculate(entry.getValue(), pureAttribute);
-            getFinalAttribute().put(entry.getKey(), AttributeElement.valueOf(entry.getKey(), value));
-        }
+        fightUnitAttribute.calculate();
         logger.debug("计算成功");
     }
 
@@ -136,15 +107,7 @@ public abstract class BaseUnit {
      * @param addAttribute 所添加的属性
      */
     public void putBuffAttribute(Map<AttributeType, AttributeElement> addAttribute) {
-        for (Map.Entry<AttributeType, AttributeElement> entry : addAttribute.entrySet()) {
-            AttributeElement unit = buffAttribute.get(entry.getKey());
-            if (unit == null) {
-                buffAttribute.put(entry.getKey(), AttributeElement.valueOf(entry.getKey(), entry.getValue().getValue()));
-            } else {
-                unit.setValue(entry.getValue().getValue() + unit.getValue());
-            }
-        }
-        calculateFinalAttribute();
+        fightUnitAttribute.putBuffAttribute(addAttribute, FightAttributeModule.BUFF_MODULE);
     }
 
     /**
@@ -153,18 +116,7 @@ public abstract class BaseUnit {
      * @param addAttribute 所去除的属性
      */
     public void removeBuffAttribute(Map<AttributeType, AttributeElement> addAttribute) {
-        for (Map.Entry<AttributeType, AttributeElement> entry : addAttribute.entrySet()) {
-            AttributeElement unit = buffAttribute.get(entry.getKey());
-            if (unit == null) {
-                logger.error("角色{}，去除属性：{}错误", getId(), entry.getKey().getDesc());
-            } else {
-                unit.setValue(unit.getValue() - entry.getValue().getValue());
-                if (unit.getValue() == 0) {
-                    buffAttribute.remove(entry.getKey());
-                }
-            }
-        }
-        calculateFinalAttribute();
+        fightUnitAttribute.removeBuffAttribute(addAttribute, FightAttributeModule.BUFF_MODULE);
     }
 
 
@@ -239,11 +191,11 @@ public abstract class BaseUnit {
      * 获取最大HP
      */
     public long getMaxHp() {
-        return finalAttribute.get(AttributeType.BLOOD).getValue();
+        return fightUnitAttribute.getFinalAttribute().get(AttributeType.BLOOD).getValue();
     }
 
     public long getMaxMp() {
-        return finalAttribute.get(AttributeType.MAGIC).getValue();
+        return fightUnitAttribute.getFinalAttribute().get(AttributeType.MAGIC).getValue();
     }
 
     /**
@@ -284,12 +236,9 @@ public abstract class BaseUnit {
     }
 
     public Map<AttributeType, AttributeElement> getFinalAttribute() {
-        return finalAttribute;
+        return fightUnitAttribute.getFinalAttribute();
     }
 
-    public void setFinalAttribute(Map<AttributeType, AttributeElement> finalAttribute) {
-        this.finalAttribute = finalAttribute;
-    }
 
     public Map<Integer, AbstractFightBuff> getBuff() {
         return buff;
@@ -339,11 +288,8 @@ public abstract class BaseUnit {
         this.level = level;
     }
 
-    public Map<AttributeType, AttributeElement> getUnitAttribute() {
-        return unitAttribute;
-    }
 
     public void setUnitAttribute(Map<AttributeType, AttributeElement> unitAttribute) {
-        this.unitAttribute = unitAttribute;
+        fightUnitAttribute.updateModule(FightAttributeModule.ROLE_MODULE, unitAttribute);
     }
 }

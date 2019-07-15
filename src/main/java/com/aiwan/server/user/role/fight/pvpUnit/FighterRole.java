@@ -64,7 +64,7 @@ public class FighterRole extends BaseUnit {
         fighterRole.setPosition(Position.valueOf(role.getX(), role.getY()));
         fighterRole.setMapId(role.getMap());
         //复制用户属性
-        fighterRole.setRoleAttribute(role.getAttribute().getFinalAttribute());
+        fighterRole.setRoleAttribute(role.getAttribute().getPureAttribute());
         fighterRole.setHp(fighterRole.getMaxHp());
         fighterRole.setMp(fighterRole.getMaxMp());
         return fighterRole;

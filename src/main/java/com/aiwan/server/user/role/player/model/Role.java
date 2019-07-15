@@ -2,8 +2,8 @@ package com.aiwan.server.user.role.player.model;
 
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
-import com.aiwan.server.user.role.attributes.model.AttributesModule;
-import com.aiwan.server.user.role.attributes.model.RoleAttribute;
+import com.aiwan.server.user.role.attributes.model.impl.RoleAttributesModule;
+import com.aiwan.server.user.role.attributes.model.impl.RoleAttribute;
 import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.util.GetBean;
 
@@ -158,7 +158,7 @@ public class Role {
      * 更新属性
      */
     public void updateAttribute(String name, Map<AttributeType, AttributeElement> map) {
-        getAttribute().updateModule(AttributesModule.getType(name), map);
+        getAttribute().updateModule(RoleAttributesModule.getType(name), map);
     }
 
     public boolean isChangingMap() {

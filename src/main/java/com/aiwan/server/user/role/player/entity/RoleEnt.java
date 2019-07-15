@@ -2,7 +2,7 @@ package com.aiwan.server.user.role.player.entity;
 
 import com.aiwan.server.ramcache.IEntity;
 import com.aiwan.server.ramcache.anno.Cache;
-import com.aiwan.server.user.role.attributes.model.RoleAttribute;
+import com.aiwan.server.user.role.attributes.model.impl.RoleAttribute;
 import com.aiwan.server.user.role.player.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

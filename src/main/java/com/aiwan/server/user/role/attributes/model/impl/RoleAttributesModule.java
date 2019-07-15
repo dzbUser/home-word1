@@ -1,9 +1,10 @@
-package com.aiwan.server.user.role.attributes.model;
+package com.aiwan.server.user.role.attributes.model.impl;
 
+import com.aiwan.server.user.role.attributes.model.AttributeElement;
+import com.aiwan.server.user.role.attributes.model.AttributeId;
+import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.util.GetBean;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,11 +12,11 @@ import java.util.Map;
  * @since 2019.6.12
  * 属性模块枚举类
  * */
-public enum  AttributesModule implements Serializable {
+public enum RoleAttributesModule implements AttributeId {
     /** 获取人物属性模块 */
     ROLE("role"){
         @Override
-        public Map<AttributeType,AttributeElement> getAttributes(Long rId){
+        public Map<AttributeType, AttributeElement> getAttributes(Long rId) {
             return GetBean.getRoleService().getAttributes(rId);
         }
     },
@@ -53,10 +54,10 @@ public enum  AttributesModule implements Serializable {
     }
 
     /** 获取模块类型 */
-    public static AttributesModule getType(String name){
-        for (AttributesModule attributesModule:values()){
-            if (attributesModule.getName() == name){
-                return attributesModule;
+    public static RoleAttributesModule getType(String name) {
+        for (RoleAttributesModule roleAttributesModule : values()) {
+            if (roleAttributesModule.getName() == name) {
+                return roleAttributesModule;
             }
         }
         throw new RuntimeException("匹配错误:" + name);
@@ -65,7 +66,7 @@ public enum  AttributesModule implements Serializable {
     /** 模块名字 */
     private String name;
 
-    AttributesModule(String name){
+    RoleAttributesModule(String name) {
         this.name = name;
     }
 
@@ -74,7 +75,7 @@ public enum  AttributesModule implements Serializable {
         return name;
     }
 
-    public AttributesModule setName(String name) {
+    public RoleAttributesModule setName(String name) {
         this.name = name;
         return this;
     }

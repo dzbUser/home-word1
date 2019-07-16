@@ -3,6 +3,7 @@ package com.aiwan.server.user.role.fight.command;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneDelayCommand;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.scenes.service.MapManager;
 import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
@@ -34,5 +35,7 @@ public class RoleReviveCommand extends AbstractSceneDelayCommand {
         fighterRole.setPosition(Position.valueOf(mapResource.getOriginX(), mapResource.getOriginY()));
         fighterRole.resetStatus();
         fighterRole.setDeath(false);
+        //发送地图到本地图所有玩家
+        GetBean.getMapManager().sendMessageToUsers(getMapId());
     }
 }

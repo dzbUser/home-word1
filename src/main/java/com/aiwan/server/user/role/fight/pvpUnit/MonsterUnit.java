@@ -54,6 +54,7 @@ public class MonsterUnit extends BaseUnit {
     @Override
     protected void death(Long attackId) {
         setDeath(true);
+        GetBean.getMapManager().sendMessageToUsers(getMapId());
         //清除状态
         resetStatus();
         //为攻击者添加道具

@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.buff.effect.impl;
 
+import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
 import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
 import com.aiwan.server.user.role.buff.resource.bean.AttributeFightBuffBean;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
@@ -15,7 +16,7 @@ public class AttributeFightBuff extends AbstractFightBuff {
     @Override
     public void doActive(BaseUnit passive) {
         AttributeFightBuffBean attributeFightBuffBean = (AttributeFightBuffBean) getEffectResource().getValueParameter();
-        passive.removeBuffAttribute(attributeFightBuffBean.getAttributes());
+        passive.removeBuffAttribute(ImmutableAttributeElement.wrapper(attributeFightBuffBean.getAttributes()));
     }
 
     @Override

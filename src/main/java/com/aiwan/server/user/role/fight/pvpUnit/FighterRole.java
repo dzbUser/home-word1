@@ -103,6 +103,7 @@ public class FighterRole extends BaseUnit {
     protected void death(Long attackId) {
         setDeath(true);
         //复活点复活,暂时为立即复活，发送提示
+        GetBean.getMapManager().sendMessageToUsers(getMapId());
         SessionManager.sendPromptMessage(this.getAccountId(), PromptCode.ROLE_DEATH,"");
         GetBean.getSceneExecutorService().submit(new RoleReviveCommand(REVIVE_TIME, getAccountId(), this.getMapId(),this));
     }

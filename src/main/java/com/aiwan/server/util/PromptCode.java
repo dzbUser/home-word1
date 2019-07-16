@@ -197,4 +197,9 @@ public class PromptCode {
      */
     public final static int ROLE_DEATH = 43;
 
+    /**
+     * 施法目标已经死亡
+     */
+    public final static int CASTING_TARGET_DEATH = 44;
+
 }

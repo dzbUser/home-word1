@@ -105,7 +105,7 @@ public class AttributeContainer {
     /**
      * 加入属性
      *
-     * @param addAttribute
+     * @param addAttribute 添加属性
      */
     public void putBuffAttribute(Map<AttributeType, AttributeElement> addAttribute, AttributeId attributeId) {
         for (Map.Entry<AttributeType, AttributeElement> entry : addAttribute.entrySet()) {
@@ -122,7 +122,7 @@ public class AttributeContainer {
     /**
      * 去除buff属性
      *
-     * @param addAttribute 所去除的属性
+     * @param addAttribute 去除的属性
      */
     public void removeBuffAttribute(Map<AttributeType, AttributeElement> addAttribute, AttributeId attributeId) {
         for (Map.Entry<AttributeType, AttributeElement> entry : addAttribute.entrySet()) {

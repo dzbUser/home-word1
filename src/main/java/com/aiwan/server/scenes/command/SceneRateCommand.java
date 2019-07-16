@@ -48,14 +48,20 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
         long now = System.currentTimeMillis();
         //复活死亡怪物
         if (now >= nextBrushTime) {
+            //用以标志是否有怪物复活
+            boolean flag = false;
             Map<Long, BaseUnit> baseUnitMap = sceneObject.getBaseUnitMap();
             for (BaseUnit baseUnit : baseUnitMap.values()) {
                 if (baseUnit.isMonster() && baseUnit.isDeath()) {
                     baseUnit.setHp(baseUnit.getMaxHp());
                     baseUnit.setDeath(false);
+                    flag = true;
                 }
             }
             nextBrushTime = now + brushPeriod;
+            if (flag) {
+                GetBean.getMapManager().sendMessageToUsers(getMapId());
+            }
         }
 
         //buff处理

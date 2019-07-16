@@ -3,6 +3,7 @@ package com.aiwan.server.user.role.fight.pvpUnit;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
+import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
 import com.aiwan.server.user.role.attributes.model.impl.FightAttributeModule;
 import com.aiwan.server.user.role.attributes.model.impl.FightUnitAttribute;
 import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
@@ -73,6 +74,9 @@ public abstract class BaseUnit {
      */
     private int level;
 
+    /**
+     * 战斗单位属性
+     */
     private FightUnitAttribute fightUnitAttribute = new FightUnitAttribute();
 
 
@@ -160,7 +164,7 @@ public abstract class BaseUnit {
         if (abstractFightBuff.isAttributeBuff()) {
             EffectResource effectResource = ((AttributeFightBuff) abstractFightBuff).getEffectResource();
             AttributeFightBuffBean attributeFightBuffBean = (AttributeFightBuffBean) effectResource.getValueParameter();
-            putBuffAttribute(attributeFightBuffBean.getAttributes());
+            putBuffAttribute(ImmutableAttributeElement.wrapper(attributeFightBuffBean.getAttributes()));
         }
     }
 

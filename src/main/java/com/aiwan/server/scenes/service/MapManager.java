@@ -97,6 +97,9 @@ public class MapManager {
         //遍历所有用户，添加到角色列表中
         for (BaseUnit baseUnit : map.values()) {
             //获取基础信息
+            if (baseUnit.isDeath()) {
+                continue;
+            }
             list.add(UnitMessage.valueOf(baseUnit.getId(), baseUnit.getPosition().getX(), baseUnit.getPosition().getY(), baseUnit.getName()));
         }
         //遍历所有用户，发送消息

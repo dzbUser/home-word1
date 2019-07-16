@@ -57,10 +57,16 @@ public class FightService implements IFightService {
         //获取目标施法单位
         List<BaseUnit> passiveList = new ArrayList<>();
         BaseUnit passiveUnit = sceneObject.getBaseUnit(passiveId);
-        if (passiveUnit == null || passiveUnit.isDeath()) {
+        if (passiveUnit == null) {
             //没有目标施法单位
-            logger.error("角色{}施法错误，找不到施法目标或者施法目标已死亡", activeRid);
+            logger.error("角色{}施法错误，找不到施法目标", activeRid);
             SessionManager.sendPromptMessage(activeRid, PromptCode.NOFIND_MAGICAIM, "");
+            return;
+        }
+        if (passiveUnit.isDeath()) {
+            //目标施法单位已死亡
+            logger.error("角色{}施法错误，施法目标已死亡", activeRid);
+            SessionManager.sendPromptMessage(activeRid, PromptCode.CASTING_TARGET_DEATH, "");
             return;
         }
         //是否在攻击范围内
@@ -82,7 +88,7 @@ public class FightService implements IFightService {
         }
         //释放技能
         skill.doUserSkill(activeRole, passiveList);
-        SessionManager.sendPromptMessage(activeRid, PromptCode.USE_SKILL_SUCCESS, "");
+        SessionManager.sendPromptMessage(activeRid, PromptCode.USE_SKILL_SUCCESS, skill.getResource().getSkillName());
         logger.info("角色{}施法成功", activeRid);
         //怪物反击
         monsterCounterattack(activeRole, passiveList);

@@ -18,9 +18,9 @@ import java.util.concurrent.*;
 @Component
 public class SceneExecutor {
 
-    Logger logger = LoggerFactory.getLogger(SceneExecutor.class);
+    private Logger logger = LoggerFactory.getLogger(SceneExecutor.class);
 
-    private static final int SCENE_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 4 / 10;
+    private static final int SCENE_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 2 * 2 / 10;
 
     private static final ThreadPoolExecutor[] SCENE_SERVICE = new ThreadPoolExecutor[SCENE_POOL_SIZE];
 
@@ -46,6 +46,7 @@ public class SceneExecutor {
                     command.active();
                 }
             } catch (Exception e) {
+                //之前未加异常捕获，出错时不捕获异常
                 logger.error("SceneExecutor执行任务{}错误:{}", taskName, e.getLocalizedMessage());
             }
 
@@ -60,8 +61,8 @@ public class SceneExecutor {
     /**
      * 定时命令
      *
-     * @param command
-     * @param delay
+     * @param command 命令实体
+     * @param delay 延迟
      */
     public final void schedule(AbstractCommand command, long delay) {
 
@@ -72,9 +73,9 @@ public class SceneExecutor {
     /**
      * 周期命令
      *
-     * @param command
-     * @param delay
-     * @param period
+     * @param command 命令实体
+     * @param delay 延迟
+     * @param period 周期
      */
     public final void schedule(AbstractCommand command, long delay, long period) {
 

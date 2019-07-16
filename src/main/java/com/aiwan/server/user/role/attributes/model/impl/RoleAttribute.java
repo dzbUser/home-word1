@@ -14,7 +14,7 @@ public class RoleAttribute extends AttributeContainer {
     public RoleAttribute(Long rId) {
         //初始化
         for (RoleAttributesModule module : RoleAttributesModule.values()) {
-            moduleMap.put(module, module.getAttributes(rId));
+            getModuleMap().put(module, module.getAttributes(rId));
         }
         //计算属性
         calculate();

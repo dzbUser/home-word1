@@ -1,7 +1,7 @@
 package com.aiwan.server.user.role.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
-import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
@@ -26,9 +26,9 @@ public class ResetStatusCommand extends AbstractSceneCommand {
         SceneObject sceneObject = GetBean.getMapManager().getSceneObject(getKey());
         if (sceneObject != null) {
             //场景不为空
-            FighterRole fighterRole = (FighterRole) sceneObject.getBaseUnit(role.getId());
-            if (fighterRole != null) {
-                fighterRole.resetStatus(role);
+            RoleUnit roleUnit = (RoleUnit) sceneObject.getBaseUnit(role.getId());
+            if (roleUnit != null) {
+                roleUnit.resetStatus(role);
             }
 
         }

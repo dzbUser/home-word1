@@ -3,8 +3,7 @@ package com.aiwan.server.user.role.fight.command;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneDelayCommand;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
-import com.aiwan.server.scenes.service.MapManager;
-import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 
@@ -16,11 +15,11 @@ import com.aiwan.server.util.GetBean;
  */
 public class RoleReviveCommand extends AbstractSceneDelayCommand {
 
-    private FighterRole fighterRole;
+    private RoleUnit roleUnit;
 
-    public RoleReviveCommand(long delay, String accountId, int mapId, FighterRole fighterRole) {
+    public RoleReviveCommand(long delay, String accountId, int mapId, RoleUnit roleUnit) {
         super(delay, accountId, mapId);
-        this.fighterRole = fighterRole;
+        this.roleUnit = roleUnit;
         setTaskName("角色复活命令");
     }
 
@@ -28,13 +27,13 @@ public class RoleReviveCommand extends AbstractSceneDelayCommand {
     public void action() {
         MapResource mapResource = GetBean.getMapManager().getMapResource(getMapId());
         //修改角色位置
-        Role role = GetBean.getRoleManager().load(fighterRole.getId());
+        Role role = GetBean.getRoleManager().load(roleUnit.getId());
         role.setX(mapResource.getOriginX());
         role.setY(mapResource.getOriginY());
         GetBean.getRoleManager().save(role);
-        fighterRole.setPosition(Position.valueOf(mapResource.getOriginX(), mapResource.getOriginY()));
-        fighterRole.resetStatus();
-        fighterRole.setDeath(false);
+        roleUnit.setPosition(Position.valueOf(mapResource.getOriginX(), mapResource.getOriginY()));
+        roleUnit.resetStatus();
+        roleUnit.setDeath(false);
         //发送地图到本地图所有玩家
         GetBean.getMapManager().sendMessageToUsers(getMapId());
     }

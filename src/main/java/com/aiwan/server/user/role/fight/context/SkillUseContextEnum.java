@@ -13,8 +13,5 @@ public enum SkillUseContextEnum {
      */
     SKILL_FINAL_DAMAGE,
 
-    /**
-     * BUFF
-     */
-    BUFF_EFFECT;
+
 }

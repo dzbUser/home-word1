@@ -2,7 +2,6 @@ package com.aiwan.server.user.role.fight.pvpUnit;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneDelayCommand;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
@@ -19,18 +18,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 战斗成员
+ * 角色战斗成员
  *
  * @author dengzebiao
  */
-public class FighterRole extends BaseUnit {
+public class RoleUnit extends BaseUnit {
 
     /**
      * 复活时间
      */
     private final static long REVIVE_TIME = 5000L;
 
-    Logger logger = LoggerFactory.getLogger(FighterRole.class);
+    Logger logger = LoggerFactory.getLogger(RoleUnit.class);
 
     /**
      * 角色基础信息
@@ -51,23 +50,23 @@ public class FighterRole extends BaseUnit {
     /**
      * 创建对象
      */
-    public static FighterRole valueOf(Role role) {
-        FighterRole fighterRole = new FighterRole();
+    public static RoleUnit valueOf(Role role) {
+        RoleUnit roleUnit = new RoleUnit();
         //初始化角色基础信息
-        fighterRole.setId(role.getId());
+        roleUnit.setId(role.getId());
         //设置基础信息
-        fighterRole.setAccountId(role.getAccountId());
-        fighterRole.setLevel(role.getLevel());
-        fighterRole.setName(role.getName());
-        fighterRole.setMonster(false);
+        roleUnit.setAccountId(role.getAccountId());
+        roleUnit.setLevel(role.getLevel());
+        roleUnit.setName(role.getName());
+        roleUnit.setMonster(false);
         //设置位置信息
-        fighterRole.setPosition(Position.valueOf(role.getX(), role.getY()));
-        fighterRole.setMapId(role.getMap());
+        roleUnit.setPosition(Position.valueOf(role.getX(), role.getY()));
+        roleUnit.setMapId(role.getMap());
         //复制用户属性
-        fighterRole.setRoleAttribute(role.getAttribute().getPureAttribute());
-        fighterRole.setHp(fighterRole.getMaxHp());
-        fighterRole.setMp(fighterRole.getMaxMp());
-        return fighterRole;
+        roleUnit.setRoleAttribute(role.getAttribute().getPureAttribute());
+        roleUnit.setHp(roleUnit.getMaxHp());
+        roleUnit.setMp(roleUnit.getMaxMp());
+        return roleUnit;
     }
 
 
@@ -109,12 +108,12 @@ public class FighterRole extends BaseUnit {
     }
 
     /**
-     * 转移状态
+     * 转移状态,用于地图跳转时
      */
-    public void transferStatus(FighterRole fighterRole) {
-        setSkillCD(fighterRole.getSkillCD());
-        setHp(fighterRole.getHp());
-        setMp(fighterRole.getMp());
+    public void transferStatus(RoleUnit roleUnit) {
+        setSkillCD(roleUnit.getSkillCD());
+        setHp(roleUnit.getHp());
+        setMp(roleUnit.getMp());
     }
 
     /**
@@ -129,7 +128,7 @@ public class FighterRole extends BaseUnit {
     }
 
     /**
-     * 重置角色状态
+     * 重置角色状态（用于复活时的重置）
      */
     @Override
     public void resetStatus() {
@@ -138,8 +137,13 @@ public class FighterRole extends BaseUnit {
         skillCD = new HashMap<>(16);
     }
 
+    /**
+     * 设置角色属性
+     *
+     * @param roleAttribute 角色属性
+     */
     public void setRoleAttribute(Map<AttributeType, AttributeElement> roleAttribute) {
-        //设置属性
+        //设置属性（复制）
         setUnitAttribute(AttributeUtil.getCopyAttributeMap(roleAttribute));
         //重新计算最终属性
         calculateFinalAttribute();

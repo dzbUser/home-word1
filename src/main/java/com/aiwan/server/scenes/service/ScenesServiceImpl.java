@@ -5,7 +5,7 @@ import com.aiwan.server.scenes.command.EnterMapCommand;
 import com.aiwan.server.scenes.command.ChangeMapCommand;
 import com.aiwan.server.scenes.command.MoveCommand;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
-import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.scenes.protocol.SM_ViewAllUnitInMap;
@@ -87,8 +87,8 @@ public class ScenesServiceImpl implements ScenesService{
             return;
         }
         //设置正在地图跳转
-        FighterRole fighterRole = (FighterRole) GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
-        if (fighterRole.isDeath()) {
+        RoleUnit roleUnit = (RoleUnit) GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
+        if (roleUnit.isDeath()) {
             //角色处于死亡状态
             logger.info("角色:{}跳转到{}失败,角色处于死亡状态", role.getId(), targetMapId);
             return;
@@ -96,7 +96,7 @@ public class ScenesServiceImpl implements ScenesService{
         role.setChangingMap(true);
         leaveMap(role);
         //进入map地图
-        GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, fighterRole));
+        GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, roleUnit));
     }
 
     @Override

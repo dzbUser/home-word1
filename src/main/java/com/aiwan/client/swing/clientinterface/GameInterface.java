@@ -50,7 +50,7 @@ public class GameInterface extends JFrame{
         //接入界面管理
         InterfaceManager.putFrame("game",this);
         //设置长宽
-        setSize(1000, 650);
+        setSize(1500, 800);
         //添加导航栏
         this.add(navigationBar);
         //消除格式
@@ -106,12 +106,12 @@ public class GameInterface extends JFrame{
         this.add(func);
 
         //添加提示信息文本框
-        promptMessage = newJTextArea(0,100,800,120,5,80);
+        promptMessage = newJTextArea(40, 100, 1200, 200, 8, 100);
         promptMessage.append(NavigationBar.getDefaultMessage() + "\n");
         //添加其他信息文本
-        otherMessage = newJTextArea(0,220,500,300,15,50);
+        otherMessage = newJTextArea(0, 300, 700, 350, 14, 60);
         //添加地图文本
-        mapMessage = newJTextArea(500,220,500,300,15,50);
+        mapMessage = newJTextArea(750, 300, 700, 350, 14, 60);
         //可见
         this.setVisible(false);
         //加入清空按钮
@@ -123,7 +123,7 @@ public class GameInterface extends JFrame{
                 otherMessage.setText("");
             }
         });
-        clear.setBounds(40, 530, 80, 40);
+        clear.setBounds(40, 660, 80, 40);
         this.add(clear);
         //添加关闭框
         addWindowListener (new WindowAdapter()
@@ -147,7 +147,7 @@ public class GameInterface extends JFrame{
         //设置组件的背景色
         jTextArea.setForeground(Color.BLACK);
         //修改字体样式
-        jTextArea.setFont(new Font("楷体",Font.BOLD,16));
+        jTextArea.setFont(new Font("楷体", Font.BOLD, 20));
         jTextArea.setEditable(false);
         //将文本域放入滚动窗口
         JScrollPane jsp=new JScrollPane(jTextArea);

@@ -24,4 +24,5 @@ public class AttributeFightBuff extends AbstractFightBuff {
         return true;
     }
 
+
 }

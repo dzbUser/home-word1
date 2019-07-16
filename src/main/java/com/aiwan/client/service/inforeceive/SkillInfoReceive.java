@@ -32,6 +32,7 @@ public class SkillInfoReceive {
         //输出道具
         for (SkillElementMessage skillElementMessage : sm_viewLearnedSkill.getList()) {
             SkillResource skillResource = GetBean.getSkillManager().getSkillResourceBySkillId(skillElementMessage.getSkillId());
+            stringBuffer.append("[" + skillResource.getSkillId() + "]");
             stringBuffer.append("名字:" + skillResource.getSkillName() + " 等级:" + skillElementMessage.getLevel());
             SkillLevelResource skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElementMessage.getSkillId(), skillElementMessage.getLevel());
             stringBuffer.append(" 伤害:" + skillLevelResource.getSkillAttack() / 100 + "%");

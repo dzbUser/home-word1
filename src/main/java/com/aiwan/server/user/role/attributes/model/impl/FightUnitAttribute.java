@@ -14,7 +14,7 @@ public class FightUnitAttribute extends AttributeContainer {
 
     public FightUnitAttribute() {
         for (FightAttributeModule fightAttributeModule : FightAttributeModule.values()) {
-            moduleMap.put(fightAttributeModule, new HashMap<>());
+            getModuleMap().put(fightAttributeModule, new HashMap<>());
         }
     }
 

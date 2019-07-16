@@ -1,9 +1,11 @@
 package com.aiwan.server.base.executor;
 
-import com.aiwan.server.base.executor.ICommand;
 
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * 抽象command
+ */
 public abstract class AbstractCommand implements ICommand {
 
     /**

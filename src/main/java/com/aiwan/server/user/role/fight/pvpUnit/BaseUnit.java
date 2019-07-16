@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * PvP基础单位
+ * 战斗基础单位
  *
  * @author dengzebiao
  * @since 2019.7.9
@@ -123,8 +123,6 @@ public abstract class BaseUnit {
         fightUnitAttribute.removeBuffAttribute(addAttribute, FightAttributeModule.BUFF_MODULE);
     }
 
-
-
     /**
      * 扣除血量
      */
@@ -148,6 +146,10 @@ public abstract class BaseUnit {
      * @param cure 回复血量
      */
     public void cureHp(long cure) {
+        if (getHp() == getMaxHp()) {
+            //已经满血
+            return;
+        }
         long finalHp = getHp() + cure;
         if (finalHp > getMaxHp()) {
             finalHp = getMaxHp();
@@ -162,6 +164,7 @@ public abstract class BaseUnit {
         buff.put(uniqueId, abstractFightBuff);
         //是属性buff
         if (abstractFightBuff.isAttributeBuff()) {
+            //获取属性参数
             EffectResource effectResource = ((AttributeFightBuff) abstractFightBuff).getEffectResource();
             AttributeFightBuffBean attributeFightBuffBean = (AttributeFightBuffBean) effectResource.getValueParameter();
             putBuffAttribute(ImmutableAttributeElement.wrapper(attributeFightBuffBean.getAttributes()));
@@ -174,6 +177,7 @@ public abstract class BaseUnit {
      * @param now 当前时间
      */
     public void buffProcessor(Long now) {
+        //便利buff容器
         for (Iterator<Map.Entry<Integer, AbstractFightBuff>> it = buff.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Integer, AbstractFightBuff> entry = it.next();
             if (entry.getValue().getWorkTime() <= now) {

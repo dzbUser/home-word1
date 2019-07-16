@@ -3,7 +3,7 @@ package com.aiwan.server.user.role.skill.entity;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
- * 存储入库技能信息
+ * 存储入库技能单位
  *
  * @author dengzebiao
  */

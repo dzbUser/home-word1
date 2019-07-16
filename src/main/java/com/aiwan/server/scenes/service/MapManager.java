@@ -4,10 +4,9 @@ import com.aiwan.server.publicsystem.annotation.Manager;
 import com.aiwan.server.publicsystem.annotation.Static;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.scenes.command.SceneRateCommand;
 import com.aiwan.server.user.role.fight.protocol.SM_UnitStatusMessage;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
-import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.mapresource.PositionMeaning;
 import com.aiwan.server.scenes.model.SceneObject;
@@ -64,8 +63,8 @@ public class MapManager {
     }
 
     /** 添加用户 */
-    public void putFighterRole(FighterRole fighterRole) {
-        sceneMap.get(fighterRole.getMapId()).putBaseUnit(fighterRole);
+    public void putFighterRole(RoleUnit roleUnit) {
+        sceneMap.get(roleUnit.getMapId()).putBaseUnit(roleUnit);
     }
 
 
@@ -105,9 +104,9 @@ public class MapManager {
         //遍历所有用户，发送消息
         for (BaseUnit baseUnit : map.values()) {
             if (!baseUnit.isMonster()) {
-                FighterRole fighterRole = (FighterRole) baseUnit;
-                Session session = SessionManager.getSessionByAccountId(fighterRole.getAccountId());
-                SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(id, list, fighterRole.getPosition().getX(), fighterRole.getPosition().getY());
+                RoleUnit roleUnit = (RoleUnit) baseUnit;
+                Session session = SessionManager.getSessionByAccountId(roleUnit.getAccountId());
+                SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(id, list, roleUnit.getPosition().getX(), roleUnit.getPosition().getY());
                 session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, sm_mapMessage));
             }
         }

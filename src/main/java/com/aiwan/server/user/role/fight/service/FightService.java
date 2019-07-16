@@ -3,11 +3,10 @@ package com.aiwan.server.user.role.fight.service;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
-import com.aiwan.server.user.role.buff.protocol.SM_ViewBuff;
 import com.aiwan.server.user.role.fight.protocol.FightBuffMessage;
 import com.aiwan.server.user.role.fight.protocol.SM_ViewFightBuff;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
-import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.user.role.fight.command.DoUserSkillCommand;
@@ -45,7 +44,7 @@ public class FightService implements IFightService {
         //获取场景对象
         SceneObject sceneObject = GetBean.getMapManager().getSceneObject(mapId);
         //获取施法单位
-        FighterRole activeRole = (FighterRole) sceneObject.getBaseUnit(activeRid);
+        RoleUnit activeRole = (RoleUnit) sceneObject.getBaseUnit(activeRid);
 
         if (activeRole == null) {
             //没有改施法单位
@@ -90,6 +89,7 @@ public class FightService implements IFightService {
         skill.doUserSkill(activeRole, passiveList);
         SessionManager.sendPromptMessage(activeRid, PromptCode.USE_SKILL_SUCCESS, skill.getResource().getSkillName());
         logger.info("角色{}施法成功", activeRid);
+
         //怪物反击
         monsterCounterattack(activeRole, passiveList);
     }

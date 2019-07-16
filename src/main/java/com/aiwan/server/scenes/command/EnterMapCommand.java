@@ -1,7 +1,7 @@
 package com.aiwan.server.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
-import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
@@ -22,7 +22,7 @@ public class EnterMapCommand extends AbstractSceneCommand {
     /**
      * 原先战斗单元
      */
-    private FighterRole fighterRole;
+    private RoleUnit roleUnit;
 
     @Override
     public void action() {
@@ -33,8 +33,9 @@ public class EnterMapCommand extends AbstractSceneCommand {
         role.setX(mapResource.getOriginX());
         role.setY(mapResource.getOriginY());
         //添加到地图资源中
-        FighterRole newFightRole = FighterRole.valueOf(role);
-        newFightRole.transferStatus(fighterRole);
+        RoleUnit newFightRole = RoleUnit.valueOf(role);
+        //传递cd、hp以及mp
+        newFightRole.transferStatus(roleUnit);
         GetBean.getMapManager().putFighterRole(newFightRole);
         //写回
         GetBean.getRoleManager().save(role);
@@ -44,11 +45,11 @@ public class EnterMapCommand extends AbstractSceneCommand {
         GetBean.getMapManager().sendMessageToUsers(getKey());
     }
 
-    public EnterMapCommand(int mapId, Role role, FighterRole fighterRole) {
+    public EnterMapCommand(int mapId, Role role, RoleUnit roleUnit) {
         super(role.getAccountId(), mapId);
         setTaskName("进入地图命令");
         this.role = role;
-        this.fighterRole = fighterRole;
+        this.roleUnit = roleUnit;
     }
 
 }

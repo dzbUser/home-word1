@@ -17,6 +17,11 @@ public class HurtFightBuff extends AbstractFightBuff {
 
     Logger logger = LoggerFactory.getLogger(HurtFightBuff.class);
 
+    /**
+     * 最终伤害
+     */
+    private long hurt;
+
     @Override
     public void doActive(BaseUnit passive) {
         HurtFightBuffBean hurtFightBuffBean = (HurtFightBuffBean) getEffectResource().getValueParameter();
@@ -24,4 +29,5 @@ public class HurtFightBuff extends AbstractFightBuff {
         passive.deduceHP(getActiveUnit().getId(), hurt);
         logger.debug("伤害buff造成效果");
     }
+
 }

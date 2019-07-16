@@ -31,6 +31,7 @@ public class BuffImpact implements ImpactInterface {
             } else {
                 abstractFightBuff.init(effectResource.getId(), now, effectResource.getPeriod(), effectResource.getDuration(), now + effectResource.getDuration(), active);
             }
+            //添加buff
             passive.putBuff(abstractFightBuff.getEffectResource().getUniqueId(), abstractFightBuff);
         }
     }

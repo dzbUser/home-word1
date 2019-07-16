@@ -30,8 +30,6 @@ public class SignOutMapCommand extends AbstractSceneCommand {
     public void action() {
         //去除地图缓存
         GetBean.getScenesService().leaveMap(role);
-        //删除buff定时器
-        GetBean.getBuffManager().interruptCommand(role.getId());
     }
 
     public SignOutMapCommand(Role role) {

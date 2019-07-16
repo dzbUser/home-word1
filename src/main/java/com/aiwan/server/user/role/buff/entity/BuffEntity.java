@@ -67,7 +67,6 @@ public class BuffEntity implements IEntity<Long> {
                 GetBean.getBuffService().refreshCommand(rId, buffElement.getBuffId(), delay);
             }
         }
-
     }
 
     public BuffInfo getBuffInfo() {

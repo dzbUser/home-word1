@@ -12,6 +12,12 @@ import com.aiwan.server.util.FightUtil;
  * @since 2019.7.11
  */
 public class CureFightBuff extends AbstractFightBuff {
+
+    /**
+     * 最终治疗量
+     */
+    private long cure;
+
     @Override
     public void doActive(BaseUnit passive) {
         CureFightBuffBean cureFightBuffBean = (CureFightBuffBean) getEffectResource().getValueParameter();

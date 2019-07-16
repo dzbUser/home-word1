@@ -23,17 +23,17 @@ public class AttributeContainer {
     /**
      * 模块属性
      */
-    public Map<AttributeId, Map<AttributeType, AttributeElement>> moduleMap = new HashMap<>(16);
+    private Map<AttributeId, Map<AttributeType, AttributeElement>> moduleMap = new HashMap<>(16);
 
     /**
      * 纯净属性
      */
-    public Map<AttributeType, AttributeElement> pureAttribute = new HashMap<>(16);
+    private Map<AttributeType, AttributeElement> pureAttribute = new HashMap<>(16);
 
     /**
      * 最终属性
      */
-    public Map<AttributeType, AttributeElement> finalAttribute = new HashMap<>(16);
+    private Map<AttributeType, AttributeElement> finalAttribute = new HashMap<>(16);
 
     /**
      * 计算属性
@@ -137,5 +137,13 @@ public class AttributeContainer {
             }
         }
         reCalculate();
+    }
+
+    public Map<AttributeId, Map<AttributeType, AttributeElement>> getModuleMap() {
+        return moduleMap;
+    }
+
+    public void setModuleMap(Map<AttributeId, Map<AttributeType, AttributeElement>> moduleMap) {
+        this.moduleMap = moduleMap;
     }
 }

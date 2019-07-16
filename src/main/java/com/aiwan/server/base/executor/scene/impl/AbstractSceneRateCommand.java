@@ -1,7 +1,13 @@
 package com.aiwan.server.base.executor.scene.impl;
 
+/**
+ * 场景循环抽象类
+ */
 public abstract class AbstractSceneRateCommand extends AbstractSceneDelayCommand {
 
+    /**
+     * 循环周期
+     */
     private long period;
 
     public AbstractSceneRateCommand(String accountId, int mapId, long delay, long period) {

@@ -2,6 +2,9 @@ package com.aiwan.server.base.executor.scene.impl;
 
 import com.aiwan.server.base.executor.AbstractCommand;
 
+/**
+ * 场景抽象command
+ */
 public abstract class AbstractSceneCommand extends AbstractCommand {
 
     /**
@@ -34,6 +37,7 @@ public abstract class AbstractSceneCommand extends AbstractCommand {
     public void active() {
         action();
     }
+
     public String getAccountId() {
         return accountId;
     }

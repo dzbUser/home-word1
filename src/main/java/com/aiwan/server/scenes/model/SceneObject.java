@@ -4,7 +4,7 @@ import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.command.SceneRateCommand;
 import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
-import com.aiwan.server.user.role.fight.pvpUnit.FighterRole;
+import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
 import com.aiwan.server.user.role.fight.pvpUnit.MonsterUnit;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.user.role.player.model.Role;
@@ -127,9 +127,9 @@ public class SceneObject {
      * 设置战斗对象属性
      */
     public void setFighterAttribute(Role role) {
-        FighterRole fighterRole = (FighterRole) baseUnitMap.get(role.getId());
-        if (fighterRole != null) {
-            fighterRole.setRoleAttribute(role.getAttribute().getPureAttribute());
+        RoleUnit roleUnit = (RoleUnit) baseUnitMap.get(role.getId());
+        if (roleUnit != null) {
+            roleUnit.setRoleAttribute(role.getAttribute().getPureAttribute());
         }
     }
 

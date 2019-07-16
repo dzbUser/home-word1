@@ -75,6 +75,7 @@ public abstract class AbstractFightBuff {
         setGainTime(gainTime);
     }
 
+
     /**
      * 获取buff效果资源
      */

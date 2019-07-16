@@ -16,8 +16,8 @@ public interface ImpactInterface {
     /**
      * 效果产生
      *
-     * @param active
-     * @param passive
+     * @param active 释放者
+     * @param passive 目标
      * @param impactAnalysis 技能效果静态参数解析类
      * @param skillUseContext 技能使用上下文
      */

@@ -1,7 +1,7 @@
 package com.aiwan.server.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
-import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
+import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
@@ -35,7 +35,9 @@ public class EnterMapCommand extends AbstractSceneCommand {
         //添加到地图资源中
         RoleUnit newFightRole = RoleUnit.valueOf(role);
         //传递cd、hp以及mp
-        newFightRole.transferStatus(roleUnit);
+        if (roleUnit != null) {
+            newFightRole.transferStatus(roleUnit);
+        }
         GetBean.getMapManager().putFighterRole(newFightRole);
         //写回
         GetBean.getRoleManager().save(role);

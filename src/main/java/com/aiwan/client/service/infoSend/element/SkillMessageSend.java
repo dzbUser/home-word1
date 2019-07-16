@@ -40,10 +40,12 @@ public enum SkillMessageSend {
                 stringBuffer.append("目标数:" + skillLevelResource.getNum());
                 if (1 < GetBean.getSkillManager().getMaxLevel(skillElement.getSkillId())) {
                     skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElement.getSkillId(), (2));
-                    stringBuffer.append(" 升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");
+                    stringBuffer.append(" 升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " ");
                 } else {
-                    stringBuffer.append(" 技能达到最高等级\n\n");
+                    stringBuffer.append(" 技能达到最高等级 ");
                 }
+
+                stringBuffer.append("描述:" + skillResource.getDec() + "\n\n");
             }
             GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
             gameInterface.printOtherMessage(stringBuffer.toString());

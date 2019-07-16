@@ -3,7 +3,7 @@ package com.aiwan.server.scenes.command;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;

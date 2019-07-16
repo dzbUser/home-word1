@@ -1,6 +1,6 @@
 package com.aiwan.server.user.role.buff.effect;
 
-import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.util.GetBean;
 

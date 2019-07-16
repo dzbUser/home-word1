@@ -2,7 +2,7 @@ package com.aiwan.server.user.role.buff.effect.impl;
 
 import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
 import com.aiwan.server.user.role.buff.resource.bean.HurtFightBuffBean;
-import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.util.FightUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

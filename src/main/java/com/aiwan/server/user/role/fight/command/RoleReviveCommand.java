@@ -3,7 +3,7 @@ package com.aiwan.server.user.role.fight.command;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneDelayCommand;
 import com.aiwan.server.scenes.mapresource.MapResource;
 import com.aiwan.server.scenes.model.Position;
-import com.aiwan.server.user.role.fight.pvpUnit.RoleUnit;
+import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 

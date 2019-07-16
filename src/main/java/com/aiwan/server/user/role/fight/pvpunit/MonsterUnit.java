@@ -1,16 +1,12 @@
-package com.aiwan.server.user.role.fight.pvpUnit;
+package com.aiwan.server.user.role.fight.pvpunit;
 
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
 import com.aiwan.server.user.role.fight.command.MonsterKillingAward;
 import com.aiwan.server.user.role.player.model.Role;
-import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.IDUtil;
-
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * 怪物战斗单位

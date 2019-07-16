@@ -1,4 +1,4 @@
-package com.aiwan.server.user.role.fight.pvpUnit;
+package com.aiwan.server.user.role.fight.pvpunit;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneDelayCommand;
 import com.aiwan.server.publicsystem.service.SessionManager;
@@ -80,7 +80,7 @@ public class RoleUnit extends BaseUnit {
         //获取当前时间
         Long now = System.currentTimeMillis();
         if (cd != null && now < cd) {
-            //存入cd到的时间
+            //处于cd状态
             logger.debug("角色{}施法技能{}失败，处于CD状态", getId(), skill.getSkillId());
             return false;
         }

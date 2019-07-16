@@ -1,7 +1,7 @@
 package com.aiwan.server.user.role.skill.model;
 
 import com.aiwan.server.user.role.fight.context.SkillUseContext;
-import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.skill.impact.ImpactInterface;
 import com.aiwan.server.user.role.skill.resource.ImpactAnalysis;
 import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
@@ -85,6 +85,5 @@ public class Skill {
                 impactInterface.takeImpact(active, passive, impactAnalysis, skillUseContext);
             }
         }
-
     }
 }

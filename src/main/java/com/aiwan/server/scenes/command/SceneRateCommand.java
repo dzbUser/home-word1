@@ -1,7 +1,7 @@
 package com.aiwan.server.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
-import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.scenes.model.SceneObject;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;

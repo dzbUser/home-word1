@@ -39,10 +39,11 @@ public class SkillInfoReceive {
             stringBuffer.append(" 目标数:" + skillLevelResource.getNum() + "\n");
             skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElementMessage.getSkillId(), (skillElementMessage.getLevel() + 1));
             if (skillElementMessage.getLevel() < GetBean.getSkillManager().getMaxLevel(skillElementMessage.getSkillId())) {
-                stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");
+                stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " ");
             } else {
-                stringBuffer.append("技能达到最高等级\n\n");
+                stringBuffer.append("技能达到最高等级 ");
             }
+            stringBuffer.append("描述:" + skillResource.getDec() + "\n\n");
         }
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
         gameInterface.printOtherMessage(stringBuffer.toString());
@@ -67,10 +68,11 @@ public class SkillInfoReceive {
                 stringBuffer.append(" 目标数:" + skillLevelResource.getNum() + "\n");
                 skillLevelResource = GetBean.getSkillManager().getSkillLevelReById(skillElementMessages[i].getSkillId(), (skillElementMessages[i].getLevel() + 1));
                 if (skillElementMessages[i].getLevel() < GetBean.getSkillManager().getMaxLevel(skillElementMessages[i].getSkillId())) {
-                    stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + "\n\n");
+                    stringBuffer.append("升级等级要求：" + skillLevelResource.getRoleLevelDemand() + " ");
                 } else {
-                    stringBuffer.append("技能达到最高等级\n\n");
+                    stringBuffer.append("技能达到最高等级 ");
                 }
+                stringBuffer.append("描述:" + skillResource.getDec() + "\n\n");
             }
         }
         GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");

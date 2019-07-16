@@ -1,9 +1,8 @@
 package com.aiwan.server.user.role.skill.impact;
 
 import com.aiwan.server.user.role.fight.context.SkillUseContext;
-import com.aiwan.server.user.role.fight.pvpUnit.BaseUnit;
+import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.skill.resource.ImpactAnalysis;
-import com.aiwan.server.user.role.skill.resource.SkillLevelResource;
 
 /**
  * 效果接口

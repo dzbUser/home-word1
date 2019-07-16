@@ -1,4 +1,4 @@
-package com.aiwan.server.user.role.fight.pvpUnit;
+package com.aiwan.server.user.role.fight.pvpunit;
 
 import com.aiwan.server.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
@@ -10,7 +10,6 @@ import com.aiwan.server.user.role.buff.effect.AbstractFightBuff;
 import com.aiwan.server.user.role.buff.effect.impl.AttributeFightBuff;
 import com.aiwan.server.user.role.buff.resource.EffectResource;
 import com.aiwan.server.user.role.buff.resource.bean.AttributeFightBuffBean;
-import com.aiwan.server.util.AttributeUtil;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +109,7 @@ public abstract class BaseUnit {
      *
      * @param addAttribute 所添加的属性
      */
-    public void putBuffAttribute(Map<AttributeType, AttributeElement> addAttribute) {
+    private void putBuffAttribute(Map<AttributeType, AttributeElement> addAttribute) {
         fightUnitAttribute.putBuffAttribute(addAttribute, FightAttributeModule.BUFF_MODULE);
     }
 

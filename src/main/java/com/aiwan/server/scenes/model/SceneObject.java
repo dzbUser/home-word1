@@ -1,5 +1,6 @@
 package com.aiwan.server.scenes.model;
 
+import com.aiwan.server.base.executor.ICommand;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.command.SceneRateCommand;
@@ -34,10 +35,11 @@ public class SceneObject {
      */
     private Map<Long, BaseUnit> baseUnitMap = new HashMap<>();
 
+
     /**
-     * 循环检查command
-     */
-    private AbstractSceneRateCommand abstractSceneRateCommand;
+     * 定时器容器
+     * */
+    private Map<Class<? extends ICommand>, ICommand> commandMap = new HashMap<>();
 
     /**
      * 存入战斗单位
@@ -85,7 +87,7 @@ public class SceneObject {
         long now = System.currentTimeMillis();
         SceneRateCommand sceneRateCommand = new SceneRateCommand(null, getMapId(), 0, 1000, now + 5000, 5000);
         GetBean.getSceneExecutorService().submit(sceneRateCommand);
-        setAbstractSceneRateCommand(sceneRateCommand);
+        commandMap.put(SceneRateCommand.class, sceneRateCommand);
     }
 
     /**
@@ -183,14 +185,6 @@ public class SceneObject {
 
     public void setLogger(Logger logger) {
         this.logger = logger;
-    }
-
-    public AbstractSceneRateCommand getAbstractSceneRateCommand() {
-        return abstractSceneRateCommand;
-    }
-
-    public void setAbstractSceneRateCommand(AbstractSceneRateCommand abstractSceneRateCommand) {
-        this.abstractSceneRateCommand = abstractSceneRateCommand;
     }
 }
 

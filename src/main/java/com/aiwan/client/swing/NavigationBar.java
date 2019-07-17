@@ -36,6 +36,8 @@ public class NavigationBar extends JPanel {
      */
     public static final int FIGHT = 5;
 
+    public static final int TEAM = 6;
+
     /** 只是当前所属模块 */
     public int num;
 
@@ -79,6 +81,9 @@ public class NavigationBar extends JPanel {
             "0.查看地图所有战斗单位\n" +
                     "1.使用技能 （指令：技能位置 唯一id）\n" +
                     "2.查看身上buff";
+    private static final String TEAMMESSAGE =
+            "0.创建队伍\n";
+
 
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);
 
@@ -89,6 +94,7 @@ public class NavigationBar extends JPanel {
         add(createItem("坐骑系统",MOUNTMESSAGE,150, 0, MOUNT));
         add(createItem("技能系统", SKILLMESSAGE, 200, 0, SKILL));
         add(createItem("战斗系统", FIGHTMESSAGE, 250, 0, FIGHT));
+        add(createItem("组队系统", TEAMMESSAGE, 300, 0, TEAM));
         num = ROLE;
     }
 

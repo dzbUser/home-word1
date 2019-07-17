@@ -20,7 +20,15 @@ public class Role {
      */
     private RoleEnt roleEnt;
 
+    /**
+     * 是否正在地图跳转
+     */
     private AtomicBoolean changingMap = new AtomicBoolean(false);
+
+    /**
+     * 是否拥有队伍
+     */
+    private AtomicBoolean isTeam = new AtomicBoolean(false);
 
     public RoleEnt getRoleEnt() {
         return roleEnt;
@@ -167,5 +175,13 @@ public class Role {
 
     public void setChangingMap(boolean changingMap) {
         this.changingMap.getAndSet(changingMap);
+    }
+
+    public boolean getIsTeam() {
+        return this.isTeam.get();
+    }
+
+    public void setIsTeam(boolean isTeam) {
+        this.isTeam.getAndSet(isTeam);
     }
 }

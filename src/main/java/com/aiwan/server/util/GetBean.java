@@ -25,6 +25,8 @@ import com.aiwan.server.user.account.service.UserService;
 import com.aiwan.server.user.backpack.service.BackpackService;
 import com.aiwan.server.user.role.skill.service.SkillManager;
 import com.aiwan.server.user.role.skill.service.SkillService;
+import com.aiwan.server.user.role.team.manager.TeamManager;
+import com.aiwan.server.user.role.team.service.ITeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -95,6 +97,33 @@ public class GetBean {
      */
     private static IFightService fightService;
 
+    /**
+     * 获取队伍业务
+     */
+    private static ITeamService teamService;
+
+    /**
+     * 获取队伍管理类
+     */
+    private static TeamManager teamManager;
+
+    public static TeamManager getTeamManager() {
+        return teamManager;
+    }
+
+    @Autowired
+    public void setTeamManager(TeamManager teamManager) {
+        GetBean.teamManager = teamManager;
+    }
+
+    public static ITeamService getTeamService() {
+        return teamService;
+    }
+
+    @Autowired
+    public void setTeamService(ITeamService teamService) {
+        GetBean.teamService = teamService;
+    }
 
     public static IFightService getFightService() {
         return fightService;

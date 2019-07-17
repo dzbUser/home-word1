@@ -122,4 +122,9 @@ public class Protocol {
      * 查看战斗buff
      */
     public static final int VIEW_FIGHTBUFF = 41;
+
+    /**
+     * 创建队伍
+     */
+    public static final int CREATE_TEAM = 42;
 }

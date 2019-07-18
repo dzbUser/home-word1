@@ -100,6 +100,10 @@ public class TeamManager {
         teamRoleMap.remove(rId);
     }
 
+    /**
+     *
+     */
+
     public long getTeamIdByRid(long rId) {
         return teamRoleMap.get(rId);
     }

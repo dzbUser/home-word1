@@ -48,7 +48,10 @@ public class SessionManager {
     public static void sendPromptMessage(long rId, int promptCode, String message) {
         Role role = GetBean.getRoleManager().load(rId);
         if (role != null) {
-            getSessionByAccountId(role.getAccountId()).sendPromptMessage(promptCode, message);
+            Session session = getSessionByAccountId(role.getAccountId());
+            if (session != null) {
+                session.sendPromptMessage(promptCode, message);
+            }
         }
     }
 

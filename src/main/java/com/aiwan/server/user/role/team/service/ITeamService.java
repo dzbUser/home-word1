@@ -36,9 +36,9 @@ public interface ITeamService {
     /**
      * 离开队伍
      *
-     * @param session 会话
+     * @param rid 退出用户id
      */
-    void leaveTeam(Session session);
+    void leaveTeam(long rid);
 
     /**
      * 查看所有申请
@@ -69,4 +69,5 @@ public interface ITeamService {
      * @param session    会话
      */
     void kickOut(long kickOutRId, Session session);
+    
 }

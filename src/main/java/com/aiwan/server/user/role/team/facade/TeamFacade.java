@@ -48,7 +48,7 @@ public class TeamFacade {
             logger.debug("错误包");
             return;
         }
-        GetBean.getTeamService().leaveTeam(session);
+        GetBean.getTeamService().leaveTeam(session.getrId());
     }
 
     /**

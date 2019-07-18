@@ -82,7 +82,14 @@ public class NavigationBar extends JPanel {
                     "1.使用技能 （指令：技能位置 唯一id）\n" +
                     "2.查看身上buff";
     private static final String TEAMMESSAGE =
-            "0.创建队伍\n";
+            "0.创建队伍\n" +
+                    "1.查看所有队伍\n" +
+                    "2.离开队伍\n" +
+                    "3.申请加入队伍（指令 输出队伍唯一id）\n" +
+                    "4.查看申请队列\n" +
+                    "5.允许申请者加入队伍（指令 输入申请者id）\n" +
+                    "6.查看队伍成员\n" +
+                    "7.踢出 （输入想要踢出的队员id）";
 
 
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);

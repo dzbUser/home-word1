@@ -275,6 +275,11 @@ public class PromptCode {
      */
     public final static int KICK_OUT_SUCCESS = 58;
 
+    /**
+     * 通知成为队长
+     */
+    public final static int BECAME_LEADER = 59;
+
 
 //
 //    /**

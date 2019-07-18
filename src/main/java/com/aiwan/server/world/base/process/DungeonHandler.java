@@ -2,9 +2,12 @@ package com.aiwan.server.world.base.process;
 
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.user.role.fight.pvpunit.MonsterUnit;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
 import com.aiwan.server.world.base.scene.DungeonScene;
+import com.aiwan.server.world.scenes.command.ChangeMapCommand;
+import com.aiwan.server.world.scenes.mapresource.GateBean;
 import com.aiwan.server.world.scenes.model.Position;
 
 import java.util.List;
@@ -28,6 +31,11 @@ public class DungeonHandler {
     private int killMonsterNum;
 
     /**
+     * 总击杀数
+     */
+    private int totalKillNum;
+
+    /**
      * 关卡数
      */
     private int checkpointNum;
@@ -36,19 +44,31 @@ public class DungeonHandler {
      * 关卡监听器
      */
     public void checkpointListener(int killNum) {
-
         /*
         0.发放关卡奖励
         1.判断是否是最后一个关卡
         2.若不是，则刷下个关卡的怪
         3.若是，则判断是否是不通关副本，若是则再次刷最后关卡的怪，若不是则结算
          */
+        //获取关卡
+        GateBean gateBean = dungeonScene.getResource().getGateBeanMap().get(checkpointNum);
+        //判断怪物是否四万
+        if (gateBean.getMonsterNum() == killNum) {
+            killNum = 0;
+        }
     }
 
     public void init() {
         /*
         初始化副本
+        1.关卡是为1
+        2.初始化怪物
          */
+        this.killMonsterNum = 0;
+        this.checkpointNum = 1;
+        GateBean gateBean = dungeonScene.getResource().getGateBeanMap().get(1);
+        //初始化怪物
+        generateMonster(gateBean.getMonsterId(), gateBean.getMonsterNum());
         enterDungeon();
     }
 
@@ -58,8 +78,10 @@ public class DungeonHandler {
     public void enterDungeon() {
         /*
         1.队伍的成员循环进入副本
-        2.把队伍添加到副本
          */
+        for (Role role : dungeonScene.getTeamModel().getTeamList()) {
+            GetBean.getSceneExecutorService().submit(new ChangeMapCommand(role, dungeonScene.getMapId(), dungeonScene.getSceneId()));
+        }
     }
 
     /**
@@ -70,7 +92,9 @@ public class DungeonHandler {
         1.队伍的队员回到初始点
         2.删除地图资源
          */
-
+        for (Role role : dungeonScene.getTeamModel().getTeamList()) {
+            GetBean.getSceneExecutorService().submit(new ChangeMapCommand(role, 1));
+        }
     }
 
     /**

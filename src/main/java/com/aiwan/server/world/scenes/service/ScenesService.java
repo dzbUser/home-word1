@@ -22,7 +22,7 @@ public interface ScenesService {
     /**
      * 地图改变
      */
-    void changeMap(Role role, int targetMapId);
+    void changeMap(Role role, int targetMapId, int targetSceneId);
 
     /**
      * 离开滴入

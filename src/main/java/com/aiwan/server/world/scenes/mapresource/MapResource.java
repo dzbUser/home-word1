@@ -3,7 +3,6 @@ package com.aiwan.server.world.scenes.mapresource;
 import com.aiwan.server.publicsystem.annotation.CellMapping;
 import com.aiwan.server.publicsystem.annotation.Resource;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +93,7 @@ public class MapResource {
     /**
      * 关卡列表（副本专有）
      */
-    private List<GateBean> gateBeanList = new ArrayList<>();
+    private Map<Integer, GateBean> gateBeanMap = new HashMap<>();
 
     /**
      * 结算（副本专有）
@@ -144,7 +143,7 @@ public class MapResource {
             for (String unit : gateUnitString) {
                 GateBean gateBean = new GateBean();
                 gateBean.doParse(unit);
-                gateBeanList.add(gateBean);
+                gateBeanMap.put(gateBean.getGateNum(), gateBean);
             }
         }
 
@@ -272,5 +271,21 @@ public class MapResource {
 
     public void setSettlementAward(String settlementAward) {
         this.settlementAward = settlementAward;
+    }
+
+    public Map<Integer, GateBean> getGateBeanMap() {
+        return gateBeanMap;
+    }
+
+    public void setGateBeanMap(Map<Integer, GateBean> gateBeanMap) {
+        this.gateBeanMap = gateBeanMap;
+    }
+
+    public SettlementBean getSettlementBean() {
+        return settlementBean;
+    }
+
+    public void setSettlementBean(SettlementBean settlementBean) {
+        this.settlementBean = settlementBean;
     }
 }

@@ -83,7 +83,7 @@ public class ScenesServiceImpl implements ScenesService{
     }
 
     @Override
-    public void changeMap(Role role, int targetMapId) {
+    public void changeMap(Role role, int targetMapId, int targetSceneId) {
         if (role.isChangingMap()) {
             logger.info("角色:{}跳转到{}失败,正在进行地图跳转", role.getId(), targetMapId);
             return;
@@ -104,7 +104,11 @@ public class ScenesServiceImpl implements ScenesService{
         role.setChangingMap(true);
         leaveMap(role);
         //进入map地图
-        GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, roleUnit));
+        if (targetSceneId == 0) {
+            GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, roleUnit));
+            return;
+        }
+        GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, targetSceneId, role, roleUnit));
     }
 
     @Override

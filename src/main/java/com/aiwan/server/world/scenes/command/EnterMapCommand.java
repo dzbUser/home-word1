@@ -24,10 +24,20 @@ public class EnterMapCommand extends AbstractSceneCommand {
      */
     private RoleUnit roleUnit;
 
+    /**
+     * 目标地图id
+     */
+    private int targetMapId;
+
     @Override
     public void action() {
         //获取地图资源
-        MapResource mapResource = GetBean.getMapManager().getMapResource(getKey());
+        MapResource mapResource;
+        if (targetMapId == 0) {
+            mapResource = GetBean.getMapManager().getMapResource(getKey());
+        } else {
+            mapResource = GetBean.getMapManager().getMapResource(targetMapId);
+        }
         //初始化化角色坐标
         role.setMap(getKey());
         role.setX(mapResource.getOriginX());
@@ -50,8 +60,17 @@ public class EnterMapCommand extends AbstractSceneCommand {
     public EnterMapCommand(int mapId, Role role, RoleUnit roleUnit) {
         super(role.getAccountId(), mapId);
         setTaskName("进入地图命令");
+        this.targetMapId = 0;
         this.role = role;
         this.roleUnit = roleUnit;
+    }
+
+    public EnterMapCommand(int mapId, int sceneId, Role role, RoleUnit roleUnit) {
+        super(role.getAccountId(), sceneId);
+        setTaskName("进入地图命令");
+        this.role = role;
+        this.roleUnit = roleUnit;
+        this.targetMapId = mapId;
     }
 
 }

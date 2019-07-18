@@ -26,15 +26,29 @@ public class ChangeMapCommand extends AbstractSceneCommand {
      */
     private int targetMapId;
 
+    /**
+     * 跳转场景id
+     */
+    private int targetSceneId;
+
     @Override
     public void action() {
-        GetBean.getScenesService().changeMap(role, targetMapId);
+        GetBean.getScenesService().changeMap(role, targetMapId, targetSceneId);
     }
 
     public ChangeMapCommand(Role role, int targetMapId) {
         super(role.getAccountId(), role.getMap());
         this.role = role;
         setTargetMapId(targetMapId);
+        setTargetSceneId(0);
+        setTaskName("地图转移命令");
+    }
+
+    public ChangeMapCommand(Role role, int targetMapId, int targetSceneId) {
+        super(role.getAccountId(), role.getMap());
+        this.role = role;
+        setTargetMapId(targetMapId);
+        setTargetSceneId(targetSceneId);
         setTaskName("地图转移命令");
     }
 
@@ -44,5 +58,13 @@ public class ChangeMapCommand extends AbstractSceneCommand {
 
     public void setTargetMapId(int targetMapId) {
         this.targetMapId = targetMapId;
+    }
+
+    public int getTargetSceneId() {
+        return targetSceneId;
+    }
+
+    public void setTargetSceneId(int targetSceneId) {
+        this.targetSceneId = targetSceneId;
     }
 }

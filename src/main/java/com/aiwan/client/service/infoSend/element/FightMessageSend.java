@@ -5,23 +5,11 @@ import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
-import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.scenes.protocol.CM_ViewAllUnitInMap;
-import com.aiwan.server.scenes.protocol.MonsterMessage;
-import com.aiwan.server.scenes.protocol.RoleMessage;
-import com.aiwan.server.user.backpack.protocol.CM_DropProps;
-import com.aiwan.server.user.role.attributes.model.AttributeElement;
-import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.fight.protocol.CM_UserSkill;
 import com.aiwan.server.user.role.fight.protocol.CM_ViewFightBuff;
-import com.aiwan.server.user.role.skill.resource.SkillResource;
-import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 public enum FightMessageSend {
     /**
@@ -57,7 +45,7 @@ public enum FightMessageSend {
         @Override
         public boolean verify(String message) {
             String[] messages = message.split(" ");
-            if (messages.length != 2 || !Verification.canParseInt(messages[0]) || !Verification.canParseInt(messages[1])) {
+            if (messages.length != 2 || !Verification.canParseNum(messages[0]) || !Verification.canParseNum(messages[1])) {
                 return false;
             }
             return true;

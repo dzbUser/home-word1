@@ -67,6 +67,16 @@ public enum  MessageSendModule {
             }
             fightMessageSend.messageSend(message);
         }
+    },
+    TEAM_MODULE(6) {
+        @Override
+        public void sendMessage(String message, int num) {
+            TeamMessageSend teamMessageSend = TeamMessageSend.getMessageSend(num);
+            if (teamMessageSend == null) {
+                return;
+            }
+            teamMessageSend.messageSend(message);
+        }
     }
     ;
 

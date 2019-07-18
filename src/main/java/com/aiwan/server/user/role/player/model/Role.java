@@ -184,4 +184,5 @@ public class Role {
     public void setIsTeam(boolean isTeam) {
         this.isTeam.getAndSet(isTeam);
     }
+
 }

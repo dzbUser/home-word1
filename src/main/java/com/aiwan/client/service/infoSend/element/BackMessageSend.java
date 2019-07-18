@@ -43,7 +43,7 @@ public enum BackMessageSend {
         @Override
         public boolean verify(String message){
             String[] messages = message.split(" ");
-            if (messages.length!= 2|| !Verification.canParseInt(messages[0])||!Verification.canParseInt(messages[1])){
+            if (messages.length != 2 || !Verification.canParseNum(messages[0]) || !Verification.canParseNum(messages[1])) {
                 return false;
             }
             return true;
@@ -84,7 +84,7 @@ public enum BackMessageSend {
         @Override
         public boolean verify(String message){
             String[] messages = message.split(" ");
-            if (messages.length != 2 || !Verification.canParseInt(messages[0]) || !Verification.canParseInt(messages[1])) {
+            if (messages.length != 2 || !Verification.canParseNum(messages[0]) || !Verification.canParseNum(messages[1])) {
                 return false;
             }
             return true;
@@ -114,7 +114,7 @@ public enum BackMessageSend {
         @Override
         public boolean verify(String message) {
             String[] messages = message.split(" ");
-            if (messages.length != 2 || !Verification.canParseInt(messages[0]) || !Verification.canParseInt(messages[1])) {
+            if (messages.length != 2 || !Verification.canParseNum(messages[0]) || !Verification.canParseNum(messages[1])) {
                 return false;
             }
             return true;
@@ -141,7 +141,7 @@ public enum BackMessageSend {
 
         @Override
         public boolean verify(String message) {
-            if (!Verification.canParseInt(message)) {
+            if (!Verification.canParseNum(message)) {
                 return false;
             }
             return true;

@@ -5,7 +5,12 @@ import com.aiwan.server.util.Protocol;
 
 import java.io.Serializable;
 
-@ProtocolAnnotation(protocol = Protocol.CREATE_TEAM)
-public class CM_CreateTeam implements Serializable {
-
+/**
+ * 查看申请列表
+ *
+ * @author dengzebiao
+ * @since 2019.7.18
+ */
+@ProtocolAnnotation(protocol = Protocol.VIEW_APPLCIATION)
+public class CM_ViewApplication implements Serializable {
 }

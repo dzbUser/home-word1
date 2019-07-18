@@ -49,6 +49,9 @@ public class RoleManager {
      * */
     public Role load(Long id){
         RoleEnt roleEnt = cache.load(id);
+        if (roleEnt == null) {
+            return null;
+        }
         Role role = roleEnt.getRole();
         if (role == null) {
             role = Role.valueOf(roleEnt);

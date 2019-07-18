@@ -64,4 +64,19 @@ public class StatusCode {
      * 返回战斗单位状态
      */
     public final static int UnitStatus = 21;
+
+    /**
+     * 查看所有队伍
+     */
+    public final static int VIEW_ALL_TEAM = 22;
+
+    /**
+     * 查看申请列表
+     */
+    public final static int VIEW_APPLICATION = 23;
+
+    /**
+     * 查看所有队伍成员
+     */
+    public final static int VIEW_MEMBERS = 24;
 }

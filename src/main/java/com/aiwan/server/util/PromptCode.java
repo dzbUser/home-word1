@@ -1,5 +1,7 @@
 package com.aiwan.server.util;
 
+import java.security.PublicKey;
+
 /**
  * 提示信息编码
  */
@@ -201,5 +203,84 @@ public class PromptCode {
      * 施法目标已经死亡
      */
     public final static int CASTING_TARGET_DEATH = 44;
+
+    /**
+     * 您已经在队伍中
+     */
+    public final static int IN_TEAM = 45;
+
+    /**
+     * 队伍创建成功
+     */
+    public final static int CREATE_TEAM_SUCCESS = 46;
+
+
+    /**
+     * 没有该队伍
+     */
+    public final static int NO_TEAM = 47;
+
+    /**
+     * 已经在队伍中
+     */
+    public final static int HAVE_IN_TEAM = 48;
+
+    /**
+     * 队伍已满
+     */
+    public final static int TEAM_FULL = 49;
+
+    /**
+     * 申请加入队伍成功
+     */
+    public final static int APPLY_JOIN_SUCCESS = 50;
+
+    /**
+     * 未在队伍中
+     */
+    public final static int NO_IN_TEAM = 51;
+
+    /**
+     * 离开队伍成功
+     */
+    public final static int LEAVE_SUCCESS = 52;
+
+    /**
+     * 队长接到通知
+     */
+    public final static int MEMBER_LEAVE_TEAM = 53;
+
+    /**
+     * 不是队长
+     */
+    public final static int NO_TEAM_LEADER = 54;
+
+    /**
+     * 加入成功
+     */
+    public final static int JOIN_TEAM_SUCCESS = 55;
+
+    /**
+     * 不可以把自己踢出队伍
+     */
+    public final static int NO_KICK_OUT_YOUSELF = 56;
+
+    /**
+     * 踢出对象不在队伍中
+     */
+    public final static int NO_IN_YOURTEAM = 57;
+
+    /**
+     * 踢出成功
+     */
+    public final static int KICK_OUT_SUCCESS = 58;
+
+
+//
+//    /**
+//     * 申请加入队伍成功
+//     */
+//    public final static int APPLY_JOIN_SUCCESS = 50;
+
 
 }

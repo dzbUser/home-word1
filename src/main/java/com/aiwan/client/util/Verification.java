@@ -8,7 +8,7 @@ package com.aiwan.client.util;
 public class Verification {
 
     /** 是否可以转化为数字 */
-    public static boolean canParseInt(String str){
+    public static boolean canParseNum(String str) {
         //验证是否为空
         if(str == null){
             return false;

@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.team.service;
 
+import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.player.model.Role;
 
 /**
@@ -16,4 +17,56 @@ public interface ITeamService {
      * @param role 创建角色
      */
     void createTeam(Role role);
+
+    /**
+     * 查看所有队伍
+     *
+     * @param session 会话
+     */
+    void viewAllTeam(Session session);
+
+    /**
+     * 申请加入队伍
+     *
+     * @param teamId  队伍id
+     * @param session 会话
+     */
+    void applyJoin(long teamId, Session session);
+
+    /**
+     * 离开队伍
+     *
+     * @param session 会话
+     */
+    void leaveTeam(Session session);
+
+    /**
+     * 查看所有申请
+     *
+     * @param session 会话
+     */
+    void viewAllApplication(Session session);
+
+    /**
+     * 允许加入队伍
+     *
+     * @param allowRId 申请者id
+     * @param session  会话
+     */
+    void allowJoin(long allowRId, Session session);
+
+    /**
+     * 查看队伍成员
+     *
+     * @param session
+     */
+    void viewMemberInTeam(Session session);
+
+    /**
+     * 踢出队伍
+     *
+     * @param kickOutRId 踢出者id
+     * @param session    会话
+     */
+    void kickOut(long kickOutRId, Session session);
 }

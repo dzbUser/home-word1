@@ -81,7 +81,7 @@ public class GameInterface extends JFrame{
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Verification.canParseInt(func.getText())){
+                if (!Verification.canParseNum(func.getText())) {
                     //功能验证
                     printOtherMessage("功能框输入不规范");
                     return;

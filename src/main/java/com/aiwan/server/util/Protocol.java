@@ -127,4 +127,39 @@ public class Protocol {
      * 创建队伍
      */
     public static final int CREATE_TEAM = 42;
+
+    /**
+     * 查看所有队伍
+     */
+    public static final int VIEW_ALL_TEAM = 43;
+
+    /**
+     * 离开队伍
+     */
+    public static final int LEAVE_TEAM = 44;
+
+    /**
+     * 申请加入队伍
+     */
+    public static final int APPLYJOIN = 45;
+
+    /**
+     * 查看申请列表
+     */
+    public static final int VIEW_APPLCIATION = 46;
+
+    /**
+     * 允许加入
+     */
+    public static final int ALLOW_JOIN = 47;
+
+    /**
+     * 查看队伍所有成员
+     */
+    public static final int VIEW_MEMBERS = 48;
+
+    /**
+     * 踢出队伍
+     */
+    public static final int KICK_OUT_TEAM = 49;
 }

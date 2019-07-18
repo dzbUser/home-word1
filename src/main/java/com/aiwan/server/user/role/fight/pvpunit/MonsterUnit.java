@@ -1,7 +1,7 @@
 package com.aiwan.server.user.role.fight.pvpunit;
 
 import com.aiwan.server.monster.resource.MonsterResource;
-import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.world.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
 import com.aiwan.server.user.role.fight.command.MonsterKillingAward;
 import com.aiwan.server.user.role.player.model.Role;

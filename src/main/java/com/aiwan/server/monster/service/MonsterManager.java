@@ -50,6 +50,11 @@ public class MonsterManager {
             logger.error(e.getLocalizedMessage());
         }
         for (MonsterResource monsterResource : list) {
+            if (monsterResource.getMap() == 0) {
+                monsterResource.init();
+                monsterMap.put(monsterResource.getResourceId(), monsterResource);
+                continue;
+            }
             //初始化地图id与怪物的映射
             List<MonsterResource> monsterList = mapMonsterMap.get(monsterResource.getMap());
             monsterResource.init();

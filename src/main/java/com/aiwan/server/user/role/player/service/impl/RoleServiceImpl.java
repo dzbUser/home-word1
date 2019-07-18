@@ -2,8 +2,8 @@ package com.aiwan.server.user.role.player.service.impl;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
-import com.aiwan.server.scenes.command.SignInMapCommand;
-import com.aiwan.server.scenes.command.UpdateSceneAttributeCommand;
+import com.aiwan.server.world.scenes.command.SignInMapCommand;
+import com.aiwan.server.world.scenes.command.UpdateSceneAttributeCommand;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.command.ResetStatusCommand;

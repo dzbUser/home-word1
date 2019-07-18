@@ -6,20 +6,16 @@ import com.aiwan.client.anno.InfoReceiveObject;
 import com.aiwan.client.service.ClientResourceManager;
 import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.swing.clientinterface.GameInterface;
-import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.publicsystem.protocol.SM_PromptMessage;
-import com.aiwan.server.scenes.mapresource.MapResource;
-import com.aiwan.server.scenes.protocol.MonsterMessage;
-import com.aiwan.server.scenes.protocol.RoleMessage;
-import com.aiwan.server.scenes.protocol.SM_MapMessage;
-import com.aiwan.server.scenes.protocol.UnitMessage;
+import com.aiwan.server.world.scenes.mapresource.MapResource;
+import com.aiwan.server.world.scenes.protocol.SM_MapMessage;
+import com.aiwan.server.world.scenes.protocol.UnitMessage;
 import com.aiwan.server.user.account.protocol.SM_Register;
 import com.aiwan.server.user.account.protocol.SM_UserMessage;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
 
 import javax.swing.*;
-import java.util.List;
 
 
 /**

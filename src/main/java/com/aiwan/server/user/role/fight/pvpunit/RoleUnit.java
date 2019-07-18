@@ -2,7 +2,7 @@ package com.aiwan.server.user.role.fight.pvpunit;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneDelayCommand;
 import com.aiwan.server.publicsystem.service.SessionManager;
-import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.world.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.user.role.fight.command.RoleReviveCommand;

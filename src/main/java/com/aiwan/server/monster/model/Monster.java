@@ -2,12 +2,10 @@ package com.aiwan.server.monster.model;
 
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.publicsystem.model.GameObject;
-import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.world.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.AttributeType;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.IDUtil;
-
-import java.util.Map;
 
 /**
  * 怪物单元

@@ -77,7 +77,7 @@ public class MonsterResource {
     /**
      * 掉落道具列表
      */
-    private List<DropMessage> dropList = new ArrayList<>();
+    private List<DropBean> dropList = new ArrayList<>();
 
     /**
      * 初始化
@@ -93,6 +93,9 @@ public class MonsterResource {
             attributeMap.put(attributeType, AttributeElement.valueOf(attributeType, value));
         }
 
+        if (dropPropString == null) {
+            return;
+        }
         //初始化属性掉落
         String[] dropStrings = dropPropString.split(" ");
         for (String element : dropStrings) {
@@ -100,7 +103,7 @@ public class MonsterResource {
             int propId = Integer.parseInt(item[0]);
             int num = Integer.parseInt(item[1]);
             dropMap.put(propId, num);
-            dropList.add(DropMessage.valueOf(propId, num));
+            dropList.add(DropBean.valueOf(propId, num));
         }
 
     }
@@ -185,11 +188,11 @@ public class MonsterResource {
         this.experience = experience;
     }
 
-    public List<DropMessage> getDropList() {
+    public List<DropBean> getDropList() {
         return dropList;
     }
 
-    public void setDropList(List<DropMessage> dropList) {
+    public void setDropList(List<DropBean> dropList) {
         this.dropList = dropList;
     }
 }

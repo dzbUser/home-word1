@@ -1,6 +1,6 @@
 package com.aiwan.server.util;
 
-import com.aiwan.server.scenes.model.Position;
+import com.aiwan.server.world.scenes.model.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

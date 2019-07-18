@@ -285,6 +285,10 @@ public class ExcelUtil
                         Cell cell = row.getCell(cellIndex);
                         // 标题
                         String titleCellData = (String) ExcelUtil.getCellFormatValue(titleCell);
+                        if (cell == null) {
+                            map.put(titleCellData, null);
+                            continue;
+                        }
                         // 数据
                         Object cellData = ExcelUtil.getCellFormatValue(cell);
                         map.put(titleCellData, cellData);

@@ -7,8 +7,9 @@ import com.aiwan.server.user.role.fight.protocol.FightBuffMessage;
 import com.aiwan.server.user.role.fight.protocol.SM_ViewFightBuff;
 import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
-import com.aiwan.server.scenes.model.Position;
-import com.aiwan.server.scenes.model.SceneObject;
+import com.aiwan.server.world.base.scene.AbstractScene;
+import com.aiwan.server.world.scenes.model.Position;
+import com.aiwan.server.world.base.scene.UniqueScene;
 import com.aiwan.server.user.role.fight.command.DoUserSkillCommand;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.skill.model.Skill;
@@ -42,9 +43,9 @@ public class FightService implements IFightService {
          * 实用技能
          * */
         //获取场景对象
-        SceneObject sceneObject = GetBean.getMapManager().getSceneObject(mapId);
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(mapId);
         //获取施法单位
-        RoleUnit activeRole = (RoleUnit) sceneObject.getBaseUnit(activeRid);
+        RoleUnit activeRole = (RoleUnit) abstractScene.getBaseUnit(activeRid);
 
         if (activeRole == null) {
             //没有改施法单位
@@ -55,7 +56,7 @@ public class FightService implements IFightService {
 
         //获取目标施法单位
         List<BaseUnit> passiveList = new ArrayList<>();
-        BaseUnit passiveUnit = sceneObject.getBaseUnit(passiveId);
+        BaseUnit passiveUnit = abstractScene.getBaseUnit(passiveId);
         if (passiveUnit == null) {
             //没有目标施法单位
             logger.error("角色{}施法错误，找不到施法目标", activeRid);
@@ -83,7 +84,7 @@ public class FightService implements IFightService {
         passiveList.add(passiveUnit);
         if (skill.getResource().getIsGroup() == 1) {
             int num = skill.getSkillLevelResource().getNum() - 1;
-            sceneObject.findAroundUnit(activeRole, passiveList, passiveUnit, skill.getSkillLevelResource().getDistance(), num);
+            abstractScene.findAroundUnit(activeRole, passiveList, passiveUnit, skill.getSkillLevelResource().getDistance(), num);
         }
         //释放技能
         skill.doUserSkill(activeRole, passiveList);
@@ -139,9 +140,9 @@ public class FightService implements IFightService {
     public void viewFightBuff(Long rId, Session session) {
         //获取角色
         Role role = GetBean.getRoleManager().load(rId);
-        SceneObject sceneObject = GetBean.getMapManager().getSceneObject(role.getMap());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap());
         //获取战斗单位
-        BaseUnit fighterRole = sceneObject.getBaseUnit(rId);
+        BaseUnit fighterRole = abstractScene.getBaseUnit(rId);
         //获取buff
         List<FightBuffMessage> list = new ArrayList<>();
         for (AbstractFightBuff abstractFightBuff : fighterRole.getBuff().values()) {

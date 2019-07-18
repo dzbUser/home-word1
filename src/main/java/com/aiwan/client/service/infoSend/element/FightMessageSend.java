@@ -5,7 +5,7 @@ import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
-import com.aiwan.server.scenes.protocol.CM_ViewAllUnitInMap;
+import com.aiwan.server.world.scenes.protocol.CM_ViewAllUnitInMap;
 import com.aiwan.server.user.role.fight.protocol.CM_UserSkill;
 import com.aiwan.server.user.role.fight.protocol.CM_ViewFightBuff;
 import com.aiwan.server.util.Protocol;

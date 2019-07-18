@@ -1,7 +1,6 @@
 package com.aiwan.client;
 
-import com.aiwan.server.scenes.protocol.RoleMessage;
-import com.aiwan.server.scenes.protocol.SM_MapMessage;
+import com.aiwan.server.world.scenes.protocol.SM_MapMessage;
 
 import java.util.List;
 

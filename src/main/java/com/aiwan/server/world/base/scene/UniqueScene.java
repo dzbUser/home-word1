@@ -66,7 +66,7 @@ public class UniqueScene extends AbstractScene {
                     Position position = MonsterGenerateUtil.generaterRandomPosition(getResource().getWidth(), getResource().getHeight());
                     //判断不是阻挡点
                     if (GetBean.getMapManager().allowMove(position.getX(), position.getY(), getMapId())) {
-                        MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position);
+                        MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position, getSceneId(), getMapId());
                         getBaseUnitMap().put(monster.getId(), monster);
                         break;
                     }

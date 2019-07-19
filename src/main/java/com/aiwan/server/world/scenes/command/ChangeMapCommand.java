@@ -27,7 +27,7 @@ public class ChangeMapCommand extends AbstractSceneCommand {
     private int targetMapId;
 
     /**
-     * 跳转场景id
+     * 跳转场景id,为0代表是永久地图
      */
     private int targetSceneId;
 

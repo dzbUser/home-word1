@@ -22,7 +22,7 @@ public class MonsterUnit extends BaseUnit {
     private int resourceId;
 
 
-    public static MonsterUnit valueOf(MonsterResource monsterResource, Position position) {
+    public static MonsterUnit valueOf(MonsterResource monsterResource, Position position, int sceneId, int mapId) {
         MonsterUnit monsterUnit = new MonsterUnit();
         //设置战斗单位属性
         monsterUnit.setUnitAttribute(ImmutableAttributeElement.wrapper(monsterResource.getAttributeMap()));
@@ -35,7 +35,8 @@ public class MonsterUnit extends BaseUnit {
         monsterUnit.setName(monsterResource.getName());
         monsterUnit.setMonster(true);
         monsterUnit.setResourceId(monsterResource.getResourceId());
-        monsterUnit.setMapId(monsterResource.getMap());
+        monsterUnit.setSceneId(sceneId);
+        monsterUnit.setMapId(mapId);
         return monsterUnit;
     }
 
@@ -50,7 +51,9 @@ public class MonsterUnit extends BaseUnit {
     @Override
     protected void death(Long attackId) {
         setDeath(true);
-        GetBean.getMapManager().sendMessageToUsers(getMapId());
+        //触发杀怪监听
+        GetBean.getMapManager().getSceneObject(getKey()).monsterKillListener();
+        GetBean.getMapManager().sendMessageToUsers(getKey());
         //清除状态
         resetStatus();
         //为攻击者添加道具

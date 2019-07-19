@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 场景抽象类
@@ -22,6 +23,8 @@ import java.util.Map;
 public abstract class AbstractScene {
     Logger logger = LoggerFactory.getLogger(UniqueScene.class);
 
+    protected static final AtomicInteger GLOBAL_SCENE_ID = new AtomicInteger(Integer.MAX_VALUE - 1);
+
     /**
      * 场景唯一id
      */
@@ -31,6 +34,13 @@ public abstract class AbstractScene {
      * 地图id
      */
     private int mapId;
+
+    public int getKey() {
+        if (sceneId == 0) {
+            return mapId;
+        }
+        return sceneId;
+    }
 
     /**
      * 地图内战斗单位
@@ -64,8 +74,14 @@ public abstract class AbstractScene {
         return baseUnitMap.get(id);
     }
 
-    public AbstractScene(int mapId) {
+    /**
+     * 普通地图没用
+     */
+    public void monsterKillListener() {
 
+    }
+
+    public AbstractScene(int mapId) {
         //sceneId,默认为0
         this(mapId, 0);
     }

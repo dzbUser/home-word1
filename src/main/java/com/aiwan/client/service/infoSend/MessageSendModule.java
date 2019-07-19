@@ -77,7 +77,17 @@ public enum  MessageSendModule {
             }
             teamMessageSend.messageSend(message);
         }
-    }
+    },
+    DUNGEON_MODULE(7) {
+        @Override
+        public void sendMessage(String message, int num) {
+            DungeonMessageSend messageSend = DungeonMessageSend.getMessageSend(num);
+            if (messageSend == null) {
+                return;
+            }
+            messageSend.messageSend(message);
+        }
+    },
     ;
 
     MessageSendModule(int num){

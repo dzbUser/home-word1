@@ -18,6 +18,11 @@ public abstract class AbstractSceneDelayCommand extends AbstractSceneCommand {
         this.delay = delay;
     }
 
+    public AbstractSceneDelayCommand(long delay, String accountId, int mapId, int sceneId) {
+        super(accountId, mapId, sceneId);
+        this.delay = delay;
+    }
+
     public long getDelay() {
         return delay;
     }

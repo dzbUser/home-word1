@@ -24,7 +24,9 @@ public abstract class AbstractSceneCommand extends AbstractCommand {
 
     @Override
     public Integer getKey() {
-//        return (mapId | sceneId);
+        if (sceneId != 0) {
+            return sceneId;
+        }
         return mapId;
     }
 
@@ -65,6 +67,12 @@ public abstract class AbstractSceneCommand extends AbstractCommand {
     public abstract void action();
 
     public AbstractSceneCommand(String accountId, int mapId) {
+        this.accountId = accountId;
+        this.sceneId = 0;
+        this.mapId = mapId;
+    }
+
+    public AbstractSceneCommand(String accountId, int mapId, int sceneId) {
         this.accountId = accountId;
         this.sceneId = sceneId;
         this.mapId = mapId;

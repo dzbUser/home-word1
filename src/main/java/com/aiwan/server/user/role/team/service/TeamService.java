@@ -35,14 +35,11 @@ public class TeamService implements ITeamService {
     @Override
     public void createTeam(Role role) {
         Session session = SessionManager.getSessionByAccountId(role.getAccountId());
-        if (teamManager.isInTeam(role.getId())) {
+        if (teamManager.isInTeamOrCreate(role.getId())) {
             logger.debug("角色{}创建队伍失败，原因：已经在队伍中", role.getId());
             session.sendPromptMessage(PromptCode.IN_TEAM, "");
             return;
         }
-        TeamModel teamModel = TeamModel.valueOf(role);
-        teamManager.putTeam(teamModel);
-        teamManager.joinTeam(role.getId(), teamModel.getObjectId());
         session.sendPromptMessage(PromptCode.CREATE_TEAM_SUCCESS, "");
     }
 

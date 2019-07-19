@@ -36,7 +36,15 @@ public class NavigationBar extends JPanel {
      */
     public static final int FIGHT = 5;
 
+    /**
+     * 组队模块
+     */
     public static final int TEAM = 6;
+
+    /**
+     * 副本模块
+     */
+    public static final int DUNGEON = 7;
 
     /** 只是当前所属模块 */
     public int num;
@@ -81,6 +89,7 @@ public class NavigationBar extends JPanel {
             "0.查看地图所有战斗单位\n" +
                     "1.使用技能 （指令：技能位置 唯一id）\n" +
                     "2.查看身上buff";
+
     private static final String TEAMMESSAGE =
             "0.创建队伍\n" +
                     "1.查看所有队伍\n" +
@@ -91,17 +100,21 @@ public class NavigationBar extends JPanel {
                     "6.查看队伍成员\n" +
                     "7.踢出 （输入想要踢出的队员id）";
 
+    private static final String DUNGEONMESSAGE =
+            "0.创建副本（输入创建副本的id）\n";
+
 
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);
 
     public NavigationBar(){
-        this.setBounds(0,0,600,50);
+        this.setBounds(0, 0, 1500, 50);
         add(createItem("角色系统",ROLEMESSAGE,50,0,ROLE));
         add(createItem("背包系统",PACKMESSAGE,100,0,PACK));
         add(createItem("坐骑系统",MOUNTMESSAGE,150, 0, MOUNT));
         add(createItem("技能系统", SKILLMESSAGE, 200, 0, SKILL));
         add(createItem("战斗系统", FIGHTMESSAGE, 250, 0, FIGHT));
         add(createItem("组队系统", TEAMMESSAGE, 300, 0, TEAM));
+        add(createItem("副本系统", DUNGEONMESSAGE, 350, 0, DUNGEON));
         num = ROLE;
     }
 

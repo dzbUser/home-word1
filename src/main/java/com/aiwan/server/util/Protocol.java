@@ -162,4 +162,9 @@ public class Protocol {
      * 踢出队伍
      */
     public static final int KICK_OUT_TEAM = 49;
+
+    /**
+     * 创建副本
+     */
+    public static final int CREATE_DUNGEON = 50;
 }

@@ -18,6 +18,7 @@ import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.role.player.service.RoleResourceManager;
+import com.aiwan.server.world.dungeon.service.DungeonService;
 import com.aiwan.server.world.scenes.service.MapManager;
 import com.aiwan.server.world.scenes.service.ScenesService;
 import com.aiwan.server.user.account.service.UserManager;
@@ -106,6 +107,20 @@ public class GetBean {
      * 获取队伍管理类
      */
     private static TeamManager teamManager;
+
+    /**
+     * 副本类
+     */
+    private static DungeonService dungeonService;
+
+    public static DungeonService getDungeonService() {
+        return dungeonService;
+    }
+
+    @Autowired
+    public void setDungeonService(DungeonService dungeonService) {
+        GetBean.dungeonService = dungeonService;
+    }
 
     public static TeamManager getTeamManager() {
         return teamManager;

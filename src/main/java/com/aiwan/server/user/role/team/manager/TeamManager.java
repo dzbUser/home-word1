@@ -1,7 +1,9 @@
 package com.aiwan.server.user.role.team.manager;
 
 import com.aiwan.server.publicsystem.annotation.Manager;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.team.model.TeamModel;
+import com.aiwan.server.util.GetBean;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -78,6 +80,23 @@ public class TeamManager {
             return true;
         }
         teamRoleMap.put(rId, teamId);
+        return false;
+    }
+
+    /**
+     * 是否在队伍中,否则创建队伍
+     *
+     * @param rId 角色id
+     * @return
+     */
+    public synchronized boolean isInTeamOrCreate(long rId) {
+        if (teamRoleMap.get(rId) != null) {
+            return true;
+        }
+        Role role = GetBean.getRoleManager().load(rId);
+        TeamModel teamModel = TeamModel.valueOf(role);
+        putTeam(teamModel);
+        teamRoleMap.put(rId, teamModel.getObjectId());
         return false;
     }
 

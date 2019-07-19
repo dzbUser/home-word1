@@ -59,7 +59,12 @@ public abstract class BaseUnit {
     private boolean isMonster;
 
     /**
-     * 角色所属地图
+     * 角色所属地图对象id
+     */
+    private int sceneId;
+
+    /**
+     * 角色所属地图对象资源id
      */
     private int mapId;
 
@@ -72,6 +77,14 @@ public abstract class BaseUnit {
      * 等级
      */
     private int level;
+
+    public int getKey() {
+        if (sceneId == 0) {
+            return mapId;
+        }
+        return sceneId;
+    }
+
 
     /**
      * 战斗单位属性
@@ -263,12 +276,12 @@ public abstract class BaseUnit {
         isDeath = death;
     }
 
-    public int getMapId() {
-        return mapId;
+    public int getSceneId() {
+        return sceneId;
     }
 
-    public void setMapId(int mapId) {
-        this.mapId = mapId;
+    public void setSceneId(int sceneId) {
+        this.sceneId = sceneId;
     }
 
     public boolean isMonster() {
@@ -295,6 +308,13 @@ public abstract class BaseUnit {
         this.level = level;
     }
 
+    public int getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(int mapId) {
+        this.mapId = mapId;
+    }
 
     public void setUnitAttribute(Map<AttributeType, AttributeElement> unitAttribute) {
         fightUnitAttribute.updateModule(FightAttributeModule.ROLE_MODULE, unitAttribute);

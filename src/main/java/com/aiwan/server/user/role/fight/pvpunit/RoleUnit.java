@@ -50,7 +50,7 @@ public class RoleUnit extends BaseUnit {
     /**
      * 创建对象
      */
-    public static RoleUnit valueOf(Role role) {
+    public static RoleUnit valueOf(Role role, int mapId) {
         RoleUnit roleUnit = new RoleUnit();
         //初始化角色基础信息
         roleUnit.setId(role.getId());
@@ -61,7 +61,8 @@ public class RoleUnit extends BaseUnit {
         roleUnit.setMonster(false);
         //设置位置信息
         roleUnit.setPosition(Position.valueOf(role.getX(), role.getY()));
-        roleUnit.setMapId(role.getMap());
+        roleUnit.setSceneId(role.getMap());
+        roleUnit.setMapId(mapId);
         //复制用户属性
         roleUnit.setRoleAttribute(role.getAttribute().getPureAttribute());
         roleUnit.setHp(roleUnit.getMaxHp());
@@ -102,9 +103,9 @@ public class RoleUnit extends BaseUnit {
     protected void death(Long attackId) {
         setDeath(true);
         //复活点复活,暂时为立即复活，发送提示
-        GetBean.getMapManager().sendMessageToUsers(getMapId());
+        GetBean.getMapManager().sendMessageToUsers(getKey());
         SessionManager.sendPromptMessage(this.getAccountId(), PromptCode.ROLE_DEATH,"");
-        GetBean.getSceneExecutorService().submit(new RoleReviveCommand(REVIVE_TIME, getAccountId(), this.getMapId(),this));
+        GetBean.getSceneExecutorService().submit(new RoleReviveCommand(REVIVE_TIME, getAccountId(), getMapId(), this.getSceneId(), this));
     }
 
     /**

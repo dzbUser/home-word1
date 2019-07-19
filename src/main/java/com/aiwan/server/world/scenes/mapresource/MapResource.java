@@ -4,7 +4,6 @@ import com.aiwan.server.publicsystem.annotation.CellMapping;
 import com.aiwan.server.publicsystem.annotation.Resource;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,8 +13,8 @@ import java.util.Map;
 @Resource("staticresource/map.xls")
 public class MapResource {
     /**地图类型*/
-    @CellMapping(name = "mapType")
-    private Integer mapType;
+    @CellMapping(name = "mapId")
+    private Integer mapId;
 
     /**地图名字*/
     @CellMapping(name = "name")
@@ -52,18 +51,18 @@ public class MapResource {
     private int isDungeon;
 
     /**
-     * 副本类型（0.不是副本 1.担任副本 2.团队副本）
+     * 副本类型（0.不是副本 1.经验副本 2.通关副本）
      */
     @CellMapping(name = "dungeonType")
     private int dungeonType;
 
     /**
      * 通关机制
-     * 1.不可通关
-     * 2.所有关卡通过有通关
+     * 1.单人副本
+     * 2.团队副本
      */
-    @CellMapping(name = "clearenceMechanism")
-    private int clearenceMechanism;
+    @CellMapping(name = "isSingle")
+    private int isSingle;
 
     /**
      * 关卡
@@ -76,6 +75,9 @@ public class MapResource {
      */
     @CellMapping(name = "settlementAward")
     private String settlementAward;
+
+    @CellMapping(name = "duration")
+    private Long duration;
 
 
 
@@ -155,13 +157,12 @@ public class MapResource {
     }
 
 
-
-    public Integer getMapType() {
-        return mapType;
+    public Integer getMapId() {
+        return mapId;
     }
 
-    public void setMapType(Integer mapType) {
-        this.mapType = mapType;
+    public void setMapId(Integer mapId) {
+        this.mapId = mapId;
     }
 
     public String getName() {
@@ -249,12 +250,13 @@ public class MapResource {
         this.dungeonType = dungeonType;
     }
 
-    public int getClearenceMechanism() {
-        return clearenceMechanism;
+
+    public int getIsSingle() {
+        return isSingle;
     }
 
-    public void setClearenceMechanism(int clearenceMechanism) {
-        this.clearenceMechanism = clearenceMechanism;
+    public void setIsSingle(int isSingle) {
+        this.isSingle = isSingle;
     }
 
     public String getCheckpoint() {
@@ -287,5 +289,25 @@ public class MapResource {
 
     public void setSettlementBean(SettlementBean settlementBean) {
         this.settlementBean = settlementBean;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public void setPositionMeaningHashMap(Map<Integer, PositionMeaning> positionMeaningHashMap) {
+        this.positionMeaningHashMap = positionMeaningHashMap;
+    }
+
+    public void setMap(int[][] map) {
+        this.map = map;
+    }
+
+    public void setMapMessage(String[][] mapMessage) {
+        this.mapMessage = mapMessage;
     }
 }

@@ -34,10 +34,12 @@ public class MapManager {
     Logger logger = LoggerFactory.getLogger(MapManager.class);
     /** 地图资源 */
     @Static(initializeMethodName = "initMapResource")
-    private Map<Integer, MapResource> mapResourceMap = new ConcurrentHashMap<Integer, MapResource>();
+    private Map<Integer, MapResource> mapResourceMap = new HashMap<>();
 
-    /**存储在本地图中的用户*/
-    private Map<Integer, AbstractScene> sceneMap = new HashMap<>();
+    /**
+     * 存储在本地图中的地图对象
+     */
+    private Map<Integer, AbstractScene> sceneMap = new ConcurrentHashMap<>();
 
     /**
      * 初始化资源
@@ -60,15 +62,16 @@ public class MapManager {
         return mapResourceMap.get(mapType);
     }
 
-    /**  存入地图资源*/
-    public void putMapResource(MapResource mapResource){
 
-        mapResourceMap.put(mapResource.getMapType(),mapResource);
+    /**  存入地图资源*/
+    public void putMapResource(MapResource mapResource) {
+
+        mapResourceMap.put(mapResource.getMapId(), mapResource);
     }
 
     /** 添加用户 */
     public void putFighterRole(RoleUnit roleUnit) {
-        sceneMap.get(roleUnit.getMapId()).putBaseUnit(roleUnit);
+        sceneMap.get(roleUnit.getKey()).putBaseUnit(roleUnit);
     }
 
 
@@ -95,7 +98,8 @@ public class MapManager {
     /** 地图内所有用户发送地图消息 */
     public void sendMessageToUsers(int id) {
         //获取地图中的所有用户
-        Map<Long, BaseUnit> map = sceneMap.get(id).getBaseUnitMap();
+        AbstractScene abstractScene = sceneMap.get(id);
+        Map<Long, BaseUnit> map = abstractScene.getBaseUnitMap();
         List<UnitMessage> list = new ArrayList<>();
         //遍历所有用户，添加到角色列表中
         for (BaseUnit baseUnit : map.values()) {
@@ -110,7 +114,7 @@ public class MapManager {
             if (!baseUnit.isMonster()) {
                 RoleUnit roleUnit = (RoleUnit) baseUnit;
                 Session session = SessionManager.getSessionByAccountId(roleUnit.getAccountId());
-                SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(id, list, roleUnit.getPosition().getX(), roleUnit.getPosition().getY());
+                SM_MapMessage sm_mapMessage = SM_MapMessage.valueOf(abstractScene.getMapId(), list, roleUnit.getPosition().getX(), roleUnit.getPosition().getY());
                 session.messageSend(SMToDecodeData.shift(StatusCode.MAPMESSAGE, sm_mapMessage));
             }
         }
@@ -141,12 +145,26 @@ public class MapManager {
     }
 
     /**
+     * 存入地图对象
+     */
+    public void putSceObject(AbstractScene abstractScene) {
+        sceneMap.put(abstractScene.getKey(), abstractScene);
+    }
+
+    /**
+     * 删除
+     */
+    public void removeSceObject(int key) {
+        sceneMap.remove(key);
+    }
+
+    /**
      * 发送战斗单位状态改变信息
      *
      * @param unit 战斗单位
      */
     public void synUnitStatusMessage(BaseUnit unit) {
-        AbstractScene abstractScene = getSceneObject(unit.getMapId());
+        AbstractScene abstractScene = getSceneObject(unit.getKey());
         SM_UnitStatusMessage sm_unitStatusMessage = SM_UnitStatusMessage.valueOf(unit.getId(), unit.getName(), unit.getMaxHp(), unit.getHp());
         for (BaseUnit baseUnit : abstractScene.getBaseUnitMap().values()) {
             if (!baseUnit.isMonster()) {

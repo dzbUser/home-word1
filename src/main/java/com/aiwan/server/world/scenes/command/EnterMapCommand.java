@@ -27,23 +27,19 @@ public class EnterMapCommand extends AbstractSceneCommand {
     /**
      * 目标地图id
      */
-    private int targetMapId;
+    private int targetSceneId;
 
     @Override
     public void action() {
         //获取地图资源
         MapResource mapResource;
-        if (targetMapId == 0) {
-            mapResource = GetBean.getMapManager().getMapResource(getKey());
-        } else {
-            mapResource = GetBean.getMapManager().getMapResource(targetMapId);
-        }
+        mapResource = GetBean.getMapManager().getMapResource(getMapId());
         //初始化化角色坐标
         role.setMap(getKey());
         role.setX(mapResource.getOriginX());
         role.setY(mapResource.getOriginY());
         //添加到地图资源中
-        RoleUnit newFightRole = RoleUnit.valueOf(role);
+        RoleUnit newFightRole = RoleUnit.valueOf(role, mapResource.getMapId());
         //传递cd、hp以及mp
         if (roleUnit != null) {
             newFightRole.transferStatus(roleUnit);
@@ -60,17 +56,17 @@ public class EnterMapCommand extends AbstractSceneCommand {
     public EnterMapCommand(int mapId, Role role, RoleUnit roleUnit) {
         super(role.getAccountId(), mapId);
         setTaskName("进入地图命令");
-        this.targetMapId = 0;
+        this.targetSceneId = 0;
         this.role = role;
         this.roleUnit = roleUnit;
     }
 
     public EnterMapCommand(int mapId, int sceneId, Role role, RoleUnit roleUnit) {
-        super(role.getAccountId(), sceneId);
+        super(role.getAccountId(), mapId, sceneId);
         setTaskName("进入地图命令");
         this.role = role;
         this.roleUnit = roleUnit;
-        this.targetMapId = mapId;
+        this.targetSceneId = mapId;
     }
 
 }

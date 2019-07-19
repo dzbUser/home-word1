@@ -38,6 +38,6 @@ public class DoUserSkillCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
-        GetBean.getFightService().doUserSkill(activeId, targetId, skill, getMapId());
+        GetBean.getFightService().doUserSkill(activeId, targetId, skill, getKey());
     }
 }

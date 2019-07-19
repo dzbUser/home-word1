@@ -40,7 +40,7 @@ public class MoveCommand extends AbstractSceneCommand {
             return;
         }
         Session session = SessionManager.getSessionByAccountId(role.getAccountId());
-        if (GetBean.getMapManager().allowMove(target.getX(), target.getY(), getKey())) {
+        if (GetBean.getMapManager().allowMove(target.getX(), target.getY(), getMapId())) {
             role.setX(target.getX());
             role.setY(target.getY());
             role.setMap(getKey());
@@ -58,6 +58,13 @@ public class MoveCommand extends AbstractSceneCommand {
 
     public MoveCommand(Position target, Role role) {
         super(role.getAccountId(), role.getMap());
+        this.target = target;
+        this.role = role;
+        setTaskName("角色移动command");
+    }
+
+    public MoveCommand(Position target, Role role, int mapId) {
+        super(role.getAccountId(), mapId, role.getMap());
         this.target = target;
         this.role = role;
         setTaskName("角色移动command");

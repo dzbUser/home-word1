@@ -1,7 +1,7 @@
 package com.aiwan.server.world.base.scene;
 
 import com.aiwan.server.user.role.team.model.TeamModel;
-import com.aiwan.server.world.base.process.DungeonHandler;
+import com.aiwan.server.world.base.handler.AbstractDungeonHandler;
 
 /**
  * 副本场景
@@ -11,8 +11,8 @@ import com.aiwan.server.world.base.process.DungeonHandler;
  */
 public class DungeonScene extends AbstractScene {
 
-    public DungeonScene(int mapId, int sceneId) {
-        super(mapId, sceneId);
+    public DungeonScene(int mapId) {
+        super(mapId, GLOBAL_SCENE_ID.getAndDecrement());
     }
 
     /**
@@ -23,7 +23,15 @@ public class DungeonScene extends AbstractScene {
     /**
      * 副本处理器
      */
-    private DungeonHandler dungeonHandler;
+    private AbstractDungeonHandler handler;
+
+
+    /**
+     * 击杀怪物后调用的监听
+     */
+    public void monsterKillListener() {
+        handler.checkpointListener();
+    }
 
 
     public TeamModel getTeamModel() {
@@ -32,5 +40,13 @@ public class DungeonScene extends AbstractScene {
 
     public void setTeamModel(TeamModel teamModel) {
         this.teamModel = teamModel;
+    }
+
+    public AbstractDungeonHandler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(AbstractDungeonHandler handler) {
+        this.handler = handler;
     }
 }

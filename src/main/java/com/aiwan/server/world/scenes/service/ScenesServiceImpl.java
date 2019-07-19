@@ -44,7 +44,9 @@ public class ScenesServiceImpl implements ScenesService{
     public void move(Long rId, int x, int y, final Session session) {
         logger.info("角色{}请求移动到({}.{})", rId, x, y);
         Role role = GetBean.getRoleManager().load(rId);
-        GetBean.getSceneExecutorService().submit(new MoveCommand(Position.valueOf(x, y), role));
+        //获取地图对象
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap());
+        GetBean.getSceneExecutorService().submit(new MoveCommand(Position.valueOf(x, y), role, abstractScene.getMapId()));
     }
 
     /**
@@ -88,7 +90,14 @@ public class ScenesServiceImpl implements ScenesService{
             logger.info("角色:{}跳转到{}失败,正在进行地图跳转", role.getId(), targetMapId);
             return;
         }
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(targetMapId);
+        AbstractScene abstractScene;
+        if (targetSceneId != 0) {
+            //是副本
+            abstractScene = GetBean.getMapManager().getSceneObject(targetSceneId);
+        } else {
+            //不是副本
+            abstractScene = GetBean.getMapManager().getSceneObject(targetMapId);
+        }
         if (abstractScene == null) {
             logger.error("找不到mapId为{}的地图资源", role.getId());
             SessionManager.sendPromptMessage(role.getId(), PromptCode.MAPNOEXIST, "");
@@ -96,7 +105,8 @@ public class ScenesServiceImpl implements ScenesService{
         }
         //设置正在地图跳转
         RoleUnit roleUnit = (RoleUnit) GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
-        if (roleUnit.isDeath()) {
+
+        if (roleUnit != null && roleUnit.isDeath()) {
             //角色处于死亡状态
             logger.info("角色:{}跳转到{}失败,角色处于死亡状态", role.getId(), targetMapId);
             return;
@@ -121,7 +131,9 @@ public class ScenesServiceImpl implements ScenesService{
 
     @Override
     public void viewUnitInMap(int mapId, Session session) {
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(mapId);
+        //获取角色
+        Role role = GetBean.getRoleManager().load(session.getrId());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap());
         if (abstractScene == null) {
             logger.error("没有改地图资源");
             return;

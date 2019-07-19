@@ -1,24 +1,33 @@
-package com.aiwan.server.world.base.process;
+package com.aiwan.server.world.base.handler;
 
 import com.aiwan.server.monster.resource.MonsterResource;
+import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpunit.MonsterUnit;
+import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
 import com.aiwan.server.world.base.scene.DungeonScene;
+import com.aiwan.server.world.dungeon.command.DungeonOverCommand;
 import com.aiwan.server.world.scenes.command.ChangeMapCommand;
+import com.aiwan.server.world.scenes.command.EnterMapCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
 import com.aiwan.server.world.scenes.model.Position;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
- * 副本处理器
+ * 副本抽象处理器
  *
  * @author dengzebiao
- * @since 2019.7.18
+ * @since 2019.7.19
  */
-public class DungeonHandler {
+public abstract class AbstractDungeonHandler {
+
+    Logger logger = LoggerFactory.getLogger(AbstractDungeonHandler.class);
 
     /**
      * 副本
@@ -26,14 +35,10 @@ public class DungeonHandler {
     private DungeonScene dungeonScene;
 
     /**
-     * 击杀怪物数
+     * 本关卡击杀怪物数
      */
     private int killMonsterNum;
 
-    /**
-     * 总击杀数
-     */
-    private int totalKillNum;
 
     /**
      * 关卡数
@@ -43,20 +48,7 @@ public class DungeonHandler {
     /**
      * 关卡监听器
      */
-    public void checkpointListener(int killNum) {
-        /*
-        0.发放关卡奖励
-        1.判断是否是最后一个关卡
-        2.若不是，则刷下个关卡的怪
-        3.若是，则判断是否是不通关副本，若是则再次刷最后关卡的怪，若不是则结算
-         */
-        //获取关卡
-        GateBean gateBean = dungeonScene.getResource().getGateBeanMap().get(checkpointNum);
-        //判断怪物是否四万
-        if (gateBean.getMonsterNum() == killNum) {
-            killNum = 0;
-        }
-    }
+    public abstract void checkpointListener();
 
     public void init() {
         /*
@@ -69,6 +61,11 @@ public class DungeonHandler {
         GateBean gateBean = dungeonScene.getResource().getGateBeanMap().get(1);
         //初始化怪物
         generateMonster(gateBean.getMonsterId(), gateBean.getMonsterNum());
+        //添加定时器
+        DungeonOverCommand dungeonOverCommand = new DungeonOverCommand(getDungeonScene().getResource().getDuration(), null, dungeonScene.getMapId(), dungeonScene.getSceneId(), getDungeonScene());
+        getDungeonScene().getCommandMap().put(DungeonOverCommand.class, dungeonOverCommand);
+        //启动定时器
+        GetBean.getSceneExecutorService().submit(dungeonOverCommand);
         enterDungeon();
     }
 
@@ -93,19 +90,14 @@ public class DungeonHandler {
         2.删除地图资源
          */
         for (Role role : dungeonScene.getTeamModel().getTeamList()) {
-            GetBean.getSceneExecutorService().submit(new ChangeMapCommand(role, 1));
+            GetBean.getSceneExecutorService().submit(new EnterMapCommand(1, role, (RoleUnit) dungeonScene.getBaseUnit(role.getId())));
         }
     }
 
     /**
      * 结算
      */
-    public void settleMent() {
-        /*
-        1.发送奖励给所有队员
-         */
-        existDungeon();
-    }
+    public abstract void settlement();
 
 
     /**
@@ -116,23 +108,34 @@ public class DungeonHandler {
      */
     public void generateMonster(int monsterId, int num) {
         //获取属于该地图的怪物
-        List<MonsterResource> monsterResources = GetBean.getMonsterManager().getMonsterList(dungeonScene.getMapId());
-        if (monsterResources == null) {
+        MonsterResource monsterResource = GetBean.getMonsterManager().getResourceById(monsterId);
+        if (monsterResource == null) {
+            logger.error("{}生成怪物{}错误，未找到怪物静态资源", dungeonScene.getSceneId(), monsterId);
             return;
         }
-        //循环创建怪物
-        for (MonsterResource monsterResource : monsterResources) {
-            for (int i = 0; i < monsterResource.getNum(); i++) {
-                //获取随机坐标
-                while (true) {
-                    Position position = MonsterGenerateUtil.generaterRandomPosition(dungeonScene.getResource().getWidth(), dungeonScene.getResource().getHeight());
-                    //判断不是阻挡点
-                    if (GetBean.getMapManager().allowMove(position.getX(), position.getY(), dungeonScene.getMapId())) {
-                        MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position);
-                        dungeonScene.getBaseUnitMap().put(monster.getId(), monster);
-                        break;
-                    }
+        for (int i = 0; i < num; i++) {
+            //获取随机坐标
+            while (true) {
+                Position position = MonsterGenerateUtil.generaterRandomPosition(dungeonScene.getResource().getWidth(), dungeonScene.getResource().getHeight());
+                //判断不是阻挡点
+                if (GetBean.getMapManager().allowMove(position.getX(), position.getY(), dungeonScene.getMapId())) {
+                    MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position, getDungeonScene().getKey(), getDungeonScene().getMapId());
+                    dungeonScene.getBaseUnitMap().put(monster.getId(), monster);
+                    break;
                 }
+            }
+        }
+    }
+
+    /**
+     * 清楚所有怪物尸体
+     */
+    public void clearAllMonster() {
+        Map<Long, BaseUnit> baseUnitMap = getDungeonScene().getBaseUnitMap();
+        for (Iterator<Map.Entry<Long, BaseUnit>> it = baseUnitMap.entrySet().iterator(); it.hasNext(); ) {
+            BaseUnit baseUnit = it.next().getValue();
+            if (baseUnit.isMonster()) {
+                it.remove();
             }
         }
     }
@@ -160,4 +163,7 @@ public class DungeonHandler {
     public void setDungeonScene(DungeonScene dungeonScene) {
         this.dungeonScene = dungeonScene;
     }
+
+
 }
+

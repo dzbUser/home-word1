@@ -45,7 +45,7 @@ public class ChangeMapCommand extends AbstractSceneCommand {
     }
 
     public ChangeMapCommand(Role role, int targetMapId, int targetSceneId) {
-        super(role.getAccountId(), role.getMap());
+        super(role.getAccountId(), role.getMap(), role.getSceneId());
         this.role = role;
         setTargetMapId(targetMapId);
         setTargetSceneId(targetSceneId);

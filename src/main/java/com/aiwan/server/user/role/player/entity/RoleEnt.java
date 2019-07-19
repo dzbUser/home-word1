@@ -49,6 +49,9 @@ public class RoleEnt implements IEntity<Long> {
     @Column(nullable = false)
     private int map;
 
+    @Column(nullable = false)
+    private int sceneId;
+
     @Column(nullable = false,length = 50)
     private String accountId;
 
@@ -198,5 +201,13 @@ public class RoleEnt implements IEntity<Long> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getSceneId() {
+        return sceneId;
+    }
+
+    public void setSceneId(int sceneId) {
+        this.sceneId = sceneId;
     }
 }

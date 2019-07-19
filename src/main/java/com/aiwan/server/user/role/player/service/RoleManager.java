@@ -34,6 +34,7 @@ public class RoleManager {
         roleEnt.setMap(map);
         roleEnt.setX(x);
         roleEnt.setY(y);
+        roleEnt.setSceneId(0);
         Long time = Calendar.getInstance().getTimeInMillis();
         roleEnt.setUpdateTime(time);
         roleEnt.setCreatTime(time);

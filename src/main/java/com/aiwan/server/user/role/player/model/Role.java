@@ -117,10 +117,19 @@ public class Role {
     public int getMap() {
         return roleEnt.getMap();
     }
-
     public void setMap(int map) {
         roleEnt.setMap(map);
     }
+
+    public void setSceneId(int sceneId) {
+        roleEnt.setSceneId(sceneId);
+    }
+
+    public int getSceneId() {
+        return roleEnt.getSceneId();
+    }
+
+
 
     public String getName() {
         return roleEnt.getName();

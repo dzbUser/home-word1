@@ -33,7 +33,7 @@ public class MoveCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
-        BaseUnit baseUnit = GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
+        BaseUnit baseUnit = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId()).getBaseUnit(role.getId());
         if (baseUnit.isDeath()) {
             //角色处于死亡状态
             logger.info("角色{}请求移动到({}.{})失败，角色处于死亡状态", role.getId(), target.getX(), target.getY());
@@ -43,12 +43,11 @@ public class MoveCommand extends AbstractSceneCommand {
         if (GetBean.getMapManager().allowMove(target.getX(), target.getY(), getMapId())) {
             role.setX(target.getX());
             role.setY(target.getY());
-            role.setMap(getKey());
             GetBean.getRoleManager().save(role);
             //获取角色战斗单位
             baseUnit.setPosition(Position.valueOf(target.getX(), target.getY()));
             //对所有在线用户发送地图信息
-            GetBean.getMapManager().sendMessageToUsers(role.getMap());
+            GetBean.getMapManager().sendMessageToUsers(role.getMap(), role.getSceneId());
             logger.info("角色{}请求移动到({}.{})成功", role.getId(), target.getX(), target.getY());
         } else {
             session.sendPromptMessage(PromptCode.MOVEFAIL, "");

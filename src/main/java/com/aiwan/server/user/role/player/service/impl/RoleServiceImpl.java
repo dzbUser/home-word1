@@ -136,7 +136,7 @@ public class RoleServiceImpl implements RoleService {
         if (oldLevel != level) {
             //等级发生改变更新人物属性
             updateAttributeModule("role", getAttributes(rId), rId);
-            GetBean.getSceneExecutorService().submit(new ResetStatusCommand(null, role.getMap(), role));
+            GetBean.getSceneExecutorService().submit(new ResetStatusCommand(null, role));
         }
 
         //返回剩余经验

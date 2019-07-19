@@ -3,6 +3,7 @@ package com.aiwan.server.world.dungeon.service;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.world.base.handler.AbstractDungeonHandler;
 import com.aiwan.server.world.base.handler.DungeonHandlerType;
+import com.aiwan.server.world.base.scene.AbstractScene;
 import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.scenes.mapresource.MapResource;
 import org.slf4j.Logger;

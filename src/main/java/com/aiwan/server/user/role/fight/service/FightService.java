@@ -35,7 +35,7 @@ public class FightService implements IFightService {
     Logger logger = LoggerFactory.getLogger(FightService.class);
 
     @Override
-    public void doUserSkill(Long activeRid, Long passiveId, Skill skill, int mapId) {
+    public void doUserSkill(Long activeRid, Long passiveId, Skill skill, int mapId, int sceneId) {
         /*
          * 获取战斗角色，
          * 判断是否可以施法技能
@@ -43,14 +43,19 @@ public class FightService implements IFightService {
          * 实用技能
          * */
         //获取场景对象
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(mapId);
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(mapId, sceneId);
         //获取施法单位
         RoleUnit activeRole = (RoleUnit) abstractScene.getBaseUnit(activeRid);
 
         if (activeRole == null) {
             //没有改施法单位
             logger.error("角色{}施法错误，找不到施法单位", activeRid);
-            SessionManager.sendPromptMessage(activeRid, PromptCode.NOFIND_MAGICUNIT, "");
+            SessionManager.sendPromptMessage(activeRid, PromptCode.YOU_DEATH, "");
+            return;
+        }
+        if (activeRole.isDeath()) {
+            logger.error("角色{}施法错误，施法目标已死亡", activeRid);
+            SessionManager.sendPromptMessage(activeRid, PromptCode.CASTING_TARGET_DEATH, "");
             return;
         }
 
@@ -122,7 +127,7 @@ public class FightService implements IFightService {
         //获取技能
         Skill skill = skillModel.getSkill(skillId);
         //移交场景command
-        GetBean.getSceneExecutorService().submit(new DoUserSkillCommand(null, role.getMap(), activeRid, passiveId, skill));
+        GetBean.getSceneExecutorService().submit(new DoUserSkillCommand(null, role.getMap(), role.getSceneId(), activeRid, passiveId, skill));
     }
 
     @Override
@@ -140,7 +145,7 @@ public class FightService implements IFightService {
     public void viewFightBuff(Long rId, Session session) {
         //获取角色
         Role role = GetBean.getRoleManager().load(rId);
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
         //获取战斗单位
         BaseUnit fighterRole = abstractScene.getBaseUnit(rId);
         //获取buff

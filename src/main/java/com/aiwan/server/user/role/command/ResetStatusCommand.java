@@ -16,15 +16,15 @@ import com.aiwan.server.util.GetBean;
 public class ResetStatusCommand extends AbstractSceneCommand {
     private Role role;
 
-    public ResetStatusCommand(String accountId, int mapId, Role role) {
-        super(accountId, mapId);
+    public ResetStatusCommand(String accountId, Role role) {
+        super(accountId, role.getMap(), role.getSceneId());
         this.role = role;
         setTaskName("重置场合内战斗单元状态命令");
     }
 
     @Override
     public void action() {
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getKey());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getMapId(), getSceneId());
         if (abstractScene != null) {
             //场景不为空
             RoleUnit roleUnit = (RoleUnit) abstractScene.getBaseUnit(role.getId());

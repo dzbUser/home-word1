@@ -280,6 +280,11 @@ public class PromptCode {
      */
     public final static int BECAME_LEADER = 59;
 
+    /**
+     * 处于死亡状态
+     */
+    public final static int YOU_DEATH = 60;
+
 
 //
 //    /**

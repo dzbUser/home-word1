@@ -41,7 +41,7 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
 
     @Override
     public void action() {
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getKey());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getMapId(), getSceneId());
         if (abstractScene == null) {
             logger.error("场景id：{}开启周期检查线程失败", getKey());
             return;
@@ -61,7 +61,7 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
             }
             nextBrushTime = now + brushPeriod;
             if (flag) {
-                GetBean.getMapManager().sendMessageToUsers(getKey());
+                GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
             }
         }
 

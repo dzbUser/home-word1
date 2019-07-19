@@ -32,7 +32,7 @@ public class RoleReviveCommand extends AbstractSceneDelayCommand {
 
     @Override
     public void action() {
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getKey());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getMapId(), getSceneId());
         MapResource mapResource = GetBean.getMapManager().getMapResource(abstractScene.getMapId());
         //修改角色位置
         Role role = GetBean.getRoleManager().load(roleUnit.getId());
@@ -43,6 +43,6 @@ public class RoleReviveCommand extends AbstractSceneDelayCommand {
         roleUnit.resetStatus();
         roleUnit.setDeath(false);
         //发送地图到本地图所有玩家
-        GetBean.getMapManager().sendMessageToUsers(getKey());
+        GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
     }
 }

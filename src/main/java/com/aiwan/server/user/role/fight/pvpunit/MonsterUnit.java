@@ -52,8 +52,8 @@ public class MonsterUnit extends BaseUnit {
     protected void death(Long attackId) {
         setDeath(true);
         //触发杀怪监听
-        GetBean.getMapManager().getSceneObject(getKey()).monsterKillListener();
-        GetBean.getMapManager().sendMessageToUsers(getKey());
+        GetBean.getMapManager().getSceneObject(getMapId(), getSceneId()).monsterKillListener();
+        GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
         //清除状态
         resetStatus();
         //为攻击者添加道具

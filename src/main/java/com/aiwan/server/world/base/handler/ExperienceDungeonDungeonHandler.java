@@ -74,7 +74,7 @@ public class ExperienceDungeonDungeonHandler extends AbstractDungeonHandler {
          */
         existDungeon();
         //删除副本
-        GetBean.getMapManager().removeSceObject(getDungeonScene().getKey());
+        GetBean.getMapManager().removeSceObject(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
     }
 
     public int getTotalKillNum() {

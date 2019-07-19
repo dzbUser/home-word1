@@ -24,7 +24,7 @@ public class SignInMapCommand extends AbstractSceneCommand {
     public void action() {
         role.setChangingMap(true);
         //把角色存到地图资源
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
         if (abstractScene == null) {
             //不存在此资源
             role.setChangingMap(false);
@@ -35,12 +35,12 @@ public class SignInMapCommand extends AbstractSceneCommand {
         RoleUnit roleUnit = RoleUnit.valueOf(role, abstractScene.getMapId());
         abstractScene.putBaseUnit(roleUnit);
         //给所有玩家发送消息
-        GetBean.getMapManager().sendMessageToUsers(getKey());
+        GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
         role.setChangingMap(false);
     }
 
     public SignInMapCommand(Role role) {
-        super(role.getAccountId(), role.getMap());
+        super(role.getAccountId(), role.getMap(), role.getSceneId());
         this.role = role;
         setTaskName("玩家登陆时进入地图指令");
     }

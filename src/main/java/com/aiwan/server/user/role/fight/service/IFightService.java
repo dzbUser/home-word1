@@ -20,7 +20,7 @@ public interface IFightService {
      * @param skill     技能
      * @param mapId     场景
      */
-    void doUserSkill(Long activeRid, Long passiveId, Skill skill, int mapId);
+    void doUserSkill(Long activeRid, Long passiveId, Skill skill, int mapId, int sceneId);
 
 
     /**

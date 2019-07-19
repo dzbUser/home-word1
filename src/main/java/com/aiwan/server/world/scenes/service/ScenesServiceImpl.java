@@ -45,7 +45,7 @@ public class ScenesServiceImpl implements ScenesService{
         logger.info("角色{}请求移动到({}.{})", rId, x, y);
         Role role = GetBean.getRoleManager().load(rId);
         //获取地图对象
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
         GetBean.getSceneExecutorService().submit(new MoveCommand(Position.valueOf(x, y), role, abstractScene.getMapId()));
     }
 
@@ -76,7 +76,7 @@ public class ScenesServiceImpl implements ScenesService{
     @Override
     public void updateSceneAttribute(final Role role) {
         //获取场景
-        AbstractScene abstractScene = mapManager.getSceneObject(role.getMap());
+        AbstractScene abstractScene = mapManager.getSceneObject(role.getMap(), role.getSceneId());
         if (abstractScene == null) {
             logger.error("mapId:{}没有该地图对象", role.getMap());
             return;
@@ -90,21 +90,14 @@ public class ScenesServiceImpl implements ScenesService{
             logger.info("角色:{}跳转到{}失败,正在进行地图跳转", role.getId(), targetMapId);
             return;
         }
-        AbstractScene abstractScene;
-        if (targetSceneId != 0) {
-            //是副本
-            abstractScene = GetBean.getMapManager().getSceneObject(targetSceneId);
-        } else {
-            //不是副本
-            abstractScene = GetBean.getMapManager().getSceneObject(targetMapId);
-        }
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(targetMapId, targetSceneId);
         if (abstractScene == null) {
             logger.error("找不到mapId为{}的地图资源", role.getId());
             SessionManager.sendPromptMessage(role.getId(), PromptCode.MAPNOEXIST, "");
             return;
         }
         //设置正在地图跳转
-        RoleUnit roleUnit = (RoleUnit) GetBean.getMapManager().getSceneObject(role.getMap()).getBaseUnit(role.getId());
+        RoleUnit roleUnit = (RoleUnit) GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId()).getBaseUnit(role.getId());
 
         if (roleUnit != null && roleUnit.isDeath()) {
             //角色处于死亡状态
@@ -114,26 +107,21 @@ public class ScenesServiceImpl implements ScenesService{
         role.setChangingMap(true);
         leaveMap(role);
         //进入map地图
-        if (targetSceneId == 0) {
-            GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, role, roleUnit));
-            return;
-        }
         GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, targetSceneId, role, roleUnit));
     }
 
     @Override
     public void leaveMap(Role role) {
-        //脱离地图
-        GetBean.getMapManager().removeFighterRole(role.getMap(), role.getId());
+        GetBean.getMapManager().removeFighterRole(role.getMap(), role.getSceneId(), role.getId());
         //给地图所有玩家发送最新地图信息
-        GetBean.getMapManager().sendMessageToUsers(role.getMap());
+        GetBean.getMapManager().sendMessageToUsers(role.getMap(), role.getSceneId());
     }
 
     @Override
     public void viewUnitInMap(int mapId, Session session) {
         //获取角色
         Role role = GetBean.getRoleManager().load(session.getrId());
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap());
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
         if (abstractScene == null) {
             logger.error("没有改地图资源");
             return;

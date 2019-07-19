@@ -61,8 +61,8 @@ public class RoleUnit extends BaseUnit {
         roleUnit.setMonster(false);
         //设置位置信息
         roleUnit.setPosition(Position.valueOf(role.getX(), role.getY()));
-        roleUnit.setSceneId(role.getMap());
-        roleUnit.setMapId(mapId);
+        roleUnit.setSceneId(role.getSceneId());
+        roleUnit.setMapId(role.getMap());
         //复制用户属性
         roleUnit.setRoleAttribute(role.getAttribute().getPureAttribute());
         roleUnit.setHp(roleUnit.getMaxHp());
@@ -103,7 +103,7 @@ public class RoleUnit extends BaseUnit {
     protected void death(Long attackId) {
         setDeath(true);
         //复活点复活,暂时为立即复活，发送提示
-        GetBean.getMapManager().sendMessageToUsers(getKey());
+        GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
         SessionManager.sendPromptMessage(this.getAccountId(), PromptCode.ROLE_DEATH,"");
         GetBean.getSceneExecutorService().submit(new RoleReviveCommand(REVIVE_TIME, getAccountId(), getMapId(), this.getSceneId(), this));
     }

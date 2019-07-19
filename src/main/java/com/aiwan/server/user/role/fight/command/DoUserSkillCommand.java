@@ -28,8 +28,8 @@ public class DoUserSkillCommand extends AbstractSceneCommand {
     private Skill skill;
 
 
-    public DoUserSkillCommand(String accountId, int mapId, long activeId, long targetId, Skill skill) {
-        super(accountId, mapId);
+    public DoUserSkillCommand(String accountId, int mapId, int sceneId, long activeId, long targetId, Skill skill) {
+        super(accountId, mapId, sceneId);
         this.activeId = activeId;
         this.targetId = targetId;
         this.skill = skill;
@@ -38,6 +38,6 @@ public class DoUserSkillCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
-        GetBean.getFightService().doUserSkill(activeId, targetId, skill, getKey());
+        GetBean.getFightService().doUserSkill(activeId, targetId, skill, getMapId(), getSceneId());
     }
 }

@@ -1,8 +1,8 @@
 package com.aiwan.server.world.scenes.mapresource;
 
 import com.aiwan.server.monster.resource.DropBean;
+import com.aiwan.server.reward.model.RewardBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,43 +13,32 @@ import java.util.List;
  */
 public class SettlementBean {
 
-    /**
-     * 掉落列表
-     */
-    private List<DropBean> dropBeanList = new ArrayList<>();
 
     /**
-     * 经验值
+     * 奖励
      */
-    private int experience;
+    private RewardBean rewardBean;
 
     public void doParse(String message) {
-        String[] unit = message.split(" ");
-        if (!unit[0].equals("#")) {
-            String[] dropUnits = unit[0].split("/");
-            for (String dropUnit : dropUnits) {
-                String[] drop = dropUnit.split("=");
-                DropBean dropBean = DropBean.valueOf(Integer.parseInt(drop[0]), Integer.parseInt(drop[1]));
-                this.dropBeanList.add(dropBean);
-            }
-        }
-        this.experience = Integer.parseInt(unit[1]);
+        this.rewardBean = new RewardBean();
+        rewardBean.doParse(message);
     }
 
 
     public List<DropBean> getDropBeanList() {
-        return dropBeanList;
+        return rewardBean.getDropBeanList();
     }
 
-    public void setDropBeanList(List<DropBean> dropBeanList) {
-        this.dropBeanList = dropBeanList;
-    }
 
     public int getExperience() {
-        return experience;
+        return rewardBean.getExperience();
     }
 
-    public void setExperience(int experience) {
-        this.experience = experience;
+    public RewardBean getRewardBean() {
+        return rewardBean;
+    }
+
+    public void setRewardBean(RewardBean rewardBean) {
+        this.rewardBean = rewardBean;
     }
 }

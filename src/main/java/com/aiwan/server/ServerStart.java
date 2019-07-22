@@ -36,6 +36,8 @@ public class ServerStart {
         GetBean.getScheduleService().init();
         //初始化地图世界
         GetBean.getMapManager().init();
+        //初始化事件的注册
+        EventInitialzation.init(applicationContext);
         logger.debug("启动Netty服务器");
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
                 .setNameFormat("server-pool-start-%d").build();

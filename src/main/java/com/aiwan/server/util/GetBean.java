@@ -1,5 +1,6 @@
 package com.aiwan.server.util;
 
+import com.aiwan.server.base.event.core.EventBusManager;
 import com.aiwan.server.base.executor.ScheduleService;
 import com.aiwan.server.base.executor.account.IAccountExecutorService;
 import com.aiwan.server.base.executor.scene.ISceneExecutorService;
@@ -18,6 +19,7 @@ import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.role.player.service.RoleResourceManager;
+import com.aiwan.server.user.role.task.service.TaskManager;
 import com.aiwan.server.world.dungeon.service.DungeonService;
 import com.aiwan.server.world.scenes.service.MapManager;
 import com.aiwan.server.world.scenes.service.ScenesService;
@@ -112,6 +114,34 @@ public class GetBean {
      * 副本类
      */
     private static DungeonService dungeonService;
+
+    /**
+     * 事件事务管理类
+     */
+    private static EventBusManager eventBusManager;
+
+    /**
+     * 任务管理类
+     */
+    private static TaskManager taskManager;
+
+    public static TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    @Autowired
+    public void setTaskManager(TaskManager taskManager) {
+        GetBean.taskManager = taskManager;
+    }
+
+    public static EventBusManager getEventBusManager() {
+        return eventBusManager;
+    }
+
+    @Autowired
+    public void setEventBusManager(EventBusManager eventBusManager) {
+        GetBean.eventBusManager = eventBusManager;
+    }
 
     public static DungeonService getDungeonService() {
         return dungeonService;

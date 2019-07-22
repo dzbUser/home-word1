@@ -1,10 +1,11 @@
 package com.aiwan.server.world.base.handler;
 
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.reward.model.RewardBean;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
-import com.aiwan.server.world.dungeon.command.RewardCommand;
+import com.aiwan.server.reward.command.RewardCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
 import com.aiwan.server.world.scenes.mapresource.SettlementBean;
 
@@ -70,8 +71,9 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
 
     @Override
     public void settlementReward(SettlementBean settlementBean) {
+        RewardBean rewardBean = RewardBean.valueOf(settlementBean.getDropBeanList(), settlementBean.getExperience() * totalKillNum);
         for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
-            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), settlementBean.getDropBeanList(), settlementBean.getExperience() * totalKillNum));
+            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), rewardBean));
         }
     }
 

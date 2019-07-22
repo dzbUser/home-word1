@@ -101,7 +101,8 @@ public class NavigationBar extends JPanel {
                     "7.踢出 （输入想要踢出的队员id）";
 
     private static final String DUNGEONMESSAGE =
-            "0.创建副本（输入创建副本的id）\n";
+            "提示：3.烤猪城（单人） 4.科赞岛（团队)\n" +
+                    "0.创建副本（输入创建副本的id）\n";
 
 
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);

@@ -1,14 +1,12 @@
-package com.aiwan.server.world.dungeon.command;
+package com.aiwan.server.reward.command;
 
 import com.aiwan.server.base.executor.account.impl.AbstractAccountCommand;
 import com.aiwan.server.monster.resource.DropBean;
-import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.reward.model.RewardBean;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
-
-import java.util.List;
 
 /**
  * 奖励命令
@@ -24,32 +22,26 @@ public class RewardCommand extends AbstractAccountCommand {
     private Long rId;
 
     /**
-     * 掉落物列表
+     *奖励
      */
-    private List<DropBean> list;
+    private RewardBean rewardBean;
 
-    /**
-     * 经验值
-     */
-    private int experience;
-
-    public RewardCommand(String accountId, Long rId, List<DropBean> list, int experience) {
+    public RewardCommand(String accountId, long rId, RewardBean rewardBean) {
         super(accountId);
         this.rId = rId;
-        this.list = list;
-        this.experience = experience;
+        this.rewardBean = rewardBean;
     }
 
     @Override
     public void active() {
         //添加经验
-        GetBean.getRoleService().addExperience(rId, experience);
-        if (list.size() == 0) {
+        GetBean.getRoleService().addExperience(rId, rewardBean.getExperience());
+        if (rewardBean.getDropBeanList().size() == 0) {
             //没有掉落物
             return;
         }
         //获取drop随机
-        DropBean dropBean = list.get(MonsterGenerateUtil.getRandomNum(list.size()));
+        DropBean dropBean = rewardBean.getDropBeanList().get(MonsterGenerateUtil.getRandomNum(rewardBean.getDropBeanList().size()));
         //添加物品
         Session session = SessionManager.getSessionByAccountId(getAccountId());
         GetBean.getBackpackService().addPropToBack(getAccountId(), dropBean.getPropId(), dropBean.getNum(), session);

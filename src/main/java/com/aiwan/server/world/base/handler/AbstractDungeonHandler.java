@@ -9,7 +9,7 @@ import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
 import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.dungeon.command.DungeonOverCommand;
-import com.aiwan.server.world.dungeon.command.RewardCommand;
+import com.aiwan.server.reward.command.RewardCommand;
 import com.aiwan.server.world.scenes.command.ChangeMapCommand;
 import com.aiwan.server.world.scenes.command.EnterMapCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
@@ -57,7 +57,7 @@ public abstract class AbstractDungeonHandler {
      */
     public void gateReward(GateBean gateBean) {
         for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
-            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), gateBean.getDropBeanList(), gateBean.getExperience()));
+            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), gateBean.getRewardBean()));
         }
     }
 

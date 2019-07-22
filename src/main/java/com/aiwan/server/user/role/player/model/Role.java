@@ -169,6 +169,8 @@ public class Role {
         GetBean.getSkillManager().create(getId());
         //创建buff模块
         GetBean.getBuffManager().create(getId());
+        //创建任务模块
+        GetBean.getTaskManager().create(getId());
     }
 
     /**

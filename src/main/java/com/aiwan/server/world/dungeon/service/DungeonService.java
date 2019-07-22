@@ -1,5 +1,6 @@
 package com.aiwan.server.world.dungeon.service;
 
+import com.aiwan.server.user.role.team.model.TeamModel;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.world.base.handler.AbstractDungeonHandler;
 import com.aiwan.server.world.base.handler.DungeonHandlerType;
@@ -35,6 +36,9 @@ public class DungeonService implements IDungeonService {
         if (mapResource.getIsSingle() == 1) {
             //创建单人副本
             createSingleDungeon(rId, mapResource);
+        } else {
+            //创建团队副本
+            createTeamDungeon(rId, mapResource);
         }
     }
 
@@ -49,6 +53,38 @@ public class DungeonService implements IDungeonService {
         if (GetBean.getTeamManager().isInTeamOrCreate(rId)) {
             //创建副本错误
             logger.error("{}创建单人副本{}错误，角色在队伍中", rId, mapResource.getMapId());
+            return;
+        }
+        //开始创建副本
+        DungeonScene dungeonScene = new DungeonScene(mapResource.getMapId());
+        //创建副本处理器
+        AbstractDungeonHandler handler = DungeonHandlerType.getHandler(mapResource.getDungeonType()).creator();
+        dungeonScene.setHandler(handler);
+        //把玩家队伍添加到副本
+        dungeonScene.setTeamModel(GetBean.getTeamManager().getTeam(GetBean.getTeamManager().getTeamIdByRid(rId)));
+        handler.setDungeonScene(dungeonScene);
+        //把副本添加到地图对象资类中
+        GetBean.getMapManager().putSceObject(dungeonScene);
+        //初始化副本
+        handler.init();
+    }
+
+    /**
+     * 创建团队副本
+     *
+     * @param rId         角色id
+     * @param mapResource 地图资源
+     */
+    private void createTeamDungeon(long rId, MapResource mapResource) {
+        //判断是否在队伍中，否则创建队伍
+        if (!GetBean.getTeamManager().isInTeam(rId)) {
+            //创建副本错误
+            logger.error("{}创建团队副本{}错误，角色没在在队伍中", rId, mapResource.getMapId());
+            return;
+        }
+        if (GetBean.getTeamManager().getTeam(GetBean.getTeamManager().getTeamIdByRid(rId)).getLeaderId() != rId) {
+            //创建副本错误
+            logger.error("{}创建团队副本{}错误，角色不是队长", rId, mapResource.getMapId());
             return;
         }
         //开始创建副本

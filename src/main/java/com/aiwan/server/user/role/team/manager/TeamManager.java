@@ -120,10 +120,16 @@ public class TeamManager {
     }
 
     /**
-     *
+     * 两个角色是不是队友
      */
+    public boolean isTeamMate(long rId1, long rId2) {
+        if (getTeamIdByRid(rId1) == null || getTeamIdByRid(rId2) == null) {
+            return false;
+        }
+        return getTeamIdByRid(rId1).equals(getTeamIdByRid(rId2));
+    }
 
-    public long getTeamIdByRid(long rId) {
+    public Long getTeamIdByRid(long rId) {
         return teamRoleMap.get(rId);
     }
 

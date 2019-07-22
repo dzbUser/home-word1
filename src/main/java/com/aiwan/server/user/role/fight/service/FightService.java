@@ -58,7 +58,6 @@ public class FightService implements IFightService {
             SessionManager.sendPromptMessage(activeRid, PromptCode.CASTING_TARGET_DEATH, "");
             return;
         }
-
         //获取目标施法单位
         List<BaseUnit> passiveList = new ArrayList<>();
         BaseUnit passiveUnit = abstractScene.getBaseUnit(passiveId);
@@ -72,6 +71,12 @@ public class FightService implements IFightService {
             //目标施法单位已死亡
             logger.error("角色{}施法错误，施法目标已死亡", activeRid);
             SessionManager.sendPromptMessage(activeRid, PromptCode.CASTING_TARGET_DEATH, "");
+            return;
+        }
+        if (GetBean.getTeamManager().isTeamMate(activeRid, passiveId)) {
+            //目标施法单位已死亡
+            logger.error("角色{}施法错误，不可以攻击队友", activeRid);
+            SessionManager.sendPromptMessage(activeRid, PromptCode.NO_ATTACK_TEAMMEATE, "");
             return;
         }
         //是否在攻击范围内

@@ -9,9 +9,11 @@ import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
 import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.dungeon.command.DungeonOverCommand;
+import com.aiwan.server.world.dungeon.command.RewardCommand;
 import com.aiwan.server.world.scenes.command.ChangeMapCommand;
 import com.aiwan.server.world.scenes.command.EnterMapCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
+import com.aiwan.server.world.scenes.mapresource.SettlementBean;
 import com.aiwan.server.world.scenes.model.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +51,20 @@ public abstract class AbstractDungeonHandler {
      * 关卡监听器
      */
     public abstract void checkpointListener();
+
+    /**
+     * 发放关卡奖励
+     */
+    public void gateReward(GateBean gateBean) {
+        for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
+            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), gateBean.getDropBeanList(), gateBean.getExperience()));
+        }
+    }
+
+    /**
+     * 发放结算奖励
+     */
+    public abstract void settlementReward(SettlementBean settlementBean);
 
     public void init() {
         /*

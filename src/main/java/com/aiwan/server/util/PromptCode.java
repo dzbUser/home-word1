@@ -285,6 +285,16 @@ public class PromptCode {
      */
     public final static int YOU_DEATH = 60;
 
+    /**
+     * 副本时间到，您已被传送到主城
+     */
+    public final static int RETUEN_CITY = 61;
+
+    /**
+     * 不可以攻击队友
+     */
+    public final static int NO_ATTACK_TEAMMEATE = 62;
+
 
 //
 //    /**

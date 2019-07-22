@@ -1,36 +1,23 @@
 package com.aiwan.server.world.base.handler;
 
+import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.PromptCode;
+import com.aiwan.server.world.dungeon.command.RewardCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
+import com.aiwan.server.world.scenes.mapresource.SettlementBean;
 
 /**
- * 经验副本处理器
+ * 通关副本处理器
  *
  * @author dengzebiao
- * @since 2019.7.18
+ * @since 2019.7.22
  */
-public class ExperienceDungeonDungeonHandler extends AbstractDungeonHandler {
+public class ClearanceDungeonHandler extends AbstractDungeonHandler {
 
-
-    /**
-     * 总击杀数
-     */
-    private int totalKillNum;
-
-
-    /**
-     * 关卡监听器
-     */
     @Override
     public void checkpointListener() {
-        /*
-        0.发放关卡奖励
-        1.判断是否是最后一个关卡
-        2.若不是，则刷下个关卡的怪
-        3.若是，则判断是否是不通关副本，若是则再次刷最后关卡的怪，若不是则结算
-         */
-        //添加杀怪数
-        setTotalKillNum(getTotalKillNum() + 1);
         setKillMonsterNum(getKillMonsterNum() + 1);
         //获取关卡
         GateBean gateBean = getDungeonScene().getResource().getGateBeanMap().get(getCheckpointNum());
@@ -39,6 +26,8 @@ public class ExperienceDungeonDungeonHandler extends AbstractDungeonHandler {
             //清楚所有怪物尸体
             clearAllMonster();
             setKillMonsterNum(0);
+            //发放关卡奖励
+            gateReward(gateBean);
             //判断是否有下一关卡的怪
             GateBean nextGateBean = getDungeonScene().getResource().getGateBeanMap().get(getCheckpointNum() + 1);
             if (nextGateBean != null) {
@@ -46,27 +35,19 @@ public class ExperienceDungeonDungeonHandler extends AbstractDungeonHandler {
                 setCheckpointNum(getCheckpointNum() + 1);
                 generateMonster(nextGateBean.getMonsterId(), nextGateBean.getMonsterNum());
             } else {
-                //没有下一关
-                generateMonster(gateBean.getMonsterId(), gateBean.getMonsterNum());
+                //通关，结算
+                settlement();
             }
         }
     }
 
     @Override
-    public void init() {
-        /*
-        初始化副本
-        1.关卡是为1
-        2.初始化怪物
-         */
-        this.totalKillNum = 0;
-        super.init();
+    public void settlementReward(SettlementBean settlementBean) {
+        for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
+            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), settlementBean.getDropBeanList(), settlementBean.getExperience()));
+        }
     }
 
-
-    /**
-     * 结算
-     */
     @Override
     public void settlement() {
         /*
@@ -75,13 +56,11 @@ public class ExperienceDungeonDungeonHandler extends AbstractDungeonHandler {
         existDungeon();
         //删除副本
         GetBean.getMapManager().removeSceObject(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
-    }
-
-    public int getTotalKillNum() {
-        return totalKillNum;
-    }
-
-    public void setTotalKillNum(int totalKillNum) {
-        this.totalKillNum = totalKillNum;
+        //发送奖励
+        settlementReward(getDungeonScene().getResource().getSettlementBean());
+        //发送提示
+        for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "");
+        }
     }
 }

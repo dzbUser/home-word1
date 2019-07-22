@@ -5,8 +5,15 @@ package com.aiwan.server.world.base.handler;
  */
 public enum DungeonHandlerType {
 
-    EXPERIENCE_HANDLER(1, ExperienceDungeonDungeonHandler.class) {},
+    /**
+     * 经验副本
+     */
+    EXPERIENCE_HANDLER(1, ExperienceDungeonHandler.class) {},
 
+    /**
+     * 通关副本
+     */
+    CLEARANCE_HANDLER(2, ClearanceDungeonHandler.class) {},
     ;
     private int type;
 

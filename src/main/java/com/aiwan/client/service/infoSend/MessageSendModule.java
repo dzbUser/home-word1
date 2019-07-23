@@ -88,6 +88,16 @@ public enum  MessageSendModule {
             messageSend.messageSend(message);
         }
     },
+    Task_MODULE(8) {
+        @Override
+        public void sendMessage(String message, int num) {
+            TaskMessageSend messageSend = TaskMessageSend.getMessageSend(num);
+            if (messageSend == null) {
+                return;
+            }
+            messageSend.messageSend(message);
+        }
+    },
     ;
 
     MessageSendModule(int num){

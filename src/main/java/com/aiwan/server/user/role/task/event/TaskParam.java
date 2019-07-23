@@ -27,6 +27,14 @@ public class TaskParam {
 
     private Map<String, Integer> paramMap = new HashMap<>();
 
+    public static TaskParam valueOf(Role role, TaskProgressType taskProgressType, Map<String, Integer> paramMap) {
+        TaskParam taskParam = new TaskParam();
+        taskParam.setRole(role);
+        taskParam.setTaskProgressType(taskProgressType);
+        taskParam.setParamMap(paramMap);
+        return taskParam;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -62,5 +70,13 @@ public class TaskParam {
      */
     public Integer getParam(String key) {
         return paramMap.get(key);
+    }
+
+    public Map<String, Integer> getParamMap() {
+        return paramMap;
+    }
+
+    public void setParamMap(Map<String, Integer> paramMap) {
+        this.paramMap = paramMap;
     }
 }

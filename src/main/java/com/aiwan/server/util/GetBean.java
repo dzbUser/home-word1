@@ -12,6 +12,7 @@ import com.aiwan.server.user.backpack.service.BackPackManager;
 import com.aiwan.server.user.backpack.service.BackResourceManager;
 import com.aiwan.server.user.role.buff.service.BuffManager;
 import com.aiwan.server.user.role.buff.service.BuffService;
+import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
 import com.aiwan.server.user.role.fight.service.IFightService;
 import com.aiwan.server.user.role.mount.service.MountManager;
@@ -19,6 +20,7 @@ import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.role.player.service.RoleResourceManager;
+import com.aiwan.server.user.role.task.service.ITaskService;
 import com.aiwan.server.user.role.task.service.TaskManager;
 import com.aiwan.server.world.dungeon.service.DungeonService;
 import com.aiwan.server.world.scenes.service.MapManager;
@@ -124,6 +126,34 @@ public class GetBean {
      * 任务管理类
      */
     private static TaskManager taskManager;
+
+    /**
+     * 任务业务类
+     */
+    private static ITaskService taskService;
+
+    /**
+     * 装备管理类
+     */
+    private static EquipmentManager equipmentManager;
+
+    public static EquipmentManager getEquipmentManager() {
+        return equipmentManager;
+    }
+
+    @Autowired
+    public void setEquipmentManager(EquipmentManager equipmentManager) {
+        GetBean.equipmentManager = equipmentManager;
+    }
+
+    public static ITaskService getTaskService() {
+        return taskService;
+    }
+
+    @Autowired
+    public void setTaskService(ITaskService taskService) {
+        GetBean.taskService = taskService;
+    }
 
     public static TaskManager getTaskManager() {
         return taskManager;

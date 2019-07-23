@@ -1,10 +1,6 @@
 package com.aiwan.server.user.role.task.process;
 
-import com.aiwan.server.user.role.task.entity.TaskElement;
-import com.aiwan.server.user.role.task.entity.TaskInfo;
-import com.aiwan.server.user.role.task.resource.TaskResource;
 import com.aiwan.server.user.role.task.service.TaskManager;
-import com.aiwan.server.util.GetBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

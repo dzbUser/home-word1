@@ -2,6 +2,9 @@ package com.aiwan.server.user.role.task.entity;
 
 import com.aiwan.server.user.role.task.process.TaskProgressType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 任务进度元素
  *
@@ -16,10 +19,13 @@ public class TaskProgressElement {
 
     private boolean isFinish = false;
 
-    public static TaskProgressElement valyeOf(TaskProgressType taskProgressType, int value) {
+    private Map<String, Integer> paramMap = new HashMap<>();
+
+    public static TaskProgressElement valyeOf(TaskProgressType taskProgressType, int value, Map<String, Integer> paramMap) {
         TaskProgressElement taskProgressElement = new TaskProgressElement();
         taskProgressElement.setTaskProgressType(taskProgressType);
         taskProgressElement.setValue(value);
+        taskProgressElement.setParamMap(paramMap);
         return taskProgressElement;
     }
 
@@ -45,5 +51,17 @@ public class TaskProgressElement {
 
     public void setFinish(boolean finish) {
         isFinish = finish;
+    }
+
+    public Map<String, Integer> getParamMap() {
+        return paramMap;
+    }
+
+    public void setParamMap(Map<String, Integer> paramMap) {
+        this.paramMap = paramMap;
+    }
+
+    public Integer getParam(String key) {
+        return paramMap.get(key);
     }
 }

@@ -46,6 +46,11 @@ public class NavigationBar extends JPanel {
      */
     public static final int DUNGEON = 7;
 
+    /**
+     * 任务模块
+     */
+    public static final int TASK = 8;
+
     /** 只是当前所属模块 */
     public int num;
 
@@ -104,6 +109,12 @@ public class NavigationBar extends JPanel {
             "提示：3.烤猪城（单人） 4.科赞岛（团队)\n" +
                     "0.创建副本（输入创建副本的id）\n";
 
+    private static final String TASKMESSAGE =
+            "0.查看可以接取的任务（指令：无需输入）\n" +
+                    "1.接受任务（指令：输入任务id）\n" +
+                    "2.查看进行中的任务（指令：无需输入）\n" +
+                    "3.完成任务（指令：输入任务id）\n";
+
 
     private static Logger logger = LoggerFactory.getLogger(NavigationBar.class);
 
@@ -116,6 +127,7 @@ public class NavigationBar extends JPanel {
         add(createItem("战斗系统", FIGHTMESSAGE, 250, 0, FIGHT));
         add(createItem("组队系统", TEAMMESSAGE, 300, 0, TEAM));
         add(createItem("副本系统", DUNGEONMESSAGE, 350, 0, DUNGEON));
+        add(createItem("任务系统", TASKMESSAGE, 400, 0, TASK));
         num = ROLE;
     }
 

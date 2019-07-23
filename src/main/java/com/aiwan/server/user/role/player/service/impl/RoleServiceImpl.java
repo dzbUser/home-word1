@@ -1,5 +1,7 @@
 package com.aiwan.server.user.role.player.service.impl;
 
+import com.aiwan.server.base.event.core.EventBusManager;
+import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
 import com.aiwan.server.world.scenes.command.SignInMapCommand;
@@ -137,6 +139,8 @@ public class RoleServiceImpl implements RoleService {
             //等级发生改变更新人物属性
             updateAttributeModule("role", getAttributes(rId), rId);
             GetBean.getSceneExecutorService().submit(new ResetStatusCommand(null, role));
+            //触发升级事件
+            roleUpgradeEvent(role);
         }
 
         //返回剩余经验
@@ -167,6 +171,11 @@ public class RoleServiceImpl implements RoleService {
     /**获取升级要求(暂用)*/
     private int getUpgradeRequest(int level){
         return (level + 1) * 300;
+    }
+
+    private void roleUpgradeEvent(Role role) {
+        RoleUpgradeEvent roleUpgradeEvent = RoleUpgradeEvent.valueOf(role);
+        GetBean.getEventBusManager().synSubmit(roleUpgradeEvent);
     }
 
 }

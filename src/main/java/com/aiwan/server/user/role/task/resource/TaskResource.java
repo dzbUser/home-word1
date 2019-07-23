@@ -29,6 +29,10 @@ public class TaskResource {
     @CellMapping(name = "condition")
     private String condition;
 
+    @CellMapping(name = "dec")
+    private String dec;
+
+
     @CellMapping(name = "origin")
     private int origin;
 
@@ -120,5 +124,13 @@ public class TaskResource {
 
     public void setRewardBean(RewardBean rewardBean) {
         this.rewardBean = rewardBean;
+    }
+
+    public String getDec() {
+        return dec;
+    }
+
+    public void setDec(String dec) {
+        this.dec = dec;
     }
 }

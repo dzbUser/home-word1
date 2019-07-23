@@ -1,6 +1,7 @@
 package com.aiwan.server.user.role.fight.pvpunit;
 
 import com.aiwan.server.monster.resource.MonsterResource;
+import com.aiwan.server.user.role.fight.command.MonsterKillEventCommand;
 import com.aiwan.server.world.scenes.model.Position;
 import com.aiwan.server.user.role.attributes.model.ImmutableAttributeElement;
 import com.aiwan.server.user.role.fight.command.MonsterKillingAward;
@@ -60,6 +61,8 @@ public class MonsterUnit extends BaseUnit {
         Role role = GetBean.getRoleManager().load(attackId);
         //为角色添加击杀奖励
         GetBean.getAccountExecutorService().submit(new MonsterKillingAward(role.getAccountId(), role, getResourceId()));
+        //抛出杀怪事件到用户线程
+        GetBean.getAccountExecutorService().submit(new MonsterKillEventCommand(role, this));
     }
 
     public int getResourceId() {

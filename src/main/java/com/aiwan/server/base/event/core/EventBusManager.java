@@ -62,6 +62,7 @@ public class EventBusManager implements IEventBusManager {
         List<ReceiveDefinition> list = receiveDefintionMap.get(receiveDefinition.getClzz());
         if (list == null) {
             list = new CopyOnWriteArrayList<>();
+            receiveDefintionMap.put(receiveDefinition.getClzz(), list);
         }
         if (!list.contains(receiveDefinition)) {
             //没有该类

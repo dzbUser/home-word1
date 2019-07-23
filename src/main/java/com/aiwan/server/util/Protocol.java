@@ -167,4 +167,24 @@ public class Protocol {
      * 创建副本
      */
     public static final int CREATE_DUNGEON = 50;
+
+    /**
+     * 查看所有可以领取的任务
+     */
+    public static final int VIEW_CANRECEIVE_TASK = 51;
+
+    /**
+     * 接收任务
+     */
+    public static final int RECEIVE_TASK = 52;
+
+    /**
+     * 查看进行中的任务
+     */
+    public static final int VIEW_PROCESSING_TASK = 53;
+
+    /**
+     * 完成任务
+     */
+    public static final int COMPLETE_TASK = 54;
 }

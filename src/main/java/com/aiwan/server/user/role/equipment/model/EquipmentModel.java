@@ -48,4 +48,17 @@ public class EquipmentModel {
         equipmentEntity.getEquipmentInfo().putEquipmentByPosition(equipment);
     }
 
+    /**
+     * 获取装备数量
+     */
+    public int getEquipBarNum() {
+        int num = 0;
+        for (int i = 0; i < getEquipmentBar().length; i++) {
+            if (getEquipmentBar()[i] != null) {
+                num++;
+            }
+        }
+        return num;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.equipment.service.impl;
 
+import com.aiwan.server.base.event.event.impl.EquipChangeEvent;
 import com.aiwan.server.prop.model.impl.Equipment;
 import com.aiwan.server.prop.resource.PropsResource;
 import com.aiwan.server.publicsystem.common.Session;
@@ -10,6 +11,7 @@ import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
 import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
 import com.aiwan.server.user.role.equipment.service.EquipmentManager;
 import com.aiwan.server.user.role.equipment.service.EquipmentService;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.util.SMToDecodeData;
@@ -56,6 +58,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         equipmentManager.writeBack(equipmentModel);
         //修改人物属性
         GetBean.getRoleService().updateAttributeModule("equip", getEquipAttributes(rId), rId);
+        equipChangeEvent(rId);
         logger.info(accountId + "装备" + equipment.getPropsResource().getName() + "成功");
         //返回装备id
         return oldEquipment;
@@ -150,9 +153,19 @@ public class EquipmentServiceImpl implements EquipmentService {
             GetBean.getBackpackService().obtainProp(accountId, equipment);
             //重新计算战斗力
             GetBean.getRoleService().updateAttributeModule("equip", getEquipAttributes(rid), rid);
+            equipChangeEvent(rid);
             session.sendPromptMessage(PromptCode.UNLOADEQUIPSUCCESS, "");
         }
 
+    }
+
+    /**
+     * 触发装备栏改变事件
+     */
+    private void equipChangeEvent(long rId) {
+        Role role = GetBean.getRoleManager().load(rId);
+        EquipChangeEvent equipChangeEvent = EquipChangeEvent.valueOf(role);
+        GetBean.getEventBusManager().synSubmit(equipChangeEvent);
     }
 
 

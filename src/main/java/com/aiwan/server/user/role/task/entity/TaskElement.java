@@ -21,7 +21,7 @@ public class TaskElement {
     /**
      * 是否可以完成
      */
-    private boolean isCanFinish;
+    private boolean isCanFinish = false;
 
     public int getTaskId() {
         return taskId;
@@ -45,5 +45,17 @@ public class TaskElement {
 
     public void setCanFinish(boolean canFinish) {
         isCanFinish = canFinish;
+    }
+
+    /**
+     * 查看是否完成
+     */
+    public void examineFinish() {
+        for (TaskProgressElement taskProgressElement : taskProgress) {
+            if (!taskProgressElement.isFinish()) {
+                return;
+            }
+        }
+        setCanFinish(true);
     }
 }

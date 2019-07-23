@@ -79,4 +79,14 @@ public class StatusCode {
      * 查看所有队伍成员
      */
     public final static int VIEW_MEMBERS = 24;
+
+    /**
+     * 查看所有可接受的任务
+     */
+    public final static int VIEW_CANRECEIVER_TASK = 25;
+
+    /**
+     * 查看进行中的任务
+     */
+    public final static int VIEW_PROCESSING_TASK = 26;
 }

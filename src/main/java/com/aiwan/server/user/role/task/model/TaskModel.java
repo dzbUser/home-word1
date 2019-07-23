@@ -1,5 +1,6 @@
 package com.aiwan.server.user.role.task.model;
 
+import com.aiwan.server.user.role.task.entity.AbstractProgressElement;
 import com.aiwan.server.user.role.task.entity.TaskElement;
 import com.aiwan.server.user.role.task.entity.TaskEnt;
 import com.aiwan.server.user.role.task.entity.TaskProgressElement;
@@ -101,7 +102,7 @@ public class TaskModel {
             //获取类型
             TaskProgressType progressType = completeCondition.getTaskProgressType();
             //创建任务进度元素类
-            TaskProgressElement taskProgressElement = TaskProgressElement.valyeOf(progressType, progressType.getOriginValue(getTaskEnt().getId()), progressType.shiftParam(completeCondition.getParam()));
+            AbstractProgressElement taskProgressElement = progressType.shiftParam(completeCondition.getParam(), getTaskEnt().getrId());
             //初始化任务状态
             AbstractProcessor abstractProcessor = AbstractProcessor.getProcessor(progressType);
             abstractProcessor.iniExcuteProgress(taskProgressElement, getTaskEnt().getrId());

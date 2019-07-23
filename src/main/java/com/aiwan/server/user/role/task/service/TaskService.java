@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.task.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.user.role.task.entity.AbstractProgressElement;
 import com.aiwan.server.user.role.task.entity.TaskElement;
 import com.aiwan.server.user.role.task.entity.TaskProgressElement;
 import com.aiwan.server.user.role.task.model.TaskModel;
@@ -75,8 +76,8 @@ public class TaskService implements ITaskService {
         //遍历所有任务
         for (TaskElement taskElement : elements.values()) {
             List<TaskProgessMessage> progressMessages = new ArrayList<>();
-            for (TaskProgressElement taskProgressElement : taskElement.getTaskProgress()) {
-                progressMessages.add(TaskProgessMessage.valueOf(taskProgressElement.getValue(), taskProgressElement.getParamMap().get("value")));
+            for (AbstractProgressElement abstractProgressElement : taskElement.getTaskProgress()) {
+                progressMessages.add(TaskProgessMessage.valueOf(abstractProgressElement.getValue(), abstractProgressElement.getFinishValue()));
             }
             elementMessageList.add(TaskElementMessage.valueOf(taskElement.getTaskId(), progressMessages));
         }

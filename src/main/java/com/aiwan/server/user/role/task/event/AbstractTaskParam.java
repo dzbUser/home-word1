@@ -9,7 +9,7 @@ import com.aiwan.server.user.role.task.process.TaskProgressType;
  * @author dengzebiao
  * @since 2019.7.23
  */
-public class AbstractTaskParam {
+public abstract class AbstractTaskParam {
     /**
      * 角色
      */

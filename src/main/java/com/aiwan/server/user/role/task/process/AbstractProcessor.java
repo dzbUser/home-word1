@@ -1,10 +1,10 @@
 package com.aiwan.server.user.role.task.process;
 
+import com.aiwan.server.user.role.task.entity.AbstractProgressElement;
 import com.aiwan.server.user.role.task.entity.TaskElement;
 import com.aiwan.server.user.role.task.entity.TaskInfo;
 import com.aiwan.server.user.role.task.entity.TaskProgressElement;
 import com.aiwan.server.user.role.task.event.AbstractTaskParam;
-import com.aiwan.server.user.role.task.event.TaskParam;
 import com.aiwan.server.user.role.task.model.TaskModel;
 import com.aiwan.server.user.role.task.service.TaskManager;
 import com.aiwan.server.util.GetBean;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @author dengzebiao
  * @since 2019.7.22
  */
-public abstract class AbstractProcessor<T extends AbstractTaskParam> {
+public abstract class AbstractProcessor<T extends AbstractTaskParam, B extends AbstractProgressElement> {
 
     Logger logger = LoggerFactory.getLogger(AbstractProcessor.class);
 
@@ -66,10 +66,10 @@ public abstract class AbstractProcessor<T extends AbstractTaskParam> {
         //遍历所有任务
         for (TaskElement taskElement : taskInfo.getTaskElementMap().values()) {
             //遍历所有任务进度
-            for (TaskProgressElement taskProgressElement : taskElement.getTaskProgress()) {
+            for (AbstractProgressElement abstractProgressElement : taskElement.getTaskProgress()) {
                 //判断任务进度的类型是否一样
-                if (isSameType(taskParam, taskProgressElement)) {
-                    change = change || modifyProgress(taskParam, taskProgressElement, taskElement);
+                if (isSameType(taskParam, (B) abstractProgressElement)) {
+                    change = change || modifyProgress(taskParam, (B) abstractProgressElement, taskElement);
                 }
             }
         }
@@ -82,15 +82,15 @@ public abstract class AbstractProcessor<T extends AbstractTaskParam> {
     /**
      * 是否是相同类型且须修改
      */
-    public abstract boolean isSameType(T taskParam, TaskProgressElement taskProgressElement);
+    public abstract boolean isSameType(T taskParam, B taskProgressElement);
 
     /**
      * 修改当前任务进度
      */
-    public abstract boolean modifyProgress(T taskParam, TaskProgressElement taskProgressElement, TaskElement taskElement);
+    public abstract boolean modifyProgress(T taskParam, B taskProgressElement, TaskElement taskElement);
 
     /**
      * 初始化任务进度
      */
-    public abstract void iniExcuteProgress(TaskProgressElement taskProgressElement, long rId);
+    public abstract void iniExcuteProgress(B taskProgressElement, long rId);
 }

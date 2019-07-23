@@ -16,7 +16,7 @@ public class TaskElement {
     /**
      * 任务进度
      */
-    private List<TaskProgressElement> taskProgress = new ArrayList<>();
+    private List<AbstractProgressElement> taskProgress = new ArrayList<>();
 
     /**
      * 是否可以完成
@@ -31,11 +31,11 @@ public class TaskElement {
         this.taskId = taskId;
     }
 
-    public List<TaskProgressElement> getTaskProgress() {
+    public List<AbstractProgressElement> getTaskProgress() {
         return taskProgress;
     }
 
-    public void setTaskProgress(List<TaskProgressElement> taskProgress) {
+    public void setTaskProgress(List<AbstractProgressElement> taskProgress) {
         this.taskProgress = taskProgress;
     }
 
@@ -51,7 +51,7 @@ public class TaskElement {
      * 查看是否完成
      */
     public void examineFinish() {
-        for (TaskProgressElement taskProgressElement : taskProgress) {
+        for (AbstractProgressElement taskProgressElement : taskProgress) {
             if (!taskProgressElement.isFinish()) {
                 return;
             }

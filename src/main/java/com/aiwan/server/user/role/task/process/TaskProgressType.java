@@ -6,11 +6,16 @@ import com.aiwan.server.base.event.event.impl.EquipChangeEvent;
 import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
 import com.aiwan.server.base.event.event.impl.MonsterKillEvent;
+import com.aiwan.server.user.role.task.entity.AbstractProgressElement;
+import com.aiwan.server.user.role.task.entity.impl.CommonProgress;
+import com.aiwan.server.user.role.task.entity.impl.DungeonClearanceProgress;
+import com.aiwan.server.user.role.task.entity.impl.KillAppointMonsterProgress;
 import com.aiwan.server.user.role.task.event.AbstractTaskParam;
 import com.aiwan.server.user.role.task.event.TaskParam;
 import com.aiwan.server.user.role.task.event.impl.CommonParam;
 import com.aiwan.server.user.role.task.event.impl.DungeonClearanceParam;
 import com.aiwan.server.user.role.task.event.impl.KillAppointMonsterParam;
+import com.aiwan.server.user.role.task.process.impl.DungeonClearanceProcessor;
 import com.aiwan.server.util.GetBean;
 
 import java.util.HashMap;
@@ -29,10 +34,9 @@ public enum TaskProgressType {
      */
     LEVEL_TYPE(1) {
         @Override
-        public Map<String, Integer> shiftParam(String param) {
-            Map<String, Integer> paramMap = new HashMap<>();
-            paramMap.put("value", Integer.parseInt(param));
-            return paramMap;
+        public AbstractProgressElement shiftParam(String param, long rId) {
+            CommonProgress commonProgress = new CommonProgress(this, getOriginValue(rId), Integer.parseInt(param));
+            return commonProgress;
         }
 
         @Override
@@ -53,15 +57,13 @@ public enum TaskProgressType {
      */
     KILL_APPOINT_MONSTER(2) {
         @Override
-        public Map<String, Integer> shiftParam(String param) {
-            Map<String, Integer> paramMap = new HashMap<>();
+        public AbstractProgressElement shiftParam(String param, long rId) {
             String[] keyValue = param.split("=");
             if (keyValue.length < 2) {
                 throw new IllegalArgumentException("KILL_APPOINT_MONSTER 参数转换错误");
             }
-            paramMap.put("monsterId", Integer.parseInt(keyValue[0]));
-            paramMap.put("value", Integer.parseInt(keyValue[1]));
-            return paramMap;
+            KillAppointMonsterProgress killAppointMonsterProgress = new KillAppointMonsterProgress(this, getOriginValue(rId), Integer.parseInt(keyValue[1]), Integer.parseInt(keyValue[0]));
+            return killAppointMonsterProgress;
         }
 
         @Override
@@ -77,10 +79,9 @@ public enum TaskProgressType {
      */
     EQUIP_NUM(3) {
         @Override
-        public Map<String, Integer> shiftParam(String param) {
-            Map<String, Integer> paramMap = new HashMap<>();
-            paramMap.put("value", Integer.parseInt(param));
-            return paramMap;
+        public AbstractProgressElement shiftParam(String param, long rId) {
+            CommonProgress commonProgress = new CommonProgress(this, getOriginValue(rId), Integer.parseInt(param));
+            return commonProgress;
         }
 
         @Override
@@ -101,15 +102,13 @@ public enum TaskProgressType {
      */
     DUNGEON_CLEARANCE(4) {
         @Override
-        public Map<String, Integer> shiftParam(String param) {
-            Map<String, Integer> paramMap = new HashMap<>();
+        public AbstractProgressElement shiftParam(String param, long rId) {
             String[] keyValue = param.split("=");
             if (keyValue.length < 2) {
                 throw new IllegalArgumentException("DUNGEON_CLEARANCE 参数转换错误");
             }
-            paramMap.put("mapId", Integer.parseInt(keyValue[0]));
-            paramMap.put("value", Integer.parseInt(keyValue[1]));
-            return paramMap;
+            DungeonClearanceProgress dungeonClearanceProgress = new DungeonClearanceProgress(this, getOriginValue(rId), Integer.parseInt(keyValue[1]), Integer.parseInt(keyValue[0]));
+            return dungeonClearanceProgress;
         }
 
         @Override
@@ -150,7 +149,7 @@ public enum TaskProgressType {
      * @param param
      * @return
      */
-    public Map<String, Integer> shiftParam(String param) {
+    public AbstractProgressElement shiftParam(String param, long rId) {
         return null;
     }
 

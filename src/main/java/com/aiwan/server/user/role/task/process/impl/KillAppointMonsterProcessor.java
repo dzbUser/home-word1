@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.task.process.impl;
 
 import com.aiwan.server.user.role.task.entity.TaskElement;
 import com.aiwan.server.user.role.task.entity.TaskProgressElement;
+import com.aiwan.server.user.role.task.entity.impl.KillAppointMonsterProgress;
 import com.aiwan.server.user.role.task.event.TaskParam;
 import com.aiwan.server.user.role.task.event.impl.KillAppointMonsterParam;
 import com.aiwan.server.user.role.task.process.AbstractProcessor;
@@ -16,28 +17,28 @@ import org.springframework.stereotype.Component;
  * @since 2019.7.22
  */
 @Component
-public class KillAppointMonsterProcessor extends AbstractProcessor<KillAppointMonsterParam> {
+public class KillAppointMonsterProcessor extends AbstractProcessor<KillAppointMonsterParam, KillAppointMonsterProgress> {
     @Override
     public TaskProgressType getEventType() {
         return TaskProgressType.KILL_APPOINT_MONSTER;
     }
 
     @Override
-    public boolean isSameType(KillAppointMonsterParam taskParam, TaskProgressElement taskProgressElement) {
+    public boolean isSameType(KillAppointMonsterParam taskParam, KillAppointMonsterProgress taskProgressElement) {
         if (taskParam.getTaskProgressType() != taskProgressElement.getTaskProgressType()) {
             return false;
         }
         //参数对比
-        if (taskParam.getMonsterId() != taskProgressElement.getParam("monsterId")) {
+        if (taskParam.getMonsterId() != taskProgressElement.getMonsterId()) {
             return false;
         }
         return true;
     }
 
     @Override
-    public boolean modifyProgress(KillAppointMonsterParam taskParam, TaskProgressElement taskProgressElement, TaskElement taskElement) {
+    public boolean modifyProgress(KillAppointMonsterParam taskParam, KillAppointMonsterProgress taskProgressElement, TaskElement taskElement) {
         taskProgressElement.setValue(taskProgressElement.getValue() + 1);
-        if (taskProgressElement.getValue() >= taskProgressElement.getParam("value") && !taskProgressElement.isFinish()) {
+        if (taskProgressElement.getValue() >= taskProgressElement.getFinishValue() && !taskProgressElement.isFinish()) {
             taskProgressElement.setFinish(true);
             taskElement.examineFinish();
         }
@@ -45,7 +46,7 @@ public class KillAppointMonsterProcessor extends AbstractProcessor<KillAppointMo
     }
 
     @Override
-    public void iniExcuteProgress(TaskProgressElement taskProgressElement, long rId) {
+    public void iniExcuteProgress(KillAppointMonsterProgress taskProgressElement, long rId) {
 
     }
 }

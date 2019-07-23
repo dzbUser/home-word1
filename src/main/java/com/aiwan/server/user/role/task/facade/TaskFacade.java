@@ -6,6 +6,7 @@ import com.aiwan.server.base.event.event.impl.EquipChangeEvent;
 import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.base.event.event.impl.MonsterKillEvent;
+import com.aiwan.server.user.role.task.event.AbstractTaskParam;
 import com.aiwan.server.user.role.task.event.TaskParam;
 import com.aiwan.server.user.role.task.process.AbstractProcessor;
 import com.aiwan.server.user.role.task.process.TaskProgressType;
@@ -37,7 +38,7 @@ public class TaskFacade {
     @ReceiverAnno
     public void killMonster(MonsterKillEvent monsterKillEvent) {
         //创建参数
-        TaskParam taskParam = TaskProgressType.KILL_APPOINT_MONSTER.getParamMap(monsterKillEvent);
+        AbstractTaskParam taskParam = TaskProgressType.KILL_APPOINT_MONSTER.getParam(monsterKillEvent);
         //抛出杀怪事件
         AbstractProcessor abstractProcessor = AbstractProcessor.getProcessor(TaskProgressType.KILL_APPOINT_MONSTER);
         abstractProcessor.refreshExecute(taskParam);
@@ -51,7 +52,7 @@ public class TaskFacade {
     @ReceiverAnno
     public void roleUpgrade(RoleUpgradeEvent roleUpgradeEvent) {
         //创建参数
-        TaskParam taskParam = TaskProgressType.LEVEL_TYPE.getParamMap(roleUpgradeEvent);
+        AbstractTaskParam taskParam = TaskProgressType.LEVEL_TYPE.getParam(roleUpgradeEvent);
         //抛出杀怪事件
         AbstractProcessor abstractProcessor = AbstractProcessor.getProcessor(TaskProgressType.LEVEL_TYPE);
         abstractProcessor.refreshExecute(taskParam);
@@ -63,9 +64,9 @@ public class TaskFacade {
      * @param equipChangeEvent 装备穿卸事件
      */
     @ReceiverAnno
-    public void roleUpgrade(EquipChangeEvent equipChangeEvent) {
+    public void equipChange(EquipChangeEvent equipChangeEvent) {
         //创建参数
-        TaskParam taskParam = TaskProgressType.EQUIP_NUM.getParamMap(equipChangeEvent);
+        AbstractTaskParam taskParam = TaskProgressType.EQUIP_NUM.getParam(equipChangeEvent);
         //抛出杀怪事件
         AbstractProcessor abstractProcessor = AbstractProcessor.getProcessor(TaskProgressType.EQUIP_NUM);
         abstractProcessor.refreshExecute(taskParam);
@@ -77,9 +78,9 @@ public class TaskFacade {
      * @param dungeonClearanceEvent 任务升级事件
      */
     @ReceiverAnno
-    public void roleUpgrade(DungeonClearanceEvent dungeonClearanceEvent) {
+    public void dungeonClearance(DungeonClearanceEvent dungeonClearanceEvent) {
         //创建参数
-        TaskParam taskParam = TaskProgressType.DUNGEON_CLEARANCE.getParamMap(dungeonClearanceEvent);
+        AbstractTaskParam taskParam = TaskProgressType.DUNGEON_CLEARANCE.getParam(dungeonClearanceEvent);
         //抛出杀怪事件
         AbstractProcessor abstractProcessor = AbstractProcessor.getProcessor(TaskProgressType.DUNGEON_CLEARANCE);
         abstractProcessor.refreshExecute(taskParam);

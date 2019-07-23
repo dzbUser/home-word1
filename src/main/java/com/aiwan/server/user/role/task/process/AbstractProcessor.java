@@ -3,6 +3,7 @@ package com.aiwan.server.user.role.task.process;
 import com.aiwan.server.user.role.task.entity.TaskElement;
 import com.aiwan.server.user.role.task.entity.TaskInfo;
 import com.aiwan.server.user.role.task.entity.TaskProgressElement;
+import com.aiwan.server.user.role.task.event.AbstractTaskParam;
 import com.aiwan.server.user.role.task.event.TaskParam;
 import com.aiwan.server.user.role.task.model.TaskModel;
 import com.aiwan.server.user.role.task.service.TaskManager;
@@ -21,7 +22,7 @@ import java.util.Map;
  * @author dengzebiao
  * @since 2019.7.22
  */
-public abstract class AbstractProcessor {
+public abstract class AbstractProcessor<T extends AbstractTaskParam> {
 
     Logger logger = LoggerFactory.getLogger(AbstractProcessor.class);
 
@@ -56,7 +57,7 @@ public abstract class AbstractProcessor {
     /**
      * 更新完成进度
      */
-    public void refreshExecute(TaskParam taskParam) {
+    public void refreshExecute(T taskParam) {
         logger.debug("{}触发任务更新", taskParam.getRole().getId());
         boolean change = false;
         //获取任务
@@ -81,12 +82,12 @@ public abstract class AbstractProcessor {
     /**
      * 是否是相同类型且须修改
      */
-    public abstract boolean isSameType(TaskParam taskParam, TaskProgressElement taskProgressElement);
+    public abstract boolean isSameType(T taskParam, TaskProgressElement taskProgressElement);
 
     /**
      * 修改当前任务进度
      */
-    public abstract boolean modifyProgress(TaskParam taskParam, TaskProgressElement taskProgressElement, TaskElement taskElement);
+    public abstract boolean modifyProgress(T taskParam, TaskProgressElement taskProgressElement, TaskElement taskElement);
 
     /**
      * 初始化任务进度

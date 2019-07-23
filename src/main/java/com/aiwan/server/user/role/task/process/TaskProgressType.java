@@ -6,7 +6,11 @@ import com.aiwan.server.base.event.event.impl.EquipChangeEvent;
 import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
 import com.aiwan.server.base.event.event.impl.MonsterKillEvent;
+import com.aiwan.server.user.role.task.event.AbstractTaskParam;
 import com.aiwan.server.user.role.task.event.TaskParam;
+import com.aiwan.server.user.role.task.event.impl.CommonParam;
+import com.aiwan.server.user.role.task.event.impl.DungeonClearanceParam;
+import com.aiwan.server.user.role.task.event.impl.KillAppointMonsterParam;
 import com.aiwan.server.util.GetBean;
 
 import java.util.HashMap;
@@ -37,13 +41,9 @@ public enum TaskProgressType {
         }
 
         @Override
-        public TaskParam getParamMap(IEvent event) {
+        public AbstractTaskParam getParam(IEvent event) {
             RoleUpgradeEvent roleUpgradeEvent = (RoleUpgradeEvent) event;
-            TaskParam taskParam = new TaskParam();
-            Map<String, Integer> paramMap = new HashMap<>();
-            taskParam.setTaskProgressType(this);
-            taskParam.setRole(roleUpgradeEvent.getRole());
-            taskParam.setParamMap(paramMap);
+            CommonParam taskParam = new CommonParam(roleUpgradeEvent.getRole(), this);
             return taskParam;
         }
     },
@@ -65,15 +65,10 @@ public enum TaskProgressType {
         }
 
         @Override
-        public TaskParam getParamMap(IEvent event) {
+        public AbstractTaskParam getParam(IEvent event) {
             MonsterKillEvent monsterKillEvent = (MonsterKillEvent) event;
-            TaskParam taskParam = new TaskParam();
-            Map<String, Integer> paramMap = new HashMap<>();
-            paramMap.put("monsterId", monsterKillEvent.getMonsterId());
-            taskParam.setTaskProgressType(this);
-            taskParam.setRole(monsterKillEvent.getRole());
-            taskParam.setParamMap(paramMap);
-            return taskParam;
+            KillAppointMonsterParam killAppointMonsterParam = new KillAppointMonsterParam(monsterKillEvent.getRole(), this, monsterKillEvent.getMonsterId());
+            return killAppointMonsterParam;
         }
     },
 
@@ -95,13 +90,9 @@ public enum TaskProgressType {
         }
 
         @Override
-        public TaskParam getParamMap(IEvent event) {
+        public AbstractTaskParam getParam(IEvent event) {
             EquipChangeEvent equipChangeEvent = (EquipChangeEvent) event;
-            TaskParam taskParam = new TaskParam();
-            Map<String, Integer> paramMap = new HashMap<>();
-            taskParam.setTaskProgressType(this);
-            taskParam.setRole(equipChangeEvent.getRole());
-            taskParam.setParamMap(paramMap);
+            CommonParam taskParam = new CommonParam(equipChangeEvent.getRole(), this);
             return taskParam;
         }
     },
@@ -122,15 +113,10 @@ public enum TaskProgressType {
         }
 
         @Override
-        public TaskParam getParamMap(IEvent event) {
+        public AbstractTaskParam getParam(IEvent event) {
             DungeonClearanceEvent dungeonClearanceEvent = (DungeonClearanceEvent) event;
-            TaskParam taskParam = new TaskParam();
-            Map<String, Integer> paramMap = new HashMap<>();
-            paramMap.put("mapId", dungeonClearanceEvent.getMapId());
-            taskParam.setTaskProgressType(this);
-            taskParam.setRole(dungeonClearanceEvent.getRole());
-            taskParam.setParamMap(paramMap);
-            return taskParam;
+            DungeonClearanceParam param = new DungeonClearanceParam(dungeonClearanceEvent.getRole(), this, dungeonClearanceEvent.getMapId());
+            return param;
         }
     },
     ;
@@ -184,7 +170,7 @@ public enum TaskProgressType {
      * @param event 事件
      * @return
      */
-    public TaskParam getParamMap(IEvent event) {
+    public AbstractTaskParam getParam(IEvent event) {
         return null;
     }
 }

@@ -1,22 +1,23 @@
 package com.aiwan.server.user.role.task.process.impl;
 
-import com.aiwan.server.user.role.equipment.model.EquipmentModel;
 import com.aiwan.server.user.role.task.entity.TaskElement;
 import com.aiwan.server.user.role.task.entity.TaskProgressElement;
 import com.aiwan.server.user.role.task.event.TaskParam;
 import com.aiwan.server.user.role.task.process.AbstractProcessor;
 import com.aiwan.server.user.role.task.process.TaskProgressType;
-import com.aiwan.server.util.GetBean;
 import org.springframework.stereotype.Component;
 
 /**
- * 装备数量处理器
+ * 副本通关任务处理器
+ *
+ * @author dengzebiao
+ * @since 2019.7.23
  */
 @Component
-public class EquipNumProcessor extends AbstractProcessor {
+public class DungeonClearanceProcessor extends AbstractProcessor {
     @Override
     public TaskProgressType getEventType() {
-        return TaskProgressType.EQUIP_NUM;
+        return TaskProgressType.DUNGEON_CLEARANCE;
     }
 
     @Override
@@ -24,13 +25,16 @@ public class EquipNumProcessor extends AbstractProcessor {
         if (taskParam.getTaskProgressType() != taskProgressElement.getTaskProgressType()) {
             return false;
         }
+        //参数对比
+        if (taskParam.getParam("mapId") == null || !taskParam.getParam("mapId").equals(taskProgressElement.getParam("mapId"))) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public boolean modifyProgress(TaskParam taskParam, TaskProgressElement taskProgressElement, TaskElement taskElement) {
-        EquipmentModel equipmentModel = GetBean.getEquipmentManager().load(taskParam.getRole().getId());
-        taskProgressElement.setValue(equipmentModel.getEquipBarNum());
+        taskProgressElement.setValue(taskProgressElement.getValue() + 1);
         if (taskProgressElement.getValue() >= taskProgressElement.getParam("value") && !taskProgressElement.isFinish()) {
             taskProgressElement.setFinish(true);
             taskElement.examineFinish();
@@ -40,10 +44,6 @@ public class EquipNumProcessor extends AbstractProcessor {
 
     @Override
     public void iniExcuteProgress(TaskProgressElement taskProgressElement, long rId) {
-        EquipmentModel equipmentModel = GetBean.getEquipmentManager().load(rId);
-        taskProgressElement.setValue(equipmentModel.getEquipBarNum());
-        if (taskProgressElement.getValue() >= taskProgressElement.getParam("value") && !taskProgressElement.isFinish()) {
-            taskProgressElement.setFinish(true);
-        }
+
     }
 }

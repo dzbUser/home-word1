@@ -1,5 +1,6 @@
 package com.aiwan.server.world.base.handler;
 
+import com.aiwan.server.base.event.event.impl.DungeonClearanceEvent;
 import com.aiwan.server.monster.resource.MonsterResource;
 import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpunit.MonsterUnit;
@@ -180,6 +181,15 @@ public abstract class AbstractDungeonHandler {
         this.dungeonScene = dungeonScene;
     }
 
-
+    /**
+     * 发送通关事件
+     *
+     * @param role  角色
+     * @param mapId 通关地图id
+     */
+    public void dungeonClearanceEvent(Role role, int mapId) {
+        DungeonClearanceEvent dungeonClearanceEvent = DungeonClearanceEvent.valueOf(role, mapId);
+        GetBean.getEventBusManager().synSubmit(dungeonClearanceEvent);
+    }
 }
 

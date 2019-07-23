@@ -104,6 +104,8 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
         settlementReward(getDungeonScene().getResource().getSettlementBean());
         //发送提示
         for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
+            //触发通关事件
+            dungeonClearanceEvent(role, getDungeonScene().getMapId());
             SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "副本时间到，");
         }
     }

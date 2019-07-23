@@ -1,6 +1,7 @@
 package com.aiwan.server.user.role.task.facade;
 
 import com.aiwan.server.base.event.anno.ReceiverAnno;
+import com.aiwan.server.base.event.event.impl.DungeonClearanceEvent;
 import com.aiwan.server.base.event.event.impl.EquipChangeEvent;
 import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.publicsystem.common.Session;
@@ -59,7 +60,7 @@ public class TaskFacade {
     /**
      * 接收角色装备栏变化
      *
-     * @param equipChangeEvent 任务升级事件
+     * @param equipChangeEvent 装备穿卸事件
      */
     @ReceiverAnno
     public void roleUpgrade(EquipChangeEvent equipChangeEvent) {
@@ -67,6 +68,20 @@ public class TaskFacade {
         TaskParam taskParam = TaskProgressType.EQUIP_NUM.getParamMap(equipChangeEvent);
         //抛出杀怪事件
         AbstractProcessor abstractProcessor = AbstractProcessor.getProcessor(TaskProgressType.EQUIP_NUM);
+        abstractProcessor.refreshExecute(taskParam);
+    }
+
+    /**
+     * 接收角色通关副本事件
+     *
+     * @param dungeonClearanceEvent 任务升级事件
+     */
+    @ReceiverAnno
+    public void roleUpgrade(DungeonClearanceEvent dungeonClearanceEvent) {
+        //创建参数
+        TaskParam taskParam = TaskProgressType.DUNGEON_CLEARANCE.getParamMap(dungeonClearanceEvent);
+        //抛出杀怪事件
+        AbstractProcessor abstractProcessor = AbstractProcessor.getProcessor(TaskProgressType.DUNGEON_CLEARANCE);
         abstractProcessor.refreshExecute(taskParam);
     }
 

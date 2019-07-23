@@ -1,6 +1,7 @@
 package com.aiwan.server.user.role.task.process;
 
 import com.aiwan.server.base.event.event.IEvent;
+import com.aiwan.server.base.event.event.impl.DungeonClearanceEvent;
 import com.aiwan.server.base.event.event.impl.EquipChangeEvent;
 import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.user.role.equipment.model.EquipmentModel;
@@ -90,13 +91,7 @@ public enum TaskProgressType {
         @Override
         public int getOriginValue(long rId) {
             EquipmentModel equipmentModel = GetBean.getEquipmentManager().load(rId);
-            int num = 0;
-            for (int i = 0; i < equipmentModel.getEquipmentBar().length; i++) {
-                if (equipmentModel.getEquipmentBar()[i] != null) {
-                    num++;
-                }
-            }
-            return num;
+            return equipmentModel.getEquipBarNum();
         }
 
         @Override
@@ -106,6 +101,34 @@ public enum TaskProgressType {
             Map<String, Integer> paramMap = new HashMap<>();
             taskParam.setTaskProgressType(this);
             taskParam.setRole(equipChangeEvent.getRole());
+            taskParam.setParamMap(paramMap);
+            return taskParam;
+        }
+    },
+    /**
+     * 任务通关类型
+     */
+    DUNGEON_CLEARANCE(4) {
+        @Override
+        public Map<String, Integer> shiftParam(String param) {
+            Map<String, Integer> paramMap = new HashMap<>();
+            String[] keyValue = param.split("=");
+            if (keyValue.length < 2) {
+                throw new IllegalArgumentException("DUNGEON_CLEARANCE 参数转换错误");
+            }
+            paramMap.put("mapId", Integer.parseInt(keyValue[0]));
+            paramMap.put("value", Integer.parseInt(keyValue[1]));
+            return paramMap;
+        }
+
+        @Override
+        public TaskParam getParamMap(IEvent event) {
+            DungeonClearanceEvent dungeonClearanceEvent = (DungeonClearanceEvent) event;
+            TaskParam taskParam = new TaskParam();
+            Map<String, Integer> paramMap = new HashMap<>();
+            paramMap.put("mapId", dungeonClearanceEvent.getMapId());
+            taskParam.setTaskProgressType(this);
+            taskParam.setRole(dungeonClearanceEvent.getRole());
             taskParam.setParamMap(paramMap);
             return taskParam;
         }

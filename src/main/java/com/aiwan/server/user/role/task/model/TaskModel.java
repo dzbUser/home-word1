@@ -50,6 +50,10 @@ public class TaskModel {
         for (Integer taskId : taskEnt.getTaskInfo().getFinishTaskId()) {
             TaskResource taskResource = GetBean.getTaskManager().getTaskResource(taskId);
             int nextTaskId = taskResource.getNextTaskId();
+            if (nextTaskId == 0) {
+                //没有下一个任务
+                continue;
+            }
             if (getTaskElement(nextTaskId) == null && !finishTask.contains(nextTaskId)) {
                 list.add(nextTaskId);
             }

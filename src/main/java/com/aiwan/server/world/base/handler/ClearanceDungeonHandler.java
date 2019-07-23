@@ -16,6 +16,11 @@ import com.aiwan.server.world.scenes.mapresource.SettlementBean;
  */
 public class ClearanceDungeonHandler extends AbstractDungeonHandler {
 
+    /**
+     * 是否通关
+     */
+    private boolean isClearance = false;
+
     @Override
     public void checkpointListener() {
         setKillMonsterNum(getKillMonsterNum() + 1);
@@ -36,6 +41,7 @@ public class ClearanceDungeonHandler extends AbstractDungeonHandler {
                 generateMonster(nextGateBean.getMonsterId(), nextGateBean.getMonsterNum());
             } else {
                 //通关，结算
+                isClearance = true;
                 settlement();
             }
         }
@@ -56,8 +62,18 @@ public class ClearanceDungeonHandler extends AbstractDungeonHandler {
         existDungeon();
         //删除副本
         GetBean.getMapManager().removeSceObject(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
-        //发送奖励
-        settlementReward(getDungeonScene().getResource().getSettlementBean());
+        //若已通关
+        if (isClearance) {
+            //发送奖励
+            settlementReward(getDungeonScene().getResource().getSettlementBean());
+            //触发副本通关事件
+            //触发副本通关事件
+            for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
+                dungeonClearanceEvent(role, getDungeonScene().getMapId());
+            }
+        }
+        //发送副本通关事件
+
         //发送提示
         for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
             SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "");

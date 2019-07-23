@@ -22,20 +22,13 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
     Logger logger = LoggerFactory.getLogger(SceneRateCommand.class);
 
 
-    /**
-     * 刷怪间隔
-     */
-    private long brushPeriod;
-
-    /**
-     * 下次刷怪时间
-     */
-    private long nextBrushTime;
-
-    public SceneRateCommand(String accountId, int mapId, long delay, long period, long brushMonsterTime, long brushPeriod) {
+    public SceneRateCommand(String accountId, int mapId, long delay, long period) {
         super(accountId, mapId, delay, period);
-        this.nextBrushTime = brushMonsterTime;
-        this.brushPeriod = brushPeriod;
+        setTaskName("场景循环命令");
+    }
+
+    public SceneRateCommand(String accountId, int mapId, int sceneId, long delay, long period) {
+        super(accountId, mapId, sceneId, delay, period);
         setTaskName("场景循环命令");
     }
 
@@ -47,23 +40,6 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
             return;
         }
         long now = System.currentTimeMillis();
-        //复活死亡怪物
-        if (now >= nextBrushTime) {
-            //用以标志是否有怪物复活
-            boolean flag = false;
-            Map<Long, BaseUnit> baseUnitMap = abstractScene.getBaseUnitMap();
-            for (BaseUnit baseUnit : baseUnitMap.values()) {
-                if (baseUnit.isMonster() && baseUnit.isDeath()) {
-                    baseUnit.setHp(baseUnit.getMaxHp());
-                    baseUnit.setDeath(false);
-                    flag = true;
-                }
-            }
-            nextBrushTime = now + brushPeriod;
-            if (flag) {
-                GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
-            }
-        }
 
         //buff处理
         for (BaseUnit baseUnit : abstractScene.getBaseUnitMap().values()) {

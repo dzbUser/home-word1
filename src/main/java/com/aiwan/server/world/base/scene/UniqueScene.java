@@ -1,6 +1,7 @@
 package com.aiwan.server.world.base.scene;
 
 import com.aiwan.server.monster.resource.MonsterResource;
+import com.aiwan.server.world.scenes.command.MonsterRateReviveCommand;
 import com.aiwan.server.world.scenes.command.SceneRateCommand;
 import com.aiwan.server.user.role.fight.pvpunit.MonsterUnit;
 import com.aiwan.server.util.GetBean;
@@ -38,9 +39,12 @@ public class UniqueScene extends AbstractScene {
         generateMonster();
         //初始化buff
         long now = System.currentTimeMillis();
-        SceneRateCommand sceneRateCommand = new SceneRateCommand(null, getMapId(), 0, 1000, now + 5000, 5000);
+        SceneRateCommand sceneRateCommand = new SceneRateCommand(null, getMapId(), 0, 1000);
+        MonsterRateReviveCommand monsterRateReviveCommand = new MonsterRateReviveCommand(null, getMapId(), 0, 5000);
         GetBean.getSceneExecutorService().submit(sceneRateCommand);
+        GetBean.getSceneExecutorService().submit(monsterRateReviveCommand);
         getCommandMap().put(SceneRateCommand.class, sceneRateCommand);
+        getCommandMap().put(MonsterRateReviveCommand.class, monsterRateReviveCommand);
     }
 
     /**

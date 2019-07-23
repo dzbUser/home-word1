@@ -143,11 +143,11 @@ public class TeamService implements ITeamService {
             logger.error("{}允许{}加入队伍失败，申请者不存在", session.getrId(), allowRId);
             return;
         }
-        if (!teamManager.isInTeam(session.getrId())) {
-            logger.error("{}允许{}加入队伍失败，操作者不在队伍中", session.getrId(), allowRId);
-            session.sendPromptMessage(PromptCode.NO_IN_TEAM, "");
-            return;
-        }
+//        if (!teamManager.isInTeam(session.getrId())) {
+//            logger.error("{}允许{}加入队伍失败，操作者不在队伍中", session.getrId(), allowRId);
+//            session.sendPromptMessage(PromptCode.NO_IN_TEAM, "");
+//            return;
+//        }
         TeamModel teamModel = teamManager.getTeam(teamManager.getTeamIdByRid(session.getrId()));
         if (teamModel == null) {
             logger.error("{}允许{}加入队伍失败，操作者者队伍不存在", session.getrId(), allowRId);

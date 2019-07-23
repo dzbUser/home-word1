@@ -13,6 +13,7 @@ import com.aiwan.server.world.dungeon.command.DungeonOverCommand;
 import com.aiwan.server.reward.command.RewardCommand;
 import com.aiwan.server.world.scenes.command.ChangeMapCommand;
 import com.aiwan.server.world.scenes.command.EnterMapCommand;
+import com.aiwan.server.world.scenes.command.SceneRateCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
 import com.aiwan.server.world.scenes.mapresource.SettlementBean;
 import com.aiwan.server.world.scenes.model.Position;
@@ -81,8 +82,12 @@ public abstract class AbstractDungeonHandler {
         //添加定时器
         DungeonOverCommand dungeonOverCommand = new DungeonOverCommand(getDungeonScene().getResource().getDuration(), null, dungeonScene.getMapId(), dungeonScene.getSceneId(), getDungeonScene());
         getDungeonScene().getCommandMap().put(DungeonOverCommand.class, dungeonOverCommand);
+        //添加场景扫描定时器
+        SceneRateCommand sceneRateCommand = new SceneRateCommand(null, dungeonScene.getMapId(), dungeonScene.getSceneId(), 0, 1000);
+        getDungeonScene().getCommandMap().put(SceneRateCommand.class, sceneRateCommand);
         //启动定时器
         GetBean.getSceneExecutorService().submit(dungeonOverCommand);
+        GetBean.getSceneExecutorService().submit(sceneRateCommand);
         enterDungeon();
     }
 

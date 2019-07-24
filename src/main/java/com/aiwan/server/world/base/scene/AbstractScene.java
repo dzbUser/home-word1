@@ -35,6 +35,11 @@ public abstract class AbstractScene {
      */
     private int mapId;
 
+    /**
+     * 是否可以进入
+     */
+    private boolean isCanEnter = false;
+
     public int getKey() {
         if (sceneId == 0) {
             return mapId;
@@ -174,5 +179,13 @@ public abstract class AbstractScene {
 
     public void setSceneId(int sceneId) {
         this.sceneId = sceneId;
+    }
+
+    public boolean isCanEnter() {
+        return isCanEnter;
+    }
+
+    public void setCanEnter(boolean canEnter) {
+        isCanEnter = canEnter;
     }
 }

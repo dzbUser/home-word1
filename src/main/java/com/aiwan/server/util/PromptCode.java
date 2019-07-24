@@ -315,6 +315,32 @@ public class PromptCode {
      */
     public final static int NO_IN_INVITATION = 66;
 
+    /**
+     * 获取经验
+     */
+    public final static int GET_EXPERIENCE = 67;
+
+    /**
+     * 改地图不可以进入
+     */
+    public final static int MAP_NO_ENTER = 68;
+
+    /**
+     * 任务接受成功
+     */
+    public final static int TASK_RECEIVE_SUCCESS = 69;
+
+    /**
+     * 该任务不具备完成条件
+     */
+    public final static int TASK_CAN_NOT_COMPLETE = 70;
+
+    /**
+     * 任务完成
+     */
+    public final static int TASK_COMPLETE = 71;
+
+
 //
 //    /**
 //     * 申请加入队伍成功

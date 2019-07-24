@@ -43,7 +43,6 @@ public class MapResource {
     /**位置信息字符串*/
     @CellMapping(name = "positionString")
     private String positionString;
-
     /**
      * 是否为副本
      */
@@ -51,18 +50,10 @@ public class MapResource {
     private int isDungeon;
 
     /**
-     * 副本类型（0.不是副本 1.经验副本 2.通关副本）
+     * 副本类型（0.不是副本 1.经验副本 2.科赞岛副本）
      */
     @CellMapping(name = "dungeonType")
     private int dungeonType;
-
-    /**
-     * 通关机制
-     * 1.单人副本
-     * 2.团队副本
-     */
-    @CellMapping(name = "isSingle")
-    private int isSingle;
 
     /**
      * 关卡
@@ -250,14 +241,6 @@ public class MapResource {
         this.dungeonType = dungeonType;
     }
 
-
-    public int getIsSingle() {
-        return isSingle;
-    }
-
-    public void setIsSingle(int isSingle) {
-        this.isSingle = isSingle;
-    }
 
     public String getCheckpoint() {
         return checkpoint;

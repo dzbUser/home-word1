@@ -34,4 +34,9 @@ public class ResetStatusCommand extends AbstractSceneCommand {
 
         }
     }
+
+    @Override
+    public String getTaskName() {
+        return "ResetStatusCommand";
+    }
 }

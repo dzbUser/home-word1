@@ -1,7 +1,7 @@
 package com.aiwan.server.world.base.scene;
 
 import com.aiwan.server.user.role.team.model.TeamModel;
-import com.aiwan.server.world.base.handler.AbstractDungeonHandler;
+import com.aiwan.server.world.base.handler.AbstractChapterDungeonHandler;
 
 /**
  * 副本场景
@@ -16,14 +16,10 @@ public class DungeonScene extends AbstractScene {
     }
 
     /**
-     * 进入副本的队伍
-     */
-    private TeamModel teamModel;
-
-    /**
      * 副本处理器
      */
-    private AbstractDungeonHandler handler;
+    private AbstractChapterDungeonHandler handler;
+
 
 
     /**
@@ -34,19 +30,12 @@ public class DungeonScene extends AbstractScene {
     }
 
 
-    public TeamModel getTeamModel() {
-        return teamModel;
-    }
-
-    public void setTeamModel(TeamModel teamModel) {
-        this.teamModel = teamModel;
-    }
-
-    public AbstractDungeonHandler getHandler() {
+    public AbstractChapterDungeonHandler getHandler() {
         return handler;
     }
 
-    public void setHandler(AbstractDungeonHandler handler) {
+    public void setHandler(AbstractChapterDungeonHandler handler) {
         this.handler = handler;
     }
+
 }

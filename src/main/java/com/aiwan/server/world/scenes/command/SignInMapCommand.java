@@ -5,6 +5,7 @@ import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.world.base.scene.AbstractScene;
+import com.aiwan.server.world.base.scene.DungeonScene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SignInMapCommand extends AbstractSceneCommand {
 
-    Logger logger = LoggerFactory.getLogger(SignInMapCommand.class);
+    private final static Logger logger = LoggerFactory.getLogger(SignInMapCommand.class);
 
     /**
      * 角色
@@ -22,26 +23,49 @@ public class SignInMapCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
-        role.setChangingMap(true);
-        //把角色存到地图资源
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
-        if (abstractScene == null) {
-            //不存在此资源
+        try {
+            role.setChangingMap(true);
+            //把角色存到地图资源
+            AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
+            if (abstractScene == null) {
+                //不存在此资源
+                role.setChangingMap(false);
+                EnterMapCommand enterMapCommand = new EnterMapCommand(1, role, null);
+                GetBean.getSceneExecutorService().submit(enterMapCommand);
+                return;
+            }
+            if (abstractScene instanceof DungeonScene) {
+                //副本
+                DungeonScene dungeonScene = (DungeonScene) abstractScene;
+                dungeonScene.getHandler().enterDungeon(role, null);
+                role.setChangingMap(false);
+            } else {
+                //普通地图
+                RoleUnit roleUnit = RoleUnit.valueOf(role, abstractScene.getMapId());
+                abstractScene.putBaseUnit(roleUnit);
+                //给所有玩家发送消息
+                GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
+                role.setChangingMap(false);
+            }
+        } catch (Exception e) {
+            logger.error("{}跳转到{}失败", role.getId(), getMapId());
+            //取消跳转
             role.setChangingMap(false);
+            //直接进入主城
             EnterMapCommand enterMapCommand = new EnterMapCommand(1, role, null);
             GetBean.getSceneExecutorService().submit(enterMapCommand);
-            return;
         }
-        RoleUnit roleUnit = RoleUnit.valueOf(role, abstractScene.getMapId());
-        abstractScene.putBaseUnit(roleUnit);
-        //给所有玩家发送消息
-        GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
-        role.setChangingMap(false);
+
     }
 
     public SignInMapCommand(Role role) {
         super(role.getAccountId(), role.getMap(), role.getSceneId());
         this.role = role;
         setTaskName("玩家登陆时进入地图指令");
+    }
+
+    @Override
+    public String getTaskName() {
+        return "SignInMapCommand";
     }
 }

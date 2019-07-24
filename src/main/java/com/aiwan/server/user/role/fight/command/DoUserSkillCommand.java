@@ -40,4 +40,9 @@ public class DoUserSkillCommand extends AbstractSceneCommand {
     public void action() {
         GetBean.getFightService().doUserSkill(activeId, targetId, skill, getMapId(), getSceneId());
     }
+
+    @Override
+    public String getTaskName() {
+        return "DoUserSkillCommand";
+    }
 }

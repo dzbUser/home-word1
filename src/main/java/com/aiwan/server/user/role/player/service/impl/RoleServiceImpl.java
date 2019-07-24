@@ -4,6 +4,7 @@ import com.aiwan.server.base.event.core.EventBusManager;
 import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.protocol.DecodeData;
+import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.world.scenes.command.SignInMapCommand;
 import com.aiwan.server.world.scenes.command.UpdateSceneAttributeCommand;
 import com.aiwan.server.user.role.attributes.model.AttributeElement;
@@ -109,6 +110,8 @@ public class RoleServiceImpl implements RoleService {
      * */
     @Override
     public int addExperience(Long rId, int experienceNum) {
+        //发送获取的提示经验
+        SessionManager.sendPromptMessage(rId, PromptCode.GET_EXPERIENCE, experienceNum + "");
         //获取经验，循环解决升级
         Role role = roleManager.load(rId);
         int level = role.getLevel();

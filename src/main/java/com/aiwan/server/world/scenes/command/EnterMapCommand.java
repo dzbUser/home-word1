@@ -3,9 +3,12 @@ package com.aiwan.server.world.scenes.command;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.world.base.scene.AbstractScene;
+import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.scenes.mapresource.MapResource;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 进入地图命令(需要初始化坐标)
@@ -14,6 +17,8 @@ import com.aiwan.server.util.GetBean;
  * @since 2019.7.4
  */
 public class EnterMapCommand extends AbstractSceneCommand {
+
+    private final static Logger logger = LoggerFactory.getLogger(EnterMapCommand.class);
 
     /**
      * 角色
@@ -28,27 +33,25 @@ public class EnterMapCommand extends AbstractSceneCommand {
 
     @Override
     public void action() {
-        //获取地图资源
-        MapResource mapResource = GetBean.getMapManager().getMapResource(getMapId());
-        //初始化化角色坐标
-        role.setMap(getMapId());
-        role.setSceneId(getSceneId());
-        role.setX(mapResource.getOriginX());
-        role.setY(mapResource.getOriginY());
-        //添加到地图资源中
-        RoleUnit newFightRole = RoleUnit.valueOf(role, mapResource.getMapId());
-        //传递cd、hp以及mp
-        if (roleUnit != null) {
-            newFightRole.transferStatus(roleUnit);
+        try {
+            AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getMapId(), getSceneId());
+            if (abstractScene instanceof DungeonScene) {
+                //副本
+                DungeonScene dungeonScene = (DungeonScene) abstractScene;
+                dungeonScene.getHandler().enterDungeon(role, roleUnit);
+            } else {
+                //普通地图
+                GetBean.getScenesService().enterMap(role, abstractScene, roleUnit);
+            }
+        } catch (Exception e) {
+            logger.error("{}跳转到{}失败", role.getId(), getMapId());
+            //取消跳转
+            role.setChangingMap(false);
+            //直接进入主城
+            EnterMapCommand enterMapCommand = new EnterMapCommand(1, role, null);
+            GetBean.getSceneExecutorService().submit(enterMapCommand);
+
         }
-        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getMapId(), getSceneId());
-        abstractScene.putBaseUnit(newFightRole);
-        //写回
-        GetBean.getRoleManager().save(role);
-        //设置跳转结束
-        role.setChangingMap(false);
-        //给所有玩家发送消息
-        GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
     }
 
     public EnterMapCommand(int mapId, Role role, RoleUnit roleUnit) {
@@ -65,5 +68,8 @@ public class EnterMapCommand extends AbstractSceneCommand {
         this.roleUnit = roleUnit;
     }
 
-
+    @Override
+    public String getTaskName() {
+        return "EnterMapCommand";
+    }
 }

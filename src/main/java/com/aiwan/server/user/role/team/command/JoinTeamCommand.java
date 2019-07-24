@@ -33,4 +33,9 @@ public class JoinTeamCommand extends AbstractAccountCommand {
     public void active() {
         GetBean.getTeamService().joinTeam(role, teamModel);
     }
+
+    @Override
+    public String getTaskName() {
+        return "JoinTeamCommand";
+    }
 }

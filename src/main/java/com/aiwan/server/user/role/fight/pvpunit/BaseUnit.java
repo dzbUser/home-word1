@@ -114,7 +114,6 @@ public abstract class BaseUnit {
      */
     protected void calculateFinalAttribute() {
         fightUnitAttribute.calculate();
-        logger.debug("计算成功");
     }
 
     /**

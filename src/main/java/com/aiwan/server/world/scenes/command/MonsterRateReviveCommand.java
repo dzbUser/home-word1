@@ -51,6 +51,6 @@ public class MonsterRateReviveCommand extends AbstractSceneRateCommand {
      */
     @Override
     public String getTaskName() {
-        return "怪物复活周期检查";
+        return "MonsterRateReviveCommand";
     }
 }

@@ -40,4 +40,9 @@ public class UpdateSceneAttributeCommand extends AbstractSceneCommand {
         this.role = role;
         setTaskName("更新场景中的角色属性命令");
     }
+
+    @Override
+    public String getTaskName() {
+        return "UpdateSceneAttributeCommand";
+    }
 }

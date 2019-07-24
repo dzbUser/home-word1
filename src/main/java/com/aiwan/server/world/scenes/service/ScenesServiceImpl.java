@@ -3,11 +3,13 @@ package com.aiwan.server.world.scenes.service;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.world.base.scene.AbstractScene;
+import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.scenes.command.EnterMapCommand;
 import com.aiwan.server.world.scenes.command.ChangeMapCommand;
 import com.aiwan.server.world.scenes.command.MoveCommand;
 import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
+import com.aiwan.server.world.scenes.mapresource.MapResource;
 import com.aiwan.server.world.scenes.model.Position;
 import com.aiwan.server.world.base.scene.UniqueScene;
 import com.aiwan.server.world.scenes.protocol.SM_ViewAllUnitInMap;
@@ -96,6 +98,12 @@ public class ScenesServiceImpl implements ScenesService{
             SessionManager.sendPromptMessage(role.getId(), PromptCode.MAPNOEXIST, "");
             return;
         }
+        if (!abstractScene.isCanEnter()) {
+            //该资源不可进入
+            logger.error("mapId为{}的跳转失败，该地图不可进入", role.getId());
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.MAP_NO_ENTER, "");
+            return;
+        }
         //设置正在地图跳转
         RoleUnit roleUnit = (RoleUnit) GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId()).getBaseUnit(role.getId());
 
@@ -105,7 +113,12 @@ public class ScenesServiceImpl implements ScenesService{
             return;
         }
         role.setChangingMap(true);
-        leaveMap(role);
+        if (abstractScene instanceof DungeonScene) {
+            DungeonScene dungeonScene = (DungeonScene) abstractScene;
+            dungeonScene.getHandler().quitDungeon(role);
+        } else {
+            leaveMap(role);
+        }
         //进入map地图
         GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, targetSceneId, role, roleUnit));
     }
@@ -115,6 +128,29 @@ public class ScenesServiceImpl implements ScenesService{
         GetBean.getMapManager().removeFighterRole(role.getMap(), role.getSceneId(), role.getId());
         //给地图所有玩家发送最新地图信息
         GetBean.getMapManager().sendMessageToUsers(role.getMap(), role.getSceneId());
+    }
+
+    public void enterMap(Role role, AbstractScene abstractScene, RoleUnit roleUnit) {
+        //获取地图资源
+        MapResource mapResource = GetBean.getMapManager().getMapResource(abstractScene.getMapId());
+        //初始化化角色坐标
+        role.setMap(abstractScene.getMapId());
+        role.setSceneId(abstractScene.getSceneId());
+        role.setX(mapResource.getOriginX());
+        role.setY(mapResource.getOriginY());
+        //添加到地图资源中
+        RoleUnit newFightRole = RoleUnit.valueOf(role, mapResource.getMapId());
+        //传递cd、hp以及mp
+        if (roleUnit != null) {
+            newFightRole.transferStatus(roleUnit);
+        }
+        abstractScene.putBaseUnit(newFightRole);
+        //写回
+        GetBean.getRoleManager().save(role);
+        //设置跳转结束
+        role.setChangingMap(false);
+        //给所有玩家发送消息
+        GetBean.getMapManager().sendMessageToUsers(abstractScene.getMapId(), abstractScene.getSceneId());
     }
 
     @Override

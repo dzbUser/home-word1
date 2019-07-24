@@ -244,8 +244,6 @@ public class TeamService implements ITeamService {
             return;
         }
         TeamModel teamModel = teamManager.getTeam(teamManager.getTeamIdByRid(activeId));
-        //添加到邀请列表中
-        teamModel.addInvitation(inviteId);
         //发送邀请通知到邀请者
         SessionManager.sendPromptMessage(inviteId, PromptCode.INVITE_PROMPT, teamModel.getObjectId() + "");
         //发送邀请成功
@@ -264,20 +262,14 @@ public class TeamService implements ITeamService {
             SessionManager.sendPromptMessage(role.getId(), PromptCode.NO_TEAM, "");
             return;
         }
-        //查看是否在邀请队列中
-        if (!teamModel.isInInvitation(role.getId())) {
-            logger.error("{}接受邀请，加入{}队伍失败，不在邀请队列中", role.getId(), teamId);
-            SessionManager.sendPromptMessage(role.getId(), PromptCode.NO_IN_INVITATION, "");
-            return;
-        }
-        //删除邀请
-        teamModel.removeInvite(role.getId());
+
         //是否在队伍中
         if (teamManager.isInTeam(role.getId())) {
             logger.error("{}接受邀请，加入{}队伍失败，已经在队伍中", role.getId(), teamId);
             SessionManager.sendPromptMessage(role.getId(), PromptCode.HAVE_IN_TEAM, "");
             return;
         }
+        // TODO: 2019/7/24
         //加入队伍
         if (teamModel.isFullOrJoin(role)) {
             logger.error("{}接受邀请，加入{}队伍失败，队伍已满", role.getId(), teamId);

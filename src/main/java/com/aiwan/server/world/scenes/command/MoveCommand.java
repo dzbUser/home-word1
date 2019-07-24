@@ -68,4 +68,9 @@ public class MoveCommand extends AbstractSceneCommand {
         this.role = role;
         setTaskName("角色移动command");
     }
+
+    @Override
+    public String getTaskName() {
+        return "MoveCommand";
+    }
 }

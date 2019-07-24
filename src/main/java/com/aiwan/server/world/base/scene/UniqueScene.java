@@ -45,6 +45,7 @@ public class UniqueScene extends AbstractScene {
         GetBean.getSceneExecutorService().submit(monsterRateReviveCommand);
         getCommandMap().put(SceneRateCommand.class, sceneRateCommand);
         getCommandMap().put(MonsterRateReviveCommand.class, monsterRateReviveCommand);
+        setCanEnter(true);
     }
 
     /**

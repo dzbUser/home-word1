@@ -2,6 +2,8 @@ package com.aiwan.server.user.role.task.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.reward.command.DesignRewardCommand;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.task.entity.AbstractProgressElement;
 import com.aiwan.server.user.role.task.entity.TaskElement;
 import com.aiwan.server.user.role.task.entity.TaskProgressElement;
@@ -13,7 +15,9 @@ import com.aiwan.server.user.role.task.protocol.TaskProgessMessage;
 import com.aiwan.server.user.role.task.resource.TaskResource;
 import com.aiwan.server.util.BaseConfiguration;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.util.StatusCode;
+import com.sun.org.apache.xpath.internal.operations.Gt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,12 @@ public class TaskService implements ITaskService {
     @Override
     public void receiveTask(int taskId, long rId) {
         TaskModel taskModel = taskManager.load(rId);
+        //接收任务
+        TaskResource taskResource = GetBean.getTaskManager().getTaskResource(taskId);
+        if (taskResource == null) {
+            logger.error("{}接收任务{}失败，静态资源为空", rId, taskId);
+            return;
+        }
         if (taskModel.isFinished(taskId)) {
             logger.error("{}接收任务{}失败，任务已完成", rId, taskId);
             return;
@@ -55,17 +65,12 @@ public class TaskService implements ITaskService {
             logger.error("{}接收任务{}失败，任务已接收", rId, taskId);
             return;
         }
-        //接收任务
-        TaskResource taskResource = GetBean.getTaskManager().getTaskResource(taskId);
-        if (taskResource == null) {
-            logger.error("{}接收任务{}失败，静态资源为空", rId, taskId);
-            return;
-        }
         //开始创建任务
         taskModel.createTask(taskId, taskResource);
         //写回
         taskManager.save(taskModel);
         logger.error("{}接收任务{}成功", rId, taskId);
+        SessionManager.sendPromptMessage(rId, PromptCode.TASK_RECEIVE_SUCCESS, "");
     }
 
     @Override
@@ -95,11 +100,17 @@ public class TaskService implements ITaskService {
         }
         if (!taskElement.isCanFinish()) {
             logger.error("{}完成任务{}失败,该任务不具备完成的条件", rId, taskId);
+            SessionManager.sendPromptMessage(rId, PromptCode.TASK_CAN_NOT_COMPLETE, "");
             return;
         }
         taskModel.completeTask(taskId);
         taskManager.save(taskModel);
+        //获取角色
+        Role role = GetBean.getRoleManager().load(rId);
+        //发送奖励
+        TaskResource taskResource = GetBean.getTaskManager().getTaskResource(taskElement.getTaskId());
+        GetBean.getAccountExecutorService().submit(new DesignRewardCommand(role.getAccountId(), role.getId(), taskResource.getRewardBean()));
         logger.info("{}完成任务{}成功", rId, taskId);
+        SessionManager.sendPromptMessage(rId, PromptCode.TASK_COMPLETE, "");
     }
-
 }

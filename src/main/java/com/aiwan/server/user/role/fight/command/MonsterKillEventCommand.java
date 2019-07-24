@@ -30,4 +30,9 @@ public class MonsterKillEventCommand extends AbstractAccountCommand {
         MonsterKillEvent monsterKillEvent = MonsterKillEvent.valueOf(role, monsterUnit.getResourceId());
         GetBean.getEventBusManager().synSubmit(monsterKillEvent);
     }
+
+    @Override
+    public String getTaskName() {
+        return "MonsterKillEventCommand";
+    }
 }

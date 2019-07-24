@@ -1,25 +1,38 @@
-package com.aiwan.server.world.base.handler;
+package com.aiwan.server.world.base.handler.impl;
 
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.user.role.team.model.TeamModel;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
-import com.aiwan.server.reward.command.RewardCommand;
+import com.aiwan.server.reward.command.RandomRewardCommand;
+import com.aiwan.server.world.base.handler.AbstractChapterDungeonHandler;
+import com.aiwan.server.world.scenes.command.EnterMapCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
 import com.aiwan.server.world.scenes.mapresource.SettlementBean;
 
 /**
- * 通关副本处理器
+ * 科赞岛副本处理器
  *
  * @author dengzebiao
  * @since 2019.7.22
  */
-public class ClearanceDungeonHandler extends AbstractDungeonHandler {
+public class KozanIslandDungeonHandler extends AbstractChapterDungeonHandler {
 
     /**
      * 是否通关
      */
     private boolean isClearance = false;
+
+    /**
+     * 队伍
+     */
+    private TeamModel teamModel;
+
+    public KozanIslandDungeonHandler(TeamModel teamModel) {
+        this.teamModel = teamModel;
+    }
 
     @Override
     public void checkpointListener() {
@@ -48,10 +61,28 @@ public class ClearanceDungeonHandler extends AbstractDungeonHandler {
     }
 
     @Override
-    public void settlementReward(SettlementBean settlementBean) {
-        for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
-            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), settlementBean.getRewardBean()));
+    public void gateReward(GateBean gateBean) {
+        for (Role role : teamModel.getTeamList()) {
+            GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), gateBean.getRewardBean()));
         }
+    }
+
+    @Override
+    public void settlementReward(SettlementBean settlementBean) {
+        for (Role role : teamModel.getTeamList()) {
+            GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), settlementBean.getRewardBean()));
+        }
+    }
+
+    @Override
+    public void enterDungeon(Role role, RoleUnit roleUnit) {
+        GetBean.getScenesService().enterMap(role, getDungeonScene(), roleUnit);
+    }
+
+    @Override
+    public void quitDungeon(Role role) {
+        getDungeonScene().removeBaseUnit(role.getId());
+        GetBean.getMapManager().sendMessageToUsers(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
     }
 
     @Override
@@ -65,16 +96,21 @@ public class ClearanceDungeonHandler extends AbstractDungeonHandler {
             //发送奖励
             settlementReward(getDungeonScene().getResource().getSettlementBean());
             //触发副本通关事件
-            //触发副本通关事件
-            for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
+            for (Role role : teamModel.getTeamList()) {
                 dungeonClearanceEvent(role, getDungeonScene().getMapId());
             }
         }
-        existDungeon();
+        releaseDungeon();
+    }
 
+    public void releaseDungeon() {
+        for (Role role : teamModel.getTeamList()) {
+            GetBean.getSceneExecutorService().submit(new EnterMapCommand(1, role, (RoleUnit) getDungeonScene().getBaseUnit(role.getId())));
+        }
         //发送提示
-        for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
+        for (Role role : teamModel.getTeamList()) {
             SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "");
         }
+        super.releaseDungeon();
     }
 }

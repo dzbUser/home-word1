@@ -46,4 +46,9 @@ public class SceneRateCommand extends AbstractSceneRateCommand {
             baseUnit.buffProcessor(now);
         }
     }
+
+    @Override
+    public String getTaskName() {
+        return "SceneRateCommand";
+    }
 }

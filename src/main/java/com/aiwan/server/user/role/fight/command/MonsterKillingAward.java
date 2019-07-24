@@ -49,4 +49,9 @@ public class MonsterKillingAward extends AbstractAccountCommand {
         Session session = SessionManager.getSessionByAccountId(getAccountId());
         GetBean.getBackpackService().addPropToBack(getAccountId(), dropBean.getPropId(), dropBean.getNum(), session);
     }
+
+    @Override
+    public String getTaskName() {
+        return "MonsterKillingAward";
+    }
 }

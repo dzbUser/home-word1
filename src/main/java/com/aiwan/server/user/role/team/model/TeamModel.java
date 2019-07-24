@@ -8,6 +8,7 @@ import com.aiwan.server.util.IDUtil;
 import com.aiwan.server.util.PromptCode;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 队伍模型
@@ -37,10 +38,6 @@ public class TeamModel extends GameObject {
      */
     private Set<Long> applicationList = Collections.synchronizedSet(new LinkedHashSet<>());
 
-    /**
-     * 邀请列表
-     */
-    private Set<Long> inviteList = Collections.synchronizedSet(new LinkedHashSet<>());
 
     public static TeamModel valueOf(Role role) {
         TeamModel teamModel = new TeamModel();
@@ -116,16 +113,21 @@ public class TeamModel extends GameObject {
         return false;
     }
 
-    public synchronized boolean isFullOrJoin(Role role) {
+    public boolean isFullOrJoin(Role role) {
         //锁着当前类
         if (isTeamFull()) {
             return true;
         }
-        teamList.add(role);
-        GetBean.getTeamManager().joinTeam(role.getId(), this.getObjectId());
-        //删除申请队列中的申请者
-        getApplicationList().remove(role.getId());
-        return false;
+        synchronized (this) {
+            if (isTeamFull()) {
+                return true;
+            }
+            teamList.add(role);
+            GetBean.getTeamManager().joinTeam(role.getId(), this.getObjectId());
+            //删除申请队列中的申请者
+            getApplicationList().remove(role.getId());
+            return false;
+        }
     }
 
     public long getLeaderId() {
@@ -152,39 +154,5 @@ public class TeamModel extends GameObject {
         this.applicationList = applicationList;
     }
 
-    public Set<Long> getInviteList() {
-        return inviteList;
-    }
 
-    public void setInviteList(Set<Long> inviteList) {
-        this.inviteList = inviteList;
-    }
-
-    /**
-     * 添加到邀请队列
-     *
-     * @param inviteId
-     */
-    public void addInvitation(long inviteId) {
-        inviteList.add(inviteId);
-    }
-
-    /**
-     * 是否在邀请队列中
-     *
-     * @param rId
-     * @return
-     */
-    public boolean isInInvitation(Long rId) {
-        return inviteList.contains(rId);
-    }
-
-    /**
-     * 删除邀请
-     *
-     * @param rId
-     */
-    public void removeInvite(Long rId) {
-        inviteList.remove(rId);
-    }
 }

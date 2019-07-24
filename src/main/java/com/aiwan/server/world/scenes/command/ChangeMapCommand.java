@@ -67,4 +67,9 @@ public class ChangeMapCommand extends AbstractSceneCommand {
     public void setTargetSceneId(int targetSceneId) {
         this.targetSceneId = targetSceneId;
     }
+
+    @Override
+    public String getTaskName() {
+        return "ChangeMapCommand";
+    }
 }

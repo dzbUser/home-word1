@@ -1,7 +1,9 @@
 package com.aiwan.server.world.scenes.service;
 
 import com.aiwan.server.publicsystem.common.Session;
+import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.world.base.scene.AbstractScene;
 
 /**
  * @author dengzebiao
@@ -28,6 +30,15 @@ public interface ScenesService {
      * 离开滴入
      */
     void leaveMap(Role role);
+
+    /**
+     * 进入地图
+     *
+     * @param role          角色
+     * @param abstractScene 场景
+     * @param roleUnit      旧战斗单位
+     */
+    void enterMap(Role role, AbstractScene abstractScene, RoleUnit roleUnit);
 
     /**
      * 查看地图所有单位

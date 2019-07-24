@@ -9,12 +9,12 @@ import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
 
 /**
- * 奖励命令
+ * 随机奖励命令
  *
  * @author dengzebiao
  * @since 2019.7.22
  */
-public class RewardCommand extends AbstractAccountCommand {
+public class RandomRewardCommand extends AbstractAccountCommand {
 
     /**
      * 角色id
@@ -26,7 +26,7 @@ public class RewardCommand extends AbstractAccountCommand {
      */
     private RewardBean rewardBean;
 
-    public RewardCommand(String accountId, long rId, RewardBean rewardBean) {
+    public RandomRewardCommand(String accountId, long rId, RewardBean rewardBean) {
         super(accountId);
         this.rId = rId;
         this.rewardBean = rewardBean;
@@ -36,7 +36,7 @@ public class RewardCommand extends AbstractAccountCommand {
     public void active() {
         //添加经验
         GetBean.getRoleService().addExperience(rId, rewardBean.getExperience());
-        if (rewardBean.getDropBeanList().size() == 0) {
+        if (rewardBean == null || rewardBean.getDropBeanList().size() == 0) {
             //没有掉落物
             return;
         }
@@ -45,5 +45,10 @@ public class RewardCommand extends AbstractAccountCommand {
         //添加物品
         Session session = SessionManager.getSessionByAccountId(getAccountId());
         GetBean.getBackpackService().addPropToBack(getAccountId(), dropBean.getPropId(), dropBean.getNum(), session);
+    }
+
+    @Override
+    public String getTaskName() {
+        return "RandomRewardCommand";
     }
 }

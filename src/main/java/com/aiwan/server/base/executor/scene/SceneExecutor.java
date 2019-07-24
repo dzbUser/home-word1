@@ -37,6 +37,7 @@ public class SceneExecutor {
 
     }
 
+
     public void addTask(ICommand command) {
         int modIndex = command.modIndex(SCENE_POOL_SIZE);
         final String taskName = command.getTaskName();
@@ -47,7 +48,7 @@ public class SceneExecutor {
                 }
             } catch (Exception e) {
                 //之前未加异常捕获，出错时不捕获异常
-                logger.error("SceneExecutor执行任务{}错误:{}", taskName, e.getLocalizedMessage());
+                logger.error("SceneExecutor执行任务{}错误:{}", taskName, e);
             }
 
         });

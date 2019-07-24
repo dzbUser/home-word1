@@ -27,4 +27,9 @@ public class BeKickOutCommand extends AbstractAccountCommand {
     public void active() {
         GetBean.getTeamService().beKickOut(role, teamModel);
     }
+
+    @Override
+    public String getTaskName() {
+        return "BeKickOutCommand";
+    }
 }

@@ -1,23 +1,30 @@
-package com.aiwan.server.world.base.handler;
+package com.aiwan.server.world.base.handler.impl;
 
-import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.reward.model.RewardBean;
+import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.PromptCode;
-import com.aiwan.server.reward.command.RewardCommand;
+import com.aiwan.server.reward.command.RandomRewardCommand;
+import com.aiwan.server.world.base.handler.AbstractChapterDungeonHandler;
+import com.aiwan.server.world.scenes.command.EnterMapCommand;
 import com.aiwan.server.world.scenes.mapresource.GateBean;
 import com.aiwan.server.world.scenes.mapresource.SettlementBean;
 
 /**
- * 经验副本处理器
+ * 定时关卡副本处理器
  *
  * @author dengzebiao
  * @since 2019.7.18
  */
-public class ExperienceDungeonHandler extends AbstractDungeonHandler {
+public class ExperienceDungeonHandler extends AbstractChapterDungeonHandler {
 
+
+    /**
+     * 副本主体
+     */
+    private Role role;
 
     /**
      * 总击杀数
@@ -29,6 +36,10 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
      */
     private boolean allReward = false;
 
+
+    public ExperienceDungeonHandler(Role role) {
+        this.role = role;
+    }
 
     /**
      * 关卡监听器
@@ -71,13 +82,15 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
     }
 
     @Override
+    public void gateReward(GateBean gateBean) {
+        GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), gateBean.getRewardBean()));
+    }
+
+    @Override
     public void settlementReward(SettlementBean settlementBean) {
         //取消循环处理器
-        getDungeonScene().getCommandMap().get(AbstractSceneRateCommand.class).cancel();
         RewardBean rewardBean = RewardBean.valueOf(settlementBean.getDropBeanList(), settlementBean.getExperience() * totalKillNum);
-        for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
-            GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), rewardBean));
-        }
+        GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), rewardBean));
     }
 
     @Override
@@ -91,23 +104,36 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
         super.init();
     }
 
+    @Override
+    public void enterDungeon(Role role, RoleUnit roleUnit) {
+        GetBean.getScenesService().enterMap(role, getDungeonScene(), roleUnit);
+    }
+
+    @Override
+    public void quitDungeon(Role role) {
+        getDungeonScene().removeBaseUnit(role.getId());
+        GetBean.getMapManager().sendMessageToUsers(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
+    }
+
+    @Override
+    public void releaseDungeon() {
+        GetBean.getSceneExecutorService().submit(new EnterMapCommand(1, role, (RoleUnit) getDungeonScene().getBaseUnit(role.getId())));
+        SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "副本时间到");
+        super.releaseDungeon();
+    }
+
 
     /**
      * 结算
      */
     @Override
     public void settlement() {
-
         //发送奖励
         settlementReward(getDungeonScene().getResource().getSettlementBean());
-        //关闭线程
-        existDungeon();
-        //发送提示
-        for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
-            //触发通关事件
-            dungeonClearanceEvent(role, getDungeonScene().getMapId());
-            SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "副本时间到，");
-        }
+        //释放资源
+        releaseDungeon();
+        //发送副本通关事假
+        dungeonClearanceEvent(role, getDungeonScene().getMapId());
     }
 
     public int getTotalKillNum() {
@@ -117,4 +143,5 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
     public void setTotalKillNum(int totalKillNum) {
         this.totalKillNum = totalKillNum;
     }
+
 }

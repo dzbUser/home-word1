@@ -75,6 +75,7 @@ public enum TaskMessageSend {
             return true;
         }
     },
+
     ;
 
     TaskMessageSend(int num) {

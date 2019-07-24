@@ -4,6 +4,7 @@ import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
+import com.aiwan.server.user.role.task.protocol.CM_CompleteTask;
 import com.aiwan.server.user.role.team.protocol.*;
 import com.aiwan.server.util.Protocol;
 import com.aiwan.server.util.SMToDecodeData;
@@ -141,6 +142,56 @@ public enum TeamMessageSend {
             return true;
         }
 
+    },
+
+    /**
+     * 发送邀请通知
+     */
+    SEND_INVITE(8) {
+        @Override
+        public void messageSend(String message) {
+            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+            if (!verify(message)) {
+                //校验指令正确性
+                gameInterface.printOtherMessage("您的输入不规范");
+                return;
+            }
+            long rId = Long.parseLong(message);
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.INVITE_TEAM_JOIN, CM_InviteJoinTeam.valueOf(rId)));
+        }
+
+        @Override
+        public boolean verify(String message) {
+            if (!Verification.canParseNum(message)) {
+                return false;
+            }
+            return true;
+        }
+    },
+
+    /**
+     * 接受邀请
+     */
+    ACCEPT_INVITE(9) {
+        @Override
+        public void messageSend(String message) {
+            GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+            if (!verify(message)) {
+                //校验指令正确性
+                gameInterface.printOtherMessage("您的输入不规范");
+                return;
+            }
+            long teamId = Long.parseLong(message);
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.ACCEPT_TEAM_INVITE, CM_AcceptTeamInvite.valueOf(teamId)));
+        }
+
+        @Override
+        public boolean verify(String message) {
+            if (!Verification.canParseNum(message)) {
+                return false;
+            }
+            return true;
+        }
     },
     ;
 

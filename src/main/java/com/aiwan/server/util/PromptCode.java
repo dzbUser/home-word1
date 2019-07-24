@@ -300,6 +300,20 @@ public class PromptCode {
      */
     public final static int BE_KICKOUT_TEAM = 63;
 
+    /**
+     * 发送邀请通知
+     */
+    public final static int INVITE_PROMPT = 64;
+
+    /**
+     * 发出邀请成功
+     */
+    public final static int INVITE_SUCCESS = 65;
+
+    /**
+     * 不在邀请队列中
+     */
+    public final static int NO_IN_INVITATION = 66;
 
 //
 //    /**

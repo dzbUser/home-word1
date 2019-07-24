@@ -77,7 +77,7 @@ public interface ITeamService {
      * @param applyRole 申请者
      * @param teamModel 队伍
      */
-    public void joinTeam(Role applyRole, TeamModel teamModel);
+    void joinTeam(Role applyRole, TeamModel teamModel);
 
     /**
      * 被踢出队伍
@@ -85,6 +85,16 @@ public interface ITeamService {
      * @param kickOutRole 被踢出的队员
      * @param teamModel   队伍
      */
-    public void beKickOut(Role kickOutRole, TeamModel teamModel);
+    void beKickOut(Role kickOutRole, TeamModel teamModel);
+
+    /**
+     * 接受邀请
+     */
+    void acceptInvitation(Role role, long teamId);
+
+    /**
+     * 发出邀请
+     */
+    void sendInvitation(long activeId, long inviteId);
     
 }

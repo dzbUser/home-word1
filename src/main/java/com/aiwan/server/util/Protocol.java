@@ -187,4 +187,14 @@ public class Protocol {
      * 完成任务
      */
     public static final int COMPLETE_TASK = 54;
+
+    /**
+     * 邀请加入队伍
+     */
+    public static final int INVITE_TEAM_JOIN = 55;
+
+    /**
+     * 接受邀请
+     */
+    public static final int ACCEPT_TEAM_INVITE = 56;
 }

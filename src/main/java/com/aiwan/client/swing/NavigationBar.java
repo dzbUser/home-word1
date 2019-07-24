@@ -103,7 +103,9 @@ public class NavigationBar extends JPanel {
                     "4.查看申请队列\n" +
                     "5.允许申请者加入队伍（指令 输入申请者id）\n" +
                     "6.查看队伍成员\n" +
-                    "7.踢出 （输入想要踢出的队员id）";
+                    "7.踢出 （输入想要踢出的队员id）\n" +
+                    "8.发出入队邀请(输入想要邀请的角色id) \n" +
+                    "9.接受入队邀请（输入接受邀请的队伍id）";
 
     private static final String DUNGEONMESSAGE =
             "提示：3.烤猪城（单人） 4.科赞岛（团队)\n" +

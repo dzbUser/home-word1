@@ -6,6 +6,7 @@ import com.aiwan.server.base.event.event.impl.EquipChangeEvent;
 import com.aiwan.server.base.event.event.impl.RoleUpgradeEvent;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.base.event.event.impl.MonsterKillEvent;
+import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.task.event.AbstractTaskParam;
 import com.aiwan.server.user.role.task.event.TaskParam;
 import com.aiwan.server.user.role.task.process.AbstractProcessor;
@@ -14,6 +15,8 @@ import com.aiwan.server.user.role.task.protocol.CM_CompleteTask;
 import com.aiwan.server.user.role.task.protocol.CM_ReceiveTask;
 import com.aiwan.server.user.role.task.protocol.CM_ViewCanReceiveTask;
 import com.aiwan.server.user.role.task.protocol.CM_ViewProcessingTask;
+import com.aiwan.server.user.role.team.protocol.CM_AcceptTeamInvite;
+import com.aiwan.server.user.role.team.protocol.CM_InviteJoinTeam;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,5 +129,31 @@ public class TaskFacade {
             return;
         }
         GetBean.getTaskService().completeTask(session.getrId(), cm_completeTask.getTaskId());
+    }
+
+    /**
+     * 发送邀请
+     */
+    public void sendInvitation(CM_InviteJoinTeam cm_inviteJoinTeam, Session session) {
+        if (session.getrId() == null) {
+            logger.debug("错误包");
+            return;
+        }
+        GetBean.getTeamService().sendInvitation(session.getrId(), cm_inviteJoinTeam.getInviteId());
+    }
+
+    /**
+     * 接受邀请
+     *
+     * @param cm_acceptTeamInvite 协议类
+     * @param session             会话
+     */
+    public void acceptInvitation(CM_AcceptTeamInvite cm_acceptTeamInvite, Session session) {
+        if (session.getrId() == null) {
+            logger.debug("错误包");
+            return;
+        }
+        Role role = GetBean.getRoleManager().load(session.getrId());
+        GetBean.getTeamService().acceptInvitation(role, cm_acceptTeamInvite.getTeamId());
     }
 }

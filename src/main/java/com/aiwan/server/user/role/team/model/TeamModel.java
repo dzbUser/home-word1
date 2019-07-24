@@ -37,6 +37,11 @@ public class TeamModel extends GameObject {
      */
     private Set<Long> applicationList = Collections.synchronizedSet(new LinkedHashSet<>());
 
+    /**
+     * 邀请列表
+     */
+    private Set<Long> inviteList = Collections.synchronizedSet(new LinkedHashSet<>());
+
     public static TeamModel valueOf(Role role) {
         TeamModel teamModel = new TeamModel();
         teamModel.leaderId = role.getId();
@@ -145,5 +150,41 @@ public class TeamModel extends GameObject {
 
     public void setApplicationList(Set<Long> applicationList) {
         this.applicationList = applicationList;
+    }
+
+    public Set<Long> getInviteList() {
+        return inviteList;
+    }
+
+    public void setInviteList(Set<Long> inviteList) {
+        this.inviteList = inviteList;
+    }
+
+    /**
+     * 添加到邀请队列
+     *
+     * @param inviteId
+     */
+    public void addInvitation(long inviteId) {
+        inviteList.add(inviteId);
+    }
+
+    /**
+     * 是否在邀请队列中
+     *
+     * @param rId
+     * @return
+     */
+    public boolean isInInvitation(Long rId) {
+        return inviteList.contains(rId);
+    }
+
+    /**
+     * 删除邀请
+     *
+     * @param rId
+     */
+    public void removeInvite(Long rId) {
+        inviteList.remove(rId);
     }
 }

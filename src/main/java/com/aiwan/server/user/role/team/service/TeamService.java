@@ -222,5 +222,69 @@ public class TeamService implements ITeamService {
         SessionManager.sendPromptMessage(applyRole.getId(), PromptCode.JOIN_TEAM_SUCCESS, "");
     }
 
+    /**
+     * 发出邀请
+     */
+    public void sendInvitation(long activeId, long inviteId) {
+
+        Role inviteRole = GetBean.getRoleManager().load(inviteId);
+        //邀请者是否存在
+        if (inviteRole == null) {
+            logger.error("{}邀请{}失败，没有邀请的角色", activeId, inviteId);
+            return;
+        }
+        if (!teamManager.isInTeam(activeId)) {
+            logger.error("{}邀请{}失败，邀请者没在队伍中", activeId, inviteId);
+            SessionManager.sendPromptMessage(activeId, PromptCode.NO_IN_TEAM, "");
+            return;
+        }
+        if (teamManager.isInTeam(inviteId)) {
+            logger.error("{}邀请{}失败，被邀请者已在队伍中", activeId, inviteId);
+            SessionManager.sendPromptMessage(activeId, PromptCode.HAVE_IN_TEAM, "你邀请的人");
+            return;
+        }
+        TeamModel teamModel = teamManager.getTeam(teamManager.getTeamIdByRid(activeId));
+        //添加到邀请列表中
+        teamModel.addInvitation(inviteId);
+        //发送邀请通知到邀请者
+        SessionManager.sendPromptMessage(inviteId, PromptCode.INVITE_PROMPT, teamModel.getObjectId() + "");
+        //发送邀请成功
+        SessionManager.sendPromptMessage(activeId, PromptCode.INVITE_SUCCESS, "");
+    }
+
+    /**
+     * 接受邀请
+     */
+    public void acceptInvitation(Role role, long teamId) {
+
+        //获取队伍
+        TeamModel teamModel = teamManager.getTeam(teamId);
+        if (teamModel == null) {
+            logger.error("{}接受邀请，加入{}队伍失败，队伍不存在", role.getId(), teamId);
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.NO_TEAM, "");
+            return;
+        }
+        //查看是否在邀请队列中
+        if (!teamModel.isInInvitation(role.getId())) {
+            logger.error("{}接受邀请，加入{}队伍失败，不在邀请队列中", role.getId(), teamId);
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.NO_IN_INVITATION, "");
+            return;
+        }
+        //删除邀请
+        teamModel.removeInvite(role.getId());
+        //是否在队伍中
+        if (teamManager.isInTeam(role.getId())) {
+            logger.error("{}接受邀请，加入{}队伍失败，已经在队伍中", role.getId(), teamId);
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.HAVE_IN_TEAM, "");
+            return;
+        }
+        //加入队伍
+        if (teamModel.isFullOrJoin(role)) {
+            logger.error("{}接受邀请，加入{}队伍失败，队伍已满", role.getId(), teamId);
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.TEAM_FULL, "");
+            return;
+        }
+        SessionManager.sendPromptMessage(role.getId(), PromptCode.JOIN_TEAM_SUCCESS, "");
+    }
 
 }

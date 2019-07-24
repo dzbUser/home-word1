@@ -59,9 +59,7 @@ public class ClearanceDungeonHandler extends AbstractDungeonHandler {
         /*
         1.发送奖励给所有队员
          */
-        existDungeon();
-        //删除副本
-        GetBean.getMapManager().removeSceObject(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
+
         //若已通关
         if (isClearance) {
             //发送奖励
@@ -72,7 +70,7 @@ public class ClearanceDungeonHandler extends AbstractDungeonHandler {
                 dungeonClearanceEvent(role, getDungeonScene().getMapId());
             }
         }
-        //发送副本通关事件
+        existDungeon();
 
         //发送提示
         for (Role role : getDungeonScene().getTeamModel().getTeamList()) {

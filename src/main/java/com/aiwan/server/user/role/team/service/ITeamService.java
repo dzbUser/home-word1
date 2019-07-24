@@ -2,6 +2,7 @@ package com.aiwan.server.user.role.team.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.user.role.team.model.TeamModel;
 
 /**
  * 队伍业务接口
@@ -69,5 +70,21 @@ public interface ITeamService {
      * @param session    会话
      */
     void kickOut(long kickOutRId, Session session);
+
+    /**
+     * 加入队伍
+     *
+     * @param applyRole 申请者
+     * @param teamModel 队伍
+     */
+    public void joinTeam(Role applyRole, TeamModel teamModel);
+
+    /**
+     * 被踢出队伍
+     *
+     * @param kickOutRole 被踢出的队员
+     * @param teamModel   队伍
+     */
+    public void beKickOut(Role kickOutRole, TeamModel teamModel);
     
 }

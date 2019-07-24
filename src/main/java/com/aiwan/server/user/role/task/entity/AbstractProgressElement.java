@@ -28,6 +28,9 @@ public abstract class AbstractProgressElement {
         this.finishValue = finishValue;
     }
 
+    public AbstractProgressElement() {
+    }
+
     public TaskProgressType getTaskProgressType() {
         return taskProgressType;
     }

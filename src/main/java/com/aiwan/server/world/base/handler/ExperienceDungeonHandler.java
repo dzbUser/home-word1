@@ -1,5 +1,6 @@
 package com.aiwan.server.world.base.handler;
 
+import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.reward.model.RewardBean;
 import com.aiwan.server.user.role.player.model.Role;
@@ -71,6 +72,8 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
 
     @Override
     public void settlementReward(SettlementBean settlementBean) {
+        //取消循环处理器
+        getDungeonScene().getCommandMap().get(AbstractSceneRateCommand.class).cancel();
         RewardBean rewardBean = RewardBean.valueOf(settlementBean.getDropBeanList(), settlementBean.getExperience() * totalKillNum);
         for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
             GetBean.getAccountExecutorService().submit(new RewardCommand(role.getAccountId(), role.getId(), rewardBean));
@@ -94,14 +97,11 @@ public class ExperienceDungeonHandler extends AbstractDungeonHandler {
      */
     @Override
     public void settlement() {
-        /*
-        1.发送奖励给所有队员
-         */
-        existDungeon();
-        //删除副本
-        GetBean.getMapManager().removeSceObject(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
+
         //发送奖励
         settlementReward(getDungeonScene().getResource().getSettlementBean());
+        //关闭线程
+        existDungeon();
         //发送提示
         for (Role role : getDungeonScene().getTeamModel().getTeamList()) {
             //触发通关事件

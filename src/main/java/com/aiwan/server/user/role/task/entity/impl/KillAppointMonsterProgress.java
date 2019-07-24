@@ -21,6 +21,10 @@ public class KillAppointMonsterProgress extends AbstractProgressElement {
         this.monsterId = monsterId;
     }
 
+    public KillAppointMonsterProgress() {
+
+    }
+
     public int getMonsterId() {
         return monsterId;
     }

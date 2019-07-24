@@ -295,6 +295,11 @@ public class PromptCode {
      */
     public final static int NO_ATTACK_TEAMMEATE = 62;
 
+    /**
+     * 被踢出退出
+     */
+    public final static int BE_KICKOUT_TEAM = 63;
+
 
 //
 //    /**

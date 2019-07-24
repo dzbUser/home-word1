@@ -1,8 +1,11 @@
 package com.aiwan.server.user.role.team.model;
 
 import com.aiwan.server.publicsystem.model.GameObject;
+import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.IDUtil;
+import com.aiwan.server.util.PromptCode;
 
 import java.util.*;
 
@@ -55,6 +58,21 @@ public class TeamModel extends GameObject {
         }
     }
 
+    public synchronized void leaveTeam(long rId) {
+        removeRoleByRid(rId);
+        GetBean.getTeamManager().leaveTeam(rId);
+        //队伍中已没有成员
+        if (teamList.size() == 0) {
+            GetBean.getTeamManager().removeTeam(getObjectId());
+        } else {
+            //队长离开,需加锁，必须保证有一个队长在队伍中
+            if (getLeaderId() == rId) {
+                setLeaderId(getTeamList().get(0).getId());
+                SessionManager.sendPromptMessage(rId, PromptCode.BECAME_LEADER, "");
+            }
+        }
+    }
+
     /**
      * 队伍是否已满
      *
@@ -90,6 +108,18 @@ public class TeamModel extends GameObject {
                 return true;
             }
         }
+        return false;
+    }
+
+    public synchronized boolean isFullOrJoin(Role role) {
+        //锁着当前类
+        if (isTeamFull()) {
+            return true;
+        }
+        teamList.add(role);
+        GetBean.getTeamManager().joinTeam(role.getId(), this.getObjectId());
+        //删除申请队列中的申请者
+        getApplicationList().remove(role.getId());
         return false;
     }
 

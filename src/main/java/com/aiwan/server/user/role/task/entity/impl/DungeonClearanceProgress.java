@@ -21,6 +21,10 @@ public class DungeonClearanceProgress extends AbstractProgressElement {
         this.mapId = mapId;
     }
 
+    public DungeonClearanceProgress() {
+
+    }
+
     public int getMapId() {
         return mapId;
     }
@@ -28,4 +32,6 @@ public class DungeonClearanceProgress extends AbstractProgressElement {
     public void setMapId(int mapId) {
         this.mapId = mapId;
     }
+
+
 }

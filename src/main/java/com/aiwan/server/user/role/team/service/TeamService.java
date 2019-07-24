@@ -3,6 +3,8 @@ package com.aiwan.server.user.role.team.service;
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.user.role.team.command.JoinTeamCommand;
+import com.aiwan.server.user.role.team.command.BeKickOutCommand;
 import com.aiwan.server.user.role.team.manager.TeamManager;
 import com.aiwan.server.user.role.team.model.TeamModel;
 import com.aiwan.server.user.role.team.protocol.*;
@@ -35,11 +37,14 @@ public class TeamService implements ITeamService {
     @Override
     public void createTeam(Role role) {
         Session session = SessionManager.getSessionByAccountId(role.getAccountId());
-        if (teamManager.isInTeamOrCreate(role.getId())) {
+        if (teamManager.isInTeam(role.getId())) {
             logger.debug("角色{}创建队伍失败，原因：已经在队伍中", role.getId());
             session.sendPromptMessage(PromptCode.IN_TEAM, "");
             return;
         }
+        TeamModel teamModel = TeamModel.valueOf(role);
+        GetBean.getTeamManager().joinTeam(role.getId(), teamModel.getObjectId());
+        GetBean.getTeamManager().putTeam(teamModel);
         session.sendPromptMessage(PromptCode.CREATE_TEAM_SUCCESS, "");
     }
 
@@ -70,7 +75,7 @@ public class TeamService implements ITeamService {
             session.sendPromptMessage(PromptCode.HAVE_IN_TEAM, "");
             return;
         }
-        if (teamModel.getTeamList().size() == TeamModel.MAXNUM) {
+        if (teamModel.isTeamFull()) {
             logger.error("{}申请加入队伍失败，队伍已满", session.getrId());
             session.sendPromptMessage(PromptCode.TEAM_FULL, "");
             return;
@@ -89,24 +94,8 @@ public class TeamService implements ITeamService {
             return;
         }
         TeamModel teamModel = teamManager.getTeam(teamManager.getTeamIdByRid(rId));
-        if (teamModel == null) {
-            logger.error("{}离开队伍失败，错误包，所发队伍id找不到相应队伍", rId);
-            SessionManager.sendPromptMessage(rId, PromptCode.NO_TEAM, "");
-            return;
-        }
         //删除队伍中的角色id
-        teamModel.removeRoleByRid(rId);
-        if (teamModel.getTeamList().size() == 0) {
-            //队伍为空
-            teamManager.removeTeam(teamModel.getObjectId());
-        } else {
-            //队长离开
-            if (teamModel.getLeaderId() == rId) {
-                teamModel.setLeaderId(teamModel.getTeamList().get(0).getId());
-                SessionManager.sendPromptMessage(teamModel.getLeaderId(), PromptCode.BECAME_LEADER, "");
-            }
-        }
-        teamManager.leaveTeam(rId);
+        teamModel.leaveTeam(rId);
         logger.info("{}离开队伍成功", rId);
         SessionManager.sendPromptMessage(rId, PromptCode.LEAVE_SUCCESS, "");
         if (teamModel.getLeaderId() != rId) {
@@ -133,7 +122,7 @@ public class TeamService implements ITeamService {
     /**
      * 允许加入
      *
-     * @param allowRId
+     * @param allowRId 加入者id
      * @param session
      */
     @Override
@@ -143,41 +132,23 @@ public class TeamService implements ITeamService {
             logger.error("{}允许{}加入队伍失败，申请者不存在", session.getrId(), allowRId);
             return;
         }
-//        if (!teamManager.isInTeam(session.getrId())) {
-//            logger.error("{}允许{}加入队伍失败，操作者不在队伍中", session.getrId(), allowRId);
-//            session.sendPromptMessage(PromptCode.NO_IN_TEAM, "");
-//            return;
-//        }
+        if (!teamManager.isInTeam(session.getrId())) {
+            logger.error("{}允许{}加入队伍失败，操作者不在队伍中", session.getrId(), allowRId);
+            session.sendPromptMessage(PromptCode.NO_IN_TEAM, "");
+            return;
+        }
         TeamModel teamModel = teamManager.getTeam(teamManager.getTeamIdByRid(session.getrId()));
-        if (teamModel == null) {
-            logger.error("{}允许{}加入队伍失败，操作者者队伍不存在", session.getrId(), allowRId);
-            session.sendPromptMessage(PromptCode.NO_TEAM, "");
+        if (teamModel.getLeaderId() != session.getrId()) {
+            logger.error("{}允许{}加入队伍失败，允许者不是队长", session.getrId(), allowRId);
+            session.sendPromptMessage(PromptCode.NO_TEAM_LEADER, "");
             return;
         }
         if (!teamModel.isInApplication(allowRId)) {
             logger.error("{}允许{}加入队伍失败，申请者不在申请队列中", session.getrId(), allowRId);
             return;
         }
-        if (teamModel.getLeaderId() != session.getrId()) {
-            logger.error("{}允许{}加入队伍失败，允许者不是队长", session.getrId(), allowRId);
-            session.sendPromptMessage(PromptCode.NO_TEAM_LEADER, "");
-            return;
-        }
-        if (teamModel.isTeamFull()) {
-            logger.error("{}允许{}加入队伍失败，队伍已满", session.getrId(), allowRId);
-            session.sendPromptMessage(PromptCode.TEAM_FULL, "");
-            return;
-        }
-        //加入队伍
-        if (teamManager.isInTeamOrJoin(allowRId, teamModel.getObjectId())) {
-            logger.error("{}允许{}加入队伍失败，申请者已在其他队伍中", session.getrId(), allowRId);
-            session.sendPromptMessage(PromptCode.HAVE_IN_TEAM, applyRole.getName());
-            return;
-        }
-        teamModel.getTeamList().add(applyRole);
-        teamModel.getApplicationList().remove(allowRId);
-        logger.info("{}允许{}加入队伍成功", session.getrId(), allowRId);
-        SessionManager.sendPromptMessage(allowRId, PromptCode.JOIN_TEAM_SUCCESS, "");
+        //抛到加入者线程
+        GetBean.getAccountExecutorService().submit(new JoinTeamCommand(applyRole.getAccountId(), applyRole, teamModel));
     }
 
     @Override
@@ -218,10 +189,37 @@ public class TeamService implements ITeamService {
             session.sendPromptMessage(PromptCode.NO_TEAM_LEADER, "");
             return;
         }
-        //踢出队伍操作
-        teamManager.leaveTeam(kickOutRId);
-        teamModel.removeRoleByRid(kickOutRId);
+        //抛出被踢出命令到主体线程
+        GetBean.getAccountExecutorService().submit(new BeKickOutCommand(GetBean.getRoleManager().load(kickOutRId), teamModel));
         session.sendPromptMessage(PromptCode.KICK_OUT_SUCCESS, "");
+    }
+
+    /**
+     * 被踢出队伍
+     */
+    public void beKickOut(Role kickOutRole, TeamModel teamModel) {
+        if (!teamModel.isContainMember(kickOutRole.getId())) {
+            logger.error("{}已不在队伍中", kickOutRole.getId());
+            return;
+        }
+        //踢出队伍操作
+        teamModel.leaveTeam(kickOutRole.getId());
+        //发送被踢出队伍提示
+        SessionManager.sendPromptMessage(kickOutRole.getId(), PromptCode.BE_KICKOUT_TEAM, "");
+    }
+
+    public void joinTeam(Role applyRole, TeamModel teamModel) {
+        if (GetBean.getTeamManager().isInTeam(applyRole.getId())) {
+            logger.error("{}允许{}加入队伍失败，加入者已在队伍中", teamModel.getLeaderId(), applyRole.getId());
+            return;
+        }
+        if (teamModel.isFullOrJoin(applyRole)) {
+            logger.error("{}允许{}加入队伍失败，队伍已满", teamModel.getLeaderId(), applyRole.getId());
+            SessionManager.sendPromptMessage(teamModel.getLeaderId(), PromptCode.TEAM_FULL, "");
+            return;
+        }
+        logger.info("{}允许{}加入队伍成功", teamModel.getLeaderId(), applyRole.getId());
+        SessionManager.sendPromptMessage(applyRole.getId(), PromptCode.JOIN_TEAM_SUCCESS, "");
     }
 
 

@@ -1,13 +1,16 @@
 package com.aiwan.server.world.base.handler;
 
 import com.aiwan.server.base.event.event.impl.DungeonClearanceEvent;
+import com.aiwan.server.base.executor.scene.impl.AbstractSceneRateCommand;
 import com.aiwan.server.monster.resource.MonsterResource;
+import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpunit.MonsterUnit;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.MonsterGenerateUtil;
+import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.dungeon.command.DungeonOverCommand;
 import com.aiwan.server.reward.command.RewardCommand;
@@ -114,6 +117,10 @@ public abstract class AbstractDungeonHandler {
         for (Role role : dungeonScene.getTeamModel().getTeamList()) {
             GetBean.getSceneExecutorService().submit(new EnterMapCommand(1, role, (RoleUnit) dungeonScene.getBaseUnit(role.getId())));
         }
+        //取消循环检查处理器
+        getDungeonScene().getCommandMap().get(AbstractSceneRateCommand.class).cancel();
+        //删除副本
+        GetBean.getMapManager().removeSceObject(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
     }
 
     /**

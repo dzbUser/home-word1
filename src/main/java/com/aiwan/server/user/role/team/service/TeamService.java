@@ -269,7 +269,6 @@ public class TeamService implements ITeamService {
             SessionManager.sendPromptMessage(role.getId(), PromptCode.HAVE_IN_TEAM, "");
             return;
         }
-        // TODO: 2019/7/24
         //加入队伍
         if (teamModel.isFullOrJoin(role)) {
             logger.error("{}接受邀请，加入{}队伍失败，队伍已满", role.getId(), teamId);

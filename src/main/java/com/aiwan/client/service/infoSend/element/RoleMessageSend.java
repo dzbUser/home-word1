@@ -5,6 +5,7 @@ import com.aiwan.client.service.InterfaceManager;
 import com.aiwan.client.socket.ClientServerStart;
 import com.aiwan.client.swing.clientinterface.GameInterface;
 import com.aiwan.client.util.Verification;
+import com.aiwan.server.user.role.powerboard.protocol.CM_ViewRankBoard;
 import com.aiwan.server.world.scenes.protocol.CM_Move;
 import com.aiwan.server.world.scenes.protocol.CM_Shift;
 import com.aiwan.server.user.account.protocol.CM_CreateRole;
@@ -198,6 +199,16 @@ public enum  RoleMessageSend {
             ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEW_BUFF, cm_viewBuff));
         }
 
+    },
+
+    /**
+     * 查看排行榜
+     */
+    VIEW_RANK_BOARD(8) {
+        @Override
+        public void messageSend(String message) {
+            ClientServerStart.sendMessage(SMToDecodeData.shift(Protocol.VIEW_RANKBOARD, new CM_ViewRankBoard()));
+        }
     },
     ;
 

@@ -197,4 +197,9 @@ public class Protocol {
      * 接受邀请
      */
     public static final int ACCEPT_TEAM_INVITE = 56;
+
+    /**
+     * 接受
+     */
+    public static final int VIEW_RANKBOARD = 57;
 }

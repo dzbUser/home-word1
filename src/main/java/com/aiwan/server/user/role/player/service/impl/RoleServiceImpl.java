@@ -99,7 +99,7 @@ public class RoleServiceImpl implements RoleService {
         if (role == null){
             logger.error("角色id：" + rId + "为空");
         }
-        SM_RoleMessage sm_roleMessage = SM_RoleMessage.valueOf(role.getJob(), role.getSex(), role.getLevel(), role.getExperience(), getUpgradeRequest(role.getLevel()), role.getAttribute().getFinalAttribute(),role.getName());
+        SM_RoleMessage sm_roleMessage = SM_RoleMessage.valueOf(role.getJob(), role.getSex(), role.getLevel(), role.getExperience(), getUpgradeRequest(role.getLevel()), role.getAttribute().getFinalAttribute(), role.getName(), role.getCombatPower());
 
         DecodeData decodeData = SMToDecodeData.shift(StatusCode.VIEWROLEMESSAGE,sm_roleMessage);
         session.messageSend(decodeData);

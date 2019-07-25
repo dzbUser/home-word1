@@ -80,6 +80,10 @@ public interface Accessor {
     <PK extends Serializable,T extends IEntity> List<T> find(String query);
 
     /**
+     * 使用hql获取数据，无参数
+     */
+    <PK extends Serializable, T extends IEntity> List<T> find(String query, int minNum, int maxNum);
+    /**
      * 使用hql获取数据，一个参数
      * */
     <PK extends Serializable,T extends IEntity> List<T> find(String query,Object value);

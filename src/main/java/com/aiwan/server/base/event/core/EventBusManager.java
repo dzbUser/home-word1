@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 事件事务管理实现类
@@ -26,9 +29,43 @@ public class EventBusManager implements IEventBusManager {
 
     private Map<Class<? extends IEvent>, List<ReceiveDefinition>> receiveDefintionMap = new HashMap<>();
 
+    private final static int EXECUTE_SIZE = 2;
 
+    private ExecutorService[] executorServices;
+
+    /**
+     * 初始化
+     */
+    public void init() {
+        executorServices = new ExecutorService[EXECUTE_SIZE];
+        for (int i = 0; i < EXECUTE_SIZE; i++) {
+            executorServices[i] = Executors.newSingleThreadExecutor();
+        }
+    }
+
+    /**
+     * 异步提交
+     */
+    public void asynSubmit(IEvent event) {
+        this.executorServices[(int) Math.abs(event.getOwner() % EXECUTE_SIZE)].submit(() -> doSubmit(event));
+    }
+
+    /**
+     * 同步提交
+     *
+     * @param event
+     */
     @Override
     public void synSubmit(IEvent event) {
+        doSubmit(event);
+    }
+
+    /**
+     * 提交事件
+     *
+     * @param event 事件
+     */
+    private void doSubmit(IEvent event){
         List<ReceiveDefinition> list = receiveDefintionMap.get(event.getClass());
         if (list == null || list.isEmpty()) {
             logger.warn("no any receiver found for event:{}", event.getClass());

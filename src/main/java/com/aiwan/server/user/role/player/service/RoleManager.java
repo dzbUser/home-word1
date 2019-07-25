@@ -1,12 +1,20 @@
 package com.aiwan.server.user.role.player.service;
 
 import com.aiwan.server.publicsystem.annotation.Manager;
+import com.aiwan.server.ramcache.orm.Accessor;
 import com.aiwan.server.ramcache.service.impl.EntityCacheServiceImpl;
 import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.user.role.player.model.Role;
+import com.aiwan.server.user.role.powerboard.model.RankInfo;
 import com.aiwan.server.util.IDUtil;
+import org.apache.poi.ss.formula.functions.Rank;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author dengzebiao
@@ -17,6 +25,9 @@ public class RoleManager {
 
 
     private EntityCacheServiceImpl<Long, RoleEnt> cache;
+
+    @Autowired
+    private Accessor accessor;
 
 
     /**
@@ -68,6 +79,24 @@ public class RoleManager {
         RoleEnt roleEnt = role.getRoleEnt();
         roleEnt.setUpdateTime(Calendar.getInstance().getTimeInMillis());
         cache.writeBack(roleEnt.getId(),roleEnt);
+    }
+
+    /**
+     * 获取战力排行的角色
+     *
+     * @param num 数目
+     * @return
+     */
+    public CopyOnWriteArrayList<RankInfo> getRoleSortByCombat(int num) {
+        String hql = "from RoleEnt order by combatPower desc";
+        List<RoleEnt> list = accessor.find(hql, 0, num);
+        CopyOnWriteArrayList<RankInfo> rankInfos = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            RoleEnt roleEnt = list.get(i);
+            RankInfo rankInfo = RankInfo.valueOf(roleEnt.getId(), roleEnt.getCombatPower());
+            rankInfos.add(rankInfo);
+        }
+        return rankInfos;
     }
 
 }

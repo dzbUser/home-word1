@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class AttributeContainer {
 
+
     Logger logger = LoggerFactory.getLogger(AttributeContainer.class);
 
     /**
@@ -146,4 +147,6 @@ public class AttributeContainer {
     public void setModuleMap(Map<AttributeId, Map<AttributeType, AttributeElement>> moduleMap) {
         this.moduleMap = moduleMap;
     }
+
+
 }

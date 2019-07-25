@@ -89,4 +89,9 @@ public class StatusCode {
      * 查看进行中的任务
      */
     public final static int VIEW_PROCESSING_TASK = 26;
+
+    /**
+     * 查看排行榜
+     */
+    public final static int VIEW_RANK_BOAED = 27;
 }

@@ -32,8 +32,13 @@ public class SM_RoleMessage implements Serializable {
     /** 属性 */
     private Map<AttributeType, AttributeElement> map;
 
+    /**
+     * 战力
+     */
+    private long combatPower;
+
     /** 创建 */
-    public static SM_RoleMessage valueOf(int job, int sex, int level, int experience, int needExperience, Map<AttributeType, AttributeElement> map, String name) {
+    public static SM_RoleMessage valueOf(int job, int sex, int level, int experience, int needExperience, Map<AttributeType, AttributeElement> map, String name, long combatPower) {
         SM_RoleMessage sm_roleMessage = new SM_RoleMessage();
         sm_roleMessage.setJob(job);
         sm_roleMessage.setExperience(experience);
@@ -42,6 +47,7 @@ public class SM_RoleMessage implements Serializable {
         sm_roleMessage.setNeedExperience(needExperience);
         sm_roleMessage.setMap(map);
         sm_roleMessage.setName(name);
+        sm_roleMessage.setCombatPower(combatPower);
         return sm_roleMessage;
     }
 
@@ -105,5 +111,13 @@ public class SM_RoleMessage implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getCombatPower() {
+        return combatPower;
+    }
+
+    public void setCombatPower(long combatPower) {
+        this.combatPower = combatPower;
     }
 }

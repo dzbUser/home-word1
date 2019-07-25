@@ -15,6 +15,7 @@ import java.util.Map;
 public class EventInitialzation {
 
     public static void init(ClassPathXmlApplicationContext applicationContext) {
+        GetBean.getEventBusManager().init();
         //获取所有门面类
         Map<String, Object> beansWithAnnotationMap = applicationContext.getBeansWithAnnotation(Controller.class);
         for (Map.Entry<String, Object> entry : beansWithAnnotationMap.entrySet()) {

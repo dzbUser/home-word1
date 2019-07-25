@@ -149,12 +149,18 @@ public class HibernateAccessor extends HibernateDaoSupport implements Accessor {
     @Transactional(readOnly=true)
     @Override
     public <PK extends Serializable, T extends IEntity> List<T> find(final String query) {
+        return (List<T>) getHibernateTemplate().find(query);
+    }
+
+    @Override
+    public <PK extends Serializable, T extends IEntity> List<T> find(final String query, int minNum, int maxNum) {
         return getHibernateTemplate().execute(new HibernateCallback<List<T>>() {
             @Override
             public List<T> doInHibernate(Session session) throws HibernateException {
-                Query namedQuery = session.getNamedQuery(query);
-                String queryString = namedQuery.getQueryString();
-                return (List<T>) getHibernateTemplate().find(queryString);
+                Query createQuery = session.createQuery(query);
+                createQuery.setFirstResult(minNum);
+                createQuery.setMaxResults(maxNum);
+                return createQuery.list();
             }
         });
     }

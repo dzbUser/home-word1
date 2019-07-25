@@ -65,6 +65,9 @@ public class RoleEnt implements IEntity<Long> {
     @Column(nullable = false)
     private int experience;
 
+    @Column(nullable = false)
+    private Long combatPower;
+
     /** 人物属性 */
     @Transient
     private RoleAttribute roleAttribute;
@@ -209,5 +212,13 @@ public class RoleEnt implements IEntity<Long> {
 
     public void setSceneId(int sceneId) {
         this.sceneId = sceneId;
+    }
+
+    public Long getCombatPower() {
+        return combatPower;
+    }
+
+    public void setCombatPower(Long combatPower) {
+        this.combatPower = combatPower;
     }
 }

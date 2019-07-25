@@ -20,6 +20,8 @@ import com.aiwan.server.user.role.mount.service.MountService;
 import com.aiwan.server.user.role.player.service.RoleManager;
 import com.aiwan.server.user.role.player.service.RoleService;
 import com.aiwan.server.user.role.player.service.RoleResourceManager;
+import com.aiwan.server.user.role.powerboard.model.PowerRankBoard;
+import com.aiwan.server.user.role.powerboard.service.IRankService;
 import com.aiwan.server.user.role.task.service.ITaskService;
 import com.aiwan.server.user.role.task.service.TaskManager;
 import com.aiwan.server.world.dungeon.service.DungeonService;
@@ -136,6 +138,48 @@ public class GetBean {
      * 装备管理类
      */
     private static EquipmentManager equipmentManager;
+
+    /**
+     * 战力计算公式
+     */
+    private static CombatPowerFormula combatPowerFormula;
+
+    /**
+     * 战力排行榜
+     */
+    private static PowerRankBoard powerRankBoard;
+
+    /**
+     * 查看排行榜
+     */
+    private static IRankService rankService;
+
+    public static IRankService getRankService() {
+        return rankService;
+    }
+
+    @Autowired
+    public void setRankService(IRankService rankService) {
+        GetBean.rankService = rankService;
+    }
+
+    public static PowerRankBoard getPowerRankBoard() {
+        return powerRankBoard;
+    }
+
+    @Autowired
+    public void setPowerRankBoard(PowerRankBoard powerRankBoard) {
+        GetBean.powerRankBoard = powerRankBoard;
+    }
+
+    public static CombatPowerFormula getCombatPowerFormula() {
+        return combatPowerFormula;
+    }
+
+    @Autowired
+    public void setCombatPowerFormula(CombatPowerFormula combatPowerFormula) {
+        GetBean.combatPowerFormula = combatPowerFormula;
+    }
 
     public static EquipmentManager getEquipmentManager() {
         return equipmentManager;

@@ -17,6 +17,8 @@ import com.aiwan.server.user.role.equipment.protocol.SM_ViewEquip;
 import com.aiwan.server.user.role.equipment.protocol.item.EquipInfo;
 import com.aiwan.server.user.role.player.protocol.SM_CreateRole;
 import com.aiwan.server.user.role.player.protocol.SM_RoleMessage;
+import com.aiwan.server.user.role.powerboard.protocol.RankBoardRoleMessage;
+import com.aiwan.server.user.role.powerboard.protocol.SM_ViewRankBoard;
 import com.aiwan.server.util.GetBean;
 import com.aiwan.server.util.StatusCode;
 
@@ -57,6 +59,7 @@ public class RoleInfoReceive {
         for (Map.Entry<AttributeType, AttributeElement> elementEntry:sm_roleMessage.getMap().entrySet()){
             stringBuffer.append(elementEntry.getValue().toString()+"\n");
         }
+        stringBuffer.append("战斗力:" + sm_roleMessage.getCombatPower() + "\n");
         //输出到游戏界面
         GameInterface GameInterface = (GameInterface)InterfaceManager.getFrame("game");
         GameInterface.printOtherMessage(stringBuffer.toString() + "\n");
@@ -109,6 +112,22 @@ public class RoleInfoReceive {
                 //输出属性加成
                 stringBuffer.append(attributeElement.toString() + " ");
             }
+        }
+        gameInterface.printOtherMessage(stringBuffer.toString() + "\n");
+    }
+
+    /**
+     * 查看排行榜
+     *
+     * @param sm_viewRankBoard
+     */
+    @InfoReceiveMethod(status = StatusCode.VIEW_RANK_BOAED)
+    public void viewRoleMessage(SM_ViewRankBoard sm_viewRankBoard) {
+        GameInterface gameInterface = (GameInterface) InterfaceManager.getFrame("game");
+        StringBuffer stringBuffer = new StringBuffer();
+        int i = 1;
+        for (RankBoardRoleMessage rankBoardRoleMessage : sm_viewRankBoard.getList()) {
+            stringBuffer.append("[" + i + "]" + "角色Id:" + rankBoardRoleMessage.getrId() + " 名字:" + rankBoardRoleMessage.getName() + " 战力:" + rankBoardRoleMessage.getCombatPower() + "\n");
         }
         gameInterface.printOtherMessage(stringBuffer.toString() + "\n");
     }

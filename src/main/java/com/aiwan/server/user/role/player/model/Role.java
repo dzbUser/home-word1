@@ -129,7 +129,13 @@ public class Role {
         return roleEnt.getSceneId();
     }
 
+    public Long getCombatPower() {
+        return roleEnt.getCombatPower();
+    }
 
+    public void setCombatPower(Long combatPower) {
+        roleEnt.setCombatPower(combatPower);
+    }
 
     public String getName() {
         return roleEnt.getName();

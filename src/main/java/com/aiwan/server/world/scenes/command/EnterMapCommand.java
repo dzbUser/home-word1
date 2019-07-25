@@ -2,6 +2,7 @@ package com.aiwan.server.world.scenes.command;
 
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
+import com.aiwan.server.world.base.handler.ISceneHandler;
 import com.aiwan.server.world.base.scene.AbstractScene;
 import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.scenes.mapresource.MapResource;
@@ -35,14 +36,8 @@ public class EnterMapCommand extends AbstractSceneCommand {
     public void action() {
         try {
             AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getMapId(), getSceneId());
-            if (abstractScene instanceof DungeonScene) {
-                //副本
-                DungeonScene dungeonScene = (DungeonScene) abstractScene;
-                dungeonScene.getHandler().enterDungeon(role, roleUnit);
-            } else {
-                //普通地图
-                GetBean.getScenesService().enterMap(role, abstractScene, roleUnit);
-            }
+            ISceneHandler handler = abstractScene.getHandler();
+            handler.enterDungeon(role, roleUnit);
         } catch (Exception e) {
             logger.error("{}跳转到{}失败", role.getId(), getMapId());
             //取消跳转
@@ -50,7 +45,6 @@ public class EnterMapCommand extends AbstractSceneCommand {
             //直接进入主城
             EnterMapCommand enterMapCommand = new EnterMapCommand(1, role, null);
             GetBean.getSceneExecutorService().submit(enterMapCommand);
-
         }
     }
 

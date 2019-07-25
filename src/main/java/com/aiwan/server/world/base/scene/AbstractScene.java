@@ -5,6 +5,7 @@ import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.world.base.handler.ISceneHandler;
 import com.aiwan.server.world.scenes.mapresource.MapResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,6 +141,13 @@ public abstract class AbstractScene {
             }
         }
     }
+
+    /**
+     * 获取处理器
+     *
+     * @return
+     */
+    public abstract ISceneHandler getHandler();
 
     public int getMapId() {
         return mapId;

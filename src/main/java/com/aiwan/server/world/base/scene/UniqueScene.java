@@ -1,16 +1,9 @@
 package com.aiwan.server.world.base.scene;
 
-import com.aiwan.server.monster.resource.MonsterResource;
-import com.aiwan.server.world.scenes.command.MonsterRateReviveCommand;
-import com.aiwan.server.world.scenes.command.SceneRateCommand;
-import com.aiwan.server.user.role.fight.pvpunit.MonsterUnit;
-import com.aiwan.server.util.GetBean;
-import com.aiwan.server.util.MonsterGenerateUtil;
-import com.aiwan.server.world.scenes.model.Position;
+import com.aiwan.server.world.base.handler.ISceneHandler;
+import com.aiwan.server.world.base.handler.impl.UniqueSceneHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * @author dengzebiao
@@ -23,6 +16,7 @@ public class UniqueScene extends AbstractScene {
         super(mapId);
     }
 
+    private UniqueSceneHandler handler;
 
     /**
      * 创建场景
@@ -32,54 +26,13 @@ public class UniqueScene extends AbstractScene {
         return uniqueScene;
     }
 
-    /**
-     * 初始化
-     */
-    public void init() {
-        generateMonster();
-        //初始化buff
-        long now = System.currentTimeMillis();
-        SceneRateCommand sceneRateCommand = new SceneRateCommand(null, getMapId(), 0, 1000);
-        MonsterRateReviveCommand monsterRateReviveCommand = new MonsterRateReviveCommand(null, getMapId(), 0, 5000);
-        GetBean.getSceneExecutorService().submit(sceneRateCommand);
-        GetBean.getSceneExecutorService().submit(monsterRateReviveCommand);
-        getCommandMap().put(SceneRateCommand.class, sceneRateCommand);
-        getCommandMap().put(MonsterRateReviveCommand.class, monsterRateReviveCommand);
-        setCanEnter(true);
+    @Override
+    public UniqueSceneHandler getHandler() {
+        return handler;
     }
 
-    /**
-     * 生成怪物
-     */
-    private void generateMonster() {
-        /*
-         * 1.获取该地图的怪物
-         * 2.获取数量，循环生成
-         * 3.获取随机坐标
-         * 4.生成怪物
-         * */
-        //获取属于该地图的怪物
-        List<MonsterResource> monsterResources = GetBean.getMonsterManager().getMonsterList(getMapId());
-        if (monsterResources == null) {
-            return;
-        }
-        //循环创建怪物
-        for (MonsterResource monsterResource : monsterResources) {
-            for (int i = 0; i < monsterResource.getNum(); i++) {
-                //获取随机坐标
-                while (true) {
-                    Position position = MonsterGenerateUtil.generaterRandomPosition(getResource().getWidth(), getResource().getHeight());
-                    //判断不是阻挡点
-                    if (GetBean.getMapManager().allowMove(position.getX(), position.getY(), getMapId())) {
-                        MonsterUnit monster = MonsterUnit.valueOf(monsterResource, position, getSceneId(), getMapId());
-                        getBaseUnitMap().put(monster.getId(), monster);
-                        break;
-                    }
-                }
-            }
-        }
-
-        logger.debug("场景{},怪物加载完毕", getMapId());
+    public void setHandler(UniqueSceneHandler handler) {
+        this.handler = handler;
     }
 }
 

@@ -3,6 +3,7 @@ package com.aiwan.server.world.scenes.command;
 import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.world.base.handler.ISceneHandler;
 import com.aiwan.server.world.base.scene.AbstractScene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,9 @@ public class SignOutMapCommand extends AbstractSceneCommand {
     @Override
     public void action() {
         //去除地图缓存
-        GetBean.getScenesService().leaveMap(role);
-
+        AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
+        ISceneHandler handler = abstractScene.getHandler();
+        handler.quitDungeon(role);
     }
 
     public SignOutMapCommand(Role role) {

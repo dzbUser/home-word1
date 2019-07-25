@@ -5,6 +5,7 @@ import com.aiwan.server.reward.model.RewardBean;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.LoggerUtil;
 import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.reward.command.RandomRewardCommand;
 import com.aiwan.server.world.base.handler.AbstractChapterDungeonHandler;
@@ -83,11 +84,13 @@ public class ExperienceDungeonHandler extends AbstractChapterDungeonHandler {
 
     @Override
     public void gateReward(GateBean gateBean) {
+        LoggerUtil.info("{}通关副本关卡{},开始发放奖励", role.getId(), gateBean.getGateNum());
         GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), gateBean.getRewardBean()));
     }
 
     @Override
     public void settlementReward(SettlementBean settlementBean) {
+        LoggerUtil.info("{}通关副本,发放奖励", role.getId());
         //取消循环处理器
         RewardBean rewardBean = RewardBean.valueOf(settlementBean.getDropBeanList(), settlementBean.getExperience() * totalKillNum);
         GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), rewardBean));
@@ -117,17 +120,19 @@ public class ExperienceDungeonHandler extends AbstractChapterDungeonHandler {
 
     @Override
     public void releaseDungeon() {
-        GetBean.getSceneExecutorService().submit(new EnterMapCommand(1, role, (RoleUnit) getDungeonScene().getBaseUnit(role.getId())));
-        SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "副本时间到");
+        if (role.getMap() == getDungeonScene().getMapId() && role.getSceneId() == getDungeonScene().getSceneId()) {
+            GetBean.getSceneExecutorService().submit(new EnterMapCommand(1, role, (RoleUnit) getDungeonScene().getBaseUnit(role.getId())));
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "副本时间到");
+        }
         super.releaseDungeon();
     }
-
 
     /**
      * 结算
      */
     @Override
     public void settlement() {
+        LoggerUtil.info("{}通关副本,开始结算", role.getId());
         //发送奖励
         settlementReward(getDungeonScene().getResource().getSettlementBean());
         //释放资源

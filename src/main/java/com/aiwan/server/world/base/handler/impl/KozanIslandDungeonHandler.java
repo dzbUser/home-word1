@@ -5,6 +5,7 @@ import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.user.role.team.model.TeamModel;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.util.LoggerUtil;
 import com.aiwan.server.util.PromptCode;
 import com.aiwan.server.reward.command.RandomRewardCommand;
 import com.aiwan.server.world.base.handler.AbstractChapterDungeonHandler;
@@ -63,6 +64,7 @@ public class KozanIslandDungeonHandler extends AbstractChapterDungeonHandler {
     @Override
     public void gateReward(GateBean gateBean) {
         for (Role role : teamModel.getTeamList()) {
+            LoggerUtil.info("{}通关副本关卡{},发放奖励", role.getId(), gateBean.getGateNum());
             GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), gateBean.getRewardBean()));
         }
     }
@@ -70,6 +72,7 @@ public class KozanIslandDungeonHandler extends AbstractChapterDungeonHandler {
     @Override
     public void settlementReward(SettlementBean settlementBean) {
         for (Role role : teamModel.getTeamList()) {
+            LoggerUtil.info("{}通关副本,发放奖励", role.getId());
             GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), settlementBean.getRewardBean()));
         }
     }

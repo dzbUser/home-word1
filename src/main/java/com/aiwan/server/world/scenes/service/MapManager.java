@@ -7,6 +7,7 @@ import com.aiwan.server.publicsystem.service.SessionManager;
 import com.aiwan.server.user.role.fight.protocol.SM_UnitStatusMessage;
 import com.aiwan.server.user.role.fight.pvpunit.BaseUnit;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
+import com.aiwan.server.world.base.handler.impl.UniqueSceneHandler;
 import com.aiwan.server.world.base.scene.AbstractScene;
 import com.aiwan.server.world.scenes.mapresource.MapResource;
 import com.aiwan.server.world.scenes.mapresource.PositionMeaning;
@@ -46,7 +47,10 @@ public class MapManager {
                 continue;
             }
             UniqueScene uniqueScene = UniqueScene.valueOf(entry.getKey());
-            uniqueScene.init();
+            UniqueSceneHandler uniqueSceneHandler = new UniqueSceneHandler();
+            uniqueScene.setHandler(uniqueSceneHandler);
+            uniqueSceneHandler.setUniqueScene(uniqueScene);
+            uniqueSceneHandler.init();
             putSceObject(uniqueScene);
         }
     }

@@ -39,9 +39,11 @@ public class PowerRankBoard {
         boolean inRank = false;
         for (int i = 0; i < RANK_NUM; i++) {
             if (rankInfoList.get(i).getrId() == role.getId()) {
+                //更新的角色已在排行榜中
                 inRank = true;
                 //更新战力
                 if (rankInfoList.get(i).getCombatPower() < role.getCombatPower()) {
+                    //战力变强了
                     rankInfoList.get(i).setCombatPower(role.getCombatPower());
                     RankInfo rankInfo = rankInfoList.get(i);
                     //往前更新
@@ -55,6 +57,7 @@ public class PowerRankBoard {
                     }
                     rankInfoList.set(j + 1, rankInfo);
                 } else {
+                    //战力变低了
                     rankInfoList.get(i).setCombatPower(role.getCombatPower());
                     RankInfo rankInfo = rankInfoList.get(i);
                     //往后更新
@@ -73,6 +76,7 @@ public class PowerRankBoard {
             }
         }
 
+        //一开始没在战力榜中
         if (!inRank) {
             //向前更新
             if (rankInfoList.get(RANK_NUM - 1).getCombatPower() < role.getCombatPower()) {

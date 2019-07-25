@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * @author dengzebiao
  * @since 2019.7.24
  */
-public abstract class AbstractDungeonHandler {
+public abstract class AbstractDungeonHandler implements ISceneHandler {
 
     Logger logger = LoggerFactory.getLogger(AbstractDungeonHandler.class);
 

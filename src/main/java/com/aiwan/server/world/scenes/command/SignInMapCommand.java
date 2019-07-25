@@ -4,6 +4,7 @@ import com.aiwan.server.base.executor.scene.impl.AbstractSceneCommand;
 import com.aiwan.server.user.role.fight.pvpunit.RoleUnit;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
+import com.aiwan.server.world.base.handler.ISceneHandler;
 import com.aiwan.server.world.base.scene.AbstractScene;
 import com.aiwan.server.world.base.scene.DungeonScene;
 import org.slf4j.Logger;
@@ -34,19 +35,10 @@ public class SignInMapCommand extends AbstractSceneCommand {
                 GetBean.getSceneExecutorService().submit(enterMapCommand);
                 return;
             }
-            if (abstractScene instanceof DungeonScene) {
-                //副本
-                DungeonScene dungeonScene = (DungeonScene) abstractScene;
-                dungeonScene.getHandler().enterDungeon(role, null);
-                role.setChangingMap(false);
-            } else {
-                //普通地图
-                RoleUnit roleUnit = RoleUnit.valueOf(role, abstractScene.getMapId());
-                abstractScene.putBaseUnit(roleUnit);
-                //给所有玩家发送消息
-                GetBean.getMapManager().sendMessageToUsers(getMapId(), getSceneId());
-                role.setChangingMap(false);
-            }
+            //进入地图
+            ISceneHandler handler = abstractScene.getHandler();
+            handler.enterDungeon(role, null);
+            role.setChangingMap(false);
         } catch (Exception e) {
             logger.error("{}跳转到{}失败", role.getId(), getMapId());
             //取消跳转

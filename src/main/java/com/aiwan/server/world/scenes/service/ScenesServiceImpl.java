@@ -2,6 +2,7 @@ package com.aiwan.server.world.scenes.service;
 
 import com.aiwan.server.publicsystem.common.Session;
 import com.aiwan.server.publicsystem.service.SessionManager;
+import com.aiwan.server.world.base.handler.ISceneHandler;
 import com.aiwan.server.world.base.scene.AbstractScene;
 import com.aiwan.server.world.base.scene.DungeonScene;
 import com.aiwan.server.world.scenes.command.EnterMapCommand;
@@ -113,14 +114,11 @@ public class ScenesServiceImpl implements ScenesService{
             return;
         }
         role.setChangingMap(true);
-        //获取角色所在地图
-        AbstractScene quitMap = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
-        if (quitMap instanceof DungeonScene) {
-            DungeonScene dungeonScene = (DungeonScene) quitMap;
-            dungeonScene.getHandler().quitDungeon(role);
-        } else {
-            leaveMap(role);
-        }
+        //获取角色所在地图,做离开地图操作
+        AbstractScene scene = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
+        ISceneHandler handler = scene.getHandler();
+        //退出地图
+        handler.quitDungeon(role);
         //进入map地图
         GetBean.getSceneExecutorService().submit(new EnterMapCommand(targetMapId, targetSceneId, role, roleUnit));
     }

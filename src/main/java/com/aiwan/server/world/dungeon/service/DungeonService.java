@@ -29,6 +29,7 @@ public class DungeonService implements IDungeonService {
     @Override
     public void createDungeon(long rId, int mapId) {
         MapResource mapResource = GetBean.getMapManager().getMapResource(mapId);
+        logger.info("{}请求进入副本,mapId:{}", rId, mapId);
         if (mapResource == null) {
             logger.error("{}创建副本{}错误，找不到地图资源", rId, mapId);
             SessionManager.sendPromptMessage(rId, PromptCode.MAPNOEXIST, "");

@@ -28,6 +28,11 @@ public class ExperienceDungeonHandler extends AbstractChapterDungeonHandler {
     private Role role;
 
     /**
+     * 标志是否离开地图
+     */
+    private boolean isLeft = true;
+
+    /**
      * 总击杀数
      */
     private int totalKillNum;
@@ -109,18 +114,20 @@ public class ExperienceDungeonHandler extends AbstractChapterDungeonHandler {
 
     @Override
     public void enterDungeon(Role role, RoleUnit roleUnit) {
+        isLeft = false;
         GetBean.getScenesService().enterMap(role, getDungeonScene(), roleUnit);
     }
 
     @Override
     public void quitDungeon(Role role) {
+        isLeft = true;
         getDungeonScene().removeBaseUnit(role.getId());
         GetBean.getMapManager().sendMessageToUsers(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
     }
 
     @Override
     public void releaseDungeon() {
-        if (role.getMap() == getDungeonScene().getMapId() && role.getSceneId() == getDungeonScene().getSceneId()) {
+        if (!isLeft) {
             GetBean.getSceneExecutorService().submit(new EnterMapCommand(1, role, (RoleUnit) getDungeonScene().getBaseUnit(role.getId())));
             SessionManager.sendPromptMessage(role.getId(), PromptCode.RETUEN_CITY, "副本时间到");
         }

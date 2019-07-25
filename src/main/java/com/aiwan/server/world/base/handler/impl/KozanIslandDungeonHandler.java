@@ -81,6 +81,9 @@ public class KozanIslandDungeonHandler extends AbstractChapterDungeonHandler {
 
     @Override
     public void quitDungeon(Role role) {
+        //退出队伍
+        GetBean.getTeamService().leaveTeam(role.getId());
+        //退出副本
         getDungeonScene().removeBaseUnit(role.getId());
         GetBean.getMapManager().sendMessageToUsers(getDungeonScene().getMapId(), getDungeonScene().getSceneId());
     }

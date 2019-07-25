@@ -42,7 +42,7 @@ public class ExperienceDungeonHandler extends AbstractChapterDungeonHandler {
     }
 
     /**
-     * 关卡监听器
+     * 关卡监函数
      */
     @Override
     public void checkpointListener() {

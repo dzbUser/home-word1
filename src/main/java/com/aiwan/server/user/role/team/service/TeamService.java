@@ -49,7 +49,7 @@ public class TeamService implements ITeamService {
     }
 
     @Override
-    public void viewAllTeam(Session session) {
+    public void viewAllTeam(long rId) {
         List<TeamMessage> list = new ArrayList<>();
         for (TeamModel teamModel : teamManager.getTeamModelMap().values()) {
             Role role = GetBean.getRoleManager().load(teamModel.getLeaderId());
@@ -58,31 +58,32 @@ public class TeamService implements ITeamService {
         }
 
         SM_ViewAllTeam sm_viewAllTeam = SM_ViewAllTeam.valueOf(list);
-        session.messageSend(StatusCode.VIEW_ALL_TEAM, sm_viewAllTeam);
+        SessionManager.sendMessageByRid(rId, StatusCode.VIEW_ALL_TEAM, sm_viewAllTeam);
     }
 
     @Override
-    public void applyJoin(long teamId, Session session) {
+    public void applyJoin(long teamId, long rId) {
         TeamModel teamModel = teamManager.getTeam(teamId);
         if (teamModel == null) {
-            logger.error("{}申请加入队伍失败，没有该队伍", session.getrId());
-            session.sendPromptMessage(PromptCode.NO_TEAM, "");
+            logger.error("{}申请加入队伍失败，没有该队伍", rId);
+            SessionManager.sendPromptMessage(rId, PromptCode.NO_TEAM, "");
             return;
         }
-        Role role = GetBean.getRoleManager().load(session.getrId());
-        if (teamManager.isInTeam(session.getrId())) {
-            logger.error("{}申请加入队伍失败，已经在队伍中", session.getrId());
-            session.sendPromptMessage(PromptCode.HAVE_IN_TEAM, "");
+        Role role = GetBean.getRoleManager().load(rId);
+        if (teamManager.isInTeam(rId)) {
+            logger.error("{}申请加入队伍失败，已经在队伍中", rId);
+            SessionManager.sendPromptMessage(rId, PromptCode.HAVE_IN_TEAM, "");
             return;
         }
         if (teamModel.isTeamFull()) {
-            logger.error("{}申请加入队伍失败，队伍已满", session.getrId());
-            session.sendPromptMessage(PromptCode.TEAM_FULL, "");
+            logger.error("{}申请加入队伍失败，队伍已满", rId);
+            SessionManager.sendPromptMessage(rId, PromptCode.TEAM_FULL, "");
             return;
         }
         teamModel.getApplicationList().add(role.getId());
-        logger.error("{}申请加入队伍成功", session.getrId());
-        session.sendPromptMessage(PromptCode.APPLY_JOIN_SUCCESS, "");
+        logger.error("{}申请加入队伍成功", rId);
+        SessionManager.sendPromptMessage(rId, PromptCode.APPLY_JOIN_SUCCESS, "");
+        SessionManager.sendPromptMessage(teamModel.getLeaderId(), PromptCode.APPLY_JOIN_TEAM, role.getName());
     }
 
     @Override
@@ -104,19 +105,19 @@ public class TeamService implements ITeamService {
     }
 
     @Override
-    public void viewAllApplication(Session session) {
-        if (!teamManager.isInTeam(session.getrId())) {
-            logger.error("{}查看申请列表失败，未在队伍中", session.getrId());
-            session.sendPromptMessage(PromptCode.NO_IN_TEAM, "");
+    public void viewAllApplication(long rId) {
+        if (!teamManager.isInTeam(rId)) {
+            logger.error("{}查看申请列表失败，未在队伍中", rId);
+            SessionManager.sendPromptMessage(rId, PromptCode.NO_IN_TEAM, "");
             return;
         }
-        TeamModel teamModel = teamManager.getTeam(teamManager.getTeamIdByRid(session.getrId()));
+        TeamModel teamModel = teamManager.getTeam(teamManager.getTeamIdByRid(rId));
         List<MemberMessage> list = new ArrayList<>();
-        for (Long rId : teamModel.getApplicationList()) {
-            Role role = GetBean.getRoleManager().load(rId);
+        for (Long teamRoleId : teamModel.getApplicationList()) {
+            Role role = GetBean.getRoleManager().load(teamRoleId);
             list.add(MemberMessage.valueOf(role.getId(), role.getName(), role.getLevel(), role.getJob()));
         }
-        session.messageSend(StatusCode.VIEW_APPLICATION, SM_ViewApplication.valueOf(list));
+        SessionManager.sendMessageByRid(rId, StatusCode.VIEW_APPLICATION, SM_ViewApplication.valueOf(list));
     }
 
     /**
@@ -220,6 +221,7 @@ public class TeamService implements ITeamService {
         }
         logger.info("{}允许{}加入队伍成功", teamModel.getLeaderId(), applyRole.getId());
         SessionManager.sendPromptMessage(applyRole.getId(), PromptCode.JOIN_TEAM_SUCCESS, "");
+        SessionManager.sendPromptMessage(teamModel.getLeaderId(), PromptCode.JOIN_TEAM_SUCCESS, applyRole.getName());
     }
 
     /**
@@ -276,6 +278,7 @@ public class TeamService implements ITeamService {
             return;
         }
         SessionManager.sendPromptMessage(role.getId(), PromptCode.JOIN_TEAM_SUCCESS, "");
+        SessionManager.sendPromptMessage(teamModel.getLeaderId(), PromptCode.JOIN_TEAM_SUCCESS, role.getName());
     }
 
 }

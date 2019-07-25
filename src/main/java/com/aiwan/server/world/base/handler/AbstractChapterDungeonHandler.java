@@ -125,16 +125,5 @@ public abstract class AbstractChapterDungeonHandler extends AbstractDungeonHandl
     public void setCheckpointNum(int checkpointNum) {
         this.checkpointNum = checkpointNum;
     }
-
-    /**
-     * 发送通关事件
-     *
-     * @param role  角色
-     * @param mapId 通关地图id
-     */
-    public void dungeonClearanceEvent(Role role, int mapId) {
-        DungeonClearanceEvent dungeonClearanceEvent = DungeonClearanceEvent.valueOf(role, mapId);
-        GetBean.getEventBusManager().synSubmit(dungeonClearanceEvent);
-    }
 }
 

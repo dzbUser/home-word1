@@ -69,36 +69,6 @@ public class TeamManager {
         return false;
     }
 
-    /**
-     * 是否在队伍中,否则加入队伍
-     *
-     * @param rId 角色id
-     * @return
-     */
-    public synchronized boolean isInTeamOrJoin(long rId, long teamId) {
-        if (teamRoleMap.get(rId) != null) {
-            return true;
-        }
-        teamRoleMap.put(rId, teamId);
-        return false;
-    }
-
-    /**
-     * 是否在队伍中,否则创建队伍
-     *
-     * @param rId 角色id
-     * @return
-     */
-    public synchronized boolean isInTeamOrCreate(long rId) {
-        if (teamRoleMap.get(rId) != null) {
-            return true;
-        }
-        Role role = GetBean.getRoleManager().load(rId);
-        TeamModel teamModel = TeamModel.valueOf(role);
-        putTeam(teamModel);
-        teamRoleMap.put(rId, teamModel.getObjectId());
-        return false;
-    }
 
     /**
      * 加入队伍

@@ -21,18 +21,15 @@ public interface ITeamService {
 
     /**
      * 查看所有队伍
-     *
-     * @param session 会话
      */
-    void viewAllTeam(Session session);
+    void viewAllTeam(long rId);
 
     /**
      * 申请加入队伍
      *
      * @param teamId  队伍id
-     * @param session 会话
      */
-    void applyJoin(long teamId, Session session);
+    void applyJoin(long teamId, long rId);
 
     /**
      * 离开队伍
@@ -44,9 +41,8 @@ public interface ITeamService {
     /**
      * 查看所有申请
      *
-     * @param session 会话
      */
-    void viewAllApplication(Session session);
+    void viewAllApplication(long rId);
 
     /**
      * 允许加入队伍

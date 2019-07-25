@@ -113,8 +113,10 @@ public class ScenesServiceImpl implements ScenesService{
             return;
         }
         role.setChangingMap(true);
-        if (abstractScene instanceof DungeonScene) {
-            DungeonScene dungeonScene = (DungeonScene) abstractScene;
+        //获取角色所在地图
+        AbstractScene quitMap = GetBean.getMapManager().getSceneObject(role.getMap(), role.getSceneId());
+        if (quitMap instanceof DungeonScene) {
+            DungeonScene dungeonScene = (DungeonScene) quitMap;
             dungeonScene.getHandler().quitDungeon(role);
         } else {
             leaveMap(role);

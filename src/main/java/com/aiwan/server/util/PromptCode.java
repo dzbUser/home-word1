@@ -340,6 +340,11 @@ public class PromptCode {
      */
     public final static int TASK_COMPLETE = 71;
 
+    /**
+     * 申请加入队伍
+     */
+    public final static int APPLY_JOIN_TEAM = 72;
+
 
 //
 //    /**

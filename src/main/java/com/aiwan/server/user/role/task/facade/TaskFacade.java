@@ -89,7 +89,12 @@ public class TaskFacade {
         abstractProcessor.refreshExecute(taskParam);
     }
 
-
+    /**
+     * 查看可接受的任务
+     *
+     * @param cm_viewCanReceiveTask
+     * @param session
+     */
     public void viewCanReceiveTask(CM_ViewCanReceiveTask cm_viewCanReceiveTask, Session session) {
         if (session.getrId() == null) {
             logger.debug("错误包");
@@ -131,29 +136,5 @@ public class TaskFacade {
         GetBean.getTaskService().completeTask(session.getrId(), cm_completeTask.getTaskId());
     }
 
-    /**
-     * 发送邀请
-     */
-    public void sendInvitation(CM_InviteJoinTeam cm_inviteJoinTeam, Session session) {
-        if (session.getrId() == null) {
-            logger.debug("错误包");
-            return;
-        }
-        GetBean.getTeamService().sendInvitation(session.getrId(), cm_inviteJoinTeam.getInviteId());
-    }
 
-    /**
-     * 接受邀请
-     *
-     * @param cm_acceptTeamInvite 协议类
-     * @param session             会话
-     */
-    public void acceptInvitation(CM_AcceptTeamInvite cm_acceptTeamInvite, Session session) {
-        if (session.getrId() == null) {
-            logger.debug("错误包");
-            return;
-        }
-        Role role = GetBean.getRoleManager().load(session.getrId());
-        GetBean.getTeamService().acceptInvitation(role, cm_acceptTeamInvite.getTeamId());
-    }
 }

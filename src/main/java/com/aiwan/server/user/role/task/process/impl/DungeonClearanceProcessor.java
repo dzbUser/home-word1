@@ -40,8 +40,10 @@ public class DungeonClearanceProcessor extends AbstractProcessor<DungeonClearanc
 
     @Override
     public boolean modifyProgress(DungeonClearanceParam taskParam, DungeonClearanceProgress taskProgressElement, TaskElement taskElement) {
+        //通关副本数+1
         taskProgressElement.setValue(taskProgressElement.getValue() + 1);
         if (taskProgressElement.getValue() >= taskProgressElement.getFinishValue() && !taskProgressElement.isFinish()) {
+            //判断该进度是否完成
             taskProgressElement.setFinish(true);
             taskElement.examineFinish();
         }
@@ -49,7 +51,7 @@ public class DungeonClearanceProcessor extends AbstractProcessor<DungeonClearanc
     }
 
     @Override
-    public void iniExcuteProgress(DungeonClearanceProgress taskProgressElement, long rId) {
+    public void initExcuteProgress(DungeonClearanceProgress taskProgressElement, long rId) {
 
     }
 }

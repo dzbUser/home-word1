@@ -128,6 +128,7 @@ public class RoleInfoReceive {
         int i = 1;
         for (RankBoardRoleMessage rankBoardRoleMessage : sm_viewRankBoard.getList()) {
             stringBuffer.append("[" + i + "]" + "角色Id:" + rankBoardRoleMessage.getrId() + " 名字:" + rankBoardRoleMessage.getName() + " 战力:" + rankBoardRoleMessage.getCombatPower() + "\n");
+            i++;
         }
         gameInterface.printOtherMessage(stringBuffer.toString() + "\n");
     }

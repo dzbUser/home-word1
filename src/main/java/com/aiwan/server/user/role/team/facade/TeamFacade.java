@@ -37,7 +37,7 @@ public class TeamFacade {
             return;
         }
         Role role = GetBean.getRoleManager().load(session.getrId());
-        GetBean.getTeamService().viewAllTeam(session);
+        GetBean.getTeamService().viewAllTeam(session.getrId());
     }
 
     /**
@@ -59,7 +59,7 @@ public class TeamFacade {
             logger.debug("错误包");
             return;
         }
-        GetBean.getTeamService().applyJoin(cm_applyJoin.getTeamId(), session);
+        GetBean.getTeamService().applyJoin(cm_applyJoin.getTeamId(), session.getrId());
     }
 
     /**
@@ -70,7 +70,7 @@ public class TeamFacade {
             logger.debug("错误包");
             return;
         }
-        GetBean.getTeamService().viewAllApplication(session);
+        GetBean.getTeamService().viewAllApplication(session.getrId());
     }
 
     /**
@@ -104,6 +104,32 @@ public class TeamFacade {
             return;
         }
         GetBean.getTeamService().kickOut(cm_kickOutTeam.getKickOutRid(), session);
+    }
+
+    /**
+     * 发送邀请
+     */
+    public void sendInvitation(CM_InviteJoinTeam cm_inviteJoinTeam, Session session) {
+        if (session.getrId() == null) {
+            logger.debug("错误包");
+            return;
+        }
+        GetBean.getTeamService().sendInvitation(session.getrId(), cm_inviteJoinTeam.getInviteId());
+    }
+
+    /**
+     * 接受邀请
+     *
+     * @param cm_acceptTeamInvite 协议类
+     * @param session             会话
+     */
+    public void acceptInvitation(CM_AcceptTeamInvite cm_acceptTeamInvite, Session session) {
+        if (session.getrId() == null) {
+            logger.debug("错误包");
+            return;
+        }
+        Role role = GetBean.getRoleManager().load(session.getrId());
+        GetBean.getTeamService().acceptInvitation(role, cm_acceptTeamInvite.getTeamId());
     }
 
 }

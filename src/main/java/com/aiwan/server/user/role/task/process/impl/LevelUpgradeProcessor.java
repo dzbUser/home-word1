@@ -43,7 +43,7 @@ public class LevelUpgradeProcessor extends AbstractProcessor<CommonParam, Common
     }
 
     @Override
-    public void iniExcuteProgress(CommonProgress taskProgressElement, long rId) {
+    public void initExcuteProgress(CommonProgress taskProgressElement, long rId) {
         Role role = GetBean.getRoleManager().load(rId);
         taskProgressElement.setValue(role.getLevel());
         if (taskProgressElement.getValue() >= taskProgressElement.getFinishValue() && !taskProgressElement.isFinish()) {

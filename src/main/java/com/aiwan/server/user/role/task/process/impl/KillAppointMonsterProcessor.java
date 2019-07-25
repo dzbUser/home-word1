@@ -46,7 +46,7 @@ public class KillAppointMonsterProcessor extends AbstractProcessor<KillAppointMo
     }
 
     @Override
-    public void iniExcuteProgress(KillAppointMonsterProgress taskProgressElement, long rId) {
+    public void initExcuteProgress(KillAppointMonsterProgress taskProgressElement, long rId) {
 
     }
 }

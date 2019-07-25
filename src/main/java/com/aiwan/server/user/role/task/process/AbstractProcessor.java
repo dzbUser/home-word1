@@ -30,7 +30,7 @@ public abstract class AbstractProcessor<T extends AbstractTaskParam, B extends A
     private TaskManager taskManager;
 
     /**
-     * 存放任务处理器的集合
+     * 存放任务处理器的集合(静态)
      */
     private static final Map<TaskProgressType, AbstractProcessor> processorMap = new HashMap<>();
 
@@ -45,13 +45,16 @@ public abstract class AbstractProcessor<T extends AbstractTaskParam, B extends A
     }
 
     /**
-     * 初始化存入处理器类型
+     * 存入静态处理器容器中（创建时调用）
      */
     @PostConstruct
     private final void init() {
         processorMap.put(getEventType(), this);
     }
 
+    /**
+     * 返回处理器的类型
+     */
     public abstract TaskProgressType getEventType();
 
     /**
@@ -69,18 +72,19 @@ public abstract class AbstractProcessor<T extends AbstractTaskParam, B extends A
             for (AbstractProgressElement abstractProgressElement : taskElement.getTaskProgress()) {
                 //判断任务进度的类型是否一样
                 if (isSameType(taskParam, (B) abstractProgressElement)) {
+                    //进度发送改变
                     change = change || modifyProgress(taskParam, (B) abstractProgressElement, taskElement);
                 }
             }
         }
         if (change) {
-            //发生变化
+            //发生变化，入库操作
             GetBean.getTaskManager().save(taskModel);
         }
     }
 
     /**
-     * 是否是相同类型且须修改
+     * 判断类型与要求的参数是否相同
      */
     public abstract boolean isSameType(T taskParam, B taskProgressElement);
 
@@ -90,7 +94,7 @@ public abstract class AbstractProcessor<T extends AbstractTaskParam, B extends A
     public abstract boolean modifyProgress(T taskParam, B taskProgressElement, TaskElement taskElement);
 
     /**
-     * 初始化任务进度
+     * 初始化任务进度（用户创建任务是的初始化）
      */
-    public abstract void iniExcuteProgress(B taskProgressElement, long rId);
+    public abstract void initExcuteProgress(B taskProgressElement, long rId);
 }

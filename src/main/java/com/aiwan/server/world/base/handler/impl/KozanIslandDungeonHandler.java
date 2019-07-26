@@ -65,6 +65,7 @@ public class KozanIslandDungeonHandler extends AbstractChapterDungeonHandler {
     public void gateReward(GateBean gateBean) {
         for (Role role : teamModel.getTeamList()) {
             LoggerUtil.info("{}通关副本关卡{},发放奖励", role.getId(), gateBean.getGateNum());
+            SessionManager.sendPromptMessage(role.getId(), PromptCode.CLEAR_GATE, "" + gateBean.getGateNum());
             GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), gateBean.getRewardBean()));
         }
     }

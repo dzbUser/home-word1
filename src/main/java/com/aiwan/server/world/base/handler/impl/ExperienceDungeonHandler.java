@@ -90,6 +90,7 @@ public class ExperienceDungeonHandler extends AbstractChapterDungeonHandler {
     @Override
     public void gateReward(GateBean gateBean) {
         LoggerUtil.info("{}通关副本关卡{},开始发放奖励", role.getId(), gateBean.getGateNum());
+        SessionManager.sendPromptMessage(role.getId(), PromptCode.CLEAR_GATE, "" + gateBean.getGateNum());
         GetBean.getAccountExecutorService().submit(new RandomRewardCommand(role.getAccountId(), role.getId(), gateBean.getRewardBean()));
     }
 

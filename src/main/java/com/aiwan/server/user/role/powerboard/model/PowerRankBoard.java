@@ -1,13 +1,16 @@
 package com.aiwan.server.user.role.powerboard.model;
 
+import com.aiwan.server.user.role.player.entity.RoleEnt;
 import com.aiwan.server.user.role.player.model.Role;
 import com.aiwan.server.util.GetBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * 战力排行榜
@@ -24,10 +27,22 @@ public class PowerRankBoard {
      */
     private final static int RANK_NUM = 3;
 
-    private CopyOnWriteArrayList<RankInfo> rankInfoList;
+    /**
+     * 排行榜最大数目
+     */
+    private final static int MAX_NUM = 10;
+
+    private ConcurrentSkipListMap<RankInfo, Long> rankInfoListMap = new ConcurrentSkipListMap<>();
+
+    private Map<Long, RankInfo> rankInfoMap = new HashMap<>();
 
     public void init() {
-        rankInfoList = GetBean.getRoleManager().getRoleSortByCombat(RANK_NUM);
+        List<RoleEnt> list = GetBean.getRoleManager().getRoleSortByCombat(RANK_NUM);
+        for (RoleEnt roleEnt : list) {
+            RankInfo rankInfo = RankInfo.valueOf(roleEnt.getId(), roleEnt.getCombatPower(), roleEnt.getUpdateTime(), roleEnt.getName());
+            rankInfoMap.put(rankInfo.getrId(), rankInfo);
+            rankInfoListMap.put(rankInfo, rankInfo.getrId());
+        }
     }
 
     /**
@@ -36,62 +51,18 @@ public class PowerRankBoard {
      * @param role
      */
     public void update(Role role) {
-        boolean inRank = false;
-        for (int i = 0; i < RANK_NUM; i++) {
-            if (rankInfoList.get(i).getrId() == role.getId()) {
-                //更新的角色已在排行榜中
-                inRank = true;
-                //更新战力
-                if (rankInfoList.get(i).getCombatPower() < role.getCombatPower()) {
-                    //战力变强了
-                    rankInfoList.get(i).setCombatPower(role.getCombatPower());
-                    RankInfo rankInfo = rankInfoList.get(i);
-                    //往前更新
-                    int j = i - 1;
-                    for (; j >= 0; j--) {
-                        if (rankInfoList.get(j).getCombatPower() < rankInfo.getCombatPower()) {
-                            rankInfoList.set(j + 1, rankInfoList.get(j));
-                        } else {
-                            break;
-                        }
-                    }
-                    rankInfoList.set(j + 1, rankInfo);
-                } else {
-                    //战力变低了
-                    rankInfoList.get(i).setCombatPower(role.getCombatPower());
-                    RankInfo rankInfo = rankInfoList.get(i);
-                    //往后更新
-                    int j = i + 1;
-                    for (; j < RANK_NUM; j++) {
-                        if (rankInfoList.get(j).getCombatPower() > rankInfo.getCombatPower()) {
-                            rankInfoList.set(j - 1, rankInfoList.get(j));
-                        } else {
-                            break;
-                        }
-                    }
-                    rankInfoList.set(j - 1, rankInfo);
-                }
-                //找到变化，退出循环
-                break;
-            }
+        RankInfo rankInfo = rankInfoMap.get(role.getId());
+        if (rankInfo != null) {
+            rankInfoListMap.remove(rankInfo);
         }
-
-        //一开始没在战力榜中
-        if (!inRank) {
-            //向前更新
-            if (rankInfoList.get(RANK_NUM - 1).getCombatPower() < role.getCombatPower()) {
-                RankInfo info = RankInfo.valueOf(role.getId(), role.getCombatPower());
-                rankInfoList.set(RANK_NUM - 1, info);
-                int i = RANK_NUM - 2;
-                for (; i >= 0; i--) {
-                    if (rankInfoList.get(i).getCombatPower() < info.getCombatPower()) {
-                        rankInfoList.set(i + 1, rankInfoList.get(i));
-                    } else {
-                        break;
-                    }
-                }
-                rankInfoList.set(i + 1, info);
-            }
+        //获取当前时间
+        rankInfo = RankInfo.valueOf(role.getId(), role.getCombatPower(), role.getUpdateTime(), role.getName());
+        rankInfoMap.put(rankInfo.getrId(), rankInfo);
+        rankInfoListMap.put(rankInfo, rankInfo.getrId());
+        if (rankInfoListMap.size() > MAX_NUM) {
+            //当前容器中的数量大于排行榜容器最大数目
+            Map.Entry<RankInfo, Long> entry = rankInfoListMap.pollLastEntry();
+            rankInfoMap.remove(entry.getValue());
         }
         logger.debug("{}战力更新", role.getId());
     }
@@ -100,11 +71,11 @@ public class PowerRankBoard {
         return RANK_NUM;
     }
 
-    public List<RankInfo> getRankInfoList() {
-        return rankInfoList;
+    public ConcurrentSkipListMap<RankInfo, Long> getRankInfoListMap() {
+        return rankInfoListMap;
     }
 
-    public void setRankInfoList(CopyOnWriteArrayList<RankInfo> rankInfoList) {
-        this.rankInfoList = rankInfoList;
+    public void setRankInfoListMap(ConcurrentSkipListMap<RankInfo, Long> rankInfoListMap) {
+        this.rankInfoListMap = rankInfoListMap;
     }
 }

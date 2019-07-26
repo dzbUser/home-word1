@@ -74,7 +74,7 @@ public class GameInterface extends JFrame{
         message.setFont(new Font("楷体",Font.BOLD,16));
         func.setFont(new Font("楷体",Font.BOLD,16));
 
-        message.setBounds(430,50,100,50);
+        message.setBounds(430, 50, 300, 50);
         func.setBounds(220,50,100,50);
         JButton submit = new JButton("提交");
         //添加监听器
@@ -100,7 +100,7 @@ public class GameInterface extends JFrame{
             }
         });
 
-        submit.setBounds(550,50,80,50);
+        submit.setBounds(750, 50, 80, 50);
         this.add(message);
         this.add(submit);
         this.add(func);

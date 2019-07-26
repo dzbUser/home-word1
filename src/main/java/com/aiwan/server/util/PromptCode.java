@@ -345,6 +345,11 @@ public class PromptCode {
      */
     public final static int APPLY_JOIN_TEAM = 72;
 
+    /**
+     * 本关卡通过
+     */
+    public final static int CLEAR_GATE = 73;
+
 
 //
 //    /**

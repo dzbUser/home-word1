@@ -36,8 +36,10 @@ public class EnterMapCommand extends AbstractSceneCommand {
     public void action() {
         try {
             AbstractScene abstractScene = GetBean.getMapManager().getSceneObject(getMapId(), getSceneId());
-            ISceneHandler handler = abstractScene.getHandler();
-            handler.enterDungeon(role, roleUnit);
+            if (abstractScene != null && abstractScene.isCanEnter()) {
+                ISceneHandler handler = abstractScene.getHandler();
+                handler.enterDungeon(role, roleUnit);
+            }
         } catch (Exception e) {
             logger.error("{}跳转到{}失败", role.getId(), getMapId());
             //取消跳转

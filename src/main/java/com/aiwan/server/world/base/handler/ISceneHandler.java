@@ -17,12 +17,12 @@ public interface ISceneHandler {
     void init();
 
     /**
-     * 玩家进入副本
+     * 玩家进入地图
      */
     void enterDungeon(Role role, RoleUnit roleUnit);
 
     /**
-     * 玩家退出副本
+     * 玩家退出地图
      */
     void quitDungeon(Role role);
 }

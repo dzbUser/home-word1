@@ -88,7 +88,8 @@ public class RoleManager {
      * @return
      */
     public CopyOnWriteArrayList<RankInfo> getRoleSortByCombat(int num) {
-        String hql = "from RoleEnt order by combatPower desc";
+        // TODO: 2019/7/26 加时间
+        String hql = "from RoleEnt order by combatPower desc,updateTime";
         List<RoleEnt> list = accessor.find(hql, 0, num);
         CopyOnWriteArrayList<RankInfo> rankInfos = new CopyOnWriteArrayList<>();
         for (int i = 0; i < list.size(); i++) {

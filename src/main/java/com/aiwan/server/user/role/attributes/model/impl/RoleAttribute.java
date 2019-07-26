@@ -2,9 +2,8 @@ package com.aiwan.server.user.role.attributes.model.impl;
 
 import com.aiwan.server.user.role.attributes.model.AttributeContainer;
 import com.aiwan.server.user.role.player.model.Role;
-import com.aiwan.server.user.role.powerboard.RankRefreshEvent;
+import com.aiwan.server.user.role.powerboard.PowerChangeEvent;
 import com.aiwan.server.util.GetBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author dengzebiao
@@ -39,7 +38,7 @@ public class RoleAttribute extends AttributeContainer {
         //写会
         GetBean.getRoleManager().save(role);
         //抛出战力更新事件
-        GetBean.getEventBusManager().asynSubmit(new RankRefreshEvent(role));
+        GetBean.getEventBusManager().asynSubmit(new PowerChangeEvent(role));
     }
 
     public long getrId() {

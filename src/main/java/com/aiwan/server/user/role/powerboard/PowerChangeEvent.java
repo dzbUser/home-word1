@@ -5,19 +5,19 @@ import com.aiwan.server.base.event.event.IEvent;
 import com.aiwan.server.user.role.player.model.Role;
 
 /**
- * 战力榜更新事件
+ * 战力改变事件
  *
  * @author dengzebiao
  * @since 2019.7.25
  */
-public class RankRefreshEvent implements IEvent {
+public class PowerChangeEvent implements IEvent {
 
     /**
      * 改变角色
      */
     private Role role;
 
-    public RankRefreshEvent(Role role) {
+    public PowerChangeEvent(Role role) {
         this.role = role;
     }
 

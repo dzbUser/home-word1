@@ -2,7 +2,7 @@ package com.aiwan.server.user.role.powerboard.facade;
 
 import com.aiwan.server.base.event.anno.ReceiverAnno;
 import com.aiwan.server.publicsystem.common.Session;
-import com.aiwan.server.user.role.powerboard.RankRefreshEvent;
+import com.aiwan.server.user.role.powerboard.PowerChangeEvent;
 import com.aiwan.server.user.role.powerboard.protocol.CM_ViewRankBoard;
 import com.aiwan.server.util.GetBean;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class RankFacade {
      * @param event
      */
     @ReceiverAnno
-    public void rankRefresh(RankRefreshEvent event) {
+    public void rankRefresh(PowerChangeEvent event) {
         GetBean.getPowerRankBoard().update(event.getRole());
     }
 

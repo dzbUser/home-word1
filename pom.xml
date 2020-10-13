@@ -55,7 +55,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.2.4.RELEASE</spring.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
-        <junit.version>3.8.1</junit.version>
+        <junit.version>4.13.1</junit.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.version>2.8.2</log4j.version>
     </properties>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>RELEASE</version>
+            <version>4.13.1</version>
         </dependency>
         <!--持久化配置  hibernate-->
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
